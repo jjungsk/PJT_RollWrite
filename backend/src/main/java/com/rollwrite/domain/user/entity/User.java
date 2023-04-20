@@ -1,12 +1,21 @@
 package com.rollwrite.domain.user.entity;
 
+import com.rollwrite.domain.meeting.entity.Participant;
+import com.rollwrite.domain.meeting.entity.Statistics;
+import com.rollwrite.domain.question.entity.Answer;
+import com.rollwrite.domain.question.entity.QuestionGpt;
+import com.rollwrite.domain.question.entity.QuestionParticipant;
 import com.rollwrite.global.model.BaseTimeEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -28,4 +37,22 @@ public class User extends BaseTimeEntity {
     @NotNull
     @Column(length = 2083)
     private String profileImage;
+
+    @NotNull
+    @Column
+    @Enumerated(EnumType.STRING)
+    private UserType type;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Participant> participantList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Statistics> statisticsList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<QuestionParticipant> questionParticipantList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Answer> answerList = new ArrayList<>();
+
 }
