@@ -19,4 +19,8 @@ public class Tag extends BaseTimeEntity {
 
     @Column(length = 10)
     private String content;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "meeting_id")
+    private Meeting meeting;
 }
