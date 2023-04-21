@@ -45,7 +45,7 @@ public class QuestionService {
                 .content(addQuestionRequestDto.getQuestion())
                 .emoji(emoji)
                 .build();
-        QuestionParticipant insertResult = questionParticipantRepository.save(questionParticipant);
+        questionParticipantRepository.save(questionParticipant);
 
         // 내가 meeting에서 한 질문의 개수
         int usage = Math.toIntExact(questionParticipantRepository.countByUserAndMeeting(user, meeting));
