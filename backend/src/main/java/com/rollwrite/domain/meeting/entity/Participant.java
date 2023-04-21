@@ -2,8 +2,8 @@ package com.rollwrite.domain.meeting.entity;
 
 import com.rollwrite.domain.user.entity.User;
 import com.rollwrite.global.model.BaseTimeEntity;
-import io.lettuce.core.dynamic.annotation.CommandNaming;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
@@ -31,4 +31,11 @@ public class Participant extends BaseTimeEntity {
     @JoinColumn(name = "meeting_id")
     private Meeting meeting;
 
+    @Builder
+    public Participant(Long id, boolean isDone, User user, Meeting meeting) {
+        this.id = id;
+        this.isDone = isDone;
+        this.user = user;
+        this.meeting = meeting;
+    }
 }

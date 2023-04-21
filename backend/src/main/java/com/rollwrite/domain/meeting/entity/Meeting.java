@@ -66,15 +66,16 @@ public class Meeting extends BaseTimeEntity {
     private List<Answer> answerList = new ArrayList<>();
 
     @OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL)
-    private List<Tag> tagList = new ArrayList<>();
+    private List<TagMeeting> tagMeetingList = new ArrayList<>();
 
     @Builder
-    public Meeting(Long id, AddMeetingRequestDto addMeetingRequestDto, String inviteCode) {
+    public Meeting(Long id, AddMeetingRequestDto addMeetingRequestDto, String inviteCode, List<TagMeeting> tagMeetingList) {
         this.id = id;
         this.title = addMeetingRequestDto.getTitle();
         this.startDay = addMeetingRequestDto.getStartDay();
         this.endDay = addMeetingRequestDto.getEndDay();
         this.color = addMeetingRequestDto.getColor();
         this.inviteCode = inviteCode;
+        this.tagMeetingList = tagMeetingList;
     }
 }
