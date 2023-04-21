@@ -18,8 +18,8 @@ import springfox.documentation.annotations.ApiIgnore;
 
 @Slf4j
 @RestController
-@RequestMapping("/question")
 @RequiredArgsConstructor
+@RequestMapping("/question")
 public class QuestionController {
 
     private final QuestionService questionService;
