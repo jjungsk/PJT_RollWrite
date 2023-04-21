@@ -1,11 +1,14 @@
 package com.rollwrite.domain.meeting.entity;
 
+import com.rollwrite.domain.meeting.dto.AddMeetingRequestDto;
+import com.rollwrite.domain.notification.entity.Notification;
 import com.rollwrite.domain.question.entity.Answer;
 import com.rollwrite.domain.question.entity.Question;
 import com.rollwrite.domain.question.entity.QuestionGpt;
 import com.rollwrite.domain.question.entity.QuestionParticipant;
 import com.rollwrite.global.model.BaseTimeEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
@@ -29,11 +32,11 @@ public class Meeting extends BaseTimeEntity {
     @Column(length = 20)
     private String title;
 
-//    @NotNull
+    //    @NotNull
     @Column
     private LocalDate startDay;
 
-//    @NotNull
+    //    @NotNull
     @Column
     private LocalDate endDay;
 
@@ -62,13 +65,17 @@ public class Meeting extends BaseTimeEntity {
     @OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL)
     private List<Answer> answerList = new ArrayList<>();
 
-//    @Builder
-//    public Meeting(Long id, AddMeetingRequestDto addMeetingRequestDto,String inviteUrl) {
-//        this.id = id;
-//        this.title = addMeetingRequestDto.getTitle();
-//        this.startDay = addMeetingRequestDto.getStartDay();
-//        this.endDay = addMeetingRequestDto.getEndDay();
-//        this.color = addMeetingRequestDto.getColor();
-//        this.inviteUrl = inviteUrl;
-//    }
+    @OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL)
+    private List<TagMeeting> tagMeetingList = new ArrayList<>();
+
+    @Builder
+    public Meeting(Long id, AddMeetingRequestDto addMeetingRequestDto, String inviteCode, List<TagMeeting> tagMeetingList) {
+        this.id = id;
+        this.title = addMeetingRequestDto.getTitle();
+        this.startDay = addMeetingRequestDto.getStartDay();
+        this.endDay = addMeetingRequestDto.getEndDay();
+        this.color = addMeetingRequestDto.getColor();
+        this.inviteCode = inviteCode;
+        this.tagMeetingList = tagMeetingList;
+    }
 }

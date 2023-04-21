@@ -2,6 +2,7 @@ package com.rollwrite.domain.user.entity;
 
 import com.rollwrite.domain.meeting.entity.Participant;
 import com.rollwrite.domain.meeting.entity.Statistics;
+import com.rollwrite.domain.notification.entity.Notification;
 import com.rollwrite.domain.question.entity.Answer;
 import com.rollwrite.domain.question.entity.QuestionGpt;
 import com.rollwrite.domain.question.entity.QuestionParticipant;
@@ -54,5 +55,8 @@ public class User extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Answer> answerList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Notification> notificationiList = new ArrayList<>();
 
 }
