@@ -14,7 +14,9 @@ public enum SuccessCode {
     LOGIN_SUCCESS(StatusCode.SUCCESS, "로그인 완료되었습니다."),
 
     // meeting
-    ;
+
+    // question
+    ADD_QUESTION_SUCCESS(StatusCode.SUCCESS, "질문이 생성되었습니다.");
 
     private final StatusCode statusCode;
     private final String message;
