@@ -88,7 +88,7 @@ public class QuestionService {
         Question question = questionRepository.findById(addAnswerRequestDto.getQuestionId())
                 .orElseThrow(() -> new IllegalArgumentException("질문을 찾을 수 없습니다"));
 
-        String imageUrl = "";
+        String imageUrl = null;
         if (image != null && !image.isEmpty())
             imageUrl = fileService.fileUpload("answer", image);
 

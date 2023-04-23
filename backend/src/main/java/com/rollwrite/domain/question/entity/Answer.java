@@ -24,7 +24,6 @@ public class Answer extends BaseTimeEntity {
     @Column(length = 400)
     private String content;
 
-    @NotNull
     @Column(length = 2083)
     private String imageUrl;
 
