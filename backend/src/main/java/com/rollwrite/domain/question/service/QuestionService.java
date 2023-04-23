@@ -88,7 +88,7 @@ public class QuestionService {
                 .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
 
         String imageUrl = "";
-        if (!image.isEmpty())
+        if (image != null && !image.isEmpty())
             imageUrl = fileService.fileUpload("answer", image);
 
         // answer insert
