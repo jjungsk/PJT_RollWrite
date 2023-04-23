@@ -4,6 +4,7 @@ import com.rollwrite.domain.meeting.entity.Meeting;
 import com.rollwrite.domain.user.entity.User;
 import com.rollwrite.global.model.BaseTimeEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
@@ -39,4 +40,13 @@ public class QuestionParticipant extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "meeting_id")
     private Meeting meeting;
+
+    @Builder
+    public QuestionParticipant(String content, boolean isChoosed, String emoji, User user, Meeting meeting) {
+        this.content = content;
+        this.isChoosed = isChoosed;
+        this.emoji = emoji;
+        this.user = user;
+        this.meeting = meeting;
+    }
 }
