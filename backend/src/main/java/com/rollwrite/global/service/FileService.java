@@ -1,19 +1,13 @@
 package com.rollwrite.global.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.URLEncoder;
 import java.net.UnknownHostException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.UUID;
 
 @Service
@@ -36,26 +30,9 @@ public class FileService {
         return "/rollwrite/" + type + "/" + name;
     }
 
-    public Resource fileDownload(String path, HttpHeaders headers) throws IOException {
-        Resource resource = new FileSystemResource(getPath(path));
-
-        // 원본 파일에서 uuid 자르기
-        String filename = resource.getFilename().substring(36);
-        log.info("filename : " + filename);
-
-        String downloadName = URLEncoder.encode(filename, StandardCharsets.UTF_8).replaceAll("\\+", "%20");
-        String contentType = Files.probeContentType(resource.getFile().toPath());
-
-        headers.add("Content-type", contentType);
-        headers.add("Content-Disposition", "attachment; filename=" + downloadName);
-
-        return resource;
-    }
-
     public void fileDelete(String path) throws UnknownHostException {
         File file = new File(getPath(path));
-        if (!file.delete())
-            throw new IllegalArgumentException("파일 삭제에 실패했습니다");
+        file.delete();
     }
 
     private String setPath(String type) throws UnknownHostException {
