@@ -40,6 +40,14 @@ public class Answer extends BaseTimeEntity {
     @JoinColumn(name = "question_id")
     private Question question;
 
+    public void updateImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
+
     @Builder
     public Answer(String content, String imageUrl, User user, Meeting meeting, Question question) {
         this.content = content;

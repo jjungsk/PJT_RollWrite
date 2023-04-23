@@ -3,6 +3,7 @@ package com.rollwrite.domain.question.controller;
 import com.rollwrite.domain.question.dto.AddAnswerRequestDto;
 import com.rollwrite.domain.question.dto.AddQuestionRequestDto;
 import com.rollwrite.domain.question.dto.AddQuestionResponseDto;
+import com.rollwrite.domain.question.dto.ModifyAnswerRequestDto;
 import com.rollwrite.domain.question.service.QuestionService;
 import com.rollwrite.global.model.ApiResponse;
 import com.rollwrite.global.model.SuccessCode;
@@ -40,6 +41,15 @@ public class QuestionController {
         log.info("addAnswerRequestDto : " + addAnswerRequestDto);
         questionService.addAnswer(1L, addAnswerRequestDto, image);
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.ADD_ANSWER_SUCCESS, null), HttpStatus.OK);
+    }
+
+    @PatchMapping("/answer")
+    public ResponseEntity<ApiResponse<AddQuestionResponseDto>> modifyAnswer(@ApiIgnore Authentication authentication,
+                                                                            @RequestPart ModifyAnswerRequestDto modifyAnswerRequestDto,
+                                                                            @RequestPart(required = false) MultipartFile image) throws IOException {
+        log.info("modifyAnswerRequestDto : " + modifyAnswerRequestDto);
+        questionService.modifyAnswer(1L, modifyAnswerRequestDto, image);
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.MODIFY_ANSWER_SUCCESS, null), HttpStatus.OK);
     }
 
 }

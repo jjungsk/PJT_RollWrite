@@ -5,6 +5,7 @@ import com.rollwrite.domain.meeting.repository.MeetingRepository;
 import com.rollwrite.domain.question.dto.AddAnswerRequestDto;
 import com.rollwrite.domain.question.dto.AddQuestionRequestDto;
 import com.rollwrite.domain.question.dto.AddQuestionResponseDto;
+import com.rollwrite.domain.question.dto.ModifyAnswerRequestDto;
 import com.rollwrite.domain.question.entity.Answer;
 import com.rollwrite.domain.question.entity.Question;
 import com.rollwrite.domain.question.entity.QuestionParticipant;
@@ -85,7 +86,7 @@ public class QuestionService {
                 .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
 
         Question question = questionRepository.findById(addAnswerRequestDto.getQuestionId())
-                .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
+                .orElseThrow(() -> new IllegalArgumentException("질문을 찾을 수 없습니다"));
 
         String imageUrl = "";
         if (image != null && !image.isEmpty())
@@ -100,5 +101,29 @@ public class QuestionService {
                 .imageUrl(imageUrl)
                 .build();
         answerRepository.save(answer);
+    }
+
+    @Transactional
+    public void modifyAnswer(Long userId, ModifyAnswerRequestDto modifyAnswerRequestDto, MultipartFile image) throws IOException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
+
+        Question question = questionRepository.findById(modifyAnswerRequestDto.getQuestionId())
+                .orElseThrow(() -> new IllegalArgumentException("질문을 찾을 수 없습니다"));
+
+        Answer answer = answerRepository.findByUserAndQuestion(user, question)
+                .orElseThrow(() -> new IllegalArgumentException("답변을 찾을 수 없습니다"));
+
+        // change image
+        if (image != null && !image.isEmpty()) {
+            fileService.fileDelete(answer.getImageUrl());
+            String imageUrl = fileService.fileUpload("answer", image);
+            answer.updateImageUrl(imageUrl);
+        }
+
+        // change content
+        if (modifyAnswerRequestDto.getAnswer() != null) {
+            answer.updateContent(modifyAnswerRequestDto.getAnswer());
+        }
     }
 }
