@@ -7,8 +7,8 @@ import lombok.ToString;
 @Getter
 @ToString
 public class AddQuestionResponseDto {
-    private int usage;
-    private int limit;
+    private final int usage;
+    private final int limit;
 
     @Builder
     public AddQuestionResponseDto(int usage, int limit) {
