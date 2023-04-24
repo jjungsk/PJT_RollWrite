@@ -1,11 +1,15 @@
 import styled from "styled-components";
 
 const FooterContainer = styled.div`
-  width: 100%;
-  height: 80px;
+  position: fixed;
+  bottom: 0;
+  width: 100vw;
+  min-width: 360px;
+  max-width: 450px;
+  height: 74px;
+  padding-inline: 24px;
   display: flex;
   justify-content: space-around;
-  align-items: center;
   text-align: center;
   color: white;
   font-size: 14px;
