@@ -30,7 +30,7 @@ import {
 function Calendar() {
   const DATE_WEEK_LENGTH = 7;
   const TODAY = new Date();
-  const SproutList = [
+  const sproutList = [
     <Sprout1 />,
     <Sprout2 />,
     <Sprout3 />,
