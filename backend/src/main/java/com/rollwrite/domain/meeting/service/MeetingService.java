@@ -135,7 +135,7 @@ public class MeetingService {
         List<MeetingInProgressResDto> meetingInProgressResDtoList = new ArrayList<>();
 
         // user가 참여 중인 Meeting List
-        List<Participant> meetingList = participantRepository.findInProgressMeeting(userId);
+        List<Participant> meetingList = participantRepository.findParticipantByUser(userId);
         for (Participant participant : meetingList) {
             Meeting meeting = participant.getMeeting();
 
@@ -155,7 +155,8 @@ public class MeetingService {
             int questionLimit = 0;
 
             // 모임에 해당하는 태그
-            List<TagMeeting> tagMeetingList = tagMeetingRepository.findMeetingTag(meeting);
+            List<TagMeeting> tagMeetingList = tagMeetingRepository.findTagMeetingByMeeting
+                (meeting);
             List<TagDto> tagDtoList = tagMeetingList.stream()
                 .map(tagMeeting -> TagDto.of(tagMeeting.getTag()))
                 .collect(Collectors.toList());

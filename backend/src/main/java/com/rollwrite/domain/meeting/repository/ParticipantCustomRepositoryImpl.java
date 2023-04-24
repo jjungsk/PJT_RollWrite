@@ -14,7 +14,7 @@ public class ParticipantCustomRepositoryImpl implements ParticipantCustomReposit
     QParticipant participant = QParticipant.participant;
 
     @Override
-    public List<Participant> findInProgressMeeting(Long userId) {
+    public List<Participant> findParticipantByUser(Long userId) {
         return queryFactory
             .selectFrom(participant)
             .where(participant.user.id.eq(userId))

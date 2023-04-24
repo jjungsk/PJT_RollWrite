@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface TagMeetingCustomRepository {
 
-    List<TagMeeting> findMeetingTag(Meeting meeting);
+    List<TagMeeting> findTagMeetingByMeeting
+        (Meeting meeting);
 
 }

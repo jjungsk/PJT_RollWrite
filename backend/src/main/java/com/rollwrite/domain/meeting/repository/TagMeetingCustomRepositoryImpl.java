@@ -17,7 +17,8 @@ public class TagMeetingCustomRepositoryImpl implements TagMeetingCustomRepositor
     QTag tag = QTag.tag;
 
     @Override
-    public List<TagMeeting> findMeetingTag(Meeting meeting) {
+    public List<TagMeeting> findTagMeetingByMeeting
+        (Meeting meeting) {
         return queryFactory
             .selectFrom(tagMeeting)
             .join(tagMeeting.tag, tag).fetchJoin()

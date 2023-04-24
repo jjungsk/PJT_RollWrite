@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface ParticipantCustomRepository {
 
-    List<Participant> findInProgressMeeting(Long userId);
+    List<Participant> findParticipantByUser(Long userId);
 
 
 }
