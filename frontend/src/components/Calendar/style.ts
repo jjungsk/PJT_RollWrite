@@ -11,11 +11,12 @@ const Header = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 0px 12px;
+  padding: 0px 24px;
   gap: 8px;
 
   font-size: 20px;
   font-weight: bold;
+  width: 100%;
 `;
 const WeekContainer = styled.div`
   display: flex;
@@ -56,6 +57,25 @@ const SproutContainer = styled.div`
   height: 16px;
 `;
 
+const PickedDay = styled.div`
+  display: flex;
+  text-align: start;
+  padding: 12px 30px;
+  width: 100%;
+
+  font-size: 12px;
+  color: var(--darkgray-color);
+`;
+
+const PickedQuestion = styled.div`
+  display: flex;
+  text-align: start;
+  padding: 0 30px;
+  width: 100%;
+  font-size: 16px;
+  font-weight: bold;
+`;
+
 export {
   MonthContainer,
   WeekContainer,
@@ -63,4 +83,6 @@ export {
   NumberContainer,
   SproutContainer,
   Header,
+  PickedDay,
+  PickedQuestion,
 };
