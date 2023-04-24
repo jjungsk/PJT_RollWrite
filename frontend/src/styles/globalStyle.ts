@@ -87,6 +87,11 @@ const GlobalStyle = createGlobalStyle`
   textarea {
     font-family: inherit;
   }
+  svg { 
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+  }
 `;
 
 export { GlobalStyle };

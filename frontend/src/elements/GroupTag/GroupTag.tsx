@@ -4,7 +4,7 @@ import { TagContent, TagContainer } from "./style";
 function GroupTag(props: { label: string }) {
   return (
     <TagContainer>
-      <Tag />
+      <Tag style={{ width: "60px", height: "20px" }} />
       <TagContent>{props.label}</TagContent>
     </TagContainer>
   );
