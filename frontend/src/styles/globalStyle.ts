@@ -36,9 +36,28 @@ const GlobalStyle = createGlobalStyle`
   } 
   
   html, body {
+    display: flex;
+    justify-content: center;
     width: 100%;
     height: 100%;
+    margin: 0;
+    overflow: hidden;
     font-family: 'IM_Hyemin', -apple-system, Helvetica Neue, sans-serif;
+    /* 드래그 방지, 우클릭 방지 */
+    -webkit-touch-callout: none;
+    user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+  }
+  #root {
+    position: relative;
+    width: 100vw;
+    min-width: 360px;
+    max-width: 450px;
+    height: 100vh;
+    text-align: center;
+    overflow: hidden;
   }
   button {
     border: none;

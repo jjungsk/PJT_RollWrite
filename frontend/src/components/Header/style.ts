@@ -9,6 +9,10 @@ const HeaderContainer = styled.div`
   text-align: center;
   color: white;
   font-size: 14px;
+
+  svg {
+    cursor: pointer;
+  }
 `;
 
 const BtnContainer = styled.div`

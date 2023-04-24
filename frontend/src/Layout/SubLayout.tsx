@@ -1,9 +1,8 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import Footer from "../components/Footer/Footer";
 import Header from "../components/Header/Header";
 
-function Layout() {
+function SubLayout() {
   return (
     <div
       style={{
@@ -13,7 +12,7 @@ function Layout() {
         backgroundColor: "#F0EDE6",
       }}
     >
-      <Header />
+      <Header sub />
       <main
         style={{
           flex: "1",
@@ -22,9 +21,8 @@ function Layout() {
       >
         <Outlet />
       </main>
-      <Footer />
     </div>
   );
 }
 
-export default Layout;
+export default SubLayout;
