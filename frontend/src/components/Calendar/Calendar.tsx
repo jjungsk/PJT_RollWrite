@@ -22,8 +22,8 @@ import {
   MonthContainer,
   WeekContainer,
   DayContainer,
-  Number,
-  Sprout,
+  SproutContainer,
+  NumberContainer,
   Header,
 } from "./style";
 
@@ -88,8 +88,10 @@ function Calendar() {
           {month.map((day, j) =>
             day.isCurrMonth ? (
               <DayContainer key={j}>
-                <Number isToday={day.isToday}>{day.formattedDate}</Number>
-                <Sprout>{day.sprout}</Sprout>
+                <NumberContainer isToday={day.isToday}>
+                  {day.formattedDate}
+                </NumberContainer>
+                <SproutContainer>{day.sprout}</SproutContainer>
               </DayContainer>
             ) : (
               <DayContainer key={j} />

@@ -33,7 +33,7 @@ const DayContainer = styled.div`
   height: 52px;
 `;
 
-const Number = styled.div<{ isToday: boolean }>`
+const NumberContainer = styled.div<{ isToday: boolean }>`
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -46,7 +46,7 @@ const Number = styled.div<{ isToday: boolean }>`
   font-size: 16px;
 `;
 
-const Sprout = styled.div`
+const SproutContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -56,4 +56,11 @@ const Sprout = styled.div`
   height: 16px;
 `;
 
-export { MonthContainer, WeekContainer, DayContainer, Number, Sprout, Header };
+export {
+  MonthContainer,
+  WeekContainer,
+  DayContainer,
+  NumberContainer,
+  SproutContainer,
+  Header,
+};
