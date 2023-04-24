@@ -5,6 +5,7 @@ import com.rollwrite.domain.meeting.dto.AddMeetingResponseDto;
 import com.rollwrite.domain.meeting.service.MeetingService;
 import com.rollwrite.global.model.ApiResponse;
 import com.rollwrite.global.model.SuccessCode;
+import java.security.NoSuchAlgorithmException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -24,9 +25,9 @@ public class MeetingController {
 
     @PostMapping()
     public ResponseEntity<ApiResponse> addMeeting(
-        @RequestBody AddMeetingRequestDto addMeetingRequestDto) {
+        @RequestBody AddMeetingRequestDto addMeetingRequestDto) throws NoSuchAlgorithmException {
         Long userId = 1L;
-        log.info("Meeting 생성");
+        log.info("Meeting 생성" + addMeetingRequestDto.toString());
         AddMeetingResponseDto addMeetingResponseDto = meetingService.addMeeting(userId,
             addMeetingRequestDto);
         return new ResponseEntity<>(
