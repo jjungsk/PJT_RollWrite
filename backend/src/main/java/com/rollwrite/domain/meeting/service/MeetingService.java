@@ -17,6 +17,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -117,5 +118,14 @@ public class MeetingService {
             .meeting(meeting)
             .build();
         participantRepository.save(participant);
+    }
+
+    public List<TagDto> findTag() {
+        List<Tag> tagList = tagRepository.findAll();
+        List<TagDto> tagDtoList = tagList.stream()
+            .map(tag -> TagDto.of(tag))
+            .collect(Collectors.toList());
+
+        return tagDtoList;
     }
 }

@@ -6,11 +6,11 @@ import lombok.Getter;
 @Getter
 public class TagDto {
 
-    private final Long id;
+    private final Long tagId;
     private final String content;
 
     public TagDto(Long id, String content) {
-        this.id = id;
+        this.tagId = id;
         this.content = content;
     }
 
