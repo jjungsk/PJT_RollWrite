@@ -3,16 +3,16 @@ import styled from "styled-components";
 const GhostBtn = styled.button`
   border: 2px solid var(--darkgray-color);
   border-radius: 10px;
-  width: 160px;
-  height: 52px;
+  width: 128px;
+  height: 48px;
   font-size: 20px;
   font-weight: bold;
 `;
 const FillBtn = styled.button`
   border: 2px solid var(--main-color);
   border-radius: 10px;
-  width: 160px;
-  height: 52px;
+  width: 128px;
+  height: 48px;
   font-size: 20px;
   color: white;
   background-color: var(--main-color);

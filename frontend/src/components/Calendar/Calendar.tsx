@@ -41,6 +41,7 @@ const sproutList = [
   <Sprout4 />,
   <Sprout5 />,
 ];
+const sproutColorList = ["#FF9847", "#3F942C", "#916F66", "#CF6F49", "#FFDC00"];
 
 function generateOneWeek(dateStart: Date, monthStart: Date) {
   const daysOfWeek = [];
@@ -160,7 +161,7 @@ function Calendar() {
                 </NumberContainer>
                 {isSwipeTop ? (
                   <MiniSprout
-                    fill="#3F942C"
+                    fill={sproutColorList[day.sprout]}
                     style={{ width: "24px", height: "2px" }}
                   />
                 ) : (

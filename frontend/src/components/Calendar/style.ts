@@ -74,7 +74,7 @@ const PickedDay = styled.div`
 const PickedQuestion = styled.div`
   display: flex;
   text-align: start;
-  padding: 16px 30px 32px 30px;
+  padding: 16px 30px 3vh 30px;
   width: 100%;
   font-size: 18px;
   font-weight: bold;
