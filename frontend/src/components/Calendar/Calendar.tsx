@@ -50,7 +50,7 @@ function Calendar() {
         formattedDate: format(currentDay, "d"),
         isToday: isSameDay(currentDay, TODAY),
         isCurrMonth: isSameMonth(currentDay, monthStart),
-        sprout: SproutList[Math.floor(Math.random() * 4) + 1],
+        sprout: sproutList[Math.floor(Math.random() * 4) + 1],
       });
 
       currentDay = addDays(currentDay, 1);
