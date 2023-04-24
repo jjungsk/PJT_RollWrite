@@ -30,7 +30,7 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository {
         LocalDateTime todayStart = today.atStartOfDay();
         LocalDateTime todayEnd = today.atTime(LocalTime.MAX);
 
-        FindTodayQuestionResDto findTodayQuestionResponseDto = jpaQueryFactory
+        FindTodayQuestionResDto findTodayQuestionResDto = jpaQueryFactory
                 .select(Projections.constructor(FindTodayQuestionResDto.class,
                         question.meeting.id.as("meetingId"),
                         question.meeting.title.as("title"),
@@ -46,6 +46,6 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository {
                 .where(question.meeting.eq(meeting).and(question.createdAt.between(todayStart, todayEnd)))
                 .fetchOne();
 
-        return Optional.ofNullable(findTodayQuestionResponseDto);
+        return Optional.ofNullable(findTodayQuestionResDto);
     }
 }

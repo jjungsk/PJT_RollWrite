@@ -40,11 +40,11 @@ public class QuestionService {
     private final QuestionParticipantRepository questionParticipantRepository;
 
     @Transactional
-    public AddQuestionResDto addQuestion(Long userId, AddQuestionReqDto addQuestionRequestDto) {
+    public AddQuestionResDto addQuestion(Long userId, AddQuestionReqDto addQuestionReqDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
-        Meeting meeting = meetingRepository.findById(addQuestionRequestDto.getMeetingId())
+        Meeting meeting = meetingRepository.findById(addQuestionReqDto.getMeetingId())
                 .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
 
         // TODO : call GPT api for picking emoji!
@@ -54,7 +54,7 @@ public class QuestionService {
         QuestionParticipant questionParticipant = QuestionParticipant.builder()
                 .user(user)
                 .meeting(meeting)
-                .content(addQuestionRequestDto.getQuestion())
+                .content(addQuestionReqDto.getQuestion())
                 .emoji(emoji)
                 .build();
         questionParticipantRepository.save(questionParticipant);
@@ -78,14 +78,14 @@ public class QuestionService {
     }
 
     @Transactional
-    public void addAnswer(Long userId, AddAnswerReqDto addAnswerRequestDto, MultipartFile image) throws IOException {
+    public void addAnswer(Long userId, AddAnswerReqDto addAnswerReqDto, MultipartFile image) throws IOException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
-        Meeting meeting = meetingRepository.findById(addAnswerRequestDto.getMeetingId())
+        Meeting meeting = meetingRepository.findById(addAnswerReqDto.getMeetingId())
                 .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
 
-        Question question = questionRepository.findById(addAnswerRequestDto.getQuestionId())
+        Question question = questionRepository.findById(addAnswerReqDto.getQuestionId())
                 .orElseThrow(() -> new IllegalArgumentException("질문을 찾을 수 없습니다"));
 
         String imageUrl = null;
@@ -97,18 +97,18 @@ public class QuestionService {
                 .user(user)
                 .meeting(meeting)
                 .question(question)
-                .content(addAnswerRequestDto.getAnswer())
+                .content(addAnswerReqDto.getAnswer())
                 .imageUrl(imageUrl)
                 .build();
         answerRepository.save(answer);
     }
 
     @Transactional
-    public void modifyAnswer(Long userId, ModifyAnswerReqDto modifyAnswerRequestDto, MultipartFile image) throws IOException {
+    public void modifyAnswer(Long userId, ModifyAnswerReqDto modifyAnswerReqDto, MultipartFile image) throws IOException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
-        Question question = questionRepository.findById(modifyAnswerRequestDto.getQuestionId())
+        Question question = questionRepository.findById(modifyAnswerReqDto.getQuestionId())
                 .orElseThrow(() -> new IllegalArgumentException("질문을 찾을 수 없습니다"));
 
         Answer answer = answerRepository.findByUserAndQuestion(user, question)
@@ -122,8 +122,8 @@ public class QuestionService {
         }
 
         // change content
-        if (modifyAnswerRequestDto.getAnswer() != null) {
-            answer.updateContent(modifyAnswerRequestDto.getAnswer());
+        if (modifyAnswerReqDto.getAnswer() != null) {
+            answer.updateContent(modifyAnswerReqDto.getAnswer());
         }
     }
 
@@ -135,16 +135,16 @@ public class QuestionService {
         List<Meeting> meetingList = participantRepository.findMeetingByUser(user);
 
         // question, answer 조인
-        List<FindTodayQuestionResDto> findTodayQuestionResponseDtoList = new ArrayList<>();
+        List<FindTodayQuestionResDto> findTodayQuestionResDtoList = new ArrayList<>();
         for (Meeting meeting : meetingList) {
             Optional<FindTodayQuestionResDto> todayQuestion = questionRepository.findTodayQuestionByMeeting(meeting);
 
             // 오늘의 질문이 있으면 리스트에 추가
-            todayQuestion.ifPresent(findTodayQuestionResponseDtoList::add);
+            todayQuestion.ifPresent(findTodayQuestionResDtoList::add);
         }
 
         // sort
-        Collections.sort(findTodayQuestionResponseDtoList, new Comparator<>() {
+        Collections.sort(findTodayQuestionResDtoList, new Comparator<>() {
             @Override
             public int compare(FindTodayQuestionResDto o1, FindTodayQuestionResDto o2) {
                 // answer가 null인 경우를 최우선으로 처리
@@ -167,6 +167,6 @@ public class QuestionService {
             }
         });
 
-        return findTodayQuestionResponseDtoList;
+        return findTodayQuestionResDtoList;
     }
 }
