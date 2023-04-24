@@ -40,7 +40,7 @@ public class MeetingController {
     public ResponseEntity<ApiResponse> joinMeeting(@PathVariable Long meetingId) {
         Long userId = 1L;
         log.info("Meeting 참여자 추가 meetingId : " + meetingId + " userId : " + userId);
-        meetingService.joinMeeting(userId,meetingId);
+        meetingService.joinMeeting(userId, meetingId);
         return new ResponseEntity<>(
             ApiResponse.success(SuccessCode.JOIN_MEETING_SUCCESS),
             HttpStatus.OK);
