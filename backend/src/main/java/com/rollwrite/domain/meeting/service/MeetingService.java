@@ -2,6 +2,8 @@ package com.rollwrite.domain.meeting.service;
 
 import com.rollwrite.domain.meeting.dto.AddMeetingRequestDto;
 import com.rollwrite.domain.meeting.dto.AddMeetingResponseDto;
+import com.rollwrite.domain.meeting.dto.MeetingInProgressResDto;
+import com.rollwrite.domain.meeting.dto.ParticipantDto;
 import com.rollwrite.domain.meeting.dto.TagDto;
 import com.rollwrite.domain.meeting.entity.Meeting;
 import com.rollwrite.domain.meeting.entity.Participant;
@@ -127,5 +129,47 @@ public class MeetingService {
             .collect(Collectors.toList());
 
         return tagDtoList;
+    }
+
+    public List<MeetingInProgressResDto> findMeetingInProgress(Long userId) {
+        List<MeetingInProgressResDto> meetingInProgressResDtoList = new ArrayList<>();
+
+        // user가 참여 중인 Meeting List
+        List<Participant> meetingList = participantRepository.findInProgressMeeting(userId);
+        for (Participant participant : meetingList) {
+            Meeting meeting = participant.getMeeting();
+
+            // 참여자 목록
+            List<Participant> participantList = participantRepository.findByMeeting(meeting);
+            List<ParticipantDto> participantDtoList = participantList.stream()
+                .map(participantDto -> ParticipantDto.of(participantDto))
+                .collect(Collectors.toList());
+
+            // 참여자 수
+            int participantCnt = participantList.size();
+
+            // TODO: 사용량 (아직 없음)
+            int questionUsage = 0;
+
+            // TODO: 제한량 (기준이 명확하지 않음)
+            int questionLimit = 0;
+
+            // 모임에 해당하는 태그
+            List<TagMeeting> tagMeetingList = tagMeetingRepository.findMeetingTag(meeting);
+            List<TagDto> tagDtoList = tagMeetingList.stream()
+                .map(tagMeeting -> TagDto.of(tagMeeting.getTag()))
+                .collect(Collectors.toList());
+
+            meetingInProgressResDtoList.add(MeetingInProgressResDto.builder()
+                .meeting(meeting)
+                .tag(tagDtoList)
+                .questionLimit(questionLimit)
+                .questionUsage(questionUsage)
+                .participant(participantDtoList)
+                .participantCnt(participantCnt)
+                .build());
+        }
+
+        return meetingInProgressResDtoList;
     }
 }

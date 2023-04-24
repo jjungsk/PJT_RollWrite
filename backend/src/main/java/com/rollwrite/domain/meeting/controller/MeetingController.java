@@ -2,6 +2,7 @@ package com.rollwrite.domain.meeting.controller;
 
 import com.rollwrite.domain.meeting.dto.AddMeetingRequestDto;
 import com.rollwrite.domain.meeting.dto.AddMeetingResponseDto;
+import com.rollwrite.domain.meeting.dto.MeetingInProgressResDto;
 import com.rollwrite.domain.meeting.dto.TagDto;
 import com.rollwrite.domain.meeting.service.MeetingService;
 import com.rollwrite.global.model.ApiResponse;
@@ -26,6 +27,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class MeetingController {
 
     private final MeetingService meetingService;
+
+    @GetMapping()
+    public ResponseEntity<ApiResponse> meetingInProgressList() {
+        log.info("진행 중인 모임 전체 조회");
+        Long userId = 1L;
+        List<MeetingInProgressResDto> meetingInProgressResDtoList = meetingService.findMeetingInProgress(
+            userId);
+        return new ResponseEntity<>(
+            ApiResponse.success(SuccessCode.GET_MEETING_IN_PROGRESS_SUCCESS,
+                meetingInProgressResDtoList),
+            HttpStatus.OK);
+    }
 
     @PostMapping()
     public ResponseEntity<ApiResponse> addMeeting(

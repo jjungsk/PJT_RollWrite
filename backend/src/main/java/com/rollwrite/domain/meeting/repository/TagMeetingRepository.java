@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TagMeetingRepository extends JpaRepository<TagMeeting, Long> {
+public interface TagMeetingRepository extends JpaRepository<TagMeeting, Long>,
+    TagMeetingCustomRepository {
 
 }
