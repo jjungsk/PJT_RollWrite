@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +33,16 @@ public class MeetingController {
             addMeetingRequestDto);
         return new ResponseEntity<>(
             ApiResponse.success(SuccessCode.ADD_MEETING_SUCCESS, addMeetingResponseDto),
+            HttpStatus.OK);
+    }
+
+    @PostMapping("/join/{meetingId}")
+    public ResponseEntity<ApiResponse> joinMeeting(@PathVariable Long meetingId) {
+        Long userId = 1L;
+        log.info("Meeting 참여자 추가 meetingId : " + meetingId + " userId : " + userId);
+        meetingService.joinMeeting(userId, meetingId);
+        return new ResponseEntity<>(
+            ApiResponse.success(SuccessCode.JOIN_MEETING_SUCCESS),
             HttpStatus.OK);
     }
 }
