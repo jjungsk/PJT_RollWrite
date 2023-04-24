@@ -2,6 +2,7 @@ package com.rollwrite.domain.meeting.service;
 
 import com.rollwrite.domain.meeting.dto.AddMeetingRequestDto;
 import com.rollwrite.domain.meeting.dto.AddMeetingResponseDto;
+import com.rollwrite.domain.meeting.dto.TagDto;
 import com.rollwrite.domain.meeting.entity.Meeting;
 import com.rollwrite.domain.meeting.entity.Participant;
 import com.rollwrite.domain.meeting.entity.Tag;
@@ -59,8 +60,9 @@ public class MeetingService {
         meetingRepository.save(meeting);
 
         // tag id에 해당하는 Meeting(tagMeetingList)에 추가
+        List<TagDto> tagList = new ArrayList<>();
         List<TagMeeting> tagMeetingList = tagIdToTagMeetingList(
-            meeting, addMeetingRequestDto.getTag());
+            meeting, addMeetingRequestDto.getTag(), tagList);
         meeting.updateTagMeetingList(tagMeetingList);
 
         // TODO:Chat GPT 생성 질문 10개 저장
@@ -74,16 +76,18 @@ public class MeetingService {
 
         return AddMeetingResponseDto.builder()
             .meeting(meeting)
+            .tag(tagList)
             .inviteUrl(inviteUrl + inviteCode)
             .build();
     }
 
-    private List<TagMeeting> tagIdToTagMeetingList(Meeting meeting, List<Long> tagIds) {
+    private List<TagMeeting> tagIdToTagMeetingList(Meeting meeting, List<Long> tagIds,
+        List<TagDto> tagList) {
         List<TagMeeting> tagMeetingList = new ArrayList<>();
         for (Long id : tagIds) {
             // tag id에 해당하는 tag 찾기
             Tag tag = tagRepository.findById(id).get();
-
+            tagList.add(TagDto.of(tag));
             // TagMeeting 에 추가
             TagMeeting tagMeeting = TagMeeting.builder()
                 .tag(tag)
