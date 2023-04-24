@@ -16,14 +16,12 @@ const TextDiv = styled.div`
   line-height: 30px;
   align-items: center;
   text-align: center;
-  margin-top: 70px;
-  margin-bottom: 70px;
+  margin-block: 70px;
 `;
 
 const BtnDiv = styled.div`
   width: 100%;
-  margin: auto;
-  margin-top: 0;
+  margin-inline: auto;
 `;
 
 export { Wrapper, TextDiv, BtnDiv };
