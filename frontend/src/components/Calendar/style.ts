@@ -17,6 +17,10 @@ const Header = styled.div`
   font-size: 20px;
   font-weight: bold;
   width: 100%;
+
+  > div {
+    width: 44px;
+  }
 `;
 const WeekContainer = styled.div`
   display: flex;
@@ -24,14 +28,14 @@ const WeekContainer = styled.div`
   align-items: flex-start;
   padding: 0px;
 `;
-const DayContainer = styled.div`
+const DayContainer = styled.div<{ isSwipeTop: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 0px;
   width: 46px;
-  height: 52px;
+  height: ${(props) => (props.isSwipeTop ? "32px" : "52px")};
 `;
 
 const NumberContainer = styled.div<{ isToday: boolean }>`
@@ -60,19 +64,19 @@ const SproutContainer = styled.div`
 const PickedDay = styled.div`
   display: flex;
   text-align: start;
-  padding: 12px 30px;
+  padding: 24px 30px 0px;
   width: 100%;
 
-  font-size: 12px;
+  font-size: 16px;
   color: var(--darkgray-color);
 `;
 
 const PickedQuestion = styled.div`
   display: flex;
   text-align: start;
-  padding: 0 30px;
+  padding: 16px 30px 32px 30px;
   width: 100%;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
 `;
 

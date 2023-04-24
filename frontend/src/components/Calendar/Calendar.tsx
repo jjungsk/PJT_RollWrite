@@ -4,6 +4,7 @@ import { ReactComponent as Sprout2 } from "../../assets/Sprout_2.svg";
 import { ReactComponent as Sprout3 } from "../../assets/Sprout_3.svg";
 import { ReactComponent as Sprout4 } from "../../assets/Sprout_4.svg";
 import { ReactComponent as Sprout5 } from "../../assets/Sprout_5.svg";
+import { ReactComponent as MiniSprout } from "../../assets/MiniSprout.svg";
 import { ReactComponent as BackArrow } from "../../assets/Back_Arrow.svg";
 import { ReactComponent as PrevArrow } from "../../assets/Prev_Arrow.svg";
 import {
@@ -29,6 +30,7 @@ import {
   PickedQuestion,
 } from "./style";
 import { ko } from "date-fns/locale";
+import GhostBtn from "../../elements/Button/GhostBtn";
 
 const DATE_WEEK_LENGTH = 7;
 const TODAY = new Date();
@@ -50,7 +52,7 @@ function generateOneWeek(dateStart: Date, monthStart: Date) {
       formattedDate: format(currentDay, "d"),
       isToday: isSameDay(currentDay, TODAY),
       isCurrMonth: isSameMonth(currentDay, monthStart),
-      sprout: sproutList[Math.floor(Math.random() * 4) + 1],
+      sprout: Math.floor(Math.random() * 4) + 1,
     });
 
     currentDay = addDays(currentDay, 1);
@@ -75,6 +77,7 @@ function makeCalendar(monthStart: Date) {
 function Calendar() {
   const [monthStart, setMonthStart] = useState(startOfMonth(TODAY));
   const [pickedDay, setPickedDay] = useState(TODAY);
+  const [isSwipeTop, setIsSwipeTop] = useState(false);
 
   const handelClickBackBtn = () => {
     setMonthStart(subMonths(monthStart, 1));
@@ -88,11 +91,59 @@ function Calendar() {
 
   const daysOfMonth = useMemo(() => makeCalendar(monthStart), [monthStart]);
 
+  // 스와이프 감지
+  let initialX: number | null = null;
+  let initialY: number | null = null;
+
+  function initTouch(e: MouseEvent | TouchEvent) {
+    const touchEvent = e as TouchEvent;
+    initialX = touchEvent.touches
+      ? touchEvent.touches[0].clientX
+      : (e as MouseEvent).clientX;
+    initialY = touchEvent.touches
+      ? touchEvent.touches[0].clientY
+      : (e as MouseEvent).clientY;
+  }
+
+  function swipeDirection(e: MouseEvent | TouchEvent) {
+    if (initialX !== null && initialY !== null) {
+      const touchEvent = e as TouchEvent;
+      const currentX = touchEvent.touches
+        ? touchEvent.touches[0].clientX
+        : (e as MouseEvent).clientX;
+      const currentY = touchEvent.touches
+        ? touchEvent.touches[0].clientY
+        : (e as MouseEvent).clientY;
+
+      let diffX = initialX - currentX;
+      let diffY = initialY - currentY;
+
+      if (Math.abs(diffX) > Math.abs(diffY)) {
+        diffX > 0 ? console.log("to left") : console.log("to right");
+      } else {
+        diffY > 0 ? setIsSwipeTop(true) : setIsSwipeTop(false);
+      }
+
+      initialX = null;
+      initialY = null;
+    }
+  }
+
+  window.addEventListener("touchstart", initTouch);
+  window.addEventListener("touchmove", swipeDirection);
+  window.addEventListener("mousedown", (e: MouseEvent) => {
+    initTouch(e);
+    window.addEventListener("mousemove", swipeDirection);
+  });
+  window.addEventListener("mouseup", () => {
+    window.removeEventListener("mousemove", swipeDirection);
+  });
+
   return (
     <MonthContainer>
       <Header>
         <BackArrow onClick={handelClickBackBtn} />
-        {getMonth(monthStart) + 1}월
+        <div>{getMonth(monthStart) + 1}월</div>
         <PrevArrow onClick={handelClickPrevBtn} />
       </Header>
       {daysOfMonth.map((month, i) => (
@@ -102,22 +153,35 @@ function Calendar() {
               <DayContainer
                 key={j}
                 onClick={() => handelClickDay(day.currentDay)}
+                isSwipeTop={isSwipeTop}
               >
                 <NumberContainer isToday={day.isToday}>
                   {day.formattedDate}
                 </NumberContainer>
-                <SproutContainer>{day.sprout}</SproutContainer>
+                {isSwipeTop ? (
+                  <MiniSprout
+                    fill="#3F942C"
+                    style={{ width: "24px", height: "2px" }}
+                  />
+                ) : (
+                  <SproutContainer>{sproutList[day.sprout]}</SproutContainer>
+                )}
               </DayContainer>
             ) : (
-              <DayContainer key={j} />
+              <DayContainer key={j} isSwipeTop={isSwipeTop} />
             )
           )}
         </WeekContainer>
       ))}
-      <PickedDay>{format(pickedDay, "PPP", { locale: ko })}</PickedDay>
-      <PickedQuestion>
-        프로젝트를 하면서 가장 특별했던 순간이 무엇인가요?
-      </PickedQuestion>
+      {isSwipeTop && (
+        <>
+          <PickedDay>{format(pickedDay, "PPP", { locale: ko })}</PickedDay>
+          <PickedQuestion>
+            프로젝트를 하면서 가장 특별했던 순간이 무엇인가요?
+          </PickedQuestion>
+          <GhostBtn label={"질문 만들기"} />
+        </>
+      )}
     </MonthContainer>
   );
 }
