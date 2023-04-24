@@ -4,6 +4,7 @@ import com.rollwrite.domain.meeting.entity.Meeting;
 import com.rollwrite.domain.user.entity.User;
 import com.rollwrite.global.model.BaseTimeEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,7 +24,6 @@ public class Answer extends BaseTimeEntity {
     @Column(length = 400)
     private String content;
 
-    @NotNull
     @Column(length = 2083)
     private String imageUrl;
 
@@ -38,4 +38,21 @@ public class Answer extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id")
     private Question question;
+
+    public void updateImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
+
+    @Builder
+    public Answer(String content, String imageUrl, User user, Meeting meeting, Question question) {
+        this.content = content;
+        this.imageUrl = imageUrl;
+        this.user = user;
+        this.meeting = meeting;
+        this.question = question;
+    }
 }
