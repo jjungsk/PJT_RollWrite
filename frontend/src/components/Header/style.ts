@@ -4,7 +4,7 @@ const HeaderContainer = styled.div`
   height: 60px;
   display: flex;
   justify-content: space-between;
-  padding: 0 24px;
+  padding: 0px 14px 0px 24px;
   align-items: center;
   text-align: center;
   color: white;
@@ -15,9 +15,24 @@ const HeaderContainer = styled.div`
   }
 `;
 
+const HeaderTitle = styled.h1`
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 29px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: var(--black-color);
+`;
+
 const BtnContainer = styled.div`
   display: flex;
   justify-content: space-between;
+
+  button {
+    padding-top: 6px;
+    margin-left: 4px;
+  }
 `;
 
-export { HeaderContainer, BtnContainer };
+export { HeaderContainer, HeaderTitle, BtnContainer };

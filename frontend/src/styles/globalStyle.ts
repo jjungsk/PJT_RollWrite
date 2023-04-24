@@ -92,6 +92,23 @@ const GlobalStyle = createGlobalStyle`
     height: 30px;
     cursor: pointer;
   }
+
+  /* 영역 클릭시 생기는 하이라이트 제거*/
+  div:focus,
+  div:hover,
+  span:focus,
+  span:hover,
+  label:focus,
+  label:hover,
+  input:focus,
+  input:hover,
+  a:focus,
+  a:hover,
+  button:focus,
+  button:hover {
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+  }
 `;
 
 export { GlobalStyle };
