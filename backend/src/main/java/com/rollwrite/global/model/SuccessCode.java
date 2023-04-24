@@ -15,6 +15,7 @@ public enum SuccessCode {
 
     // meeting
     ADD_MEETING_SUCCESS(StatusCode.SUCCESS, "모임이 생성되었습니다."),
+    JOIN_MEETING_SUCCESS(StatusCode.SUCCESS,"모임에 가입되었습니다."),
 
     // question
     ADD_QUESTION_SUCCESS(StatusCode.SUCCESS, "질문이 생성되었습니다."),

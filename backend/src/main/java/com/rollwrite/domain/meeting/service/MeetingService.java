@@ -103,4 +103,19 @@ public class MeetingService {
         }
         return tagMeetingList;
     }
+
+    @Transactional
+    public void joinMeeting(Long userId, Long meetingId) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
+
+        Meeting meeting = meetingRepository.findById(meetingId)
+            .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
+
+        Participant participant = Participant.builder()
+            .user(user)
+            .meeting(meeting)
+            .build();
+        participantRepository.save(participant);
+    }
 }
