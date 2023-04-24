@@ -4,7 +4,6 @@ const TagContainer = styled.div`
   width: 60px;
   height: 20px;
   position: relative;
-  margin: 10px;
 `;
 const TagContent = styled.div`
   width: 60px;
