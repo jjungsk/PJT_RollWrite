@@ -6,12 +6,12 @@ import lombok.ToString;
 
 @Getter
 @ToString
-public class AddQuestionResponseDto {
+public class AddQuestionResDto {
     private final int usage;
     private final int limit;
 
     @Builder
-    public AddQuestionResponseDto(int usage, int limit) {
+    public AddQuestionResDto(int usage, int limit) {
         this.usage = usage;
         this.limit = limit;
     }
