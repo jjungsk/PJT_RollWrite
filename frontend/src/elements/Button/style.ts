@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const GhostBtn = styled.button`
-  border: solid 2px var(--darkgray-color);
+  border: 2px solid var(--darkgray-color);
   border-radius: 10px;
   width: 160px;
   height: 52px;
@@ -9,7 +9,7 @@ const GhostBtn = styled.button`
   font-weight: bold;
 `;
 const FillBtn = styled.button`
-  border: solid 2px var(--main-color);
+  border: 2px solid var(--main-color);
   border-radius: 10px;
   width: 160px;
   height: 52px;
