@@ -86,8 +86,12 @@ public class MeetingService {
         List<TagMeeting> tagMeetingList = new ArrayList<>();
         for (Long id : tagIds) {
             // tag id에 해당하는 tag 찾기
-            Tag tag = tagRepository.findById(id).get();
+            Tag tag = tagRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("ID에 해당하는 태그를 찾을 수 없습니다"));
+
+            // Tag -> TagDto
             tagList.add(TagDto.of(tag));
+
             // TagMeeting 에 추가
             TagMeeting tagMeeting = TagMeeting.builder()
                 .tag(tag)
