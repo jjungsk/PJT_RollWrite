@@ -27,7 +27,7 @@ public class MeetingController {
     public ResponseEntity<ApiResponse> addMeeting(
         @RequestBody AddMeetingRequestDto addMeetingRequestDto) throws NoSuchAlgorithmException {
         Long userId = 1L;
-        log.info("Meeting 생성");
+        log.info("Meeting 생성" + addMeetingRequestDto.toString());
         AddMeetingResponseDto addMeetingResponseDto = meetingService.addMeeting(userId,
             addMeetingRequestDto);
         return new ResponseEntity<>(
