@@ -6,10 +6,10 @@ services:
     container_name: db-mysql
     image: mysql/mysql-server:8.0
     environment:
-      MYSQL_ROOT_PASSWORD: 'rollwrite123!'
+      MYSQL_ROOT_PASSWORD: 'roll123!'
       MYSQL_ROOT_HOST: '%'
-      MYSQL_USER: 'rollwrite'
-      MYSQL_PASSWORD: 'rollwrite123!'
+      MYSQL_USER: 'roll'
+      MYSQL_PASSWORD: 'roll123!'
       MYSQL_DATABASE: 'rollwrite'
       TZ: Asia/Seoul
     restart: always

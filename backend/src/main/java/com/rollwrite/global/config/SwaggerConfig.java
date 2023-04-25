@@ -16,12 +16,13 @@ import java.util.*;
 @Configuration
 @EnableOpenApi
 public class SwaggerConfig {
+
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("RollWrite API")
-                .description("RollWrite API Document")
-                .version("1.0")
-                .build();
+            .title("RollWrite API")
+            .description("RollWrite API Document")
+            .version("1.0")
+            .build();
     }
 
     private Set<String> consumeContentTypes() {
@@ -39,12 +40,13 @@ public class SwaggerConfig {
 
     private SecurityContext securityContext() {
         return SecurityContext.builder()
-                .securityReferences(defaultAuth())
-                .build();
+            .securityReferences(defaultAuth())
+            .build();
     }
 
     private List<SecurityReference> defaultAuth() {
-        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
+        AuthorizationScope authorizationScope = new AuthorizationScope("global",
+            "accessEverything");
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
         authorizationScopes[0] = authorizationScope;
         return Arrays.asList(new SecurityReference("Authorization", authorizationScopes));
@@ -56,19 +58,21 @@ public class SwaggerConfig {
 
     @Bean
     public Docket api() {
-        Server serverLocal = new Server("local server", "http://localhost:8081", "for local usages", Collections.emptyList(), Collections.emptyList());
-        Server testServer = new Server("deploy server", "https://", "for deploy server", Collections.emptyList(), Collections.emptyList());
+        Server serverLocal = new Server("local server", "http://localhost:8081", "for local usages",
+            Collections.emptyList(), Collections.emptyList());
+        Server testServer = new Server("deploy server", "https://k8a508.p.ssafy.io",
+            "for deploy server", Collections.emptyList(), Collections.emptyList());
         return new Docket(DocumentationType.OAS_30)
-                .servers(serverLocal, testServer)
-                .securityContexts(Arrays.asList(securityContext()))
-                .securitySchemes(Arrays.asList(apiKey()))
-                .consumes(consumeContentTypes())
-                .produces(produceContentTypes())
-                .useDefaultResponseMessages(false)
-                .apiInfo(apiInfo())
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("com.rollwrite"))
-                .paths(PathSelectors.any())
-                .build();
+            .servers(serverLocal, testServer)
+            .securityContexts(Arrays.asList(securityContext()))
+            .securitySchemes(Arrays.asList(apiKey()))
+            .consumes(consumeContentTypes())
+            .produces(produceContentTypes())
+            .useDefaultResponseMessages(false)
+            .apiInfo(apiInfo())
+            .select()
+            .apis(RequestHandlerSelectors.basePackage("com.rollwrite"))
+            .paths(PathSelectors.any())
+            .build();
     }
 }
