@@ -129,7 +129,7 @@ public class QuestionService {
     }
 
     public List<FindTodayQuestionResDto> findTodayQuestion(Long userId) {
-        // 내가 참여한 모임 전체 조회
+        // 내가 참여한 진행 중인 모임 전체 조회
         List<Meeting> meetingList = participantRepository.findMeetingByUser(userId);
 
         // question, answer 조인
