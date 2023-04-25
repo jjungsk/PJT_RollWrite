@@ -26,12 +26,23 @@ public class ParticipantCustomRepositoryImpl implements ParticipantCustomReposit
     }
 
     @Override
-    public List<Meeting> findMeetingByUser(Long userId) {
+    public List<Meeting> findMeetingByUserAndIsDone(Long userId, boolean isDone) {
         return jpaQueryFactory
                 .select(participant.meeting)
                 .from(participant)
                 .where(participant.user.id.eq(userId))
-                .where(participant.isDone.eq(false))
+                .where(participant.isDone.eq(isDone))
                 .fetch();
+    }
+
+    @Override
+    public Meeting findMeetingByUserAndMeetingAndIsDone(Long userId, Long meetingId, boolean isDone) {
+        return jpaQueryFactory
+                .select(participant.meeting)
+                .from(participant)
+                .where(participant.user.id.eq(userId))
+                .where(participant.meeting.id.eq(meetingId))
+                .where(participant.isDone.eq(isDone))
+                .fetchOne();
     }
 }
