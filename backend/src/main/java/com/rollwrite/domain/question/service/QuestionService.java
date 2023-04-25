@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.Period;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -41,12 +40,15 @@ public class QuestionService {
     private final QuestionParticipantRepository questionParticipantRepository;
 
     @Transactional
-    public AddQuestionResDto addQuestion(Long userId, AddQuestionReqDto addQuestionReqDto) {
+    public void addQuestion(Long userId, AddQuestionReqDto addQuestionReqDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
-        Meeting meeting = meetingRepository.findById(addQuestionReqDto.getMeetingId())
-                .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
+        // 내가 참여한 진행 중인 모임
+        Meeting meeting = participantRepository.findMeetingByUserAndMeetingAndIsDone(userId, addQuestionReqDto.getMeetingId(), false);
+        if (meeting == null) {
+            throw new IllegalArgumentException("모임을 찾을 수 없습니다");
+        }
 
         // TODO : call GPT api for picking emoji!
         String emoji = "";
@@ -59,23 +61,6 @@ public class QuestionService {
                 .emoji(emoji)
                 .build();
         questionParticipantRepository.save(questionParticipant);
-
-        // 내가 meeting에서 한 질문의 개수
-        int usage = Math.toIntExact(questionParticipantRepository.countByUserAndMeeting(user, meeting));
-        log.info("usage : " + usage);
-
-        // meeting의 참여자 수
-        int participantCnt = meeting.getParticipantList().size();
-        log.info("participantCnt : " + participantCnt);
-
-        // meeting의 전체 기간
-        double meetingPeriod = Period.between(meeting.getEndDay(), meeting.getStartDay()).getDays();
-        log.info("meetingPeriod : " + meetingPeriod);
-
-        return AddQuestionResDto.builder()
-                .usage(usage)
-                .limit((int) Math.ceil(meetingPeriod / participantCnt))
-                .build();
     }
 
     @Transactional
@@ -83,8 +68,11 @@ public class QuestionService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
-        Meeting meeting = meetingRepository.findById(addAnswerReqDto.getMeetingId())
-                .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
+        // 내가 참여한 진행 중인 모임
+        Meeting meeting = participantRepository.findMeetingByUserAndMeetingAndIsDone(userId, addAnswerReqDto.getMeetingId(), false);
+        if (meeting == null) {
+            throw new IllegalArgumentException("모임을 찾을 수 없습니다");
+        }
 
         Question question = questionRepository.findById(addAnswerReqDto.getQuestionId())
                 .orElseThrow(() -> new IllegalArgumentException("질문을 찾을 수 없습니다"));
@@ -130,7 +118,7 @@ public class QuestionService {
 
     public List<FindTodayQuestionResDto> findTodayQuestion(Long userId) {
         // 내가 참여한 진행 중인 모임 전체 조회
-        List<Meeting> meetingList = participantRepository.findMeetingByUser(userId);
+        List<Meeting> meetingList = participantRepository.findMeetingByUserAndIsDone(userId, false);
 
         // question, answer 조인
         List<FindTodayQuestionResDto> findTodayQuestionResDtoList = new ArrayList<>();
