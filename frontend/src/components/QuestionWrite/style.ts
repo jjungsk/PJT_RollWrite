@@ -17,7 +17,7 @@ const SubTitle = styled.div`
 
   @media (height < 700px) {
     font-size: 24px;
-    margin: 12px;
+    margin: 8px;
   }
 `;
 

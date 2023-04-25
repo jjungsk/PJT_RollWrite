@@ -55,14 +55,11 @@ const NumberContainer = styled.div<{
   width: 30px;
   height: 30px;
   background-color: ${(props) =>
-    props.isPicked
-      ? "var(--main-color)"
-      : props.isToday
-      ? props.themaColor
-      : ""};
+    props.isPicked ? "var(--main-color)" : props.isToday ? "" : ""};
   border-radius: 16px;
   font-size: 16px;
-
+  border: ${(props) =>
+    props.isToday ? "1px solid var(--darkgray-color)" : ""};
   cursor: pointer;
 `;
 
@@ -101,7 +98,7 @@ const PickedQuestion = styled.div`
 
   @media (height < 700px) {
     font-size: 16px;
-    padding: 10 px 30px;
+    padding: 10px 30px;
   }
 `;
 

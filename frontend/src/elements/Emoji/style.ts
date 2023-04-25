@@ -7,7 +7,7 @@ const EmojiContainer = styled.div`
   line-height: 200px;
   font-size: 180px;
   text-align: center;
-  margin: auto;
+  margin-inline: auto;
 
   @media (height < 700px) {
     height: 140px;

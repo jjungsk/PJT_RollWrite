@@ -40,13 +40,13 @@ const People = styled.div`
 
 const HorizontalBtn = styled.div`
   position: absolute;
-  right: 18px;
+  right: 16px;
   top: 4px;
   display: flex;
-  justify-content: space-around;
+  justify-content: start;
   align-items: center;
   font-weight: bold;
-  width: 40px;
+  width: 50px;
   height: 40px;
 `;
 
