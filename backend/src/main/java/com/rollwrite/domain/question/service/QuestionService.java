@@ -176,9 +176,7 @@ public class QuestionService {
 
         //  List<Question> -> List<FindQuestionResDto>
         return questionList.stream().map(question -> FindQuestionResDto.builder()
-                .questionId(question.getId())
-                .day(question.getCreatedAt().toLocalDate())
-                .question(question.getContent())
+                .question(question)
                 .build()).collect(Collectors.toList());
     }
 }
