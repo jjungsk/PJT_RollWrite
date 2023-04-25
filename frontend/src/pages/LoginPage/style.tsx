@@ -1,27 +1,38 @@
 import styled from "styled-components";
 
-const Wrapper = styled.div`
-  width: 100vw;
-  height: 100vh;
-  background-color: rgb(240, 237, 230);
-  display: flex;
-  flex-direction: column;
-`;
-
-const TextDiv = styled.div`
+const LogoContainer = styled.div`
+  position: absolute;
   width: 100%;
-  height: 56px;
-  font-weight: 700;
-  font-size: 20px;
-  line-height: 30px;
-  align-items: center;
-  text-align: center;
-  margin-block: 70px;
+  padding-top: 45%;
+
+  svg {
+    width: 285px;
+    height: 133px;
+    cursor: default;
+  }
+
+  p {
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 30px;
+    align-items: center;
+    text-align: center;
+    margin-block: 50px;
+  }
 `;
 
-const BtnDiv = styled.div`
-  width: 100%;
-  margin-inline: auto;
+const BtnContainer = styled.div`
+  position: absolute;
+  width: 240px;
+  height: 60px;
+  bottom: 20%;
+  left: 50%;
+  transform: translate(-50%, 0);
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
 `;
 
-export { Wrapper, TextDiv, BtnDiv };
+export { LogoContainer, BtnContainer };

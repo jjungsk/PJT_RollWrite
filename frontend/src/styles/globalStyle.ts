@@ -14,6 +14,7 @@ const GlobalStyle = createGlobalStyle`
 
   :root {
     /* Colors */
+    --bg-color: #F0EDE6;
     --black-color:#1E1E1E;
     --darkgray-color:#7A7E80;
     --gray-color:#DADADA;
@@ -58,6 +59,7 @@ const GlobalStyle = createGlobalStyle`
     height: 100vh;
     text-align: center;
     overflow: hidden;
+    background-color: var(--bg-color);
   }
   button {
     border: none;
