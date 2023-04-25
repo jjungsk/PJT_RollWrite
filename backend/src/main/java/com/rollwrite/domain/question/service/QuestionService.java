@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.Period;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -165,5 +166,17 @@ public class QuestionService {
         });
 
         return findTodayQuestionResDtoList;
+    }
+
+    public List<FindQuestionResDto> findQuestion(Long meetingId) {
+        Meeting meeting = meetingRepository.findById(meetingId)
+                .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
+
+        List<Question> questionList = questionRepository.findAllByMeeting(meeting);
+
+        //  List<Question> -> List<FindQuestionResDto>
+        return questionList.stream().map(question -> FindQuestionResDto.builder()
+                .question(question)
+                .build()).collect(Collectors.toList());
     }
 }
