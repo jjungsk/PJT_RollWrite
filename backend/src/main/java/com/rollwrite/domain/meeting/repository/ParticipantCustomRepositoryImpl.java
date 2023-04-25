@@ -1,6 +1,7 @@
 package com.rollwrite.domain.meeting.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.rollwrite.domain.meeting.entity.Meeting;
 import com.rollwrite.domain.meeting.entity.Participant;
 import com.rollwrite.domain.meeting.entity.QParticipant;
 import java.util.List;
@@ -19,6 +20,15 @@ public class ParticipantCustomRepositoryImpl implements ParticipantCustomReposit
             .selectFrom(participant)
             .where(participant.user.id.eq(userId))
             .where(participant.isDone.eq(false))
+            .fetch();
+    }
+
+    @Override
+    public List<Meeting> findMeetingByUser(Long userId) {
+        return queryFactory
+            .select(participant.meeting)
+            .from(participant)
+            .where(participant.user.id.eq(userId))
             .fetch();
     }
 }

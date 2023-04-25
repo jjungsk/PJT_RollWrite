@@ -7,7 +7,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @RequiredArgsConstructor
-public class AddQuestionRequestDto {
-    private final Long meetingId;
-    private final String question;
+public class ModifyAnswerReqDto {
+    private final Long questionId;
+    private final String answer;
 }
