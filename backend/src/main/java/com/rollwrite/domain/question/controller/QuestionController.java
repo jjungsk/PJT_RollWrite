@@ -27,7 +27,7 @@ public class QuestionController {
     @PostMapping
     public ResponseEntity<ApiResponse<AddQuestionResDto>> addQuestion(@ApiIgnore Authentication authentication,
                                                                       @RequestBody AddQuestionReqDto addQuestionReqDto) {
-        log.info("addQuestionRequestDto : " + addQuestionReqDto);
+        log.info("사용자 질문 생성 addQuestionReqDto : " + addQuestionReqDto);
         AddQuestionResDto addQuestionResDto = questionService.addQuestion(1L, addQuestionReqDto);
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.ADD_QUESTION_SUCCESS, addQuestionResDto), HttpStatus.OK);
     }
@@ -36,7 +36,7 @@ public class QuestionController {
     public ResponseEntity<ApiResponse> addAnswer(@ApiIgnore Authentication authentication,
                                                  @RequestPart AddAnswerReqDto addAnswerReqDto,
                                                  @RequestPart(required = false) MultipartFile image) throws IOException {
-        log.info("addAnswerRequestDto : " + addAnswerReqDto);
+        log.info("답변 생성 addAnswerReqDto : " + addAnswerReqDto);
         questionService.addAnswer(1L, addAnswerReqDto, image);
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.ADD_ANSWER_SUCCESS), HttpStatus.OK);
     }
@@ -45,15 +45,23 @@ public class QuestionController {
     public ResponseEntity<ApiResponse> modifyAnswer(@ApiIgnore Authentication authentication,
                                                     @RequestPart ModifyAnswerReqDto modifyAnswerReqDto,
                                                     @RequestPart(required = false) MultipartFile image) throws IOException {
-        log.info("modifyAnswerRequestDto : " + modifyAnswerReqDto);
+        log.info("답변 수정 modifyAnswerReqDto : " + modifyAnswerReqDto);
         questionService.modifyAnswer(1L, modifyAnswerReqDto, image);
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.MODIFY_ANSWER_SUCCESS), HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<FindTodayQuestionResDto>>> todayQuestionList(@ApiIgnore Authentication authentication) {
-        log.info("call todayQuestionList");
+        log.info("todayQuestionList 호출");
         List<FindTodayQuestionResDto> findTodayQuestionResDtoList = questionService.findTodayQuestion(1L);
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_TODAY_QUESTION_SUCCESS, findTodayQuestionResDtoList), HttpStatus.OK);
+    }
+
+    @GetMapping("/{meetingId}")
+    public ResponseEntity<ApiResponse<List<FindQuestionResDto>>> questionList(@ApiIgnore Authentication authentication,
+                                                                              @PathVariable Long meetingId) {
+        log.info("모임 질문 전체 조회 meetingId : " + meetingId);
+        List<FindQuestionResDto> findQuestionResDtoList = questionService.findQuestion(meetingId);
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_QUESTION_SUCCESS, findQuestionResDtoList), HttpStatus.OK);
     }
 }
