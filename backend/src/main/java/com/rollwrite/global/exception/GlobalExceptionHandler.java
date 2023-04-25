@@ -15,6 +15,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiResponse> handleIllegalArgument(IllegalArgumentException e) {
-        return new ResponseEntity<>(ApiResponse.error(ErrorCode.VALIDATION_EXCEPTION), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(ApiResponse.error(ErrorCode.VALIDATION_EXCEPTION, e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 }
