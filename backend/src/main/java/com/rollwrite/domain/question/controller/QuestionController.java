@@ -56,4 +56,12 @@ public class QuestionController {
         List<FindTodayQuestionResDto> findTodayQuestionResDtoList = questionService.findTodayQuestion(1L);
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_TODAY_QUESTION_SUCCESS, findTodayQuestionResDtoList), HttpStatus.OK);
     }
+
+    @GetMapping("/{meetingId}")
+    public ResponseEntity<ApiResponse<List<FindQuestionResDto>>> questionList(@ApiIgnore Authentication authentication,
+                                                                              @PathVariable Long meetingId) {
+        log.info("meetingId : " + meetingId);
+        List<FindQuestionResDto> findQuestionResDtoList = questionService.findQuestion(meetingId);
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_QUESTION_SUCCESS, findQuestionResDtoList), HttpStatus.OK);
+    }
 }
