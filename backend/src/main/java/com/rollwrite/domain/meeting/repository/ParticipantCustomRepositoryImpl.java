@@ -10,13 +10,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ParticipantCustomRepositoryImpl implements ParticipantCustomRepository {
 
-    private final JPAQueryFactory queryFactory;
+    private final JPAQueryFactory jpaQueryFactory;
 
     QParticipant participant = QParticipant.participant;
 
     @Override
     public List<Participant> findParticipantByUser(Long userId) {
-        return queryFactory
+        return jpaQueryFactory
             .selectFrom(participant)
             .where(participant.user.id.eq(userId))
             .where(participant.isDone.eq(false))
@@ -25,7 +25,7 @@ public class ParticipantCustomRepositoryImpl implements ParticipantCustomReposit
 
     @Override
     public List<Meeting> findMeetingByUser(Long userId) {
-        return queryFactory
+        return jpaQueryFactory
             .select(participant.meeting)
             .from(participant)
             .where(participant.user.id.eq(userId))

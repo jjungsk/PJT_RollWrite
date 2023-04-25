@@ -7,6 +7,7 @@ import java.util.List;
 public interface ParticipantCustomRepository {
 
     List<Participant> findParticipantByUser(Long userId);
+
     List<Meeting> findMeetingByUser(Long userId);
 
 }
