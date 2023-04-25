@@ -19,14 +19,14 @@ const TagContainer = styled.div`
 const Title = styled.div`
   font-size: 14px;
   font-weight: bold;
-
+  text-align: start;
   width: 100%;
   height: 24px;
 `;
 const SubTitle = styled.div`
   font-size: 14px;
   color: var(--darkgray-color);
-
+  text-align: start;
   width: 100%;
   height: 16px;
 `;

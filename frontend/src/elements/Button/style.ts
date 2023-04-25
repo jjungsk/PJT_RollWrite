@@ -23,12 +23,12 @@ const NavBtnContainer = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  width: 72px;
-  height: 72px;
+  width: 64px;
+  height: 66px;
 `;
 const NavBtn = styled.button<{ isClicked?: boolean }>`
-  width: 52px;
-  height: 52px;
+  width: 48px;
+  height: 48px;
   background-color: ${(props) => (props.isClicked ? "var(--main-color)" : "")};
   border-radius: 16px;
 `;
