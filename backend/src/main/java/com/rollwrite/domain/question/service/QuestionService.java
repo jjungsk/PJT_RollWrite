@@ -45,10 +45,8 @@ public class QuestionService {
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
         // 내가 참여한 진행 중인 모임
-        Meeting meeting = participantRepository.findMeetingByUserAndMeetingAndIsDone(userId, addQuestionReqDto.getMeetingId(), false);
-        if (meeting == null) {
-            throw new IllegalArgumentException("모임을 찾을 수 없습니다");
-        }
+        Meeting meeting = participantRepository.findMeetingByUserAndMeetingAndIsDone(userId, addQuestionReqDto.getMeetingId(), false)
+                .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
 
         // TODO : call GPT api for picking emoji!
         String emoji = "";
@@ -69,10 +67,8 @@ public class QuestionService {
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
         // 내가 참여한 진행 중인 모임
-        Meeting meeting = participantRepository.findMeetingByUserAndMeetingAndIsDone(userId, addAnswerReqDto.getMeetingId(), false);
-        if (meeting == null) {
-            throw new IllegalArgumentException("모임을 찾을 수 없습니다");
-        }
+        Meeting meeting = participantRepository.findMeetingByUserAndMeetingAndIsDone(userId, addAnswerReqDto.getMeetingId(), false)
+                .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
 
         Question question = questionRepository.findById(addAnswerReqDto.getQuestionId())
                 .orElseThrow(() -> new IllegalArgumentException("질문을 찾을 수 없습니다"));

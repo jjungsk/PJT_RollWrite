@@ -6,6 +6,7 @@ import com.rollwrite.domain.meeting.entity.Participant;
 import com.rollwrite.domain.meeting.entity.QParticipant;
 
 import java.util.List;
+import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,13 +37,13 @@ public class ParticipantCustomRepositoryImpl implements ParticipantCustomReposit
     }
 
     @Override
-    public Meeting findMeetingByUserAndMeetingAndIsDone(Long userId, Long meetingId, boolean isDone) {
-        return jpaQueryFactory
+    public Optional<Meeting> findMeetingByUserAndMeetingAndIsDone(Long userId, Long meetingId, boolean isDone) {
+        return Optional.ofNullable(jpaQueryFactory
                 .select(participant.meeting)
                 .from(participant)
                 .where(participant.user.id.eq(userId))
                 .where(participant.meeting.id.eq(meetingId))
                 .where(participant.isDone.eq(isDone))
-                .fetchOne();
+                .fetchOne());
     }
 }
