@@ -27,7 +27,7 @@ public class QuestionController {
     @PostMapping
     public ResponseEntity<ApiResponse<AddQuestionResDto>> addQuestion(@ApiIgnore Authentication authentication,
                                                                       @RequestBody AddQuestionReqDto addQuestionReqDto) {
-        log.info("addQuestionRequestDto : " + addQuestionReqDto);
+        log.info("addQuestionReqDto : " + addQuestionReqDto);
         AddQuestionResDto addQuestionResDto = questionService.addQuestion(1L, addQuestionReqDto);
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.ADD_QUESTION_SUCCESS, addQuestionResDto), HttpStatus.OK);
     }
@@ -36,7 +36,7 @@ public class QuestionController {
     public ResponseEntity<ApiResponse> addAnswer(@ApiIgnore Authentication authentication,
                                                  @RequestPart AddAnswerReqDto addAnswerReqDto,
                                                  @RequestPart(required = false) MultipartFile image) throws IOException {
-        log.info("addAnswerRequestDto : " + addAnswerReqDto);
+        log.info("addAnswerReqDto : " + addAnswerReqDto);
         questionService.addAnswer(1L, addAnswerReqDto, image);
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.ADD_ANSWER_SUCCESS), HttpStatus.OK);
     }
@@ -45,7 +45,7 @@ public class QuestionController {
     public ResponseEntity<ApiResponse> modifyAnswer(@ApiIgnore Authentication authentication,
                                                     @RequestPart ModifyAnswerReqDto modifyAnswerReqDto,
                                                     @RequestPart(required = false) MultipartFile image) throws IOException {
-        log.info("modifyAnswerRequestDto : " + modifyAnswerReqDto);
+        log.info("modifyAnswerReqDto : " + modifyAnswerReqDto);
         questionService.modifyAnswer(1L, modifyAnswerReqDto, image);
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.MODIFY_ANSWER_SUCCESS), HttpStatus.OK);
     }
