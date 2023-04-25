@@ -6,8 +6,10 @@ import { ReactComponent as BackCircle } from "../../assets/Back_Circle.svg";
 import { ReactComponent as PrevCircle } from "../../assets/Prev_Circle.svg";
 import { HomePageContainer, Header, HeaderTitle } from "./style";
 import QuestionWrite from "../../components/QuestionWrite/QuestionWrite";
+import { useNavigate } from "react-router-dom";
 
 function HomePage() {
+  const navigate = useNavigate();
   const [homeContent, setHomeContent] = useState(0); // 0:달력, 1:질문, 2:참여지
   return (
     <HomePageContainer>
@@ -15,9 +17,13 @@ function HomePage() {
         <HeaderTitle>
           <span>주대선</span> 님의 모임
         </HeaderTitle>
-        <Plus />
+        <Plus
+          onClick={() => {
+            navigate("/create");
+          }}
+        />
       </Header>
-      <GroupCard />
+      <GroupCard setHomeContent={setHomeContent} homeContent={homeContent} />
       {homeContent === 0 && <Calendar setHomeContent={setHomeContent} />}
       {homeContent === 1 && <QuestionWrite setHomeContent={setHomeContent} />}
       <BackCircle className="back_btn" />

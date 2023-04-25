@@ -17,9 +17,6 @@ function QuestionWrite(props: {
       <Title>원하는 질문을 입력해주세요.</Title>
       <SubTitle>무잇이 궁금 하나요?</SubTitle>
       <Emoji label="🧐" />
-      <QuestionCount>
-        <span>1</span>/<span>4</span>
-      </QuestionCount>
       <QuestionInput onChange={onChange} value={question} />
       {question.length > 0 ? (
         <FillBtn label="질문 추가" onClick={() => props.setHomeContent(0)} />

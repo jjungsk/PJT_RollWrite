@@ -8,7 +8,11 @@ import {
 } from "./style";
 import GroupTag from "../../elements/GroupTag/GroupTag";
 import { ReactComponent as Person } from "../../assets/Person.svg";
-function GroupCard() {
+import { ReactComponent as Calendar } from "../../assets/Calendar.svg";
+function GroupCard(props: {
+  setHomeContent: (homeContent: number) => void;
+  homeContent: number;
+}) {
   return (
     <CardContainer margin={"16px 20px"}>
       <div>
@@ -22,7 +26,8 @@ function GroupCard() {
         <GroupTag label="프로젝트" />
         <GroupTag label="가나다라마바사" />
       </TagContainer>
-      <HorizontalBtn>
+
+      <HorizontalBtn onClick={() => props.setHomeContent(2)}>
         <Person />
         <p>6</p>
       </HorizontalBtn>
