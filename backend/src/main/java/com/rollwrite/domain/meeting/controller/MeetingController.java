@@ -2,6 +2,7 @@ package com.rollwrite.domain.meeting.controller;
 
 import com.rollwrite.domain.meeting.dto.AddMeetingRequestDto;
 import com.rollwrite.domain.meeting.dto.AddMeetingResponseDto;
+import com.rollwrite.domain.meeting.dto.MeetingCalenderResDto;
 import com.rollwrite.domain.meeting.dto.MeetingInProgressResDto;
 import com.rollwrite.domain.meeting.dto.TagDto;
 import com.rollwrite.domain.meeting.service.MeetingService;
@@ -49,6 +50,20 @@ public class MeetingController {
             addMeetingRequestDto);
         return new ResponseEntity<>(
             ApiResponse.success(SuccessCode.ADD_MEETING_SUCCESS, addMeetingResponseDto),
+            HttpStatus.OK);
+    }
+
+    @GetMapping("/{meetingId}")
+    public ResponseEntity<ApiResponse> meetingCalenderList(@PathVariable Long meetingId) {
+        Long userId = 1L;
+        log.info("진행 중인 모임 캘린더 조회  meetingId : " + meetingId + " userId : " + userId);
+
+        List<MeetingCalenderResDto> meetingCalenderResDtoList = meetingService.findMeetingCalender(
+            userId, meetingId);
+
+        return new ResponseEntity<>(
+            ApiResponse.success(SuccessCode.GET_MEETING_CALENDER_SUCCESS,
+                meetingCalenderResDtoList),
             HttpStatus.OK);
     }
 
