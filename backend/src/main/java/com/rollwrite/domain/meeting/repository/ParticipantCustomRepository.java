@@ -1,11 +1,13 @@
 package com.rollwrite.domain.meeting.repository;
 
 import com.rollwrite.domain.meeting.entity.Meeting;
-import org.springframework.stereotype.Repository;
-
+import com.rollwrite.domain.meeting.entity.Participant;
 import java.util.List;
 
-@Repository
 public interface ParticipantCustomRepository {
+
+    List<Participant> findParticipantByUser(Long userId);
+
     List<Meeting> findMeetingByUser(Long userId);
+
 }
