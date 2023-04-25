@@ -128,11 +128,8 @@ public class QuestionService {
     }
 
     public List<FindTodayQuestionResDto> findTodayQuestion(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
-
         // 내가 참여한 모임 전체 조회
-        List<Meeting> meetingList = participantRepository.findMeetingByUser(user);
+        List<Meeting> meetingList = participantRepository.findMeetingByUser(userId);
 
         // question, answer 조인
         List<FindTodayQuestionResDto> findTodayQuestionResDtoList = new ArrayList<>();

@@ -3,7 +3,6 @@ package com.rollwrite.domain.meeting.repository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.rollwrite.domain.meeting.entity.Meeting;
 import com.rollwrite.domain.meeting.entity.QParticipant;
-import com.rollwrite.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -15,11 +14,11 @@ public class ParticipantCustomRepositoryImpl implements ParticipantCustomReposit
     QParticipant participant = QParticipant.participant;
 
     @Override
-    public List<Meeting> findMeetingByUser(User user) {
+    public List<Meeting> findMeetingByUser(Long userId) {
         return jpaQueryFactory
                 .select(participant.meeting)
                 .from(participant)
-                .where(participant.user.eq(user))
+                .where(participant.user.id.eq(userId))
                 .fetch();
     }
 }
