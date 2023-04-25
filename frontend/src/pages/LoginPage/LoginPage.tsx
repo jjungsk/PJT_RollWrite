@@ -2,18 +2,20 @@ import React from "react";
 import { LogoContainer, BtnContainer } from "./style";
 import { ReactComponent as Logo } from "../../assets/Logo.svg";
 import { ReactComponent as KakaoBtn } from "../../assets/Kakao.svg";
-import { updateLoginStatus } from "../../store/authReducer";
-import { useAppDispatch } from "../../constants/types";
+import { updateLoginStatus, updateRouteHistory } from "../../store/authReducer";
+import { useAppDispatch, useAppSelector } from "../../constants/types";
 import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const routeHistory = useAppSelector((state) => state.auth.routeHistory);
 
   const handleClickLoginBtn = () => {
     // TODO: 카카오 로그인 구현
     dispatch(updateLoginStatus(true));
-    navigate("");
+    navigate(routeHistory);
+    dispatch(updateRouteHistory(""));
   };
 
   return (
