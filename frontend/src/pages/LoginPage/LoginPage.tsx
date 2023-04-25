@@ -1,7 +1,36 @@
 import React from "react";
+import { LogoContainer, BtnContainer } from "./style";
+import { ReactComponent as Logo } from "../../assets/Logo.svg";
+import { ReactComponent as KakaoBtn } from "../../assets/Kakao.svg";
+import { updateLoginStatus, updateRouteHistory } from "../../store/authReducer";
+import { useAppDispatch, useAppSelector } from "../../constants/types";
+import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
-  return <div>로그인 페이지</div>;
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const routeHistory = useAppSelector((state) => state.auth.routeHistory);
+
+  const handleClickLoginBtn = () => {
+    // TODO: 카카오 로그인 구현
+    dispatch(updateLoginStatus(true));
+    navigate(routeHistory);
+    dispatch(updateRouteHistory(""));
+  };
+
+  return (
+    <>
+      <LogoContainer>
+        <Logo />
+        <p>
+          친구들과 특별한 추억을 <br /> 만들어 볼까요?
+        </p>
+      </LogoContainer>
+      <BtnContainer>
+        <KakaoBtn onClick={handleClickLoginBtn} />
+      </BtnContainer>
+    </>
+  );
 }
 
 export default LoginPage;

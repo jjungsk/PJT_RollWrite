@@ -9,7 +9,6 @@ function SubLayout() {
         display: "flex",
         minHeight: "100vh",
         flexDirection: "column",
-        backgroundColor: "#F0EDE6",
       }}
     >
       <Header sub />
