@@ -6,13 +6,14 @@ const FooterContainer = styled.div`
   width: 100vw;
   min-width: 360px;
   max-width: 450px;
-  height: 74px;
+  height: 70px;
   padding-inline: 24px;
   display: flex;
   justify-content: space-around;
   text-align: center;
   color: white;
   font-size: 14px;
+  background-color: var(--bg-color);
 `;
 
 export { FooterContainer };
