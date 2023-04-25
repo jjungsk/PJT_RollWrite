@@ -7,6 +7,11 @@ const GhostBtn = styled.button`
   height: 48px;
   font-size: 20px;
   font-weight: bold;
+  @media (height < 700px) {
+    font-size: 16px;
+    width: 112px;
+    height: 40px;
+  }
 `;
 const FillBtn = styled.button`
   border: 2px solid var(--main-color);
@@ -17,6 +22,11 @@ const FillBtn = styled.button`
   color: white;
   background-color: var(--main-color);
   font-weight: bold;
+  @media (height < 700px) {
+    font-size: 16px;
+    width: 112px;
+    height: 40px;
+  }
 `;
 const NavBtnContainer = styled.div`
   display: flex;

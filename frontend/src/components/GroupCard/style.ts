@@ -4,7 +4,7 @@ const CardContainer = styled.div<{ margin: string }>`
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 16px 16px 12px 16px;
+  padding: 16px 16px 12px;
   background-color: var(--green-color);
   box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
   margin: ${(props) => props.margin};
@@ -40,8 +40,8 @@ const People = styled.div`
 
 const HorizontalBtn = styled.div`
   position: absolute;
-  right: 16px;
-  top: 0px;
+  right: 18px;
+  top: 4px;
   display: flex;
   justify-content: space-around;
   align-items: center;

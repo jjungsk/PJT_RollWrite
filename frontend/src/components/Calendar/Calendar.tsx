@@ -28,6 +28,7 @@ import {
   Header,
   PickedDay,
   PickedQuestion,
+  QuestionContainer,
 } from "./style";
 import { ko } from "date-fns/locale";
 import GhostBtn from "../../elements/Button/GhostBtn";
@@ -75,7 +76,7 @@ function makeCalendar(monthStart: Date) {
   return daysOfMonth;
 }
 
-function Calendar() {
+function Calendar(props: { setHomeContent: (homeContent: number) => void }) {
   const [monthStart, setMonthStart] = useState(startOfMonth(TODAY));
   const [pickedDay, setPickedDay] = useState(TODAY);
   const [isSwipeTop, setIsSwipeTop] = useState(false);
@@ -120,9 +121,9 @@ function Calendar() {
       let diffY = initialY - currentY;
 
       if (Math.abs(diffX) > Math.abs(diffY)) {
-        diffX > 0 ? console.log("to left") : console.log("to right");
+        diffX > 0 ? console.log("to left" + diffX) : console.log("to right");
       } else {
-        diffY > 0 ? setIsSwipeTop(true) : setIsSwipeTop(false);
+        diffY > 1 ? setIsSwipeTop(true) : setIsSwipeTop(false);
       }
 
       initialX = null;
@@ -141,49 +142,58 @@ function Calendar() {
   });
 
   return (
-    <MonthContainer>
-      <Header>
-        <BackArrow onClick={handelClickBackBtn} />
-        <div>{getMonth(monthStart) + 1}월</div>
-        <PrevArrow onClick={handelClickPrevBtn} />
-      </Header>
-      {daysOfMonth.map((month, i) => (
-        <WeekContainer key={i}>
-          {month.map((day, j) =>
-            day.isCurrMonth ? (
-              <DayContainer
-                key={j}
-                onClick={() => handelClickDay(day.currentDay)}
-                isSwipeTop={isSwipeTop}
-              >
-                <NumberContainer isToday={day.isToday}>
-                  {day.formattedDate}
-                </NumberContainer>
-                {isSwipeTop ? (
-                  <MiniSprout
-                    fill={sproutColorList[day.sprout]}
-                    style={{ width: "24px", height: "2px" }}
-                  />
-                ) : (
-                  <SproutContainer>{sproutList[day.sprout]}</SproutContainer>
-                )}
-              </DayContainer>
-            ) : (
-              <DayContainer key={j} isSwipeTop={isSwipeTop} />
-            )
-          )}
-        </WeekContainer>
-      ))}
+    <>
+      <MonthContainer>
+        <Header>
+          <BackArrow onClick={handelClickBackBtn} />
+          <div>{getMonth(monthStart) + 1}월</div>
+          <PrevArrow onClick={handelClickPrevBtn} />
+        </Header>
+        {daysOfMonth.map((month, i) => (
+          <WeekContainer key={i}>
+            {month.map((day, j) =>
+              day.isCurrMonth ? (
+                <DayContainer
+                  key={j}
+                  onClick={() => handelClickDay(day.currentDay)}
+                  isSwipeTop={isSwipeTop}
+                >
+                  <NumberContainer
+                    isPicked={day.currentDay === pickedDay}
+                    isToday={day.isToday}
+                    themaColor="var(--green-color)"
+                  >
+                    {day.formattedDate}
+                  </NumberContainer>
+                  {isSwipeTop ? (
+                    <MiniSprout
+                      fill={sproutColorList[day.sprout]}
+                      style={{ width: "24px", height: "2px" }}
+                    />
+                  ) : (
+                    <SproutContainer>{sproutList[day.sprout]}</SproutContainer>
+                  )}
+                </DayContainer>
+              ) : (
+                <DayContainer key={j} isSwipeTop={isSwipeTop} />
+              )
+            )}
+          </WeekContainer>
+        ))}
+      </MonthContainer>
       {isSwipeTop && (
-        <>
+        <QuestionContainer>
           <PickedDay>{format(pickedDay, "PPP", { locale: ko })}</PickedDay>
           <PickedQuestion>
             프로젝트를 하면서 가장 특별했던 순간이 무엇인가요?
           </PickedQuestion>
-          <GhostBtn label={"질문 만들기"} />
-        </>
+          <GhostBtn
+            label={"질문 만들기"}
+            onClick={() => props.setHomeContent(1)}
+          />
+        </QuestionContainer>
       )}
-    </MonthContainer>
+    </>
   );
 }
 
