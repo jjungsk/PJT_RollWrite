@@ -107,7 +107,7 @@ const PickedQuestion = styled.div`
 
   @media (height < 700px) {
     font-size: 16px;
-    padding: 12px 30px;
+    padding: 8px 30px;
   }
 `;
 

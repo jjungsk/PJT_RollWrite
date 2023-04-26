@@ -7,20 +7,8 @@ import { ReactComponent as Sprout5 } from "../../assets/Sprout_5.svg";
 import { ReactComponent as MiniSprout } from "../../assets/MiniSprout.svg";
 import { ReactComponent as BackArrow } from "../../assets/Back_Arrow.svg";
 import { ReactComponent as PrevArrow } from "../../assets/Prev_Arrow.svg";
-import {
-  format,
-  isSameDay,
-  isSameMonth,
-  addDays,
-  getMonth,
-  startOfMonth,
-  startOfWeek,
-  getWeeksInMonth,
-  addMonths,
-  subMonths,
-  isAfter,
-  isBefore,
-} from "date-fns";
+
+import { format, getMonth, startOfMonth, addMonths, subMonths } from "date-fns";
 import {
   MonthContainer,
   WeekContainer,
@@ -35,9 +23,9 @@ import {
 import { ko } from "date-fns/locale";
 import GhostBtn from "../../elements/Button/GhostBtn";
 import { DayInfo, Question } from "../../constants/types";
+import { initTouch, swipeDirection } from "../../apis/swipeDetector";
+import { TODAY, makeCalendar } from "../../apis/makeCalendar";
 
-const DATE_WEEK_LENGTH = 7;
-const TODAY = new Date();
 const sproutList = [
   <></>,
   <Sprout1 />,
@@ -54,77 +42,6 @@ const sproutColorList = [
   "#CF6F49",
   "#FFDC00",
 ];
-
-function generateOneWeek(
-  dateStart: Date,
-  monthStart: Date,
-  questionList?: Question[],
-  startDay?: string,
-  endDay?: string
-) {
-  let map = new Map();
-  questionList?.map((question) => {
-    map.set(question.day, question.question);
-    return 0;
-  });
-
-  const daysOfWeek = [];
-  let currentDay = dateStart;
-
-  for (let i = 0; i < DATE_WEEK_LENGTH; i++) {
-    const isPeriod =
-      isAfter(currentDay, new Date(startDay!)) &&
-      isBefore(currentDay, new Date(endDay!));
-    const isToday = isSameDay(currentDay, TODAY);
-    daysOfWeek.push({
-      currentDay,
-      formattedDate: format(currentDay, "d"),
-      isToday: isToday,
-      isCurrMonth: isSameMonth(currentDay, monthStart),
-      isPeriod: isPeriod,
-      sprout: map.has(format(currentDay, "yyyy-MM-dd", { locale: ko }))
-        ? Math.floor(Math.random() * 4) + 1
-        : 0,
-      question: map.has(format(currentDay, "yyyy-MM-dd", { locale: ko }))
-        ? map.get(format(currentDay, "yyyy-MM-dd", { locale: ko }))
-        : isToday
-        ? "오늘 질문에 답변했나요? 🤓"
-        : isPeriod
-        ? isAfter(TODAY, currentDay)
-          ? "답변을 하지 않아서 질문을 볼수가 없어요~😛"
-          : "아직 질문이 공개되지 않았습니다.🤔"
-        : "모임 기간이 아닙니다. ❌",
-    });
-
-    currentDay = addDays(currentDay, 1);
-  }
-
-  return daysOfWeek;
-}
-
-function makeCalendar(
-  monthStart: Date,
-  questionList?: Question[],
-  startDay?: string,
-  endDay?: string
-) {
-  const weekLength = getWeeksInMonth(monthStart);
-  const daysOfMonth = [];
-  for (let i = 0; i < weekLength; i++) {
-    const currentDate = addDays(monthStart, i * 7);
-    const startDate = startOfWeek(currentDate);
-    const oneWeek = generateOneWeek(
-      startDate,
-      monthStart,
-      questionList,
-      startDay,
-      endDay
-    );
-    daysOfMonth.push(oneWeek);
-  }
-
-  return daysOfMonth;
-}
 
 function Calendar(props: {
   setHomeContent: (homeContent: number) => void;
@@ -160,44 +77,26 @@ function Calendar(props: {
     [monthStart, props.endDay, props.questionList, props.startDay]
   );
 
-  // 스와이프 감지
-  let initialX: number | null = null;
-  let initialY: number | null = null;
-
-  function initTouch(e: MouseEvent | React.TouchEvent<HTMLDivElement>) {
-    const touchEvent = e as React.TouchEvent;
-    initialX = touchEvent.touches
-      ? touchEvent.touches[0].clientX
-      : (e as MouseEvent).clientX;
-    initialY = touchEvent.touches
-      ? touchEvent.touches[0].clientY
-      : (e as MouseEvent).clientY;
-  }
-
-  function swipeDirection(e: MouseEvent | React.TouchEvent<HTMLDivElement>) {
-    if (initialX !== null && initialY !== null) {
-      const touchEvent = e as React.TouchEvent;
-      const currentX = touchEvent.touches
-        ? touchEvent.touches[0].clientX
-        : (e as MouseEvent).clientX;
-      const currentY = touchEvent.touches
-        ? touchEvent.touches[0].clientY
-        : (e as MouseEvent).clientY;
-
-      let diffX = initialX - currentX;
-      let diffY = initialY - currentY;
-
-      if (Math.abs(diffX) < Math.abs(diffY))
-        diffY > 0 ? setIsSwipeTop(true) : setIsSwipeTop(false);
-
-      initialX = null;
-      initialY = null;
-    }
-  }
-
   return (
     <>
-      <MonthContainer onTouchStart={initTouch} onTouchMove={swipeDirection}>
+      <MonthContainer
+        onTouchStart={initTouch}
+        onTouchMove={(e) =>
+          swipeDirection(
+            e,
+            () => setIsSwipeTop(true),
+            () => setIsSwipeTop(false)
+          )
+        }
+        onMouseDown={initTouch}
+        onMouseMove={(e) =>
+          swipeDirection(
+            e,
+            () => setIsSwipeTop(true),
+            () => setIsSwipeTop(false)
+          )
+        }
+      >
         <Header>
           <BackArrow onClick={handelClickBackBtn} />
           <div>{getMonth(monthStart) + 1}월</div>
