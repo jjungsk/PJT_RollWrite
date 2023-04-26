@@ -41,8 +41,7 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository {
                 .from(question)
                 .leftJoin(answer).on(question.eq(answer.question))
                 .where(question.meeting.eq(meeting))
-                .orderBy(question.id.desc())
-                .limit(1)
+                .where(question.expireTime.after(LocalDateTime.now()))
                 .fetchOne();
 
         return Optional.ofNullable(findTodayQuestionResDto);
