@@ -4,6 +4,7 @@ import com.rollwrite.domain.meeting.dto.AddMeetingRequestDto;
 import com.rollwrite.domain.meeting.dto.AddMeetingResponseDto;
 import com.rollwrite.domain.meeting.dto.MeetingCalenderResDto;
 import com.rollwrite.domain.meeting.dto.MeetingInProgressResDto;
+import com.rollwrite.domain.meeting.dto.MeetingResultDto;
 import com.rollwrite.domain.meeting.dto.TagDto;
 import com.rollwrite.domain.meeting.service.MeetingService;
 import com.rollwrite.global.model.ApiResponse;
@@ -12,6 +13,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -83,6 +85,17 @@ public class MeetingController {
         List<TagDto> tagDtoList = meetingService.findTag();
         return new ResponseEntity<>(
             ApiResponse.success(SuccessCode.GET_TAG_SUCCESS, tagDtoList),
+            HttpStatus.OK);
+    }
+
+    @GetMapping("/result")
+    public ResponseEntity<ApiResponse> meetingResultList(Pageable pageable) {
+        Long userId = 1L;
+        log.info("내 모임 결과 전체 조회 userId : " + userId + " " + pageable.toString());
+        List<MeetingResultDto> meetingResultDtoList = meetingService.findMeetingResult(userId,
+            pageable);
+        return new ResponseEntity<>(
+            ApiResponse.success(SuccessCode.GET_MEETING_RESULT_SUCCESS, meetingResultDtoList),
             HttpStatus.OK);
     }
 }
