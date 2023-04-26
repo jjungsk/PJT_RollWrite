@@ -24,7 +24,14 @@ const NameDiv = styled.div`
 const EmojiContainer = styled.div`
   width: 100%;
   margin-block: 30px;
+  display: flex;
+  align-items: space-between;
 `;
+
+const ArrowContainer = styled.div`
+  margin: auto;
+`;
+
 
 const TextDiv = styled.div`
   width: 100%;
@@ -33,6 +40,7 @@ const TextDiv = styled.div`
   text-align: center;
   font-weight: 700;
   line-height: 24px;
+  padding: 0 15px;
 `;
 
 const BtnContainer = styled.div`
@@ -44,7 +52,8 @@ export {
     InfoContainer, 
     DateDiv, 
     NameDiv, 
-    EmojiContainer, 
+    EmojiContainer,
+    ArrowContainer, 
     TextDiv, 
     BtnContainer 
 };

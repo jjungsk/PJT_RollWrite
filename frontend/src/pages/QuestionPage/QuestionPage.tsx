@@ -5,11 +5,14 @@ import {
   DateDiv,
   NameDiv,
   EmojiContainer,
+  ArrowContainer,
   TextDiv,
   BtnContainer,
 } from "./style";
 import GhostBtn from "../../elements/Button/GhostBtn";
 import Emoji from "../../elements/Emoji/Emoji";
+import { ReactComponent as BackArrow } from "../../assets/Back_Btn.svg";
+import { ReactComponent as PrevArrow } from "../../assets/Prev_Btn.svg";
 
 function QuestionPage() {
   const navigate = useNavigate();
@@ -38,9 +41,18 @@ function QuestionPage() {
         <NameDiv>싸피모임 D-10</NameDiv>
       </InfoContainer>
       <EmojiContainer>
+        <ArrowContainer>
+          <BackArrow></BackArrow>
+        </ArrowContainer>
         <Emoji label="🍖"></Emoji>
+        <ArrowContainer>
+          <PrevArrow></PrevArrow>
+        </ArrowContainer>
       </EmojiContainer>
-      <TextDiv>어제 저녁에 무엇을 먹었나요?</TextDiv>
+      <TextDiv>
+        어제 저녁에 무엇을 먹었나요?어제 저녁에 무엇을 먹었나요?어제 저녁에
+        무엇을 먹었나요?
+      </TextDiv>
       <BtnContainer>
         <GhostBtn label="입력하기"></GhostBtn>
       </BtnContainer> */}
