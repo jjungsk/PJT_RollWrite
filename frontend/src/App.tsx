@@ -17,10 +17,11 @@ import SubLayout from "./Layout/SubLayout";
 import { useAppDispatch, useAppSelector } from "./constants/types";
 import { updateRouteHistory } from "./store/authReducer";
 import CreateGroupPage from "./pages/CreateGroupPage/CreateGroupPage";
+import AnswerPage from "./pages/AnswerPage/AnswerPage";
 
 function App() {
-  // const dispatch = useAppDispatch();
-  // const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   // const isLogin = useAppSelector((state) => state.auth.isLogin);
   // const routeHistory = useAppSelector((state) => state.auth.routeHistory);
@@ -60,6 +61,7 @@ function App() {
         <Route path="/notify" element={<NotifyPage />} />
         <Route path="/setting" element={<SettingPage />} />
         <Route path="/create" element={<CreateGroupPage />} />
+        <Route path="/answer" element={<AnswerPage />} />
       </Route>
     </Routes>
   );
