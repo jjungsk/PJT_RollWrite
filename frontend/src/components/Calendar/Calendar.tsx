@@ -131,6 +131,7 @@ function Calendar(props: {
   questionList?: Question[];
   startDay?: string;
   endDay?: string;
+  color?: string;
 }) {
   const [monthStart, setMonthStart] = useState(startOfMonth(TODAY));
   const [pickedDay, setPickedDay] = useState(TODAY);
@@ -212,6 +213,7 @@ function Calendar(props: {
                   isSwipeTop={isSwipeTop}
                   isPicked={day.currentDay === pickedDay}
                   isPeriod={day.isPeriod}
+                  color={props.color}
                 >
                   <NumberContainer isToday={day.isToday}>
                     {day.formattedDate}

@@ -33,6 +33,7 @@ const DayContainer = styled.div<{
   isSwipeTop: boolean;
   isPicked: boolean;
   isPeriod?: boolean;
+  color?: string;
 }>`
   display: flex;
   flex-direction: column;
@@ -44,7 +45,7 @@ const DayContainer = styled.div<{
   border: ${(props) =>
     props.isPicked ? "1px solid var(--darkgray-color)" : ""};
   border-radius: 4px;
-  background-color: ${(props) => (props.isPeriod ? "var(--green-color)" : "")};
+  background-color: ${(props) => (props.isPeriod ? props.color : "")};
   @media (height < 700px) {
     height: ${(props) => (props.isSwipeTop ? "36px" : "50px")};
   }

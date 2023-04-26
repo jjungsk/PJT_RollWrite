@@ -1,31 +1,48 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import Info from "../../components/Info/Info";
 import { useNavigate } from "react-router-dom";
 import {
   GroupInput,
   GroupNameContainer,
+  TagBtn,
+  TagListContainer,
   ThemaBox,
   ThemaSelect,
   Title,
 } from "./style";
 import GhostBtn from "../../elements/Button/GhostBtn";
-import { CreateGroup } from "../../constants/types";
+import { CreateGroup, Tag } from "../../constants/types";
 import { ReactComponent as Check } from "../../assets/Check.svg";
-import { createGroup } from "../../apis/group";
+import { createGroup, getGroupTag } from "../../apis/group";
 import GroupTag from "../../elements/GroupTag/GroupTag";
+import { isAfter, subDays } from "date-fns";
 
 function CreateGroupPage() {
   const navigate = useNavigate();
   const [createState, setCreateState] = useState(0);
+  const [tagList, setTagList] = useState<Tag[]>([]);
+
+  const [selectedTagList, setSelectedTagList] = useState();
+
+  useEffect(() => {
+    getGroupTag()
+      .then((res) => {
+        console.log(res);
+        setTagList(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
 
   const [groupInfo, setGroupInfo] = useState<CreateGroup>({
     title: "",
-    tag: [1, 2, 3, 5, 8],
+    tag: [],
     startDay: "",
     endDay: "",
     color: "",
   });
-  const { title, startDay, endDay, color } = groupInfo;
+  const { title, tag, startDay, endDay, color } = groupInfo;
 
   const handleChangeGroupInfo = (e: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target as HTMLInputElement;
@@ -33,7 +50,6 @@ function CreateGroupPage() {
       ...groupInfo,
       [name]: value,
     });
-    console.log(groupInfo);
   };
 
   const handleClickThemaBtn = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -44,13 +60,34 @@ function CreateGroupPage() {
     });
   };
 
-  const handelClickCreateGroup = () => {
+  const handleClickTagBtn = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const { value, name } = e.target as HTMLButtonElement;
+
+    tag.includes(parseInt(value))
+      ? setGroupInfo({
+          ...groupInfo,
+          [name]: tag.filter((item) => item !== parseInt(value)),
+        })
+      : tag.length > 3
+      ? alert("최대 4개까지 가능합니다")
+      : setGroupInfo({
+          ...groupInfo,
+          [name]: [...tag, parseInt(value)],
+        });
+    console.log(groupInfo);
+  };
+
+  const handelClickNextBtn = () => {
     if (!validateForm()) {
       return;
     }
+    setCreateState(2);
+  };
+  const handelClickCreateGroup = () => {
     createGroup(groupInfo)
       .then((res) => {
         console.log(res);
+        setCreateState(3);
       })
       .catch((error) => {
         console.error(error);
@@ -77,6 +114,16 @@ function CreateGroupPage() {
 
     if (!color) {
       alert("모임 테마를 선택해주세요.");
+      return false;
+    }
+
+    if (isAfter(new Date(startDay), new Date(endDay))) {
+      alert("시작일이 종료일 이후입니다.");
+      return false;
+    }
+
+    if (isAfter(subDays(new Date(), 1), new Date(startDay))) {
+      alert("시작일이 오늘보다 이전입니다.");
       return false;
     }
 
@@ -169,6 +216,33 @@ function CreateGroupPage() {
           <GhostBtn
             label="확인"
             margin="64px 0px"
+            onClick={handelClickNextBtn}
+          />
+        </>
+      )}
+      {createState === 2 && (
+        <>
+          <Title>
+            <div>{title}은</div>
+            <div> 어떤 모임인가요?</div>
+            <p> 최대 4개를 선택할수 있습니다.</p>
+          </Title>
+          <TagListContainer>
+            {tagList.map((tagListTag) => (
+              <TagBtn
+                name="tag"
+                value={tagListTag.tagId}
+                onClick={handleClickTagBtn}
+                isTagged={tag.includes(tagListTag.tagId)}
+              >
+                {tagListTag.content}
+              </TagBtn>
+            ))}
+          </TagListContainer>
+
+          <GhostBtn
+            label="확인"
+            margin="64px 0px"
             onClick={handelClickCreateGroup}
           />
         </>
@@ -182,16 +256,6 @@ function CreateGroupPage() {
           fillOnClick={() => setCreateState(0)}
           ghostOnClick={() => navigate("/home")}
         />
-      )}
-      {createState === 2 && (
-        <>
-          <Title>
-            <div>{title}은</div>
-            <div> 어떤 모임인가요?</div>
-          </Title>
-
-          <GroupTag label="asd" />
-        </>
       )}
     </>
   );
