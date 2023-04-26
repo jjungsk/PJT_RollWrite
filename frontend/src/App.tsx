@@ -17,6 +17,7 @@ import SubLayout from "./Layout/SubLayout";
 import { useAppDispatch, useAppSelector } from "./constants/types";
 import { updateRouteHistory } from "./store/authReducer";
 import CreateGroupPage from "./pages/CreateGroupPage/CreateGroupPage";
+import InvitePage from "./pages/InvitePage/InvitePage";
 
 function App() {
   // const dispatch = useAppDispatch();
@@ -60,6 +61,7 @@ function App() {
         <Route path="/notify" element={<NotifyPage />} />
         <Route path="/setting" element={<SettingPage />} />
         <Route path="/create" element={<CreateGroupPage />} />
+        <Route path="/invite" element={<InvitePage />} />
       </Route>
     </Routes>
   );
