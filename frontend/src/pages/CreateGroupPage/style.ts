@@ -14,11 +14,11 @@ const GroupNameContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 12px 40px;
+  padding: 16px 40px;
   gap: 4px;
 
   @media (height < 700px) {
-    padding: 8px 40px;
+    padding: 12px 40px;
   }
 `;
 const GroupInput = styled.input`
@@ -34,11 +34,12 @@ const ThemaSelect = styled.div`
   justify-content: space-around;
   margin-top: 12px;
 `;
-const ThemaBox = styled.input<{ color: string }>`
+const ThemaBox = styled.button<{ color: string }>`
   display: flex;
   width: 56px;
   height: 56px;
-
+  align-items: center;
+  justify-content: center;
   background: ${(props) => props.color};
   border-radius: 16px;
 `;

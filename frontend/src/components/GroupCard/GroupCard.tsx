@@ -8,28 +8,27 @@ import {
 } from "./style";
 import GroupTag from "../../elements/GroupTag/GroupTag";
 import { ReactComponent as Person } from "../../assets/Person.svg";
-import { ReactComponent as Calendar } from "../../assets/Calendar.svg";
-function GroupCard(props: {
-  setHomeContent: (homeContent: number) => void;
-  homeContent: number;
-}) {
+import { GroupInfo } from "../../constants/types";
+function GroupCard(props: { groupInfo?: GroupInfo }) {
   return (
-    <CardContainer margin={"16px 20px"}>
+    <CardContainer margin={"8px 20px 16px"}>
       <div>
         <Title>
-          <div>자율PJT 팀 가보자구!!...</div>
+          <div>{props.groupInfo?.title}</div>
         </Title>
-        <SubTitle>2023.00.00 ~ 2023.00.00</SubTitle>
+        <SubTitle>
+          {props.groupInfo?.startDay}~{props.groupInfo?.endDay}
+        </SubTitle>
       </div>
       <TagContainer>
-        <GroupTag label="친구" />
-        <GroupTag label="프로젝트" />
-        <GroupTag label="가나다라마바사" />
+        {props.groupInfo?.tag.map((tag, i) => (
+          <GroupTag label={tag.content} key={i} />
+        ))}
       </TagContainer>
 
-      <HorizontalBtn onClick={() => props.setHomeContent(2)}>
+      <HorizontalBtn>
         <Person />
-        <p>6</p>
+        <p>{props.groupInfo?.participantCnt}</p>
       </HorizontalBtn>
     </CardContainer>
   );

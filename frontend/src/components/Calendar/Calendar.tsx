@@ -18,6 +18,8 @@ import {
   getWeeksInMonth,
   addMonths,
   subMonths,
+  isAfter,
+  isBefore,
 } from "date-fns";
 import {
   MonthContainer,
@@ -32,29 +34,66 @@ import {
 } from "./style";
 import { ko } from "date-fns/locale";
 import GhostBtn from "../../elements/Button/GhostBtn";
+import { DayInfo, Question } from "../../constants/types";
 
 const DATE_WEEK_LENGTH = 7;
 const TODAY = new Date();
 const sproutList = [
+  <></>,
   <Sprout1 />,
   <Sprout2 />,
   <Sprout3 />,
   <Sprout4 />,
   <Sprout5 />,
 ];
-const sproutColorList = ["#FF9847", "#3F942C", "#916F66", "#CF6F49", "#FFDC00"];
+const sproutColorList = [
+  "#F0EDE6",
+  "#FF9847",
+  "#3F942C",
+  "#916F66",
+  "#CF6F49",
+  "#FFDC00",
+];
 
-function generateOneWeek(dateStart: Date, monthStart: Date) {
+function generateOneWeek(
+  dateStart: Date,
+  monthStart: Date,
+  questionList?: Question[],
+  startDay?: string,
+  endDay?: string
+) {
+  let map = new Map();
+  questionList?.map((question) => {
+    map.set(question.day, question.question);
+    return 0;
+  });
+
   const daysOfWeek = [];
   let currentDay = dateStart;
 
   for (let i = 0; i < DATE_WEEK_LENGTH; i++) {
+    const isPeriod =
+      isAfter(currentDay, new Date(startDay!)) &&
+      isBefore(currentDay, new Date(endDay!));
+    const isToday = isSameDay(currentDay, TODAY);
     daysOfWeek.push({
       currentDay,
       formattedDate: format(currentDay, "d"),
-      isToday: isSameDay(currentDay, TODAY),
+      isToday: isToday,
       isCurrMonth: isSameMonth(currentDay, monthStart),
-      sprout: Math.floor(Math.random() * 4) + 1,
+      isPeriod: isPeriod,
+      sprout: map.has(format(currentDay, "yyyy-MM-dd", { locale: ko }))
+        ? Math.floor(Math.random() * 4) + 1
+        : 0,
+      question: map.has(format(currentDay, "yyyy-MM-dd", { locale: ko }))
+        ? map.get(format(currentDay, "yyyy-MM-dd", { locale: ko }))
+        : isToday
+        ? "오늘 질문에 답변했나요? 🤓"
+        : isPeriod
+        ? isAfter(TODAY, currentDay)
+          ? "답변을 하지 않아서 질문을 볼수가 없어요~😛"
+          : "아직 질문이 공개되지 않았습니다.🤔"
+        : "모임 기간이 아닙니다. ❌",
     });
 
     currentDay = addDays(currentDay, 1);
@@ -63,22 +102,39 @@ function generateOneWeek(dateStart: Date, monthStart: Date) {
   return daysOfWeek;
 }
 
-function makeCalendar(monthStart: Date) {
+function makeCalendar(
+  monthStart: Date,
+  questionList?: Question[],
+  startDay?: string,
+  endDay?: string
+) {
   const weekLength = getWeeksInMonth(monthStart);
   const daysOfMonth = [];
   for (let i = 0; i < weekLength; i++) {
     const currentDate = addDays(monthStart, i * 7);
     const startDate = startOfWeek(currentDate);
-    const oneWeek = generateOneWeek(startDate, monthStart);
+    const oneWeek = generateOneWeek(
+      startDate,
+      monthStart,
+      questionList,
+      startDay,
+      endDay
+    );
     daysOfMonth.push(oneWeek);
   }
 
   return daysOfMonth;
 }
 
-function Calendar(props: { setHomeContent: (homeContent: number) => void }) {
+function Calendar(props: {
+  setHomeContent: (homeContent: number) => void;
+  questionList?: Question[];
+  startDay?: string;
+  endDay?: string;
+}) {
   const [monthStart, setMonthStart] = useState(startOfMonth(TODAY));
   const [pickedDay, setPickedDay] = useState(TODAY);
+  const [pickedQuestion, setPickedQuestion] = useState("");
   const [isSwipeTop, setIsSwipeTop] = useState(false);
 
   const handelClickBackBtn = () => {
@@ -87,18 +143,28 @@ function Calendar(props: { setHomeContent: (homeContent: number) => void }) {
   const handelClickPrevBtn = () => {
     setMonthStart(addMonths(monthStart, 1));
   };
-  const handelClickDay = (day: Date) => {
-    setPickedDay(day);
+  const handelClickDay = (day: DayInfo) => {
+    setPickedDay(day.currentDay);
+    setPickedQuestion(day.question);
   };
 
-  const daysOfMonth = useMemo(() => makeCalendar(monthStart), [monthStart]);
+  const daysOfMonth = useMemo(
+    () =>
+      makeCalendar(
+        monthStart,
+        props.questionList,
+        props.startDay,
+        props.endDay
+      ),
+    [monthStart, props.endDay, props.questionList, props.startDay]
+  );
 
   // 스와이프 감지
   let initialX: number | null = null;
   let initialY: number | null = null;
 
-  function initTouch(e: MouseEvent | TouchEvent) {
-    const touchEvent = e as TouchEvent;
+  function initTouch(e: MouseEvent | React.TouchEvent<HTMLDivElement>) {
+    const touchEvent = e as React.TouchEvent;
     initialX = touchEvent.touches
       ? touchEvent.touches[0].clientX
       : (e as MouseEvent).clientX;
@@ -107,9 +173,9 @@ function Calendar(props: { setHomeContent: (homeContent: number) => void }) {
       : (e as MouseEvent).clientY;
   }
 
-  function swipeDirection(e: MouseEvent | TouchEvent) {
+  function swipeDirection(e: MouseEvent | React.TouchEvent<HTMLDivElement>) {
     if (initialX !== null && initialY !== null) {
-      const touchEvent = e as TouchEvent;
+      const touchEvent = e as React.TouchEvent;
       const currentX = touchEvent.touches
         ? touchEvent.touches[0].clientX
         : (e as MouseEvent).clientX;
@@ -120,30 +186,17 @@ function Calendar(props: { setHomeContent: (homeContent: number) => void }) {
       let diffX = initialX - currentX;
       let diffY = initialY - currentY;
 
-      if (Math.abs(diffX) > Math.abs(diffY)) {
-        diffX > 0 ? console.log("to left" + diffX) : console.log("to right");
-      } else {
-        diffY > 1 ? setIsSwipeTop(true) : setIsSwipeTop(false);
-      }
+      if (Math.abs(diffX) < Math.abs(diffY))
+        diffY > 0 ? setIsSwipeTop(true) : setIsSwipeTop(false);
 
       initialX = null;
       initialY = null;
     }
   }
 
-  window.addEventListener("touchstart", initTouch);
-  window.addEventListener("touchmove", swipeDirection);
-  window.addEventListener("mousedown", (e: MouseEvent) => {
-    initTouch(e);
-    window.addEventListener("mousemove", swipeDirection);
-  });
-  window.addEventListener("mouseup", () => {
-    window.removeEventListener("mousemove", swipeDirection);
-  });
-
   return (
     <>
-      <MonthContainer>
+      <MonthContainer onTouchStart={initTouch} onTouchMove={swipeDirection}>
         <Header>
           <BackArrow onClick={handelClickBackBtn} />
           <div>{getMonth(monthStart) + 1}월</div>
@@ -155,14 +208,12 @@ function Calendar(props: { setHomeContent: (homeContent: number) => void }) {
               day.isCurrMonth ? (
                 <DayContainer
                   key={j}
-                  onClick={() => handelClickDay(day.currentDay)}
+                  onClick={() => handelClickDay(day)}
                   isSwipeTop={isSwipeTop}
+                  isPicked={day.currentDay === pickedDay}
+                  isPeriod={day.isPeriod}
                 >
-                  <NumberContainer
-                    isPicked={day.currentDay === pickedDay}
-                    isToday={day.isToday}
-                    themaColor="var(--green-color)"
-                  >
+                  <NumberContainer isToday={day.isToday}>
                     {day.formattedDate}
                   </NumberContainer>
                   {isSwipeTop ? (
@@ -175,7 +226,11 @@ function Calendar(props: { setHomeContent: (homeContent: number) => void }) {
                   )}
                 </DayContainer>
               ) : (
-                <DayContainer key={j} isSwipeTop={isSwipeTop} />
+                <DayContainer
+                  key={j}
+                  isSwipeTop={isSwipeTop}
+                  isPicked={day.currentDay === pickedDay}
+                />
               )
             )}
           </WeekContainer>
@@ -184,9 +239,7 @@ function Calendar(props: { setHomeContent: (homeContent: number) => void }) {
       {isSwipeTop && (
         <QuestionContainer>
           <PickedDay>{format(pickedDay, "PPP", { locale: ko })}</PickedDay>
-          <PickedQuestion>
-            프로젝트를 하면서 가장 특별했던 순간이 무엇인가요?
-          </PickedQuestion>
+          <PickedQuestion>{pickedQuestion}</PickedQuestion>
           <GhostBtn
             label={"질문 만들기"}
             onClick={() => props.setHomeContent(1)}
