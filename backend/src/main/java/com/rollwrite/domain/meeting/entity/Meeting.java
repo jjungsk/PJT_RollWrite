@@ -30,11 +30,9 @@ public class Meeting extends BaseTimeEntity {
     @Column(length = 20)
     private String title;
 
-    //    @NotNull
     @Column
     private LocalDate startDay;
 
-    //    @NotNull
     @Column
     private LocalDate endDay;
 

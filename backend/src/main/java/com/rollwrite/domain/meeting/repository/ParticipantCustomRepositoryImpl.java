@@ -4,7 +4,10 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.rollwrite.domain.meeting.entity.Meeting;
 import com.rollwrite.domain.meeting.entity.Participant;
 import com.rollwrite.domain.meeting.entity.QParticipant;
+
 import java.util.List;
+import java.util.Optional;
+
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -17,18 +20,30 @@ public class ParticipantCustomRepositoryImpl implements ParticipantCustomReposit
     @Override
     public List<Participant> findParticipantByUser(Long userId) {
         return jpaQueryFactory
-            .selectFrom(participant)
-            .where(participant.user.id.eq(userId))
-            .where(participant.isDone.eq(false))
-            .fetch();
+                .selectFrom(participant)
+                .where(participant.user.id.eq(userId))
+                .where(participant.isDone.eq(false))
+                .fetch();
     }
 
     @Override
-    public List<Meeting> findMeetingByUser(Long userId) {
+    public List<Meeting> findMeetingByUserAndIsDone(Long userId, boolean isDone) {
         return jpaQueryFactory
-            .select(participant.meeting)
-            .from(participant)
-            .where(participant.user.id.eq(userId))
-            .fetch();
+                .select(participant.meeting)
+                .from(participant)
+                .where(participant.user.id.eq(userId))
+                .where(participant.isDone.eq(isDone))
+                .fetch();
+    }
+
+    @Override
+    public Optional<Meeting> findMeetingByUserAndMeetingAndIsDone(Long userId, Long meetingId, boolean isDone) {
+        return Optional.ofNullable(jpaQueryFactory
+                .select(participant.meeting)
+                .from(participant)
+                .where(participant.user.id.eq(userId))
+                .where(participant.meeting.id.eq(meetingId))
+                .where(participant.isDone.eq(isDone))
+                .fetchOne());
     }
 }

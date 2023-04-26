@@ -25,11 +25,11 @@ public class QuestionController {
     private final QuestionService questionService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<AddQuestionResDto>> addQuestion(@ApiIgnore Authentication authentication,
-                                                                      @RequestBody AddQuestionReqDto addQuestionReqDto) {
+    public ResponseEntity<ApiResponse> addQuestion(@ApiIgnore Authentication authentication,
+                                                   @RequestBody AddQuestionReqDto addQuestionReqDto) {
         log.info("사용자 질문 생성 addQuestionReqDto : " + addQuestionReqDto);
-        AddQuestionResDto addQuestionResDto = questionService.addQuestion(1L, addQuestionReqDto);
-        return new ResponseEntity<>(ApiResponse.success(SuccessCode.ADD_QUESTION_SUCCESS, addQuestionResDto), HttpStatus.OK);
+        questionService.addQuestion(1L, addQuestionReqDto);
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.ADD_QUESTION_SUCCESS), HttpStatus.OK);
     }
 
     @PostMapping("/answer")

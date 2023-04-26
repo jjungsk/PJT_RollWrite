@@ -7,12 +7,12 @@ import com.rollwrite.domain.meeting.entity.Meeting;
 import com.rollwrite.domain.question.dto.FindTodayQuestionResDto;
 import com.rollwrite.domain.question.entity.QAnswer;
 import com.rollwrite.domain.question.entity.QQuestion;
+import com.rollwrite.domain.question.entity.Question;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Optional;
 
 @Slf4j
@@ -27,9 +27,6 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository {
     public Optional<FindTodayQuestionResDto> findTodayQuestionByMeeting(Meeting meeting) {
         LocalDate today = LocalDate.now();
 
-        LocalDateTime todayStart = today.atStartOfDay();
-        LocalDateTime todayEnd = today.atTime(LocalTime.MAX);
-
         FindTodayQuestionResDto findTodayQuestionResDto = jpaQueryFactory
                 .select(Projections.constructor(FindTodayQuestionResDto.class,
                         question.meeting.id.as("meetingId"),
@@ -43,9 +40,19 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository {
                         answer.imageUrl.as("image")))
                 .from(question)
                 .leftJoin(answer).on(question.eq(answer.question))
-                .where(question.meeting.eq(meeting).and(question.createdAt.between(todayStart, todayEnd)))
+                .where(question.meeting.eq(meeting))
+                .where(question.expireTime.after(LocalDateTime.now()))
                 .fetchOne();
 
         return Optional.ofNullable(findTodayQuestionResDto);
+    }
+
+    @Override
+    public Optional<Question> findQuestionByIdAndExpireTime(Long questionId) {
+        return Optional.ofNullable(jpaQueryFactory
+                .selectFrom(question)
+                .where(question.id.eq(questionId))
+                .where(question.expireTime.after(LocalDateTime.now()))
+                .fetchOne());
     }
 }
