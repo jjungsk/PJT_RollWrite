@@ -1,10 +1,11 @@
 import styled from "styled-components";
 
-const GhostBtn = styled.button`
+const GhostBtn = styled.button<{ margin?: string }>`
   border: 2px solid var(--darkgray-color);
   border-radius: 10px;
   width: 128px;
   height: 48px;
+  margin: ${(props) => props.margin};
   font-size: 20px;
   font-weight: bold;
   @media (height < 700px) {

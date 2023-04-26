@@ -11,12 +11,12 @@ const Header = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 0px 24px;
+  padding: 0px 16px;
   gap: 8px;
 
   font-size: 20px;
   font-weight: bold;
-  width: 100%;
+  width: 350px;
 
   > div {
     width: 44px;
@@ -28,7 +28,12 @@ const WeekContainer = styled.div`
   align-items: flex-start;
   padding: 0px;
 `;
-const DayContainer = styled.div<{ isSwipeTop: boolean }>`
+
+const DayContainer = styled.div<{
+  isSwipeTop: boolean;
+  isPicked: boolean;
+  isPeriod?: boolean;
+}>`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -36,16 +41,17 @@ const DayContainer = styled.div<{ isSwipeTop: boolean }>`
   padding: 0px;
   width: 46px;
   height: ${(props) => (props.isSwipeTop ? "32px" : "52px")};
-
+  border: ${(props) =>
+    props.isPicked ? "1px solid var(--darkgray-color)" : ""};
+  border-radius: 4px;
+  background-color: ${(props) => (props.isPeriod ? "var(--green-color)" : "")};
   @media (height < 700px) {
-    height: ${(props) => (props.isSwipeTop ? "32px" : "50px")};
+    height: ${(props) => (props.isSwipeTop ? "36px" : "50px")};
   }
 `;
 
 const NumberContainer = styled.div<{
   isToday: boolean;
-  isPicked: boolean;
-  themaColor: string;
 }>`
   display: flex;
   flex-direction: row;
@@ -54,13 +60,15 @@ const NumberContainer = styled.div<{
   padding: 0px;
   width: 30px;
   height: 30px;
-  background-color: ${(props) =>
-    props.isPicked ? "var(--main-color)" : props.isToday ? "" : ""};
+  background-color: ${(props) => (props.isToday ? "var(--main-color)" : "")};
   border-radius: 16px;
   font-size: 16px;
-  border: ${(props) =>
-    props.isToday ? "1px solid var(--darkgray-color)" : ""};
   cursor: pointer;
+
+  @media (height < 700px) {
+    height: 26px;
+    width: 26px;
+  }
 `;
 
 const SproutContainer = styled.div`
@@ -84,21 +92,21 @@ const PickedDay = styled.div`
 
   @media (height < 700px) {
     font-size: 14px;
-    padding: 12px 30px 0px;
+    padding: 8px 30px 0px;
   }
 `;
 
 const PickedQuestion = styled.div`
   display: flex;
   text-align: start;
-  padding: 16px 30px;
+  padding: 24px 30px;
   width: 100%;
   font-size: 18px;
   font-weight: bold;
 
   @media (height < 700px) {
     font-size: 16px;
-    padding: 10px 30px;
+    padding: 12px 30px;
   }
 `;
 

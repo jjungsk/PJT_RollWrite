@@ -1,16 +1,46 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Calendar from "../../components/Calendar/Calendar";
 import GroupCard from "../../components/GroupCard/GroupCard";
-import { ReactComponent as Plus } from "../../assets/Plus.svg";
-import { ReactComponent as BackCircle } from "../../assets/Back_Circle.svg";
-import { ReactComponent as PrevCircle } from "../../assets/Prev_Circle.svg";
-import { HomePageContainer, Header, HeaderTitle } from "./style";
 import QuestionWrite from "../../components/QuestionWrite/QuestionWrite";
+import { ReactComponent as Plus } from "../../assets/Plus.svg";
+import { HomePageContainer, Header, HeaderTitle } from "./style";
 import { useNavigate } from "react-router-dom";
+import { getQuestionList, getGroupList } from "../../apis/group";
+import { GroupInfo, Question } from "../../constants/types";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
 
 function HomePage() {
   const navigate = useNavigate();
   const [homeContent, setHomeContent] = useState(0); // 0:달력, 1:질문, 2:참여지
+  const [groupList, setGroupList] = useState<GroupInfo[]>();
+  const [nowIndex, setNowIndex] = useState(0);
+  const [qusetionList, setQuestionList] = useState<Question[]>();
+  useEffect(() => {
+    getGroupList()
+      .then((res) => {
+        console.log(res);
+        setGroupList(res.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    groupList &&
+      getQuestionList(groupList[nowIndex].meetingId)
+        .then((res) => {
+          console.log(res);
+          setQuestionList(res.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+  }, [nowIndex, groupList]);
+
   return (
     <HomePageContainer>
       <Header>
@@ -23,11 +53,29 @@ function HomePage() {
           }}
         />
       </Header>
-      <GroupCard setHomeContent={setHomeContent} homeContent={homeContent} />
-      {homeContent === 0 && <Calendar setHomeContent={setHomeContent} />}
+
+      <Swiper
+        width={360}
+        spaceBetween={50}
+        slidesPerView={1}
+        onSlideChange={(e) => setNowIndex(e.activeIndex)}
+      >
+        {groupList?.map((groupInfo, i) => (
+          <SwiperSlide key={i}>
+            <GroupCard groupInfo={groupInfo} />
+          </SwiperSlide>
+        ))}
+      </Swiper>
+
+      {homeContent === 0 && (
+        <Calendar
+          setHomeContent={setHomeContent}
+          questionList={qusetionList}
+          startDay={groupList?.[nowIndex].startDay}
+          endDay={groupList?.[nowIndex].endDay}
+        />
+      )}
       {homeContent === 1 && <QuestionWrite setHomeContent={setHomeContent} />}
-      <BackCircle className="back_btn" />
-      <PrevCircle className="prev_btn" />
     </HomePageContainer>
   );
 }
