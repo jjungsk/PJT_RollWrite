@@ -19,7 +19,7 @@ function QuestionPage() {
   return (
     <>
       {/* 모임 없는 경우 */}
-      <InfoContainer>
+      {/* <InfoContainer>
         <DateDiv>2023.04.18</DateDiv>
       </InfoContainer>
       <EmojiContainer>
@@ -33,10 +33,10 @@ function QuestionPage() {
           label="모임 만들기"
           onClick={() => navigate("/create")}
         ></GhostBtn>
-      </BtnContainer>
+      </BtnContainer> */}
 
       {/* 모임 있는 경우 */}
-      {/* <InfoContainer>
+      <InfoContainer>
         <DateDiv>2023.04.18</DateDiv>
         <NameDiv>싸피모임 D-10</NameDiv>
       </InfoContainer>
@@ -49,13 +49,10 @@ function QuestionPage() {
           <PrevArrow></PrevArrow>
         </ArrowContainer>
       </EmojiContainer>
-      <TextDiv>
-        어제 저녁에 무엇을 먹었나요?어제 저녁에 무엇을 먹었나요?어제 저녁에
-        무엇을 먹었나요?
-      </TextDiv>
+      <TextDiv>어제 저녁에 무엇을 먹었나요?</TextDiv>
       <BtnContainer>
         <GhostBtn label="입력하기"></GhostBtn>
-      </BtnContainer> */}
+      </BtnContainer>
     </>
   );
 }

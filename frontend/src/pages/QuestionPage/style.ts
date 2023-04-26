@@ -29,12 +29,12 @@ const EmojiContainer = styled.div`
 `;
 
 const ArrowContainer = styled.div`
-  margin: auto;
+  margin: auto 15px;
 `;
-
 
 const TextDiv = styled.div`
   width: 100%;
+  height: 8vh;
   font-size: 20px;
   color: var(--black-color);
   text-align: center;
