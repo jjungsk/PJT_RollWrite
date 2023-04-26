@@ -6,6 +6,12 @@ const Title = styled.div`
   font-weight: bold;
   padding: 32px 40px;
 
+  > p {
+    font-size: 16px;
+    font-weight: normal;
+    margin-top: 12px;
+  }
+
   @media (height < 700px) {
     padding: 16px 40px;
   }
@@ -53,6 +59,26 @@ const GroupSelectTag = styled.div`
   margin-bottom: 32px;
 `;
 
+const TagListContainer = styled.div`
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+`;
+
+const TagBtn = styled.button<{ isTagged: boolean }>`
+  min-width: 80px;
+  font-weight: bold;
+  padding: 12px;
+  margin: 8px 12px;
+  border-radius: 16px;
+  border: ${(props) =>
+    props.isTagged
+      ? "2px solid var(--main-color)"
+      : "2px solid var(--black-color)"};
+  background-color: ${(props) => (props.isTagged ? "var(--main-color)" : "")};
+  color: ${(props) => (props.isTagged ? "var(--white-color)" : "")};
+  font-size: 16px;
+`;
 export {
   GroupNameContainer,
   GroupInput,
@@ -60,4 +86,6 @@ export {
   ThemaBox,
   GroupSelectTag,
   Title,
+  TagListContainer,
+  TagBtn,
 };

@@ -1,11 +1,11 @@
 import styled from "styled-components";
 
-const CardContainer = styled.div<{ margin: string }>`
+const CardContainer = styled.div<{ margin: string; color?: string }>`
   position: relative;
   display: flex;
   flex-direction: column;
   padding: 16px 16px 12px;
-  background-color: var(--green-color);
+  background-color: ${(props) => props.color};
   box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
   margin: ${(props) => props.margin};
   gap: 8px;

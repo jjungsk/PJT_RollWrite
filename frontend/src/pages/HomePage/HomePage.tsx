@@ -73,6 +73,7 @@ function HomePage() {
           questionList={qusetionList}
           startDay={groupList?.[nowIndex].startDay}
           endDay={groupList?.[nowIndex].endDay}
+          color={groupList?.[nowIndex].color}
         />
       )}
       {homeContent === 1 && <QuestionWrite setHomeContent={setHomeContent} />}

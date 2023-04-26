@@ -13,3 +13,7 @@ export const getQuestionList = async (id: number) => {
   const response = await axiosInstance.get(`/meeting/${id}`);
   return response.data;
 };
+export const getGroupTag = async () => {
+  const response = await axiosInstance.get(`/meeting/tag`);
+  return response.data;
+};

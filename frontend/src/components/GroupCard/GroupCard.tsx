@@ -11,7 +11,7 @@ import { ReactComponent as Person } from "../../assets/Person.svg";
 import { GroupInfo } from "../../constants/types";
 function GroupCard(props: { groupInfo?: GroupInfo }) {
   return (
-    <CardContainer margin={"8px 20px 16px"}>
+    <CardContainer margin={"8px 20px 16px"} color={props.groupInfo?.color}>
       <div>
         <Title>
           <div>{props.groupInfo?.title}</div>
