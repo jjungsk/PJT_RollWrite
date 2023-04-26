@@ -46,3 +46,10 @@ export interface DayInfo {
   sprout: number;
   question: string;
 }
+
+export interface Profile {
+  nickname: string;
+  profileImg: string;
+  ongoingGroupCnt: number;
+  completeGroupCnt: number;
+}

@@ -16,7 +16,7 @@ function MainLayout() {
       <main
         style={{
           flex: "1",
-          overflow: "auto",
+          overflow: "scroll",
         }}
       >
         <Outlet />
