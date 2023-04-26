@@ -70,7 +70,8 @@ public class QuestionService {
         Meeting meeting = participantRepository.findMeetingByUserAndMeetingAndIsDone(userId, addAnswerReqDto.getMeetingId(), false)
                 .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
 
-        Question question = questionRepository.findById(addAnswerReqDto.getQuestionId())
+        // 만료시간이 지나지 않은 질문
+        Question question = questionRepository.findQuestionByIdAndExpireTime(addAnswerReqDto.getQuestionId())
                 .orElseThrow(() -> new IllegalArgumentException("질문을 찾을 수 없습니다"));
 
         String imageUrl = null;
@@ -93,7 +94,8 @@ public class QuestionService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
-        Question question = questionRepository.findById(modifyAnswerReqDto.getQuestionId())
+        // 만료시간이 지나지 않은 질문
+        Question question = questionRepository.findQuestionByIdAndExpireTime(modifyAnswerReqDto.getQuestionId())
                 .orElseThrow(() -> new IllegalArgumentException("질문을 찾을 수 없습니다"));
 
         Answer answer = answerRepository.findByUserAndQuestion(user, question)
