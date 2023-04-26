@@ -6,8 +6,8 @@ import { Question, GroupInfo } from "../../constants/types";
 interface HomeContentProps {
   homeContent: number;
   setHomeContent: (value: number) => void;
-  questionList?: Question[];
-  group?: GroupInfo;
+  questionList: Question[];
+  group: GroupInfo;
 }
 
 function HomeContent({
@@ -22,12 +22,17 @@ function HomeContent({
         <Calendar
           setHomeContent={setHomeContent}
           questionList={questionList}
-          startDay={group?.startDay}
-          endDay={group?.endDay}
-          color={group?.color}
+          startDay={group.startDay}
+          endDay={group.endDay}
+          color={group.color}
         />
       )}
-      {homeContent === 1 && <QuestionWrite setHomeContent={setHomeContent} />}
+      {homeContent === 1 && (
+        <QuestionWrite
+          setHomeContent={setHomeContent}
+          groupId={group.meetingId}
+        />
+      )}
     </>
   );
 }
