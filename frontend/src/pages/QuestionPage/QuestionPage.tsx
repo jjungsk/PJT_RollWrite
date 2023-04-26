@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   InfoContainer,
   DateDiv,
@@ -11,6 +12,7 @@ import GhostBtn from "../../elements/Button/GhostBtn";
 import Emoji from "../../elements/Emoji/Emoji";
 
 function QuestionPage() {
+  const navigate = useNavigate();
   return (
     <>
       {/* 모임 없는 경우 */}
@@ -24,7 +26,10 @@ function QuestionPage() {
         음.. 모임이 없습니다 <br /> 모임을 만들든가 들어가든가 하세요
       </TextDiv>
       <BtnContainer>
-        <GhostBtn label="모임 만들기"></GhostBtn>
+        <GhostBtn
+          label="모임 만들기"
+          onClick={() => navigate("/create")}
+        ></GhostBtn>
       </BtnContainer>
 
       {/* 모임 있는 경우 */}
