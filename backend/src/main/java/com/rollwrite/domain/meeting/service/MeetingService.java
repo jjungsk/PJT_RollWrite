@@ -18,11 +18,13 @@ import com.rollwrite.domain.meeting.repository.TagRepository;
 import com.rollwrite.domain.question.repository.AnswerRepository;
 import com.rollwrite.domain.user.entity.User;
 import com.rollwrite.domain.user.repository.UserRepository;
+
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -44,10 +46,10 @@ public class MeetingService {
 
     @Transactional
     public AddMeetingResponseDto addMeeting(Long userId,
-        AddMeetingRequestDto addMeetingRequestDto) throws NoSuchAlgorithmException {
+                                            AddMeetingRequestDto addMeetingRequestDto) throws NoSuchAlgorithmException {
 
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
         // 초대 코드 생성
         String inviteUrl = "http://localhost:8081/api/auth/join=";
@@ -62,49 +64,49 @@ public class MeetingService {
 
         // Meeting 생성
         Meeting meeting = Meeting.builder()
-            .addMeetingRequestDto(addMeetingRequestDto)
-            .inviteCode(inviteCode)
-            .build();
+                .addMeetingRequestDto(addMeetingRequestDto)
+                .inviteCode(inviteCode)
+                .build();
         meetingRepository.save(meeting);
 
         // tag id에 해당하는 Meeting(tagMeetingList)에 추가
         List<TagDto> tagList = new ArrayList<>();
         List<TagMeeting> tagMeetingList = tagIdToTagMeetingList(
-            meeting, addMeetingRequestDto.getTag(), tagList);
+                meeting, addMeetingRequestDto.getTag(), tagList);
         meeting.updateTagMeetingList(tagMeetingList);
 
         // TODO:Chat GPT 생성 질문 10개 저장
 
         // Meeting 생성자 Meeting에 추가
         Participant participant = Participant.builder()
-            .user(user)
-            .meeting(meeting)
-            .build();
+                .user(user)
+                .meeting(meeting)
+                .build();
         participantRepository.save(participant);
 
         return AddMeetingResponseDto.builder()
-            .meeting(meeting)
-            .tag(tagList)
-            .inviteUrl(inviteUrl + inviteCode)
-            .build();
+                .meeting(meeting)
+                .tag(tagList)
+                .inviteUrl(inviteUrl + inviteCode)
+                .build();
     }
 
     private List<TagMeeting> tagIdToTagMeetingList(Meeting meeting, List<Long> tagIds,
-        List<TagDto> tagList) {
+                                                   List<TagDto> tagList) {
         List<TagMeeting> tagMeetingList = new ArrayList<>();
         for (Long id : tagIds) {
             // tag id에 해당하는 tag 찾기
             Tag tag = tagRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("ID에 해당하는 태그를 찾을 수 없습니다"));
+                    .orElseThrow(() -> new IllegalArgumentException("ID에 해당하는 태그를 찾을 수 없습니다"));
 
             // Tag -> TagDto
             tagList.add(TagDto.of(tag));
 
             // TagMeeting 에 추가
             TagMeeting tagMeeting = TagMeeting.builder()
-                .tag(tag)
-                .meeting(meeting)
-                .build();
+                    .tag(tag)
+                    .meeting(meeting)
+                    .build();
             tagMeetingRepository.save(tagMeeting);
 
             tagMeetingList.add(tagMeeting);
@@ -115,23 +117,23 @@ public class MeetingService {
     @Transactional
     public void joinMeeting(Long userId, Long meetingId) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
         Meeting meeting = meetingRepository.findById(meetingId)
-            .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
+                .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
 
         Participant participant = Participant.builder()
-            .user(user)
-            .meeting(meeting)
-            .build();
+                .user(user)
+                .meeting(meeting)
+                .build();
         participantRepository.save(participant);
     }
 
     public List<TagDto> findTag() {
         List<Tag> tagList = tagRepository.findAll();
         List<TagDto> tagDtoList = tagList.stream()
-            .map(tag -> TagDto.of(tag))
-            .collect(Collectors.toList());
+                .map(tag -> TagDto.of(tag))
+                .collect(Collectors.toList());
 
         return tagDtoList;
     }
@@ -146,8 +148,8 @@ public class MeetingService {
             // 참여자 목록
             List<Participant> participantList = participantRepository.findByMeeting(meeting);
             List<ParticipantDto> participantDtoList = participantList.stream()
-                .map(participantDto -> ParticipantDto.of(participantDto))
-                .collect(Collectors.toList());
+                    .map(participantDto -> ParticipantDto.of(participantDto))
+                    .collect(Collectors.toList());
 
             // 참여자 수
             int participantCnt = participantList.size();
@@ -160,19 +162,19 @@ public class MeetingService {
 
             // 모임에 해당하는 태그
             List<TagMeeting> tagMeetingList = tagMeetingRepository.findTagMeetingByMeeting
-                (meeting);
+                    (meeting);
             List<TagDto> tagDtoList = tagMeetingList.stream()
-                .map(tagMeeting -> TagDto.of(tagMeeting.getTag()))
-                .collect(Collectors.toList());
+                    .map(tagMeeting -> TagDto.of(tagMeeting.getTag()))
+                    .collect(Collectors.toList());
 
             meetingInProgressResDtoList.add(MeetingInProgressResDto.builder()
-                .meeting(meeting)
-                .tag(tagDtoList)
-                .questionLimit(questionLimit)
-                .questionUsage(questionUsage)
-                .participant(participantDtoList)
-                .participantCnt(participantCnt)
-                .build());
+                    .meeting(meeting)
+                    .tag(tagDtoList)
+                    .questionLimit(questionLimit)
+                    .questionUsage(questionUsage)
+                    .participant(participantDtoList)
+                    .participantCnt(participantCnt)
+                    .build());
         }
 
         return meetingInProgressResDtoList;
@@ -180,10 +182,10 @@ public class MeetingService {
 
     public List<MeetingCalenderResDto> findMeetingCalender(Long userId, Long meetingId) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
         Meeting meeting = meetingRepository.findById(meetingId)
-            .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
+                .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
 
         return answerRepository.findMeetingCalender(user, meeting);
     }
@@ -193,9 +195,9 @@ public class MeetingService {
         List<MeetingResultDto> meetingResultDtoList = new ArrayList<>();
 
         // user가 참여 완료 한 Meeting List
-        List<Meeting> meetingList = participantRepository.findFinisihedMeetingByUserAndIsDone(
-            userId,
-            pageable);
+        List<Meeting> meetingList = participantRepository.findFinisihedMeetingByUser(
+                userId,
+                pageable);
 
         for (Meeting meeting : meetingList) {
             // 참여자 목록 가져오기
@@ -203,28 +205,28 @@ public class MeetingService {
 
             // List<Participant> -> List<ParticipantDto>
             List<ParticipantDto> participantDtoList = participantList.stream()
-                .map(participantDto -> ParticipantDto.of(participantDto))
-                .collect(Collectors.toList());
+                    .map(participantDto -> ParticipantDto.of(participantDto))
+                    .collect(Collectors.toList());
 
             // 참여자 수
             int participantCnt = participantList.size();
 
             // 모임에 해당하는 태그 가져오기
             List<TagMeeting> tagMeetingList = tagMeetingRepository.findTagMeetingByMeeting
-                (meeting);
+                    (meeting);
 
             // List<TagMeeting> -> List<TagDto>
             List<TagDto> tagDtoList = tagMeetingList.stream()
-                .map(tagMeeting -> TagDto.of(tagMeeting.getTag()))
-                .collect(Collectors.toList());
+                    .map(tagMeeting -> TagDto.of(tagMeeting.getTag()))
+                    .collect(Collectors.toList());
 
             // 반환 List에 추가
             meetingResultDtoList.add(MeetingResultDto.builder()
-                .meeting(meeting)
-                .tag(tagDtoList)
-                .participant(participantDtoList)
-                .participantCnt(participantCnt)
-                .build());
+                    .meeting(meeting)
+                    .tag(tagDtoList)
+                    .participant(participantDtoList)
+                    .participantCnt(participantCnt)
+                    .build());
         }
         return meetingResultDtoList;
     }
