@@ -4,6 +4,7 @@ import com.rollwrite.domain.meeting.dto.AddMeetingRequestDto;
 import com.rollwrite.domain.meeting.dto.AddMeetingResponseDto;
 import com.rollwrite.domain.meeting.dto.MeetingCalenderResDto;
 import com.rollwrite.domain.meeting.dto.MeetingInProgressResDto;
+import com.rollwrite.domain.meeting.dto.MeetingResultDto;
 import com.rollwrite.domain.meeting.dto.ParticipantDto;
 import com.rollwrite.domain.meeting.dto.TagDto;
 import com.rollwrite.domain.meeting.entity.Meeting;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -184,5 +186,46 @@ public class MeetingService {
             .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
 
         return answerRepository.findMeetingCalender(user, meeting);
+    }
+
+
+    public List<MeetingResultDto> findMeetingResult(Long userId, Pageable pageable) {
+        List<MeetingResultDto> meetingResultDtoList = new ArrayList<>();
+
+        // user가 참여 완료 한 Meeting List
+        List<Meeting> meetingList = participantRepository.findFinisihedMeetingByUserAndIsDone(
+            userId,
+            pageable);
+
+        for (Meeting meeting : meetingList) {
+            // 참여자 목록 가져오기
+            List<Participant> participantList = participantRepository.findByMeeting(meeting);
+
+            // List<Participant> -> List<ParticipantDto>
+            List<ParticipantDto> participantDtoList = participantList.stream()
+                .map(participantDto -> ParticipantDto.of(participantDto))
+                .collect(Collectors.toList());
+
+            // 참여자 수
+            int participantCnt = participantList.size();
+
+            // 모임에 해당하는 태그 가져오기
+            List<TagMeeting> tagMeetingList = tagMeetingRepository.findTagMeetingByMeeting
+                (meeting);
+
+            // List<TagMeeting> -> List<TagDto>
+            List<TagDto> tagDtoList = tagMeetingList.stream()
+                .map(tagMeeting -> TagDto.of(tagMeeting.getTag()))
+                .collect(Collectors.toList());
+
+            // 반환 List에 추가
+            meetingResultDtoList.add(MeetingResultDto.builder()
+                .meeting(meeting)
+                .tag(tagDtoList)
+                .participant(participantDtoList)
+                .participantCnt(participantCnt)
+                .build());
+        }
+        return meetingResultDtoList;
     }
 }

@@ -4,10 +4,12 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.rollwrite.domain.meeting.entity.Meeting;
 import com.rollwrite.domain.meeting.entity.QParticipant;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 
 @RequiredArgsConstructor
 public class ParticipantCustomRepositoryImpl implements ParticipantCustomRepository {
@@ -23,6 +25,20 @@ public class ParticipantCustomRepositoryImpl implements ParticipantCustomReposit
             .from(participant)
             .where(participant.user.id.eq(userId))
             .where(participant.isDone.eq(isDone))
+            .fetch();
+    }
+
+    @Override
+    public List<Meeting> findFinisihedMeetingByUserAndIsDone(Long userId, Pageable pageable) {
+        LocalDate today = LocalDate.now();
+        return jpaQueryFactory
+            .select(participant.meeting)
+            .from(participant)
+            .where(participant.user.id.eq(userId))
+            .where(participant.isDone.eq(true))
+            .where(participant.meeting.endDay.before(today))
+            .offset(pageable.getOffset())   // 페이지 번호
+            .limit(pageable.getPageSize())  // 페이지 사이즈
             .fetch();
     }
 
