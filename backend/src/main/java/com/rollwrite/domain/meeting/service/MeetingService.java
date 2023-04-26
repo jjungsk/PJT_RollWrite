@@ -138,9 +138,8 @@ public class MeetingService {
         List<MeetingInProgressResDto> meetingInProgressResDtoList = new ArrayList<>();
 
         // user가 참여 중인 Meeting List
-        List<Participant> meetingList = participantRepository.findParticipantByUser(userId);
-        for (Participant participant : meetingList) {
-            Meeting meeting = participant.getMeeting();
+        List<Meeting> meetingList = participantRepository.findMeetingByUserAndIsDone(userId, false);
+        for (Meeting meeting : meetingList) {
 
             // 참여자 목록
             List<Participant> participantList = participantRepository.findByMeeting(meeting);
