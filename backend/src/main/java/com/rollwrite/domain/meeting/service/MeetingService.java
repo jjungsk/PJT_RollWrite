@@ -2,6 +2,7 @@ package com.rollwrite.domain.meeting.service;
 
 import com.rollwrite.domain.meeting.dto.AddMeetingRequestDto;
 import com.rollwrite.domain.meeting.dto.AddMeetingResponseDto;
+import com.rollwrite.domain.meeting.dto.MeetingCalenderResDto;
 import com.rollwrite.domain.meeting.dto.MeetingInProgressResDto;
 import com.rollwrite.domain.meeting.dto.ParticipantDto;
 import com.rollwrite.domain.meeting.dto.TagDto;
@@ -13,6 +14,7 @@ import com.rollwrite.domain.meeting.repository.MeetingRepository;
 import com.rollwrite.domain.meeting.repository.ParticipantRepository;
 import com.rollwrite.domain.meeting.repository.TagMeetingRepository;
 import com.rollwrite.domain.meeting.repository.TagRepository;
+import com.rollwrite.domain.question.repository.AnswerRepository;
 import com.rollwrite.domain.user.entity.User;
 import com.rollwrite.domain.user.repository.UserRepository;
 import java.security.NoSuchAlgorithmException;
@@ -33,6 +35,7 @@ public class MeetingService {
 
     private final TagRepository tagRepository;
     private final UserRepository userRepository;
+    private final AnswerRepository answerRepository;
     private final MeetingRepository meetingRepository;
     private final TagMeetingRepository tagMeetingRepository;
     private final ParticipantRepository participantRepository;
@@ -172,5 +175,15 @@ public class MeetingService {
         }
 
         return meetingInProgressResDtoList;
+    }
+
+    public List<MeetingCalenderResDto> findMeetingCalender(Long userId, Long meetingId) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
+
+        Meeting meeting = meetingRepository.findById(meetingId)
+            .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
+
+        return answerRepository.findMeetingCalender(user, meeting);
     }
 }
