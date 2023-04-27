@@ -41,7 +41,7 @@ function HomePage() {
           homeContent={homeContent}
           setHomeContent={setHomeContent}
           questionList={questionList}
-          group={groupList[nowIndex]}
+          groupInfo={groupList[nowIndex]}
         />
       )}
     </HomePageContainer>
