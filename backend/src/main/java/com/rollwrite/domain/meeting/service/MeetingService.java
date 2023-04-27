@@ -15,7 +15,9 @@ import com.rollwrite.domain.meeting.repository.MeetingRepository;
 import com.rollwrite.domain.meeting.repository.ParticipantRepository;
 import com.rollwrite.domain.meeting.repository.TagMeetingRepository;
 import com.rollwrite.domain.meeting.repository.TagRepository;
+import com.rollwrite.domain.question.entity.QuestionGpt;
 import com.rollwrite.domain.question.repository.AnswerRepository;
+import com.rollwrite.domain.question.repository.QuestionGptRepository;
 import com.rollwrite.domain.user.entity.User;
 import com.rollwrite.domain.user.repository.UserRepository;
 
@@ -23,8 +25,14 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import com.rollwrite.global.model.chatgpt.ChatGPTReqDto;
+import com.rollwrite.global.model.chatgpt.ChatGPTResDto;
+import com.rollwrite.global.model.chatgpt.MessageDto;
+import com.rollwrite.global.service.OpenAIClientService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -41,8 +49,10 @@ public class MeetingService {
     private final UserRepository userRepository;
     private final AnswerRepository answerRepository;
     private final MeetingRepository meetingRepository;
+    private final OpenAIClientService openAIClientService;
     private final TagMeetingRepository tagMeetingRepository;
     private final ParticipantRepository participantRepository;
+    private final QuestionGptRepository questionGptRepository;
 
     @Transactional
     public AddMeetingResponseDto addMeeting(Long userId,
@@ -70,12 +80,17 @@ public class MeetingService {
         meetingRepository.save(meeting);
 
         // tag id에 해당하는 Meeting(tagMeetingList)에 추가
+        String tag = "";
         List<TagDto> tagList = new ArrayList<>();
         List<TagMeeting> tagMeetingList = tagIdToTagMeetingList(
                 meeting, addMeetingRequestDto.getTag(), tagList);
         meeting.updateTagMeetingList(tagMeetingList);
 
-        // TODO:Chat GPT 생성 질문 10개 저장
+        // Chat GPT 생성 질문 10개 저장
+        for (TagDto tagDto : tagList) {
+            tag += tagDto.getContent() + ",";
+        }
+        saveGptQuestion(tag, meeting);
 
         // Meeting 생성자 Meeting에 추가
         Participant participant = Participant.builder()
@@ -89,6 +104,46 @@ public class MeetingService {
                 .tag(tagList)
                 .inviteUrl(inviteUrl + inviteCode)
                 .build();
+    }
+
+    private void saveGptQuestion(String tag, Meeting meeting) {
+        String query = "를 공통으로 이루어진 모임이 있어. 이 모임에서 서로 에게 물어볼 만한 20자 이내의 흥미로운 질문과 연관된 이모지를 10개 말해줘, 형식 예시는 '1. 미래의 직업은? 이모지'니까 꼭 지켜줘";
+        List<MessageDto> messageDtoList = new ArrayList<>();
+        MessageDto messageDto = MessageDto.builder()
+                .role("user")
+                .content(tag + query)
+                .build();
+
+        messageDtoList.add(messageDto);
+
+        ChatGPTReqDto chatGPTReqDto = ChatGPTReqDto.builder()
+                .model("gpt-3.5-turbo")
+                .messages(messageDtoList)
+                .build();
+
+        ChatGPTResDto chatGPTResDto = openAIClientService.chat(chatGPTReqDto);
+        log.info("질문 : " + tag + query);
+        String response = chatGPTResDto.getChoices().get(0).getMessage().getContent();
+
+        String[] questionArray = response.split("\n");
+        for (String question : questionArray) {
+            log.info("대답 : " + question);
+            String pattern = "^\\d+\\.\\s+(.+?)\\s*(\\p{So})?$";
+
+            Pattern r = Pattern.compile(pattern);
+            Matcher m = r.matcher(question);
+            if (m.find()) {
+                String content = m.group(1); // "내가 가장 좋아하는 취미는?"
+                String emoji = m.group(2); // "🎨"
+
+                QuestionGpt questionGpt = QuestionGpt.builder()
+                        .emoji(emoji)
+                        .content(content)
+                        .meeting(meeting)
+                        .build();
+                questionGptRepository.save(questionGpt);
+            }
+        }
     }
 
     private List<TagMeeting> tagIdToTagMeetingList(Meeting meeting, List<Long> tagIds,
@@ -154,12 +209,6 @@ public class MeetingService {
             // 참여자 수
             int participantCnt = participantList.size();
 
-            // TODO: 사용량 (아직 없음)
-            int questionUsage = 0;
-
-            // TODO: 제한량 (기준이 명확하지 않음)
-            int questionLimit = 0;
-
             // 모임에 해당하는 태그
             List<TagMeeting> tagMeetingList = tagMeetingRepository.findTagMeetingByMeeting
                     (meeting);
@@ -170,8 +219,6 @@ public class MeetingService {
             meetingInProgressResDtoList.add(MeetingInProgressResDto.builder()
                     .meeting(meeting)
                     .tag(tagDtoList)
-                    .questionLimit(questionLimit)
-                    .questionUsage(questionUsage)
                     .participant(participantDtoList)
                     .participantCnt(participantCnt)
                     .build());
