@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface QuestionParticipantRepository extends JpaRepository<QuestionParticipant, Long> {
+public interface QuestionParticipantRepository extends JpaRepository<QuestionParticipant, Long>, QuestionParticipantCustomRepository {
     Long countByUserAndMeeting(User user, Meeting meeting);
 }
