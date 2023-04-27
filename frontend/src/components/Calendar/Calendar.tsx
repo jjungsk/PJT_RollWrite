@@ -142,8 +142,10 @@ function Calendar({
                 isSwipeTop={isSwipeTop}
                 isGroup={
                   groupInfo &&
-                  isAfter(day.currentDay, new Date(groupInfo?.startDay)) &&
-                  isBefore(day.currentDay, new Date(groupInfo?.endDay))
+                  ((isAfter(day.currentDay, new Date(groupInfo?.startDay)) &&
+                    isBefore(day.currentDay, new Date(groupInfo?.endDay)) &&
+                    isSameMonth(day.currentDay, monthStart)) ||
+                    isSameDay(day.currentDay, new Date(groupInfo?.startDay)))
                 }
                 color={groupInfo?.color}
                 isPicked={day.currentDay === pickedDay}

@@ -38,7 +38,11 @@ function GroupCalendar({ groupInfo, questionList }: Props) {
         questionMap={questionMap}
       />
       {isSwipeTop && (
-        <QuestionOfDay pickedDay={pickedDay} questionMap={questionMap} />
+        <QuestionOfDay
+          pickedDay={pickedDay}
+          questionMap={questionMap}
+          groupInfo={groupInfo}
+        />
       )}
     </GroupCalendarContainer>
   );
