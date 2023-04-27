@@ -53,3 +53,9 @@ export interface Profile {
   ongoingGroupCnt: number;
   completeGroupCnt: number;
 }
+
+export interface Notify {
+  id: number;
+  type: number;
+  content: string;
+}
