@@ -22,6 +22,7 @@ import com.rollwrite.domain.user.repository.UserRepository;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,12 +59,10 @@ public class MeetingService {
         SecureRandom random = SecureRandom.getInstanceStrong();
         byte[] bytes = new byte[16];
         random.nextBytes(bytes);
-        String inviteCode = bytes.toString();
+        log.info("2-1번");
+        String inviteCode = Base64.getUrlEncoder().encodeToString(bytes);
+        log.info("2-2번");
 
-        log.info("2번");
-//        addMeetingRequestDto.updateInviteUrl(inviteUrl);
-//        String link = Base64.getUrlEncoder().encodeToString(bytes);
-//        log.info("link : " + link);
 
         // Meeting 생성
         Meeting meeting = Meeting.builder()

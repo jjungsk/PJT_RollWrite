@@ -40,7 +40,7 @@ public class Meeting extends BaseTimeEntity {
     @Column(length = 7)
     private String color;
 
-    @Column(length = 20, unique = true)
+    @Column(length = 24, unique = true)
     private String inviteCode;
 
     @OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL)
