@@ -56,11 +56,12 @@ public class MeetingService {
         log.info("1번");
         // 초대 코드 생성
         String inviteUrl = "http://localhost:8081/api/auth/join=";
-        SecureRandom random = SecureRandom.getInstanceStrong();
-        byte[] bytes = new byte[16];
-        random.nextBytes(bytes);
-        log.info("2-1번");
-        String inviteCode = Base64.getUrlEncoder().encodeToString(bytes);
+//        SecureRandom random = SecureRandom.getInstanceStrong();
+//        byte[] bytes = new byte[16];
+//        random.nextBytes(bytes);
+//        log.info("2-1번");
+//        String inviteCode = Base64.getUrlEncoder().encodeToString(bytes);
+        String inviteCode = "ExInviteCode";
         log.info("2-2번");
 
 
