@@ -6,6 +6,11 @@ import com.rollwrite.global.model.ApiResponse;
 import com.rollwrite.global.model.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.JobParameter;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -14,7 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -23,6 +30,8 @@ import java.util.List;
 public class QuestionController {
 
     private final QuestionService questionService;
+    private final JobLauncher jobLauncher;
+    private final Job notificationAlarmJob;
 
     @PostMapping
     public ResponseEntity<ApiResponse> addQuestion(@ApiIgnore Authentication authentication,
@@ -63,5 +72,14 @@ public class QuestionController {
         log.info("모임 질문 전체 조회 meetingId : " + meetingId);
         List<FindQuestionResDto> findQuestionResDtoList = questionService.findQuestion(meetingId);
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_QUESTION_SUCCESS, findQuestionResDtoList), HttpStatus.OK);
+    }
+
+    // 수동으로 오늘 질문 생성
+    @GetMapping("/job")
+    public ResponseEntity<ApiResponse<String>> startJob() throws Exception {
+        Map<String, JobParameter> parameters = new HashMap<>();
+        parameters.put("timestamp", new JobParameter(System.currentTimeMillis()));
+        JobExecution jobExecution = jobLauncher.run(notificationAlarmJob, new JobParameters(parameters));
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.TEST, "Batch job "+ jobExecution.getStatus()), HttpStatus.OK);
     }
 }
