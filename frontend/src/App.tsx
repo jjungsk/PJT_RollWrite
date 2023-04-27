@@ -19,6 +19,7 @@ import { updateRouteHistory } from "./store/authReducer";
 import CreateGroupPage from "./pages/CreateGroupPage/CreateGroupPage";
 import InvitePage from "./pages/InvitePage/InvitePage";
 import AnswerPage from "./pages/AnswerPage/AnswerPage";
+import ResultPage from "./pages/ResultPage/ResultPage";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -65,6 +66,7 @@ function App() {
         <Route path="/invite" element={<InvitePage />} />
         <Route path="/answer" element={<AnswerPage />} />
       </Route>
+      <Route path="/result/:meetingId" element={<ResultPage />} />
     </Routes>
   );
 }
