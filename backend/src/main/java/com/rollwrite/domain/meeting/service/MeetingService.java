@@ -90,7 +90,9 @@ public class MeetingService {
         for (TagDto tagDto : tagList) {
             tag += tagDto.getContent() + ",";
         }
+        log.info("질문 생성 ");
         saveGptQuestion(tag, meeting);
+        log.info("질문 종료 ");
 
         // Meeting 생성자 Meeting에 추가
         Participant participant = Participant.builder()
@@ -134,7 +136,16 @@ public class MeetingService {
             Matcher m = r.matcher(question);
             if (m.find()) {
                 String content = m.group(1); // "내가 가장 좋아하는 취미는?"
-                String emoji = m.group(2); // "🎨"
+                String emoji = "";
+
+                if (m.group(2) != null) {
+                    emoji = m.group(2).substring(0, 2); // "🎨"
+                } else {
+                    // 이모지 종류가 다양해 파싱 안되는 문제 -> 직접 추가 파싱
+                    String[] list = content.split("\\? ");
+                    content = list[0] + "?";
+                    emoji = list[1];
+                }
 
                 QuestionGpt questionGpt = QuestionGpt.builder()
                         .emoji(emoji)
