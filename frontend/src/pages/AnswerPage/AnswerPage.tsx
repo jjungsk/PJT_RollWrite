@@ -11,6 +11,11 @@ import GhostBtn from "../../elements/Button/GhostBtn";
 import { ReactComponent as ImgBtn } from "../../assets/AddImgBtn.svg";
 import { ReactComponent as ImgIcon } from "../../assets/ImgIcon.svg";
 
+// 추가로 구현해야할 부분
+// 1. 데이터 저장, 수정 api 연결
+// 2. 이미지 업로드
+// 3. 이미지 미리보기
+
 export default function AnswerPage() {
   const location = useLocation();
   const state = location.state as {

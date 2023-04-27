@@ -64,3 +64,10 @@ export interface QuestionInfo {
   answer: string;
   image: string;
 }
+
+export interface AnswerInfo {
+  answer: string;
+  meetingId: number;
+  questionId: number;
+  image?: string;
+}
