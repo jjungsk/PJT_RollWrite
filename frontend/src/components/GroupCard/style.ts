@@ -1,9 +1,14 @@
 import styled from "styled-components";
 
-const CardContainer = styled.div<{ margin: string; color?: string }>`
+const CardContainer = styled.div<{
+  width: string;
+  margin: string;
+  color?: string;
+}>`
   position: relative;
   display: flex;
   flex-direction: column;
+  width: ${(props) => props.width};
   padding: 16px 16px 12px;
   background-color: ${(props) => props.color};
   box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
