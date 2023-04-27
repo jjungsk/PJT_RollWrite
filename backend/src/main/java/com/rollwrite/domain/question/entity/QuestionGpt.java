@@ -34,4 +34,8 @@ public class QuestionGpt extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "meeting_id")
     private Meeting meeting;
+
+    public void updateIsChoosed(boolean isChoosed) {
+        this.isChoosed = isChoosed;
+    }
 }

@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface QuestionGptRepository extends JpaRepository<QuestionGpt, Long> {
+public interface QuestionGptRepository extends JpaRepository<QuestionGpt, Long>, QuestionGptCustomRepository {
 }
