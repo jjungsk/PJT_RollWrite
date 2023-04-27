@@ -17,35 +17,36 @@ import SubLayout from "./Layout/SubLayout";
 import { useAppDispatch, useAppSelector } from "./constants/types";
 import { updateRouteHistory } from "./store/authReducer";
 import CreateGroupPage from "./pages/CreateGroupPage/CreateGroupPage";
+import AnswerPage from "./pages/AnswerPage/AnswerPage";
 
 function App() {
-  // const dispatch = useAppDispatch();
-  // const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
-  // const isLogin = useAppSelector((state) => state.auth.isLogin);
-  // const routeHistory = useAppSelector((state) => state.auth.routeHistory);
-  // const location = useLocation();
+  const isLogin = useAppSelector((state) => state.auth.isLogin);
+  const routeHistory = useAppSelector((state) => state.auth.routeHistory);
+  const location = useLocation();
 
-  // useEffect(() => {
-  //   const currentPath = location.pathname;
+  useEffect(() => {
+    const currentPath = location.pathname;
 
-  //   if (!isLogin) {
-  //     if (currentPath !== "/login") {
-  //       dispatch(updateRouteHistory(currentPath));
-  //     }
-  //     navigate("/login");
-  //   }
+    if (!isLogin) {
+      if (currentPath !== "/login") {
+        dispatch(updateRouteHistory(currentPath));
+      }
+      navigate("/login");
+    }
 
-  //   if (isLogin) {
-  //     if (currentPath == "/login") {
-  //       navigate("");
-  //     }
-  //     if (routeHistory !== "") {
-  //       navigate(routeHistory);
-  //       dispatch(updateRouteHistory(""));
-  //     }
-  //   }
-  // }, [dispatch, isLogin, location, navigate, routeHistory]);
+    if (isLogin) {
+      if (currentPath == "/login") {
+        navigate("");
+      }
+      if (routeHistory !== "") {
+        navigate(routeHistory);
+        dispatch(updateRouteHistory(""));
+      }
+    }
+  }, [dispatch, isLogin, location, navigate, routeHistory]);
 
   return (
     <Routes>
@@ -60,6 +61,7 @@ function App() {
         <Route path="/notify" element={<NotifyPage />} />
         <Route path="/setting" element={<SettingPage />} />
         <Route path="/create" element={<CreateGroupPage />} />
+        <Route path="/answer" element={<AnswerPage />} />
       </Route>
     </Routes>
   );
