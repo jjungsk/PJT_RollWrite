@@ -24,6 +24,7 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
@@ -53,17 +54,15 @@ public class MeetingService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
-        log.info("1번");
         // 초대 코드 생성
-        String inviteUrl = "http://localhost:8081/api/auth/join=";
+        // TODO: SecureRandom 서버에서는 작동 제대로 안 함 -> 수정 필요
 //        SecureRandom random = SecureRandom.getInstanceStrong();
-//        byte[] bytes = new byte[16];
-//        random.nextBytes(bytes);
-//        log.info("2-1번");
-//        String inviteCode = Base64.getUrlEncoder().encodeToString(bytes);
-        String inviteCode = "ExInviteCode";
-        log.info("2-2번");
-
+        String inviteUrl = "http://localhost:8081/api/auth/join=";
+        long seed = System.currentTimeMillis();
+        Random random = new Random(seed);
+        byte[] codeBytes = new byte[15];
+        random.nextBytes(codeBytes);
+        String inviteCode = Base64.getUrlEncoder().withoutPadding().encodeToString(codeBytes);
 
         // Meeting 생성
         Meeting meeting = Meeting.builder()
@@ -72,14 +71,12 @@ public class MeetingService {
                 .build();
         meetingRepository.save(meeting);
 
-        log.info("3번");
         // tag id에 해당하는 Meeting(tagMeetingList)에 추가
         List<TagDto> tagList = new ArrayList<>();
         List<TagMeeting> tagMeetingList = tagIdToTagMeetingList(
                 meeting, addMeetingRequestDto.getTag(), tagList);
         meeting.updateTagMeetingList(tagMeetingList);
 
-        log.info("4번");
         // 질문에 사용 될 Tag
         String tag = "";
         for (TagDto tagDto : tagList) {
@@ -88,7 +85,6 @@ public class MeetingService {
         // Chat GPT 생성 질문 10개 저장
         asyncMeetingService.saveGptQuestion(tag, meeting);
 
-        log.info("5번");
         // Meeting 생성자 Meeting에 추가
         Participant participant = Participant.builder()
                 .user(user)
@@ -96,7 +92,6 @@ public class MeetingService {
                 .build();
         participantRepository.save(participant);
 
-        log.info("6번");
         return AddMeetingResponseDto.builder()
                 .meeting(meeting)
                 .tag(tagList)
