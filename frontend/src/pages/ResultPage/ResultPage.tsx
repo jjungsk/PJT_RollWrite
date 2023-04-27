@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Chat, GroupResult } from "../../constants/types";
+import { Chat, GroupResult, Participant } from "../../constants/types";
 import {
   HeaderContainer,
   HeaderGroupTitle,
@@ -11,11 +11,18 @@ import { ReactComponent as Person } from "../../assets/Person.svg";
 import Contour from "../../elements/Contour/Contour";
 import {
   AnswerContainer,
+  AnswerContent,
+  AnswerDate,
   AnswerDetail,
   ChatContainer,
   QuestionContainer,
+  ResultContainer,
+  StatisticContainer,
+  StatisticUserList,
 } from "./style";
 import { ProfileImg } from "../MyPage/style";
+import format from "date-fns/format";
+import { ko } from "date-fns/locale";
 
 function ResultPage() {
   const navigate = useNavigate();
@@ -153,6 +160,27 @@ function ResultPage() {
             },
           ],
         },
+        {
+          day: "2023-03-18",
+          questionId: 2,
+          question: "오늘의 질문 내용 블라 블라",
+          answer: [
+            {
+              nickname: "닉네임1",
+              profileImage: "/sample_profile_image.png",
+              isMe: false,
+              content: "이건 답변 내용이야 이건 답변 내용이야",
+              time: "2023-03-18 16:52:10",
+            },
+            {
+              nickname: "닉네임2",
+              profileImage: "/sample_profile_image.png",
+              isMe: false,
+              content: "이건 짧은 답변이야",
+              time: "2023-03-18 17:38:31",
+            },
+          ],
+        },
       ],
     };
 
@@ -168,13 +196,7 @@ function ResultPage() {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        minHeight: "100vh",
-        flexDirection: "column",
-      }}
-    >
+    <>
       <HeaderContainer padding={"0px 24px 0px 24px"}>
         <Back onClick={handleClickBackBtn} />
         <HeaderGroupTitle>
@@ -184,44 +206,96 @@ function ResultPage() {
             <div>{groupResult.participantCnt}</div>
           </div>
           <div>
-            {groupResult.startDay.replace(/-/g, ".")}
+            {format(new Date(groupResult.startDay), "yyyy.MM.dd")}
             {" ~ "}
-            {groupResult.endDay.replace(/-/g, ".")}
+            {format(new Date(groupResult.endDay), "yyyy.MM.dd")}
           </div>
         </HeaderGroupTitle>
         <HamburgerMenu onClick={handleClickMenuBtn} />
       </HeaderContainer>
 
-      <main
-        style={{
-          flex: "1",
-          overflow: "scroll",
-        }}
-      >
+      <ResultContainer>
         {groupResult.chat.map((chat: Chat) => (
           <ChatContainer key={chat.questionId}>
-            <Contour text={chat.day.replace(/-/g, ".")} />
+            <Contour text={format(new Date(chat.day), "yy.MM.dd")} />
             <QuestionContainer bgColor={groupResult.color}>
               {chat.question}
             </QuestionContainer>
             {chat.answer.map((answer) => (
               <AnswerContainer key={answer.time} isMe={answer.isMe}>
-                <ProfileImg
-                  style={{ backgroundImage: `url(${answer.profileImage})` }}
-                />
-                <AnswerDetail>
+                {!answer.isMe && (
+                  <ProfileImg size={40} bgImg={answer.profileImage} />
+                )}
+                <AnswerDetail isMe={answer.isMe}>
                   <div>{answer.nickname}</div>
                   <div>
-                    <div>{answer.content}</div>
-                    <div>{answer.time.split(" ")[1]}</div>
+                    {answer.isMe && (
+                      <AnswerDate>
+                        {format(new Date(answer.time), "a", { locale: ko })}
+                        <br />
+                        {format(new Date(answer.time), "hh:mm")}
+                      </AnswerDate>
+                    )}
+                    <AnswerContent>{answer.content}</AnswerContent>
+                    {!answer.isMe && (
+                      <AnswerDate>
+                        {format(new Date(answer.time), "a", { locale: ko })}
+                        <br />
+                        {format(new Date(answer.time), "hh:mm")}
+                      </AnswerDate>
+                    )}
                   </div>
                 </AnswerDetail>
+                {answer.isMe && (
+                  <ProfileImg size={40} bgImg={answer.profileImage} />
+                )}
               </AnswerContainer>
             ))}
           </ChatContainer>
         ))}
-      </main>
-    </div>
+
+        <StatisticContainer>
+          <Contour text={"업적"} />
+          <QuestionContainer width={"240px"} bgColor={groupResult.color}>
+            이야기 보따리 📚
+          </QuestionContainer>
+          <StatisticUserList>
+            {groupResult.statistic.taleteller.map((user: Participant) => (
+              <ProfileImg
+                key={user.userId}
+                size={40}
+                bgImg={user.profileImage}
+              />
+            ))}
+          </StatisticUserList>
+          <QuestionContainer width={"240px"} bgColor={groupResult.color}>
+            포토 그래퍼 📷
+          </QuestionContainer>
+          <StatisticUserList>
+            {groupResult.statistic.photographer.map((user: Participant) => (
+              <ProfileImg
+                key={user.userId}
+                size={40}
+                bgImg={user.profileImage}
+              />
+            ))}
+          </StatisticUserList>
+          <QuestionContainer width={"240px"} bgColor={groupResult.color}>
+            프로 개근러 👍
+          </QuestionContainer>
+          <StatisticUserList>
+            {groupResult.statistic.proGagler.map((user: Participant) => (
+              <ProfileImg
+                key={user.userId}
+                size={40}
+                bgImg={user.profileImage}
+              />
+            ))}
+          </StatisticUserList>
+        </StatisticContainer>
+        <div></div>
+      </ResultContainer>
+    </>
   );
 }
 

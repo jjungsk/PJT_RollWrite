@@ -9,17 +9,18 @@ const ProfileContainer = styled.div`
   background-size: cover;
 `;
 
-const ProfileImg = styled.div`
-  width: 110px;
-  height: 110px;
-  border-radius: 55px;
-  margin-right: 10px;
+const ProfileImg = styled.div<{ size: number; bgImg: string }>`
+  width: ${(props) => props.size}px;
+  height: ${(props) => props.size}px;
+  border-radius: ${(props) => props.size / 2}px;
+  background-image: url(${(props) => props.bgImg});
   background-size: cover;
   background-color: var(--gray-color);
 `;
 
 const ProfileInfo = styled.div`
   width: 160px;
+  margin-left: 10px;
   text-align: center;
 
   & > p {
