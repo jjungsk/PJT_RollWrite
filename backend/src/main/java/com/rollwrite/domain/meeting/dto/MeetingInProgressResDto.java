@@ -7,10 +7,13 @@ import java.util.List;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Value;
 
 @Getter
 public class MeetingInProgressResDto {
 
+    @Value("${inviteUrl}")
+    private String baseUrl;
     private final Long meetingId;
     private final String title;
     private final LocalDate startDay;
@@ -23,13 +26,12 @@ public class MeetingInProgressResDto {
 
     @Builder
     public MeetingInProgressResDto(Meeting meeting, int participantCnt, List<TagDto> tag, List<ParticipantDto> participant) {
-        String inviteUrl = "http://localhost:8081/api/auth/join=";
         this.meetingId = meeting.getId();
         this.title = meeting.getTitle();
         this.startDay = meeting.getStartDay();
         this.endDay = meeting.getEndDay();
         this.color = meeting.getColor();
-        this.inviteCode = inviteUrl + meeting.getInviteCode();
+        this.inviteCode = baseUrl + meeting.getInviteCode();
         this.participantCnt = participantCnt;
         this.tag = tag;
         this.participant = participant;

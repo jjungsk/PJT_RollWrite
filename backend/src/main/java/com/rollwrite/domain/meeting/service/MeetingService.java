@@ -54,7 +54,6 @@ public class MeetingService {
         // 초대 코드 생성
         // TODO: SecureRandom 서버에서는 작동 제대로 안 함 -> 수정 필요
 //        SecureRandom random = SecureRandom.getInstanceStrong();
-        String inviteUrl = "http://localhost:8081/api/auth/join=";
         long seed = System.currentTimeMillis();
         Random random = new Random(seed);
         byte[] codeBytes = new byte[15];
@@ -92,7 +91,7 @@ public class MeetingService {
         return AddMeetingResponseDto.builder()
                 .meeting(meeting)
                 .tag(tagList)
-                .inviteUrl(inviteUrl + inviteCode)
+                .inviteUrl(baseUrl + inviteCode)
                 .build();
     }
 
