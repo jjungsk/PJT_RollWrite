@@ -41,6 +41,7 @@ public class MeetingService {
     private final UserRepository userRepository;
     private final AnswerRepository answerRepository;
     private final MeetingRepository meetingRepository;
+    private final AsyncMeetingService asyncMeetingService;
     private final TagMeetingRepository tagMeetingRepository;
     private final ParticipantRepository participantRepository;
 
@@ -51,6 +52,7 @@ public class MeetingService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
+        log.info("1번");
         // 초대 코드 생성
         String inviteUrl = "http://localhost:8081/api/auth/join=";
         SecureRandom random = SecureRandom.getInstanceStrong();
@@ -58,6 +60,7 @@ public class MeetingService {
         random.nextBytes(bytes);
         String inviteCode = bytes.toString();
 
+        log.info("2번");
 //        addMeetingRequestDto.updateInviteUrl(inviteUrl);
 //        String link = Base64.getUrlEncoder().encodeToString(bytes);
 //        log.info("link : " + link);
@@ -69,14 +72,23 @@ public class MeetingService {
                 .build();
         meetingRepository.save(meeting);
 
+        log.info("3번");
         // tag id에 해당하는 Meeting(tagMeetingList)에 추가
         List<TagDto> tagList = new ArrayList<>();
         List<TagMeeting> tagMeetingList = tagIdToTagMeetingList(
                 meeting, addMeetingRequestDto.getTag(), tagList);
         meeting.updateTagMeetingList(tagMeetingList);
 
-        // TODO:Chat GPT 생성 질문 10개 저장
+        log.info("4번");
+        // 질문에 사용 될 Tag
+        String tag = "";
+        for (TagDto tagDto : tagList) {
+            tag += tagDto.getContent() + ",";
+        }
+        // Chat GPT 생성 질문 10개 저장
+        asyncMeetingService.saveGptQuestion(tag, meeting);
 
+        log.info("5번");
         // Meeting 생성자 Meeting에 추가
         Participant participant = Participant.builder()
                 .user(user)
@@ -84,6 +96,7 @@ public class MeetingService {
                 .build();
         participantRepository.save(participant);
 
+        log.info("6번");
         return AddMeetingResponseDto.builder()
                 .meeting(meeting)
                 .tag(tagList)
@@ -154,12 +167,6 @@ public class MeetingService {
             // 참여자 수
             int participantCnt = participantList.size();
 
-            // TODO: 사용량 (아직 없음)
-            int questionUsage = 0;
-
-            // TODO: 제한량 (기준이 명확하지 않음)
-            int questionLimit = 0;
-
             // 모임에 해당하는 태그
             List<TagMeeting> tagMeetingList = tagMeetingRepository.findTagMeetingByMeeting
                     (meeting);
@@ -170,8 +177,6 @@ public class MeetingService {
             meetingInProgressResDtoList.add(MeetingInProgressResDto.builder()
                     .meeting(meeting)
                     .tag(tagDtoList)
-                    .questionLimit(questionLimit)
-                    .questionUsage(questionUsage)
                     .participant(participantDtoList)
                     .participantCnt(participantCnt)
                     .build());
