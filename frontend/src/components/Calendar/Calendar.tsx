@@ -45,10 +45,10 @@ const sproutColorList = [
 
 function Calendar(props: {
   setHomeContent: (homeContent: number) => void;
-  questionList?: Question[];
-  startDay?: string;
-  endDay?: string;
-  color?: string;
+  questionList: Question[];
+  startDay: string;
+  endDay: string;
+  color: string;
 }) {
   const [monthStart, setMonthStart] = useState(startOfMonth(TODAY));
   const [pickedDay, setPickedDay] = useState(TODAY);

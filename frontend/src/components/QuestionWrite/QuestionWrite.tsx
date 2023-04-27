@@ -1,16 +1,29 @@
 import React, { useState } from "react";
 import Emoji from "../../elements/Emoji/Emoji";
 import GhostBtn from "../../elements/Button/GhostBtn";
-import { Title, SubTitle, QuestionInput, QuestionCount } from "./style";
+import { Title, SubTitle, QuestionInput } from "./style";
 import FillBtn from "../../elements/Button/FillBtn";
+import { createQuestion } from "../../apis/home";
 
 function QuestionWrite(props: {
   setHomeContent: (homeContent: number) => void;
+  groupId: number;
 }) {
   const [question, setQuestion] = useState("");
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuestion(e.target.value);
+  };
+
+  const handleClickCreateBtn = () => {
+    createQuestion(props.groupId, question)
+      .then((res) => {
+        alert(res.message);
+        props.setHomeContent(0);
+      })
+      .catch((err) => {
+        alert(err.message);
+      });
   };
   return (
     <div>
@@ -19,7 +32,7 @@ function QuestionWrite(props: {
       <Emoji label="🧐" />
       <QuestionInput onChange={onChange} value={question} />
       {question.length > 0 ? (
-        <FillBtn label="질문 추가" onClick={() => props.setHomeContent(0)} />
+        <FillBtn label="질문 추가" onClick={handleClickCreateBtn} />
       ) : (
         <GhostBtn label="취소 하기" onClick={() => props.setHomeContent(0)} />
       )}

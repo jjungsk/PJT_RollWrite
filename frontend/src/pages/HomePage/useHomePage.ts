@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getQuestionList, getGroupList } from "../../apis/group";
+import { getQuestionList, getGroupList } from "../../apis/home";
 import { GroupInfo, Question } from "../../constants/types";
 
 function useHomePage() {

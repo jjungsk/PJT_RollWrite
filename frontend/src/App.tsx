@@ -17,6 +17,7 @@ import SubLayout from "./Layout/SubLayout";
 import { useAppDispatch, useAppSelector } from "./constants/types";
 import { updateRouteHistory } from "./store/authReducer";
 import CreateGroupPage from "./pages/CreateGroupPage/CreateGroupPage";
+import InvitePage from "./pages/InvitePage/InvitePage";
 import AnswerPage from "./pages/AnswerPage/AnswerPage";
 
 function App() {
@@ -38,7 +39,7 @@ function App() {
     }
 
     if (isLogin) {
-      if (currentPath == "/login") {
+      if (currentPath === "/login") {
         navigate("");
       }
       if (routeHistory !== "") {
@@ -61,6 +62,7 @@ function App() {
         <Route path="/notify" element={<NotifyPage />} />
         <Route path="/setting" element={<SettingPage />} />
         <Route path="/create" element={<CreateGroupPage />} />
+        <Route path="/invite" element={<InvitePage />} />
         <Route path="/answer" element={<AnswerPage />} />
       </Route>
     </Routes>
