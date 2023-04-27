@@ -53,3 +53,14 @@ export interface Profile {
   ongoingGroupCnt: number;
   completeGroupCnt: number;
 }
+
+export interface QuestionInfo {
+  meetingId: number;
+  title: string;
+  day: number;
+  questionId: number;
+  question: string;
+  emoji: string;
+  answer: string;
+  image: string;
+}
