@@ -5,12 +5,19 @@ const GlobalStyle = createGlobalStyle`
   ${reset}
 
   @font-face {
-    font-family: 'IM_Hyemin';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2106@1.1/IM_Hyemin-Regular.woff2') format('woff');
+    font-family: "IM_Hyemin";
     font-weight: normal;
     font-style: normal;
+    src: url("/IM_Hyemin-Regular.woff2") format("woff");
   }
 
+  @font-face {
+    font-family: "Tossface";
+    font-style: normal;
+    font-weight: 400;
+    font-display: block;
+    src: url("/TossFaceFontMac.woff2") format("woff");
+  }
 
   :root {
     /* Colors */

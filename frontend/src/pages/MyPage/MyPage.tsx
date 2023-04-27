@@ -12,15 +12,17 @@ import { ReactComponent as Flower } from "../../assets/Flower.svg";
 import { GroupInfo, Profile } from "../../constants/types";
 import Contour from "../../elements/Contour/Contour";
 import GroupCard from "../../components/GroupCard/GroupCard";
+import { useNavigate } from "react-router-dom";
 
 function MyPage() {
+  const navigate = useNavigate();
+
   const [profile, setProfile] = useState<Profile>({
     nickname: "",
     profileImg: "",
     ongoingGroupCnt: 0,
     completeGroupCnt: 0,
   });
-
   const [groupList, setGroupList] = useState<GroupInfo[]>([]);
 
   useEffect(() => {
@@ -49,14 +51,17 @@ function MyPage() {
         participant: [
           {
             userId: 1,
+            nickname: "닉네임1",
             profileImage: "/sample_profile_image.png",
           },
           {
             userId: 2,
+            nickname: "닉네임2",
             profileImage: "/sample_profile_image.png",
           },
           {
             userId: 3,
+            nickname: "닉네임3",
             profileImage: "/sample_profile_image.png",
           },
         ],
@@ -78,22 +83,27 @@ function MyPage() {
         participant: [
           {
             userId: 1,
+            nickname: "닉네임1",
             profileImage: "/sample_profile_image.png",
           },
           {
             userId: 2,
+            nickname: "닉네임2",
             profileImage: "/sample_profile_image.png",
           },
           {
             userId: 3,
+            nickname: "닉네임3",
             profileImage: "/sample_profile_image.png",
           },
           {
             userId: 4,
+            nickname: "닉네임4",
             profileImage: "/sample_profile_image.png",
           },
           {
             userId: 5,
+            nickname: "닉네임5",
             profileImage: "/sample_profile_image.png",
           },
         ],
@@ -111,10 +121,12 @@ function MyPage() {
         participant: [
           {
             userId: 1,
+            nickname: "닉네임1",
             profileImage: "/sample_profile_image.png",
           },
           {
             userId: 2,
+            nickname: "닉네임2",
             profileImage: "/sample_profile_image.png",
           },
         ],
@@ -132,18 +144,22 @@ function MyPage() {
         participant: [
           {
             userId: 1,
+            nickname: "닉네임1",
             profileImage: "/sample_profile_image.png",
           },
           {
             userId: 2,
+            nickname: "닉네임2",
             profileImage: "/sample_profile_image.png",
           },
           {
             userId: 3,
+            nickname: "닉네임3",
             profileImage: "/sample_profile_image.png",
           },
           {
             userId: 4,
+            nickname: "닉네임4",
             profileImage: "/sample_profile_image.png",
           },
         ],
@@ -157,11 +173,14 @@ function MyPage() {
   }, []);
 
   const handleClickGroup = (meetingId: number) => {
-    alert(`${meetingId}번 모임 결과보기`);
+    navigate(`/result/${meetingId}`);
   };
 
   var groupListContainer = groupList.map((group: GroupInfo) => (
-    <div onClick={() => handleClickGroup(group.meetingId)}>
+    <div
+      key={group.meetingId}
+      onClick={() => handleClickGroup(group.meetingId)}
+    >
       <GroupCard width="320px" groupInfo={group} margin="16px auto" />
     </div>
   ));
@@ -171,31 +190,33 @@ function MyPage() {
       <ProfileContainer style={{ backgroundImage: `url(${ProfileCard})` }}>
         <ProfileImg
           style={{ backgroundImage: "url(/sample_profile_image.png)" }}
-        ></ProfileImg>
+        />
         <ProfileInfo>
           <p>{profile.nickname}</p>
           <ProfileInfoDetail>
             <table>
-              <tr>
-                <td>
-                  <Sprout />
-                </td>
-                <td>진행 중인 모임</td>
-                <td>{profile.ongoingGroupCnt}</td>
-              </tr>
-              <tr>
-                <td>
-                  <Flower />
-                </td>
-                <td>완료된 모임</td>
-                <td>{profile.completeGroupCnt}</td>
-              </tr>
+              <tbody>
+                <tr>
+                  <td>
+                    <Sprout />
+                  </td>
+                  <td>진행 중인 모임</td>
+                  <td>{profile.ongoingGroupCnt}</td>
+                </tr>
+                <tr>
+                  <td>
+                    <Flower />
+                  </td>
+                  <td>완료된 모임</td>
+                  <td>{profile.completeGroupCnt}</td>
+                </tr>
+              </tbody>
             </table>
           </ProfileInfoDetail>
         </ProfileInfo>
       </ProfileContainer>
 
-      <Contour text="참여한 모임"></Contour>
+      <Contour text="참여한 모임" />
 
       <GroupListContainer>
         {groupListContainer}

@@ -12,14 +12,18 @@ export interface CreateGroup {
   endDay: string;
   color: string;
 }
+
 export interface Tag {
   tagId: number;
   content: string;
 }
+
 export interface Participant {
-  profileImage: string;
   userId: number;
+  nickname: string;
+  profileImage: string;
 }
+
 export interface GroupInfo {
   meetingId: number;
   title: string;
@@ -52,6 +56,38 @@ export interface Profile {
   profileImg: string;
   ongoingGroupCnt: number;
   completeGroupCnt: number;
+}
+
+export interface Chat {
+  questionId: number;
+  question: string;
+  day: string;
+  answer: {
+    nickname: string;
+    profileImage: string;
+    isMe: boolean;
+    content: string;
+    time: string;
+  }[];
+}
+
+export interface Statistic {
+  taleteller: Participant[];
+  photographer: Participant[];
+  proGagler: Participant[];
+}
+
+export interface GroupResult {
+  meetingId: number;
+  title: string;
+  tag: Tag[];
+  startDay: string;
+  endDay: string;
+  color: string;
+  participant: Participant[];
+  participantCnt: number;
+  statistic: Statistic;
+  chat: Chat[];
 }
 
 export interface Notify {
