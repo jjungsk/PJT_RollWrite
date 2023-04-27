@@ -16,6 +16,7 @@ public enum SuccessCode {
     // meeting
     GET_MEETING_IN_PROGRESS_SUCCESS(StatusCode.SUCCESS, "진행 중인 전체 모임 조회했습니다."),
     GET_MEETING_CALENDER_SUCCESS(StatusCode.SUCCESS, "진행 중인 모임 캘린더 조회했습니다."),
+    GET_MEETING_INVITE_URL_SUCCESS(StatusCode.SUCCESS, "모임 초대 링크를 조회했습니다."),
     ADD_MEETING_SUCCESS(StatusCode.SUCCESS, "모임이 생성되었습니다."),
     JOIN_MEETING_SUCCESS(StatusCode.SUCCESS, "모임에 가입되었습니다."),
     GET_MEETING_RESULT_SUCCESS(StatusCode.SUCCESS, "전체 모임 결과 조회했습니다."),

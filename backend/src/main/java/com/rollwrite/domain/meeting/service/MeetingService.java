@@ -1,12 +1,6 @@
 package com.rollwrite.domain.meeting.service;
 
-import com.rollwrite.domain.meeting.dto.AddMeetingRequestDto;
-import com.rollwrite.domain.meeting.dto.AddMeetingResponseDto;
-import com.rollwrite.domain.meeting.dto.MeetingCalenderResDto;
-import com.rollwrite.domain.meeting.dto.MeetingInProgressResDto;
-import com.rollwrite.domain.meeting.dto.MeetingResultDto;
-import com.rollwrite.domain.meeting.dto.ParticipantDto;
-import com.rollwrite.domain.meeting.dto.TagDto;
+import com.rollwrite.domain.meeting.dto.*;
 import com.rollwrite.domain.meeting.entity.Meeting;
 import com.rollwrite.domain.meeting.entity.Participant;
 import com.rollwrite.domain.meeting.entity.Tag;
@@ -20,7 +14,6 @@ import com.rollwrite.domain.user.entity.User;
 import com.rollwrite.domain.user.repository.UserRepository;
 
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -29,6 +22,7 @@ import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +40,9 @@ public class MeetingService {
     private final AsyncMeetingService asyncMeetingService;
     private final TagMeetingRepository tagMeetingRepository;
     private final ParticipantRepository participantRepository;
+
+    @Value("${inviteUrl}")
+    private String baseUrl;
 
     @Transactional
     public AddMeetingResponseDto addMeeting(Long userId,
@@ -229,5 +226,16 @@ public class MeetingService {
                     .build());
         }
         return meetingResultDtoList;
+    }
+
+    public MeetingInviteUrlDto findMeetingInviteUrl(Long meetingId) {
+
+        Meeting meeting = meetingRepository.findById(meetingId)
+                .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
+
+        return MeetingInviteUrlDto.builder()
+                .meetingId(meeting.getId())
+                .inviteUrl(baseUrl + meeting.getInviteCode())
+                .build();
     }
 }

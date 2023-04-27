@@ -1,11 +1,6 @@
 package com.rollwrite.domain.meeting.controller;
 
-import com.rollwrite.domain.meeting.dto.AddMeetingRequestDto;
-import com.rollwrite.domain.meeting.dto.AddMeetingResponseDto;
-import com.rollwrite.domain.meeting.dto.MeetingCalenderResDto;
-import com.rollwrite.domain.meeting.dto.MeetingInProgressResDto;
-import com.rollwrite.domain.meeting.dto.MeetingResultDto;
-import com.rollwrite.domain.meeting.dto.TagDto;
+import com.rollwrite.domain.meeting.dto.*;
 import com.rollwrite.domain.meeting.service.MeetingService;
 import com.rollwrite.global.model.ApiResponse;
 import com.rollwrite.global.model.SuccessCode;
@@ -67,6 +62,16 @@ public class MeetingController {
             ApiResponse.success(SuccessCode.GET_MEETING_CALENDER_SUCCESS,
                 meetingCalenderResDtoList),
             HttpStatus.OK);
+    }
+
+    @GetMapping("/join/{meetingId}")
+    public ResponseEntity<ApiResponse> getMeetingInviteUrl(@PathVariable Long meetingId) {
+        Long userId = 1L;
+        log.info("Meeting 초대 링크 가져오기 meetingId : " + meetingId + " userId : " + userId);
+        MeetingInviteUrlDto meetingInviteUrlDto = meetingService.findMeetingInviteUrl(meetingId);
+        return new ResponseEntity<>(
+                ApiResponse.success(SuccessCode.GET_MEETING_INVITE_URL_SUCCESS, meetingInviteUrlDto),
+                HttpStatus.OK);
     }
 
     @PostMapping("/join/{meetingId}")
