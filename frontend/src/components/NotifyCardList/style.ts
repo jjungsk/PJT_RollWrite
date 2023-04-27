@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
 const NotifyCardListContainer = styled.div`
   height: calc(100vh - 60px);
