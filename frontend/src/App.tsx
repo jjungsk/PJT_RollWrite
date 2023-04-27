@@ -17,7 +17,9 @@ import SubLayout from "./Layout/SubLayout";
 import { useAppDispatch, useAppSelector } from "./constants/types";
 import { updateRouteHistory } from "./store/authReducer";
 import CreateGroupPage from "./pages/CreateGroupPage/CreateGroupPage";
+import InvitePage from "./pages/InvitePage/InvitePage";
 import AnswerPage from "./pages/AnswerPage/AnswerPage";
+import ResultPage from "./pages/ResultPage/ResultPage";
 
 function App() {
   // const dispatch = useAppDispatch();
@@ -37,16 +39,16 @@ function App() {
   //     navigate("/login");
   //   }
 
-  //   if (isLogin) {
-  //     if (currentPath == "/login") {
-  //       navigate("");
-  //     }
-  //     if (routeHistory !== "") {
-  //       navigate(routeHistory);
-  //       dispatch(updateRouteHistory(""));
-  //     }
-  //   }
-  // }, [dispatch, isLogin, location, navigate, routeHistory]);
+    if (isLogin) {
+      if (currentPath === "/login") {
+        navigate("");
+      }
+      if (routeHistory !== "") {
+        navigate(routeHistory);
+        dispatch(updateRouteHistory(""));
+      }
+    }
+  }, [dispatch, isLogin, location, navigate, routeHistory]);
 
   return (
     <Routes>
@@ -61,8 +63,10 @@ function App() {
         <Route path="/notify" element={<NotifyPage />} />
         <Route path="/setting" element={<SettingPage />} />
         <Route path="/create" element={<CreateGroupPage />} />
+        <Route path="/invite" element={<InvitePage />} />
         <Route path="/answer" element={<AnswerPage />} />
       </Route>
+      <Route path="/result/:meetingId" element={<ResultPage />} />
     </Routes>
   );
 }

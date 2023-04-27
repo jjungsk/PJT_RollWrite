@@ -13,16 +13,13 @@ import {
 import GhostBtn from "../../elements/Button/GhostBtn";
 import { CreateGroup, Tag } from "../../constants/types";
 import { ReactComponent as Check } from "../../assets/Check.svg";
-import { createGroup, getGroupTag } from "../../apis/group";
-import GroupTag from "../../elements/GroupTag/GroupTag";
+import { createGroup, getGroupTag } from "../../apis/home";
 import { isAfter, subDays } from "date-fns";
 
 function CreateGroupPage() {
   const navigate = useNavigate();
   const [createState, setCreateState] = useState(0);
   const [tagList, setTagList] = useState<Tag[]>([]);
-
-  const [selectedTagList, setSelectedTagList] = useState();
 
   useEffect(() => {
     getGroupTag()

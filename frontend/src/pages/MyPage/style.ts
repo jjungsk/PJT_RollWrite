@@ -66,9 +66,23 @@ const ProfileInfoDetail = styled.div`
 `;
 
 const GroupListContainer = styled.div`
-  width: 340px;
+  width: 100%;
   height: calc(100vh - 360px);
   overflow-y: scroll;
+
+  & > div {
+    width: fit-content;
+    margin: auto;
+  }
+
+  & > div:first-child > div {
+    margin-top: 10px;
+  }
+
+  & > div:last-child {
+    width: 100%;
+    height: calc(100vh - 480px);
+  }
 `;
 
 export {

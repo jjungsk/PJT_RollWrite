@@ -1,33 +1,32 @@
 import React from "react";
-import Calendar from "../../components/Calendar/Calendar";
 import QuestionWrite from "../../components/QuestionWrite/QuestionWrite";
 import { Question, GroupInfo } from "../../constants/types";
+import GroupCalendar from "../GroupCalendar/GroupCalendar";
 
 interface HomeContentProps {
   homeContent: number;
   setHomeContent: (value: number) => void;
-  questionList?: Question[];
-  group?: GroupInfo;
+  questionList: Question[];
+  groupInfo: GroupInfo;
 }
 
 function HomeContent({
   homeContent,
   setHomeContent,
   questionList,
-  group,
+  groupInfo,
 }: HomeContentProps) {
   return (
     <>
       {homeContent === 0 && (
-        <Calendar
+        <GroupCalendar groupInfo={groupInfo} questionList={questionList} />
+      )}
+      {homeContent === 1 && (
+        <QuestionWrite
           setHomeContent={setHomeContent}
-          questionList={questionList}
-          startDay={group?.startDay}
-          endDay={group?.endDay}
-          color={group?.color}
+          groupId={groupInfo.meetingId}
         />
       )}
-      {homeContent === 1 && <QuestionWrite setHomeContent={setHomeContent} />}
     </>
   );
 }

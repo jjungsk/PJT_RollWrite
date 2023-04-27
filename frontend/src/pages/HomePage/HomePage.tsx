@@ -36,12 +36,14 @@ function HomePage() {
         onIndexChanged={(index) => setNowIndex(index)}
       />
 
-      <HomeContent
-        homeContent={homeContent}
-        setHomeContent={setHomeContent}
-        questionList={questionList}
-        group={groupList?.[nowIndex]}
-      />
+      {groupList && questionList && (
+        <HomeContent
+          homeContent={homeContent}
+          setHomeContent={setHomeContent}
+          questionList={questionList}
+          groupInfo={groupList[nowIndex]}
+        />
+      )}
     </HomePageContainer>
   );
 }

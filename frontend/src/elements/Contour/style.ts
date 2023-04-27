@@ -8,7 +8,7 @@ const ContourContainer = styled.div`
   font-weight: bold;
   font-size: 14px;
   line-height: 23px;
-  margin: 10px auto;
+  margin: 6px auto;
   background-size: cover;
 `;
 

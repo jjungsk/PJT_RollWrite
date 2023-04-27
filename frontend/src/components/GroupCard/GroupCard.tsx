@@ -9,9 +9,18 @@ import {
 import GroupTag from "../../elements/GroupTag/GroupTag";
 import { ReactComponent as Person } from "../../assets/Person.svg";
 import { GroupInfo } from "../../constants/types";
-function GroupCard(props: { groupInfo?: GroupInfo }) {
+
+function GroupCard(props: {
+  groupInfo?: GroupInfo;
+  width?: string;
+  margin?: string;
+}) {
   return (
-    <CardContainer margin={"8px 20px 16px"} color={props.groupInfo?.color}>
+    <CardContainer
+      width={props.width !== undefined ? props.width : ""}
+      margin={props.margin !== undefined ? props.margin : "8px 20px 16px"}
+      color={props.groupInfo?.color}
+    >
       <div>
         <Title>
           <div>{props.groupInfo?.title}</div>
