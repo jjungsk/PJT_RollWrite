@@ -3,6 +3,7 @@ package com.rollwrite.domain.question.entity;
 import com.rollwrite.domain.meeting.entity.Meeting;
 import com.rollwrite.global.model.BaseTimeEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -39,4 +40,11 @@ public class Question extends BaseTimeEntity {
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private List<Answer> answerList = new ArrayList<>();
 
+    @Builder
+    public Question(String content, String emoji, LocalDateTime expireTime, Meeting meeting) {
+        this.content = content;
+        this.emoji = emoji;
+        this.expireTime = expireTime;
+        this.meeting = meeting;
+    }
 }
