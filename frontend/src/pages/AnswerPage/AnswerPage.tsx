@@ -1,9 +1,10 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
 import {
   NameContainer,
   QuestionDiv,
   ImgContainer,
-  BtnContainer,
+  IconContainer,
 } from "./style";
 import TextArea from "../../elements/TextArea/TextArea";
 import GhostBtn from "../../elements/Button/GhostBtn";
@@ -11,17 +12,25 @@ import { ReactComponent as ImgBtn } from "../../assets/AddImgBtn.svg";
 import { ReactComponent as ImgIcon } from "../../assets/ImgIcon.svg";
 
 export default function AnswerPage() {
+  const location = useLocation();
+  const state = location.state as {
+    title: string;
+    day: number;
+    question: string;
+  };
+  const title = state.title;
+  const day = state.day;
+  const question = state.question;
   return (
     <>
-      <NameContainer>싸피 모임 D-10</NameContainer>
-      <QuestionDiv>
-        프로젝트를 하면서 가장 특별했던 순간이 무엇인가요를레이요를레이?
-      </QuestionDiv>
-      <ImgContainer>
-        <ImgIcon width="80px"></ImgIcon>
-        <BtnContainer>
+      <NameContainer>
+        {title} D-{day}
+      </NameContainer>
+      <QuestionDiv>{question}</QuestionDiv>
+      <ImgContainer style={{ backgroundImage: "url()" }}>
+        <IconContainer>
           <ImgBtn></ImgBtn>
-        </BtnContainer>
+        </IconContainer>
       </ImgContainer>
       <TextArea></TextArea>
       <GhostBtn label="저장하기"></GhostBtn>

@@ -18,6 +18,7 @@ import { getQuestionList } from "../../apis/question";
 
 function QuestionPage() {
   const navigate = useNavigate();
+  var today = new Date().toLocaleDateString();
 
   type QuestionListType = {
     statusCode: number;
@@ -45,16 +46,17 @@ function QuestionPage() {
   useEffect(() => {
     getQuestionList()
       .then((res) => {
-        console.log(res);
         setQuestionList(res);
-        console.log("확인", questionList);
       })
       .catch((err) => {
         console.error(err);
       });
   }, []);
 
-  var today = new Date().toLocaleDateString();
+  // 추가로 구현해야할 부분
+  // 1. 리스트 크기에 따른 분기(화살표 보이게/안보이게)
+  // 2. 슬라이더 구현
+  // 3. 리스트 순서 정렬(answer 없는순>meetingId 낮은순)
 
   if (questionList.statusCode === 200) {
     return (
@@ -77,7 +79,18 @@ function QuestionPage() {
         </EmojiContainer>
         <TextContainer>{questionList.data[0].question}</TextContainer>
         <BtnContainer>
-          <GhostBtn label="입력하기"></GhostBtn>
+          <GhostBtn
+            label="입력하기"
+            onClick={() =>
+              navigate("/answer", {
+                state: {
+                  title: questionList.data[0].title,
+                  day: questionList.data[0].day,
+                  question: questionList.data[0].question,
+                },
+              })
+            }
+          ></GhostBtn>
         </BtnContainer>
       </>
     );
