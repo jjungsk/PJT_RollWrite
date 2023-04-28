@@ -36,8 +36,8 @@ public class AuthController {
 
     // 1. 카카오 로그인
     @GetMapping("/kakao/login")
-    public ResponseEntity<?> kakaoLogin(@RequestParam("code") String code, HttpServletResponse response) throws JsonProcessingException {
-        AddTokenCookieDto addTokenCookieDto = authService.kakaoLogin(code, response);
+    public ResponseEntity<?> kakaoLogin(@RequestParam("code") String code) throws JsonProcessingException {
+        AddTokenCookieDto addTokenCookieDto = authService.kakaoLogin(code);
 
         // accessToken Dto 담기
         AddAccessTokenResDto addAccessTokenResDto = AddAccessTokenResDto.builder()
