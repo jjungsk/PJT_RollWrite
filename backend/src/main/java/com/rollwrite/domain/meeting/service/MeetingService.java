@@ -119,12 +119,12 @@ public class MeetingService {
     }
 
     @Transactional
-    public void joinMeeting(Long userId, Long meetingId) {
+    public void joinMeeting(Long userId, String inviteCode) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
-        Meeting meeting = meetingRepository.findById(meetingId)
-                .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
+        Meeting meeting = meetingRepository.findByInviteCode(inviteCode)
+                .orElseThrow(() -> new IllegalArgumentException("올바르지 않은 초대코드 입니다."));
 
         Participant participant = Participant.builder()
                 .user(user)

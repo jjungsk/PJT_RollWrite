@@ -76,11 +76,11 @@ public class MeetingController {
                 HttpStatus.OK);
     }
 
-    @PostMapping("/join/{meetingId}")
-    public ResponseEntity<ApiResponse> joinMeeting(@PathVariable Long meetingId) {
-        Long userId = 1L;
-        log.info("Meeting 참여자 추가 meetingId : " + meetingId + " userId : " + userId);
-        meetingService.joinMeeting(userId, meetingId);
+    @PostMapping("/join/{inviteCode}/{userId}")
+    public ResponseEntity<ApiResponse> joinMeeting(@PathVariable String inviteCode, Long userId) {
+        // TODO: Test하기 위해 직접  userId 입력 받음 (후에 userId는 삭제 예정)
+        log.info("Meeting 참여자 추가 userId : " + userId + " inviteCode : " + inviteCode);
+        meetingService.joinMeeting(userId, inviteCode);
         return new ResponseEntity<>(
                 ApiResponse.success(SuccessCode.JOIN_MEETING_SUCCESS),
                 HttpStatus.OK);
