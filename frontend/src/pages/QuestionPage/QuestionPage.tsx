@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
 import {
   InfoContainer,
   DateContainer,
@@ -22,6 +24,16 @@ function QuestionPage() {
 
   const [hasQuestion, setHasQuestion] = useState<boolean>(false);
   const [questionList, setQuestionList] = useState<QuestionInfo[]>([]);
+  const [currentSlide, setCurrentSlide] = useState<number>(0);
+  const [swiper, setSwiper] = useState<any>(null);
+
+  const nexto = () => {
+    swiper?.slideNext();
+  };
+
+  const backto = () => {
+    swiper?.slidePrev();
+  };
 
   useEffect(() => {
     getQuestionList()
@@ -36,51 +48,62 @@ function QuestionPage() {
       });
   }, []);
 
-  // 추가로 구현해야할 부분
-  // 1. 리스트 크기에 따른 분기(화살표 보이게/안보이게)
-  // 2. 슬라이더 구현 -> swiper js
-  // 3. 리스트 순서 정렬(answer 없는순>meetingId 낮은순)
-
   return (
     <>
-      {hasQuestion &&
-        questionList.map((item: QuestionInfo, idx: number) => {
-          return (
-            <>
-              {/* 모임 있는 경우 */}
-              <InfoContainer>
-                <DateContainer>{today}</DateContainer>
-                <NameContainer>
-                  {item.title} D-{item.day}
-                </NameContainer>
-              </InfoContainer>
-              <EmojiContainer>
-                <ArrowContainer>
-                  {idx !== 0 && <BackArrow></BackArrow>}
-                </ArrowContainer>
-                <Emoji label={item.emoji}></Emoji>
-                <ArrowContainer>
-                  {idx !== questionList.length - 1 && <PrevArrow></PrevArrow>}
-                </ArrowContainer>
-              </EmojiContainer>
-              <TextContainer>{item.question}</TextContainer>
-              <BtnContainer>
-                <GhostBtn
-                  label="입력하기"
-                  onClick={() =>
-                    navigate("/answer", {
-                      state: {
-                        title: item.title,
-                        day: item.day,
-                        question: item.question,
-                      },
-                    })
-                  }
-                ></GhostBtn>
-              </BtnContainer>
-            </>
-          );
-        })}
+      {hasQuestion && (
+        <>
+          {/* 모임 있는 경우 */}
+          <InfoContainer>
+            <DateContainer>{today}</DateContainer>
+            <NameContainer>
+              {questionList[currentSlide].title} D-
+              {questionList[currentSlide].day}
+            </NameContainer>
+          </InfoContainer>
+          <EmojiContainer>
+            <ArrowContainer>
+              {currentSlide !== 0 && <BackArrow onClick={backto}></BackArrow>}
+            </ArrowContainer>
+            <Swiper
+              style={{ width: "200px", overflow: "hidden" }}
+              slidesPerView={1}
+              onRealIndexChange={(element) =>
+                setCurrentSlide(element.activeIndex)
+              }
+              onSwiper={(s) => {
+                setSwiper(s);
+              }}
+            >
+              {questionList.map((item: QuestionInfo, idx: number) => (
+                <SwiperSlide key={idx}>
+                  <Emoji label={item.emoji}></Emoji>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+            <ArrowContainer>
+              {currentSlide !== questionList.length - 1 && (
+                <PrevArrow onClick={nexto}></PrevArrow>
+              )}
+            </ArrowContainer>
+          </EmojiContainer>
+          <TextContainer>{questionList[currentSlide].question}</TextContainer>
+          <BtnContainer>
+            <GhostBtn
+              label="입력하기"
+              onClick={() =>
+                navigate("/answer", {
+                  state: {
+                    title: questionList[currentSlide].title,
+                    day: questionList[currentSlide].day,
+                    question: questionList[currentSlide].question,
+                  },
+                })
+              }
+            ></GhostBtn>
+          </BtnContainer>
+        </>
+      )}
+
       {!hasQuestion && (
         <>
           {/* 모임 없는 경우 */}
