@@ -6,7 +6,7 @@ const GroupCalendarContainer = styled.div`
   gap: 16px;
 
   @media (height < 700px) {
-    gap: 12px;
+    gap: 4px;
   }
 `;
 

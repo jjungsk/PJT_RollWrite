@@ -9,36 +9,43 @@ import {
 import GroupTag from "../../elements/GroupTag/GroupTag";
 import { ReactComponent as Person } from "../../assets/Person.svg";
 import { GroupInfo } from "../../constants/types";
+import { useNavigate } from "react-router-dom";
 
-function GroupCard(props: {
+interface Props {
   groupInfo?: GroupInfo;
   width?: string;
   margin?: string;
-}) {
+}
+
+function GroupCard({ groupInfo, width, margin }: Props) {
+  const navigate = useNavigate();
   return (
     <CardContainer
-      width={props.width !== undefined ? props.width : ""}
-      margin={props.margin !== undefined ? props.margin : "8px 20px 16px"}
-      color={props.groupInfo?.color}
+      width={width !== undefined ? width : ""}
+      margin={margin != undefined ? margin : "8px 20px 12px"}
+      color={groupInfo?.color}
     >
       <div>
         <Title>
-          <div>{props.groupInfo?.title}</div>
+          <div>{groupInfo?.title}</div>
         </Title>
         <SubTitle>
-          {props.groupInfo?.startDay}~{props.groupInfo?.endDay}
+          {groupInfo?.startDay}~{groupInfo?.endDay}
         </SubTitle>
       </div>
       <TagContainer>
-        {props.groupInfo?.tag.map((tag, i) => (
+        {groupInfo?.tag.map((tag, i) => (
           <GroupTag label={tag.content} key={i} />
         ))}
       </TagContainer>
 
       <HorizontalBtn>
         <Person />
-        <p>{props.groupInfo?.participantCnt}</p>
+        {groupInfo?.participantCnt}
       </HorizontalBtn>
+      <div onClick={() => navigate(`/invite/${groupInfo?.meetingId}`)}>
+        초대하기
+      </div>
     </CardContainer>
   );
 }

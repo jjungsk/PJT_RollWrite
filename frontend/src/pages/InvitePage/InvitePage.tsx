@@ -1,35 +1,55 @@
 import React, { useEffect, useState } from "react";
-import {
-  GroupInput,
-  GroupNameContainer,
-  Title,
-} from "../CreateGroupPage/style";
 import { InvitePageContainer } from "./style";
+import { getInviteUrl } from "../../apis/home";
+import { useParams } from "react-router-dom";
+import InputLine from "../../elements/InputLine/InputLine";
+import { ReactComponent as Copy } from "../../assets/Copy.svg";
+import GhostBtn from "../../elements/Button/GhostBtn";
 
 function InvitePageContinger() {
-  const [inviteUrl, setInviteUrl] = useState(
-    "http://localhost:8081/api/auth/join=[B@2706ea30"
-  );
-
+  const { meetingId } = useParams();
+  const [inviteUrl, setInviteUrl] = useState("");
   const QRCode = require("qrcode");
 
+  const handleCopyClipBoard = async () => {
+    try {
+      await navigator.clipboard.writeText(inviteUrl);
+      alert("복사 성공!");
+    } catch (error) {
+      alert("복사 실패!");
+    }
+  };
+
   useEffect(() => {
-    const canvas = document.getElementById("roomCode");
-    QRCode.toCanvas(canvas, inviteUrl);
-  }, [QRCode, inviteUrl]);
+    if (meetingId)
+      getInviteUrl(meetingId)
+        .then((res) => {
+          console.log(res);
+          setInviteUrl(res.data.inviteUrl);
+          const canvas = document.getElementById("roomCode");
+          QRCode.toCanvas(canvas, res.data.inviteUrl);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+  }, [meetingId, QRCode]);
+
   return (
     <InvitePageContainer>
-      <Title>
-        <div>초대해보세요</div>
-      </Title>
+      <div>초대해보세요</div>
+
       <canvas
         id="roomCode"
         style={{ borderRadius: 20, margin: "auto" }}
       ></canvas>
-      <GroupNameContainer>
-        <p>초대링크</p>
-        <GroupInput value={inviteUrl} disabled />
-      </GroupNameContainer>
+      <InputLine
+        label="초대링크"
+        name="link"
+        value={inviteUrl}
+        Icon={Copy}
+        onClick={handleCopyClipBoard}
+      />
+      <GhostBtn label="공유하기" />
     </InvitePageContainer>
   );
 }

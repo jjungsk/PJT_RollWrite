@@ -33,3 +33,15 @@ export const createQuestion = async (id: number, question: string) => {
   });
   return response.data;
 };
+
+// 초대 링크 가져오기
+export const getInviteUrl = async (meetingId: string) => {
+  const response = await axiosInstance.get(`/meeting/join/${meetingId}`);
+  return response.data;
+};
+
+// 모임 가입 하기
+export const joinGroup = async (inviteCode: string) => {
+  const response = await axiosInstance.post(`/meeting/join/${inviteCode}/2`);
+  return response.data;
+};
