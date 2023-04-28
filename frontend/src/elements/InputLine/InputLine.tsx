@@ -7,14 +7,34 @@ interface Props {
   name: string;
   type?: string;
   label?: string;
+  value?: string;
+  onClick?: React.MouseEventHandler<SVGSVGElement>;
 }
-function InputLine({ Icon, onChange, name, type, label }: Props) {
+function InputLine({
+  Icon,
+  onChange,
+  name,
+  type,
+  label,
+  value,
+  onClick,
+}: Props) {
   return (
     <InputLineContainer>
       <p>{label}</p>
       <InputLineBox>
-        <InputLineBoxInput name={name} onChange={onChange} type={type} />
-        {Icon && <Icon />}
+        {value !== undefined ? (
+          <InputLineBoxInput
+            name={name}
+            onChange={onChange}
+            type={type}
+            value={value}
+            disabled
+          />
+        ) : (
+          <InputLineBoxInput name={name} onChange={onChange} type={type} />
+        )}
+        {Icon && <Icon onClick={onClick} />}
       </InputLineBox>
     </InputLineContainer>
   );

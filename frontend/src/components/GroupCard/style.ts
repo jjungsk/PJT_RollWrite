@@ -9,7 +9,7 @@ const CardContainer = styled.div<{
   display: flex;
   flex-direction: column;
   width: ${(props) => props.width};
-  padding: 16px 16px 12px;
+  padding: 12px 12px 8px;
   background-color: ${(props) => props.color};
   box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
   margin: ${(props) => props.margin};

@@ -20,6 +20,7 @@ import CreateGroupPage from "./pages/CreateGroupPage/CreateGroupPage";
 import InvitePage from "./pages/InvitePage/InvitePage";
 import AnswerPage from "./pages/AnswerPage/AnswerPage";
 import ResultPage from "./pages/ResultPage/ResultPage";
+import JoinPage from "./pages/JoinPage/JoinPage";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -62,10 +63,11 @@ function App() {
       <Route path="/" element={<SubLayout />}>
         <Route path="/notify" element={<NotifyPage />} />
         <Route path="/setting" element={<SettingPage />} />
-        <Route path="/invite" element={<InvitePage />} />
+        <Route path="/invite/:meetingId" element={<InvitePage />} />
         <Route path="/answer" element={<AnswerPage />} />
       </Route>
       <Route path="/result/:meetingId" element={<ResultPage />} />
+      <Route path="/join/:inviteCode" element={<JoinPage />} />
       <Route path="/create" element={<CreateGroupPage />} />
     </Routes>
   );
