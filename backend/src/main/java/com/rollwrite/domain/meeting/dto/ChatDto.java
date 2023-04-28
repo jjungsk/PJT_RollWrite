@@ -9,11 +9,11 @@ import java.util.List;
 
 @Getter
 public class ChatDto {
-    private Long questionId;
-    private String question;
-    private String emoji;
-    private LocalDate day;
-    List<AnswerDto> answer;
+    private final Long questionId;
+    private final String question;
+    private final String emoji;
+    private final LocalDate day;
+    private final List<AnswerDto> answer;
 
     @Builder
     public ChatDto(Question question, List<AnswerDto> answer) {
