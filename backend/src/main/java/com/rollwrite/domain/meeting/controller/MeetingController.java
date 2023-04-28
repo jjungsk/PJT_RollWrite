@@ -98,11 +98,22 @@ public class MeetingController {
     @GetMapping("/result")
     public ResponseEntity<ApiResponse> meetingResultList(Pageable pageable) {
         Long userId = 1L;
-        log.info("내 모임 결과 전체 조회 userId : " + userId + " " + pageable.toString());
-        List<MeetingResultDto> meetingResultDtoList = meetingService.findMeetingResult(userId,
+        log.info("내 완료한 모임 전체 리스트 조회 userId : " + userId + " " + pageable.toString());
+        List<MeetingResultDto> meetingResultDtoList = meetingService.findMeetingResultList(userId,
                 pageable);
         return new ResponseEntity<>(
                 ApiResponse.success(SuccessCode.GET_MEETING_RESULT_SUCCESS, meetingResultDtoList),
+                HttpStatus.OK);
+    }
+
+
+    @GetMapping("/result/{meetingId}")
+    public ResponseEntity<ApiResponse> meetingResultDetails(Long meetingId) {
+        Long userId = 1L;
+        log.info("내 모임 결과 전체 조회 userId : " + userId + " meetingId : " + meetingId);
+        MeetingResultDetailsDto meetingResultDetailsDto = meetingService.findMeetingResult(userId, meetingId);
+        return new ResponseEntity<>(
+                ApiResponse.success(SuccessCode.GET_MEETING_RESULT_SUCCESS, meetingResultDetailsDto),
                 HttpStatus.OK);
     }
 }

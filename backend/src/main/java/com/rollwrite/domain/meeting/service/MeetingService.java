@@ -1,14 +1,9 @@
 package com.rollwrite.domain.meeting.service;
 
 import com.rollwrite.domain.meeting.dto.*;
-import com.rollwrite.domain.meeting.entity.Meeting;
-import com.rollwrite.domain.meeting.entity.Participant;
-import com.rollwrite.domain.meeting.entity.Tag;
-import com.rollwrite.domain.meeting.entity.TagMeeting;
-import com.rollwrite.domain.meeting.repository.MeetingRepository;
-import com.rollwrite.domain.meeting.repository.ParticipantRepository;
-import com.rollwrite.domain.meeting.repository.TagMeetingRepository;
-import com.rollwrite.domain.meeting.repository.TagRepository;
+import com.rollwrite.domain.meeting.entity.*;
+import com.rollwrite.domain.meeting.repository.*;
+import com.rollwrite.domain.question.entity.Question;
 import com.rollwrite.domain.question.repository.AnswerRepository;
 import com.rollwrite.domain.user.entity.User;
 import com.rollwrite.domain.user.repository.UserRepository;
@@ -38,6 +33,7 @@ public class MeetingService {
     private final AnswerRepository answerRepository;
     private final MeetingRepository meetingRepository;
     private final AsyncMeetingService asyncMeetingService;
+    private final StatisticsRepository statisticsRepository;
     private final TagMeetingRepository tagMeetingRepository;
     private final ParticipantRepository participantRepository;
 
@@ -188,7 +184,7 @@ public class MeetingService {
     }
 
 
-    public List<MeetingResultDto> findMeetingResult(Long userId, Pageable pageable) {
+    public List<MeetingResultDto> findMeetingResultList(Long userId, Pageable pageable) {
         List<MeetingResultDto> meetingResultDtoList = new ArrayList<>();
 
         // user가 참여 완료 한 Meeting List
@@ -236,6 +232,58 @@ public class MeetingService {
         return MeetingInviteUrlDto.builder()
                 .meetingId(meeting.getId())
                 .inviteUrl(baseUrl + meeting.getInviteCode())
+                .build();
+    }
+
+    public MeetingResultDetailsDto findMeetingResult(Long userId, Long meetingId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
+
+        Meeting meeting = meetingRepository.findById(meetingId)
+                .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
+
+        // 참여자 수
+        int participantCnt = participantRepository.findByMeeting(meeting).size();
+
+        // 모임에 해당하는 태그 가져오기
+        List<TagMeeting> tagMeetingList = tagMeetingRepository.findTagMeetingByMeeting
+                (meeting);
+        List<TagDto> tagDtoList = tagMeetingList.stream()
+                .map(tagMeeting -> TagDto.of(tagMeeting.getTag()))
+                .collect(Collectors.toList());
+
+        // 해당 Meeting에 해당하는 모든 통계 가져오기
+        List<StatisticUserDto> statisticsList = statisticsRepository.findStatisticUser(meeting);
+        StatisticDto statisticDto = new StatisticDto();
+        for (StatisticUserDto statisticUserDto : statisticsList) {
+            StatisticsType statisticsType = statisticUserDto.getStatisticsType();
+            if (statisticsType == StatisticsType.TALETELLER) {
+                statisticDto.addTaleteller(statisticUserDto);
+            } else if (statisticsType == StatisticsType.PHTOGRAPHER) {
+                statisticDto.addPhotographer(statisticUserDto);
+            } else if (statisticsType == StatisticsType.PROGAGLER) {
+                statisticDto.addProGagler(statisticUserDto);
+            }
+        }
+        
+        // 내가 답변한 날의 Question 목록
+        List<Question> questionList = answerRepository.findMeetingQuestion(user, meeting);
+        List<ChatDto> chatDtoList = new ArrayList<>();
+        for (Question question : questionList) {
+            List<AnswerDto> answerDtoList = answerRepository.findMeetingChatResult(meeting, question, userId);
+            ChatDto chatDto = ChatDto.builder()
+                    .question(question)
+                    .answer(answerDtoList)
+                    .build();
+            chatDtoList.add(chatDto);
+        }
+
+        return MeetingResultDetailsDto.builder()
+                .meeting(meeting)
+                .participantCnt(participantCnt)
+                .statistic(statisticDto)
+                .tag(tagDtoList)
+                .chat(chatDtoList)
                 .build();
     }
 }
