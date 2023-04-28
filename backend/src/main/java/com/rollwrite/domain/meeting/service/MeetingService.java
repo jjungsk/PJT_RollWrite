@@ -168,6 +168,7 @@ public class MeetingService {
             meetingInProgressResDtoList.add(MeetingInProgressResDto.builder()
                     .meeting(meeting)
                     .tag(tagDtoList)
+                    .baseUrl(baseUrl)
                     .participant(participantDtoList)
                     .participantCnt(participantCnt)
                     .build());
