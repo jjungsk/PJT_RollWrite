@@ -5,26 +5,29 @@ import java.time.LocalDate;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
-public class AddMeetingResponseDto {
+public class MeetingResultDto {
 
+    private final Long meetingId;
     private final String title;
-    private final List<TagDto> tag;
     private final LocalDate startDay;
     private final LocalDate endDay;
     private final String color;
-    private final String inviteUrl;
+    private final int participantCnt;
+    private final List<TagDto> tag;
+    private final List<ParticipantDto> participant;
 
     @Builder
-    public AddMeetingResponseDto(Meeting meeting, String inviteUrl, List<TagDto> tag) {
+    public MeetingResultDto(Meeting meeting, int participantCnt, List<TagDto> tag,
+        List<ParticipantDto> participant) {
+        this.meetingId = meeting.getId();
         this.title = meeting.getTitle();
-        this.tag = tag;
         this.startDay = meeting.getStartDay();
         this.endDay = meeting.getEndDay();
         this.color = meeting.getColor();
-        this.inviteUrl = inviteUrl;
+        this.participantCnt = participantCnt;
+        this.tag = tag;
+        this.participant = participant;
     }
 }

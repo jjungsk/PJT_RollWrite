@@ -1,9 +1,6 @@
 package com.rollwrite.domain.question.controller;
 
-import com.rollwrite.domain.question.dto.AddAnswerRequestDto;
-import com.rollwrite.domain.question.dto.AddQuestionRequestDto;
-import com.rollwrite.domain.question.dto.AddQuestionResponseDto;
-import com.rollwrite.domain.question.dto.ModifyAnswerRequestDto;
+import com.rollwrite.domain.question.dto.*;
 import com.rollwrite.domain.question.service.QuestionService;
 import com.rollwrite.global.model.ApiResponse;
 import com.rollwrite.global.model.SuccessCode;
@@ -17,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.IOException;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -27,29 +25,43 @@ public class QuestionController {
     private final QuestionService questionService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<AddQuestionResponseDto>> addQuestion(@ApiIgnore Authentication authentication,
-                                                                           @RequestBody AddQuestionRequestDto addQuestionRequestDto) {
-        log.info("addQuestionRequestDto : " + addQuestionRequestDto);
-        AddQuestionResponseDto addQuestionResponseDto = questionService.addQuestion(1L, addQuestionRequestDto);
-        return new ResponseEntity<>(ApiResponse.success(SuccessCode.ADD_QUESTION_SUCCESS, addQuestionResponseDto), HttpStatus.OK);
+    public ResponseEntity<ApiResponse> addQuestion(@ApiIgnore Authentication authentication,
+                                                   @RequestBody AddQuestionReqDto addQuestionReqDto) {
+        log.info("사용자 질문 생성 addQuestionReqDto : " + addQuestionReqDto);
+        questionService.addQuestion(1L, addQuestionReqDto);
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.ADD_QUESTION_SUCCESS), HttpStatus.OK);
     }
 
     @PostMapping("/answer")
-    public ResponseEntity<ApiResponse<AddQuestionResponseDto>> addAnswer(@ApiIgnore Authentication authentication,
-                                                                         @RequestPart AddAnswerRequestDto addAnswerRequestDto,
-                                                                         @RequestPart(required = false) MultipartFile image) throws IOException {
-        log.info("addAnswerRequestDto : " + addAnswerRequestDto);
-        questionService.addAnswer(1L, addAnswerRequestDto, image);
-        return new ResponseEntity<>(ApiResponse.success(SuccessCode.ADD_ANSWER_SUCCESS, null), HttpStatus.OK);
+    public ResponseEntity<ApiResponse> addAnswer(@ApiIgnore Authentication authentication,
+                                                 @RequestPart AddAnswerReqDto addAnswerReqDto,
+                                                 @RequestPart(required = false) MultipartFile image) throws IOException {
+        log.info("답변 생성 addAnswerReqDto : " + addAnswerReqDto);
+        questionService.addAnswer(1L, addAnswerReqDto, image);
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.ADD_ANSWER_SUCCESS), HttpStatus.OK);
     }
 
     @PatchMapping("/answer")
-    public ResponseEntity<ApiResponse<AddQuestionResponseDto>> modifyAnswer(@ApiIgnore Authentication authentication,
-                                                                            @RequestPart ModifyAnswerRequestDto modifyAnswerRequestDto,
-                                                                            @RequestPart(required = false) MultipartFile image) throws IOException {
-        log.info("modifyAnswerRequestDto : " + modifyAnswerRequestDto);
-        questionService.modifyAnswer(1L, modifyAnswerRequestDto, image);
-        return new ResponseEntity<>(ApiResponse.success(SuccessCode.MODIFY_ANSWER_SUCCESS, null), HttpStatus.OK);
+    public ResponseEntity<ApiResponse> modifyAnswer(@ApiIgnore Authentication authentication,
+                                                    @RequestPart ModifyAnswerReqDto modifyAnswerReqDto,
+                                                    @RequestPart(required = false) MultipartFile image) throws IOException {
+        log.info("답변 수정 modifyAnswerReqDto : " + modifyAnswerReqDto);
+        questionService.modifyAnswer(1L, modifyAnswerReqDto, image);
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.MODIFY_ANSWER_SUCCESS), HttpStatus.OK);
     }
 
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<FindTodayQuestionResDto>>> todayQuestionList(@ApiIgnore Authentication authentication) {
+        log.info("todayQuestionList 호출");
+        List<FindTodayQuestionResDto> findTodayQuestionResDtoList = questionService.findTodayQuestion(1L);
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_TODAY_QUESTION_SUCCESS, findTodayQuestionResDtoList), HttpStatus.OK);
+    }
+
+    @GetMapping("/{meetingId}")
+    public ResponseEntity<ApiResponse<List<FindQuestionResDto>>> questionList(@ApiIgnore Authentication authentication,
+                                                                              @PathVariable Long meetingId) {
+        log.info("모임 질문 전체 조회 meetingId : " + meetingId);
+        List<FindQuestionResDto> findQuestionResDtoList = questionService.findQuestion(meetingId);
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_QUESTION_SUCCESS, findQuestionResDtoList), HttpStatus.OK);
+    }
 }

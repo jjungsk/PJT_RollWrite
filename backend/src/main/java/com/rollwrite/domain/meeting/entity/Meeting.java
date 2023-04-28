@@ -1,7 +1,6 @@
 package com.rollwrite.domain.meeting.entity;
 
 import com.rollwrite.domain.meeting.dto.AddMeetingRequestDto;
-import com.rollwrite.domain.notification.entity.Notification;
 import com.rollwrite.domain.question.entity.Answer;
 import com.rollwrite.domain.question.entity.Question;
 import com.rollwrite.domain.question.entity.QuestionGpt;
@@ -11,7 +10,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -32,11 +30,9 @@ public class Meeting extends BaseTimeEntity {
     @Column(length = 20)
     private String title;
 
-    //    @NotNull
     @Column
     private LocalDate startDay;
 
-    //    @NotNull
     @Column
     private LocalDate endDay;
 
@@ -68,14 +64,17 @@ public class Meeting extends BaseTimeEntity {
     @OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL)
     private List<TagMeeting> tagMeetingList = new ArrayList<>();
 
+    public void updateTagMeetingList(List<TagMeeting> tagMeetingList) {
+        this.tagMeetingList = tagMeetingList;
+    }
+
     @Builder
-    public Meeting(Long id, AddMeetingRequestDto addMeetingRequestDto, String inviteCode, List<TagMeeting> tagMeetingList) {
+    public Meeting(Long id, AddMeetingRequestDto addMeetingRequestDto, String inviteCode) {
         this.id = id;
         this.title = addMeetingRequestDto.getTitle();
         this.startDay = addMeetingRequestDto.getStartDay();
         this.endDay = addMeetingRequestDto.getEndDay();
         this.color = addMeetingRequestDto.getColor();
         this.inviteCode = inviteCode;
-        this.tagMeetingList = tagMeetingList;
     }
 }

@@ -12,6 +12,7 @@ import java.util.Arrays;
 
 @Component
 public class Workaround implements WebMvcOpenApiTransformationFilter {
+
     @Override
     public OpenAPI transform(OpenApiTransformationContext<HttpServletRequest> context) {
         OpenAPI openApi = context.getSpecification();
@@ -21,7 +22,7 @@ public class Workaround implements WebMvcOpenApiTransformationFilter {
 
         Server testServer = new Server();
         testServer.setDescription("deploy server");
-//        testServer.setUrl("https://j8a501.p.ssafy.io");
+        testServer.setUrl("https://k8a508.p.ssafy.io");
         openApi.setServers(Arrays.asList(localServer, testServer));
         return openApi;
     }
