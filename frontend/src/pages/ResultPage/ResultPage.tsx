@@ -23,6 +23,7 @@ import {
 import { ProfileImg } from "../MyPage/style";
 import format from "date-fns/format";
 import { ko } from "date-fns/locale";
+import SideMenu from "../../components/SideMenu/SideMenu";
 
 function ResultPage() {
   const navigate = useNavigate();
@@ -43,6 +44,7 @@ function ResultPage() {
     },
     chat: [],
   });
+  const [sideMenuOpen, setSideMenuOpen] = useState<boolean>(false);
 
   useEffect(() => {
     // TODO: meetingId에 해당하는 모임 상세 결과 호출
@@ -192,11 +194,12 @@ function ResultPage() {
   };
 
   const handleClickMenuBtn = () => {
-    alert("메뉴 열린다!!");
+    setSideMenuOpen(true);
   };
 
   return (
     <>
+      {sideMenuOpen && <SideMenu handleSideMenuOpen={setSideMenuOpen} />}
       <HeaderContainer padding={"0px 24px 0px 24px"}>
         <Back onClick={handleClickBackBtn} />
         <HeaderGroupTitle>
