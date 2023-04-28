@@ -1,22 +1,23 @@
 import styled from "styled-components";
 
-const CardContainer = styled.div<{
-  width: string;
-  margin: string;
+const GroupCardContainer = styled.div<{
+  width?: string;
+  margin?: string;
   color?: string;
 }>`
   position: relative;
   display: flex;
   flex-direction: column;
-  width: ${(props) => props.width};
+  width: ${(props) => props.width || "330px"};
+  height: 112px;
   padding: 12px 12px 8px;
   background-color: ${(props) => props.color};
   box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
-  margin: ${(props) => props.margin};
+  margin: ${(props) => props.margin || "auto"};
   gap: 8px;
 `;
 
-const TagContainer = styled.div`
+const GroupCardContent = styled.div`
   display: flex;
   gap: 8px;
 `;
@@ -55,4 +56,25 @@ const HorizontalBtn = styled.div`
   height: 40px;
 `;
 
-export { CardContainer, TagContainer, Title, SubTitle, People, HorizontalBtn };
+const GroupCardFooter = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  border-top: 1px solid var(--gray-color);
+  > div {
+    color: var(--black-color);
+    width: 50%;
+    height: 24px;
+    line-height: 24px;
+  }
+`;
+
+export {
+  GroupCardContainer,
+  GroupCardContent,
+  Title,
+  SubTitle,
+  People,
+  HorizontalBtn,
+  GroupCardFooter,
+};

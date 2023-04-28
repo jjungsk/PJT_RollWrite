@@ -1,10 +1,11 @@
 import React from "react";
 import {
-  CardContainer,
-  TagContainer,
+  GroupCardContainer,
+  GroupCardContent,
   Title,
   SubTitle,
   HorizontalBtn,
+  GroupCardFooter,
 } from "./style";
 import GroupTag from "../../elements/GroupTag/GroupTag";
 import { ReactComponent as Person } from "../../assets/Person.svg";
@@ -17,36 +18,39 @@ interface Props {
   margin?: string;
 }
 
-function GroupCard({ groupInfo, width, margin }: Props) {
+function GroupCard({ groupInfo }: Props) {
   const navigate = useNavigate();
   return (
-    <CardContainer
-      width={width !== undefined ? width : ""}
-      margin={margin != undefined ? margin : "8px 20px 12px"}
-      color={groupInfo?.color}
-    >
-      <div>
-        <Title>
-          <div>{groupInfo?.title}</div>
-        </Title>
-        <SubTitle>
-          {groupInfo?.startDay}~{groupInfo?.endDay}
-        </SubTitle>
-      </div>
-      <TagContainer>
-        {groupInfo?.tag.map((tag, i) => (
-          <GroupTag label={tag.content} key={i} />
-        ))}
-      </TagContainer>
+    <>
+      <GroupCardContainer color={groupInfo?.color}>
+        <div>
+          <Title>
+            <div>{groupInfo?.title}</div>
+          </Title>
+          <SubTitle>
+            {groupInfo?.startDay}~{groupInfo?.endDay}
+          </SubTitle>
+        </div>
+        <GroupCardContent>
+          {groupInfo?.tag.map((tag, i) => (
+            <GroupTag label={tag.content} key={i} />
+          ))}
+        </GroupCardContent>
 
-      <HorizontalBtn>
-        <Person />
-        {groupInfo?.participantCnt}
-      </HorizontalBtn>
-      <div onClick={() => navigate(`/invite/${groupInfo?.meetingId}`)}>
-        초대하기
-      </div>
-    </CardContainer>
+        <HorizontalBtn>
+          <Person />
+          {groupInfo?.participantCnt}
+        </HorizontalBtn>
+        <GroupCardFooter>
+          <div onClick={() => navigate(`/invite/${groupInfo?.meetingId}`)}>
+            초대하기
+          </div>
+          <div onClick={() => navigate(`/invite/${groupInfo?.meetingId}`)}>
+            참여자 보기
+          </div>
+        </GroupCardFooter>
+      </GroupCardContainer>
+    </>
   );
 }
 

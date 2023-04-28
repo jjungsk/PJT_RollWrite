@@ -13,8 +13,8 @@ interface GroupListProps {
 function GroupList({ groupList, onIndexChanged }: GroupListProps) {
   return (
     <Swiper
-      width={360}
-      spaceBetween={50}
+      style={{ height: "128px", width: "100vw", maxWidth: "450px" }}
+      spaceBetween={20}
       slidesPerView={1}
       onSlideChange={(e) => onIndexChanged(e.activeIndex)}
     >
