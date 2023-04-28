@@ -1,7 +1,6 @@
 package com.rollwrite.global.config;
 
 import com.rollwrite.domain.user.service.AuthService;
-import com.rollwrite.domain.user.service.UserService;
 import com.rollwrite.global.auth.CustomUserDetailService;
 import com.rollwrite.global.auth.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +19,10 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+/**
+ * 인증(authentication) 과 인가(authorization) 처리를 위한 spring security 설정 정의
+ */
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -27,7 +30,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CustomUserDetailService customUserDetailService;
-    private final UserService userService;
     private final AuthService authService;
 
     // Password 인코딩 방식에 BCrypt 암호화 방식 사용
@@ -52,6 +54,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(authenticationProvider());
     }
 
+    // (1) 세션 사용 X
+    // (2) Http 요청에 따른 JWT Filter 설정
+    // (3) 인증 필요 여부 URL 설정
+    // (4) Cors 설정
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -59,10 +65,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 토큰 기반 인증이므로 세션 사용 하지않음
                 .and()
-                .addFilter(new JwtAuthenticationFilter(authenticationManager(), userService, authService)) //HTTP 요청에 JWT 토큰 인증 필터를 거치도록 필터를 추가
+                .addFilter(new JwtAuthenticationFilter(authenticationManager(), authService)) //HTTP 요청에 JWT 토큰 인증 필터를 거치도록 필터를 추가
                 .authorizeRequests()
                 //인증이 필요한 URL과 필요하지 않은 URL에 대하여 설정
-                .antMatchers("/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll()
+                .antMatchers("/auth/kakao/login", "/auth/reissue","/oauth/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll()
                 .anyRequest().authenticated()
                 .and().cors().configurationSource(corsConfigurationSource());
     }
