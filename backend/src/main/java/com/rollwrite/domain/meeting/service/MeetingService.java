@@ -121,12 +121,16 @@ public class MeetingService {
 
         Meeting meeting = meetingRepository.findByInviteCode(inviteCode)
                 .orElseThrow(() -> new IllegalArgumentException("올바르지 않은 초대코드 입니다."));
-
-        Participant participant = Participant.builder()
-                .user(user)
-                .meeting(meeting)
-                .build();
-        participantRepository.save(participant);
+        Participant participant = participantRepository.findByMeetingAndUser(meeting,user).get();
+        if(participant == null){
+            participant = Participant.builder()
+                    .user(user)
+                    .meeting(meeting)
+                    .build();
+            participantRepository.save(participant);
+        }else{
+             throw new IllegalArgumentException("이미 참여한 사용자입니다.");
+        }
     }
 
     public List<TagDto> findTag() {
