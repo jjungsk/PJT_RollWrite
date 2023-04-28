@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 const GroupCardContainer = styled.div<{
   width?: string;
+  height?: string;
   margin?: string;
   color?: string;
 }>`
@@ -9,7 +10,7 @@ const GroupCardContainer = styled.div<{
   display: flex;
   flex-direction: column;
   width: ${(props) => props.width || "330px"};
-  height: 112px;
+  height: ${(props) => props.height || "112px"};
   padding: 12px 12px 8px;
   background-color: ${(props) => props.color};
   box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);

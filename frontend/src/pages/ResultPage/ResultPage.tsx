@@ -164,7 +164,7 @@ function ResultPage() {
         },
         {
           day: "2023-03-18",
-          questionId: 2,
+          questionId: 3,
           question: "오늘의 질문 내용 블라 블라",
           answer: [
             {
@@ -199,7 +199,12 @@ function ResultPage() {
 
   return (
     <>
-      {sideMenuOpen && <SideMenu handleSideMenuOpen={setSideMenuOpen} />}
+      {sideMenuOpen && (
+        <SideMenu
+          sideMenuOpen={sideMenuOpen}
+          handleSideMenuOpen={setSideMenuOpen}
+        />
+      )}
       <HeaderContainer padding={"0px 24px 0px 24px"}>
         <Back onClick={handleClickBackBtn} />
         <HeaderGroupTitle>
@@ -224,8 +229,8 @@ function ResultPage() {
             <QuestionContainer bgColor={groupResult.color}>
               {chat.question}
             </QuestionContainer>
-            {chat.answer.map((answer) => (
-              <AnswerContainer key={answer.time} isMe={answer.isMe}>
+            {chat.answer.map((answer, idx) => (
+              <AnswerContainer key={idx} isMe={answer.isMe}>
                 {!answer.isMe && (
                   <ProfileImg size={40} bgImg={answer.profileImage} />
                 )}

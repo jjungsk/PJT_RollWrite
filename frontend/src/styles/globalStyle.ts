@@ -19,6 +19,21 @@ const GlobalStyle = createGlobalStyle`
     src: url("/TossFaceFontMac.woff2") format("woff");
   }
 
+  @keyframes spread {
+    from {
+      margin-top: -50%;
+    }
+    to {
+      margin-top: 0;
+    }
+  }
+  .spreadOpenAnimation {
+    animation: spread 0.4s ease-in-out 0s 1 normal forwards;
+  }
+  .spreadCloseAnimation {
+    animation: spread 0.4s ease-in-out 0s 1 reverse forwards;
+  }
+
   :root {
     /* Colors */
     --bg-color: #F0EDE6;
@@ -51,6 +66,7 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     overflow: hidden;
     font-family: 'IM_Hyemin', -apple-system, Helvetica Neue, sans-serif;
+
     /* 드래그 방지, 우클릭 방지 */
     -webkit-touch-callout: none;
     user-select: none;
