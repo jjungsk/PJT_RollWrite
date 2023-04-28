@@ -188,9 +188,7 @@ function MyPage() {
   return (
     <div>
       <ProfileContainer style={{ backgroundImage: `url(${ProfileCard})` }}>
-        <ProfileImg
-          style={{ backgroundImage: "url(/sample_profile_image.png)" }}
-        />
+        <ProfileImg size={110} bgImg={profile.profileImg} />
         <ProfileInfo>
           <p>{profile.nickname}</p>
           <ProfileInfoDetail>

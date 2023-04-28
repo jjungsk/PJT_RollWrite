@@ -1,15 +1,23 @@
 import styled from "styled-components";
 
+const ResultContainer = styled.div`
+  height: calc(100vh - 60px);
+  overflow-y: scroll;
+
+  & > div:last-child {
+    height: calc(100vh - 530px);
+  }
+`;
+
 const ChatContainer = styled.div`
   width: 90%;
   padding: 10px;
   margin-inline: auto;
   word-break: keep-all;
-  clear: both;
 `;
 
-const QuestionContainer = styled.div<{ bgColor: string }>`
-  width: 100%;
+const QuestionContainer = styled.div<{ width?: string; bgColor: string }>`
+  width: ${(props) => (props.width ? props.width : "100%")};
   padding: 8px 20px;
   margin: 16px auto;
   transform: skew(-10deg);
@@ -17,7 +25,7 @@ const QuestionContainer = styled.div<{ bgColor: string }>`
     props.bgColor ? props.bgColor : "var(--blue-color)"};
   box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.25);
   font-weight: bold;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 21px;
 `;
 
@@ -25,41 +33,71 @@ const AnswerContainer = styled.div<{ isMe: boolean }>`
   display: flex;
   width: 100%;
   height: fit-content;
-  float: ${(props) => (props.isMe ? "right" : "left")};
-
-  & > div:first-child {
-    width: 40px;
-    height: 40px;
-  }
+  margin-block: 16px;
+  justify-content: ${(props) => (props.isMe ? "right" : "left")};
 `;
 
-const AnswerDetail = styled.div`
+const AnswerDetail = styled.div<{ isMe: boolean }>`
   width: calc(90% - 40px);
+  margin-inline: 8px;
   color: var(--black-color);
 
   & > div:first-child {
     font-weight: bold;
     font-size: 10px;
     line-height: 12px;
+    margin: 3px 6px;
+    float: ${(props) => (props.isMe ? "right" : "left")};
   }
 
   & > div:last-child {
     display: flex;
-
-    & > div:first-child {
-      width: 240px;
-      padding: 6px 10px;
-      border-radius: 10px;
-      background-color: var(--lightgray-color);
-      font-size: 12px;
-      line-height: 15px;
-    }
-
-    & > div:last-child {
-      font-size: 8px;
-      line-height: 10px;
-    }
+    justify-content: ${(props) => (props.isMe ? "right" : "left")};
+    clear: both;
+    align-items: end;
   }
 `;
 
-export { ChatContainer, QuestionContainer, AnswerContainer, AnswerDetail };
+const AnswerContent = styled.div`
+  max-width: 240px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background-color: var(--lightgray-color);
+  font-size: 12px;
+  line-height: 15px;
+`;
+
+const AnswerDate = styled.div`
+  font-size: 8px;
+  line-height: 10px;
+  margin-inline: 4px;
+`;
+
+const StatisticContainer = styled.div`
+  width: 90%;
+  padding: 10px;
+  margin: 20px auto;
+  word-break: keep-all;
+`;
+
+const StatisticUserList = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+
+  & > div {
+    margin-inline: 10px;
+  }
+`;
+
+export {
+  ResultContainer,
+  ChatContainer,
+  QuestionContainer,
+  AnswerContainer,
+  AnswerDetail,
+  AnswerContent,
+  AnswerDate,
+  StatisticContainer,
+  StatisticUserList,
+};
