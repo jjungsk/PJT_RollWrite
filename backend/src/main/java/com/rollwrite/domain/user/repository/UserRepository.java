@@ -11,7 +11,10 @@ import java.util.Optional;
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+    // (공통) userId 로 조회
+    Optional<User> findById(Long Id);
 
+    // (카카오 Identifier) 회원가입 유무를 확인
     Optional<User> findByIdentifier(String identifier);
 
 }
