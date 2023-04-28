@@ -16,6 +16,9 @@ import java.util.*;
 @Configuration
 @EnableOpenApi
 public class SwaggerConfig {
+
+    private static final String REFERENCE = "Bearer ";
+
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("RollWrite API")
@@ -44,14 +47,16 @@ public class SwaggerConfig {
     }
 
     private List<SecurityReference> defaultAuth() {
-        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
-        authorizationScopes[0] = authorizationScope;
-        return Arrays.asList(new SecurityReference("Authorization", authorizationScopes));
+        authorizationScopes[0] = new AuthorizationScope("global", "accessEverything");
+        return List.of(new SecurityReference(REFERENCE, authorizationScopes));
     }
 
-    private ApiKey apiKey() {
-        return new ApiKey("Authorization", "Authorization", "header");
+    // Authorization : Bearer 추가
+    private HttpAuthenticationScheme bearerAuthSecuritySchema() {
+        return HttpAuthenticationScheme.JWT_BEARER_BUILDER
+                .name(REFERENCE)
+                .build();
     }
 
     @Bean
@@ -60,8 +65,8 @@ public class SwaggerConfig {
         Server testServer = new Server("deploy server", "https://", "for deploy server", Collections.emptyList(), Collections.emptyList());
         return new Docket(DocumentationType.OAS_30)
                 .servers(serverLocal, testServer)
-                .securityContexts(Arrays.asList(securityContext()))
-                .securitySchemes(Arrays.asList(apiKey()))
+                .securityContexts(List.of(securityContext()))
+                .securitySchemes(List.of(bearerAuthSecuritySchema()))
                 .consumes(consumeContentTypes())
                 .produces(produceContentTypes())
                 .useDefaultResponseMessages(false)
