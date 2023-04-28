@@ -2,7 +2,6 @@ package com.rollwrite.global.auth;
 
 import com.rollwrite.domain.user.entity.User;
 import com.rollwrite.domain.user.entity.UserType;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,10 +15,9 @@ import java.util.List;
  * (활성화 여부, 만료, 룰 등) 정의
  */
 @ToString
-@RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
 
-    private final User user;
+    private User user;
 
     boolean accountNonExpired; // 만료 시점
     boolean accountNonLocked; // Lock 여부
@@ -27,17 +25,34 @@ public class CustomUserDetails implements UserDetails {
     boolean enabled = false;
     List<GrantedAuthority> roles = new ArrayList<>();
 
+    public CustomUserDetails(User user) {
+        super();
+        this.user = user;
+    }
+
+    public User getUser() {
+        return this.user;
+    }
+
     public Long getUserId() {
         return this.user.getId();
     }
 
-    public String getIdentifier() { return this.user.getIdentifier(); }
+    public String getIdentifier() {
+        return this.user.getIdentifier();
+    }
 
-    public String nickname() {return this.user.getNickname();}
+    public String nickname() {
+        return this.user.getNickname();
+    }
 
-    public String profileImage() { return this.user.getProfileImage();}
+    public String profileImage() {
+        return this.user.getProfileImage();
+    }
 
-    public UserType type() {return this.user.getType();}
+    public UserType type() {
+        return this.user.getType();
+    }
 
     @Override
     public String getUsername() {

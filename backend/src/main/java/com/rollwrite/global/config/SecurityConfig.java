@@ -1,6 +1,7 @@
 package com.rollwrite.global.config;
 
 import com.rollwrite.domain.user.service.AuthService;
+import com.rollwrite.domain.user.service.UserService;
 import com.rollwrite.global.auth.CustomUserDetailService;
 import com.rollwrite.global.auth.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
@@ -68,7 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(new JwtAuthenticationFilter(authenticationManager(), authService)) //HTTP 요청에 JWT 토큰 인증 필터를 거치도록 필터를 추가
                 .authorizeRequests()
                 //인증이 필요한 URL과 필요하지 않은 URL에 대하여 설정
-                .antMatchers("/auth/kakao/login", "/auth/reissue","/oauth/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll()
+                .antMatchers("/auth/kakao/login", "/auth/reissue", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll()
                 .anyRequest().authenticated()
                 .and().cors().configurationSource(corsConfigurationSource());
     }

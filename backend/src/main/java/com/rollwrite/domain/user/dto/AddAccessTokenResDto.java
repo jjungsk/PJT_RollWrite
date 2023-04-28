@@ -7,10 +7,11 @@ import lombok.ToString;
 @Getter
 @ToString
 public class AddAccessTokenResDto {
-    private String accessToken;
+    private final String accessToken;
 
     @Builder
     public AddAccessTokenResDto(String accessToken) {
         this.accessToken = accessToken;
     }
+
 }

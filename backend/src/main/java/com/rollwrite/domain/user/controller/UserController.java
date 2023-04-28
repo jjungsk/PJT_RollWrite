@@ -1,6 +1,6 @@
 package com.rollwrite.domain.user.controller;
 
-import com.rollwrite.domain.user.dto.AddUserResDto;
+import com.rollwrite.domain.user.dto.FindUserResDto;
 import com.rollwrite.domain.user.service.UserService;
 import com.rollwrite.global.model.ApiResponse;
 import com.rollwrite.global.model.SuccessCode;
@@ -24,10 +24,10 @@ public class UserController {
 
     // 1. User 정보 조회
     @GetMapping("/{identifier}")
-    public ResponseEntity<ApiResponse<?>> findUserByIdentifier(@PathVariable String identifier) {
-        AddUserResDto addUserResDto = userService.findUserByIdentifier(identifier);
+    public ResponseEntity<ApiResponse<?>> userDetails(@PathVariable String identifier) {
+        FindUserResDto findUserResDto = userService.findUser(identifier);
 
-        return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_USER_SUCCESS, addUserResDto), HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_USER_SUCCESS, findUserResDto), HttpStatus.OK);
     }
 
 }

@@ -12,8 +12,8 @@ import com.rollwrite.domain.user.entity.RefreshToken;
 import com.rollwrite.domain.user.entity.TokenType;
 import com.rollwrite.domain.user.entity.User;
 import com.rollwrite.domain.user.entity.UserType;
-import com.rollwrite.domain.user.repository.AuthRepository;
 import com.rollwrite.domain.user.repository.RefreshTokenRepository;
+import com.rollwrite.domain.user.repository.UserRepository;
 import com.rollwrite.global.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class AuthService {
 
 
@@ -49,7 +49,7 @@ public class AuthService {
     private Long REFRESH_TOKEN_EXPIRATION;
     private final String BLACK = "-BlackList";
     private final RedisTemplate<String, String> redisTemplate;
-    private final AuthRepository authRepository; // DB - user 정보 저장
+    private final UserRepository userRepository; // DB - user 정보 저장
     private final RefreshTokenRepository refreshTokenRepository; // Redis - refreshToken 저장
 
     // Local 함수 로그아웃 : 로그아웃한 accessToken을 redis 에 -BlackList key로 등록
@@ -75,7 +75,8 @@ public class AuthService {
 //    }
 
     // Local 함수 (1-3). 회원 가입
-    private User registKakaoUser(AddKakaoUserResDto addKakaoUserResDto) {
+    @Transactional
+    public User registKakaoUser(AddKakaoUserResDto addKakaoUserResDto) {
         // User Rentity에 담기
         User user = User.builder()
                 .identifier(addKakaoUserResDto.getId())
@@ -83,7 +84,7 @@ public class AuthService {
                 .profileImage(addKakaoUserResDto.getProfileImage())
                 .type(UserType.USER)
                 .build();
-        authRepository.save(user);
+        userRepository.save(user);
 
         return user;
     }
@@ -117,17 +118,14 @@ public class AuthService {
 
         // redis Black List user 라면 삭제
         if (isBlackListAccessToken(id)) {
-            redisTemplate.delete(id+BLACK);
+            redisTemplate.delete(id + BLACK);
         }
 
-        // User 정보 Dto 담기
-        AddKakaoUserResDto addKakaoUserResDto = AddKakaoUserResDto.builder()
+        return AddKakaoUserResDto.builder()
                 .id(id)
                 .nickname(nickname)
                 .profileImage(profileImage)
                 .build();
-
-        return addKakaoUserResDto;
     }
 
     // Local 함수 (1-1). 카카오 accessToken 요청 함수
@@ -138,7 +136,7 @@ public class AuthService {
 
         // Http Body 생성
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add("grant_type","authorization_code");
+        body.add("grant_type", "authorization_code");
         body.add("client_id", REST_API_KEY);
         body.add("redirect_uri", REDIRECT_URL);
         body.add("code", code);
@@ -173,7 +171,7 @@ public class AuthService {
         AddKakaoUserResDto addKakaoUserResDto = getKakaoUserInfo(kakaoAccessToken);
 
         // 3. DB에 로그인 User 정보 불러 오기
-        Optional<User> user = authRepository.findByIdentifier(addKakaoUserResDto.getId());
+        Optional<User> user = userRepository.findByIdentifier(addKakaoUserResDto.getId());
 
         // 유저 정보가 없다면 회원 가입 진행
         if (user.isEmpty()) {
@@ -194,7 +192,7 @@ public class AuthService {
 
         // 6. cookie 에 refreshToken 저장
         ResponseCookie responseCookie = ResponseCookie.from("refreshToken", refreshToken)
-                .maxAge(REFRESH_TOKEN_EXPIRATION)
+                .maxAge(REFRESH_TOKEN_EXPIRATION / 1000) // 초 단위
                 .path("/")
                 .secure(true)
                 .sameSite("None")
@@ -202,13 +200,11 @@ public class AuthService {
                 .build();
 
         // Dto 에 accessToken, refreshToken, cookie 담아서 controller 에 보내기
-        AddTokenCookieDto addTokenCookieDto = AddTokenCookieDto.builder()
+        return AddTokenCookieDto.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .responseCookie(responseCookie)
                 .build();
-
-        return addTokenCookieDto;
     }
 
     // Main 함수 2. accessToken 재발급
@@ -229,11 +225,9 @@ public class AuthService {
 
         // (3) accessToken 재발급
         String accessToken = JwtTokenUtil.createAccessToken(identifier);
-        AddAccessTokenResDto addAccessTokenResDto = AddAccessTokenResDto.builder()
+        return AddAccessTokenResDto.builder()
                 .accessToken(accessToken)
                 .build();
-
-        return addAccessTokenResDto;
     }
 
     // Main 함수 3. 카카오 로그아웃 메인 로직
@@ -247,12 +241,11 @@ public class AuthService {
     }
 
     // Main 함수 4. user 정보 찾기
-    @Transactional(readOnly = true)
-    public Optional<User> findUserByIdentifier(String identifier) {
-        User user = authRepository.findByIdentifier(identifier)
+    public User findUserByIdentifier(String identifier) {
+        User user = userRepository.findByIdentifier(identifier)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
-        return Optional.ofNullable(user);
+        return user;
     }
 
 }

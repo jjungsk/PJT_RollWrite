@@ -6,7 +6,6 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.rollwrite.domain.user.entity.TokenType;
 import com.rollwrite.domain.user.entity.User;
 import com.rollwrite.domain.user.service.AuthService;
-import com.rollwrite.global.model.DirectResponse;
 import com.rollwrite.global.util.JwtTokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
@@ -22,6 +21,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * 요청 헤더에 jwt 토큰이 있는 경우, 토큰 검증 및 인증 처리 로직 정의.
@@ -51,58 +51,46 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             return;
         }
 
-        try {
-            // If header is present, try grab user principal from database and perform authorization
-            Authentication authentication = getAuthentication(request, response);
-            log.info("authentication : {}", authentication.getPrincipal().toString());
-            // authentication 이 없은 경우
-            if (authentication == null) {
-                log.info("authentication 이 없습니다.");
-                throw new AuthenticationCredentialsNotFoundException("authentication 정보가 없습니다.");
-            }
-            // jwt 토큰으로 부터 획득한 인증 정보(authentication) 설정.
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        } catch (Exception ex) {
-            DirectResponse.sendError(request, response, ex);
-            return;
-        }
+        // If header is present, try grab user principal from database and perform authorization
+        Authentication authentication = Optional.ofNullable(getAuthentication(request))
+                        .orElseThrow(() -> new AuthenticationCredentialsNotFoundException("authentication 정보가 없습니다."));
+
+        // jwt 토큰으로 부터 획득한 인증 정보(authentication) 설정.
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
         filterChain.doFilter(request, response);
     }
 
     // Client 인가 validation 확인
     @Transactional(readOnly = true)
-    public Authentication getAuthentication(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public Authentication getAuthentication(HttpServletRequest request) {
         String token = request.getHeader(JwtTokenUtil.HEADER_STRING);
         // 요청 헤더에 Authorization 키값에 jwt 토큰이 포함된 경우에만, 토큰 검증 및 인증 처리 로직 실행.
-        try {
-            // parse the token and validate it (decode)
-            JWTVerifier verifier = JwtTokenUtil.getVerifier(TokenType.ACCESS);
-            JwtTokenUtil.handleError(token);
-            DecodedJWT decodedJWT = verifier.verify(token.replace(JwtTokenUtil.TOKEN_PREFIX, ""));
-            String identifier = decodedJWT.getSubject();
-            if (identifier != null) {
-                // jwt 토큰에 포함된 계정 정보(identifier) 통해 실제 디비에 해당 정보의 계정이 있는지 조회.
-                User user = authService.findUserByIdentifier(identifier).get();
-                if (user != null) {
-                    // 식별된 정상 유저인 경우, 요청 context 내에서 참조 가능한 인증 정보(jwtAuthentication) 생성.
-                    CustomUserDetails userDetails = new CustomUserDetails(user);
-                    // Redis에 Black List 처리된 accessToken 인지 확인
-                    if (authService.isBlackListAccessToken(identifier)) {
-                        log.info("BlackList에 추가된 유저 입니다.");
-                        throw new TokenExpiredException("재로그인이 필요합니다.");
-                    }
-                    UsernamePasswordAuthenticationToken jwtAuthentication = new UsernamePasswordAuthenticationToken(identifier,
-                            null, userDetails.getAuthorities());
-                    jwtAuthentication.setDetails(userDetails);
-                    return jwtAuthentication;
-                }
-            }
-            log.info("fail to verify JWTToken");
-            return null;
-        } catch (TokenExpiredException e) {
-            log.info("토큰이 만료되었습니다.", e);
-//            DirectResponse.sendError(request, response, e, HttpStatus.UNAUTHORIZED);
-            return null;
-        }
+
+        // parse the token and validate it (decode)
+        JWTVerifier verifier = JwtTokenUtil.getVerifier(TokenType.ACCESS);
+        JwtTokenUtil.handleError(token);
+        DecodedJWT decodedJWT = verifier.verify(token.replace(JwtTokenUtil.TOKEN_PREFIX, ""));
+        String identifier = Optional.ofNullable(decodedJWT.getSubject())
+                .orElseThrow(() -> new IllegalArgumentException("유저 정보가 없습니다."));
+
+        // jwt 토큰에 포함된 계정 정보(identifier) 통해 실제 디비에 해당 정보의 계정이 있는지 조회
+        User user = authService.findUserByIdentifier(identifier);
+
+        // 식별된 정상 유저인 경우, 요청 context 내에서 참조 가능한 인증 정보(jwtAuthentication) 생성.
+        CustomUserDetails userDetails = new CustomUserDetails(user);
+        // Redis에 Black List 처리된 accessToken 인지 확인
+        Optional.ofNullable(authService.isBlackListAccessToken(identifier))
+                .orElseThrow(() -> {
+                    log.info("Redis Black List에 등록된 accessToken 입니다.");
+                    return new TokenExpiredException("재 로그인이 필요합니다.");
+                });
+
+        UsernamePasswordAuthenticationToken jwtAuthentication = new UsernamePasswordAuthenticationToken(identifier,
+                null, userDetails.getAuthorities());
+        jwtAuthentication.setDetails(userDetails);
+
+        return jwtAuthentication;
+
     }
 }

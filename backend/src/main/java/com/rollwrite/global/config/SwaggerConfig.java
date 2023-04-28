@@ -21,10 +21,10 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-            .title("RollWrite API")
-            .description("RollWrite API Document")
-            .version("1.0")
-            .build();
+                .title("RollWrite API")
+                .description("RollWrite API Document")
+                .version("1.0")
+                .build();
     }
 
     private Set<String> consumeContentTypes() {
@@ -42,8 +42,8 @@ public class SwaggerConfig {
 
     private SecurityContext securityContext() {
         return SecurityContext.builder()
-            .securityReferences(defaultAuth())
-            .build();
+                .securityReferences(defaultAuth())
+                .build();
     }
 
     private List<SecurityReference> defaultAuth() {
@@ -62,9 +62,9 @@ public class SwaggerConfig {
     @Bean
     public Docket api() {
         Server serverLocal = new Server("local server", "http://localhost:8081", "for local usages",
-            Collections.emptyList(), Collections.emptyList());
+                Collections.emptyList(), Collections.emptyList());
         Server testServer = new Server("deploy server", "https://k8a508.p.ssafy.io",
-            "for deploy server", Collections.emptyList(), Collections.emptyList());
+                "for deploy server", Collections.emptyList(), Collections.emptyList());
         return new Docket(DocumentationType.OAS_30)
                 .servers(serverLocal, testServer)
                 .securityContexts(List.of(securityContext()))

@@ -58,7 +58,7 @@ public class AuthController {
         // 새로 발급 받은 accessToken을 Dto에 담기
         AddAccessTokenResDto addAccessTokenResDto = authService.reissueAccessToken(cookieRefreshToken);
 
-        return new ResponseEntity<>(ApiResponse.success(SuccessCode.REISSUE_SUCCESS,addAccessTokenResDto), HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.REISSUE_SUCCESS, addAccessTokenResDto), HttpStatus.OK);
     }
 
     // 3. 카카오 로그아웃
@@ -72,17 +72,17 @@ public class AuthController {
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.LOGOUT_SUCCESS), HttpStatus.OK);
     }
 
+
     // * spring security 에서 로그인한 유저 정보 중 identifier 값 가져오는 방법
     @GetMapping("/search/me")
     public void searchMe(@ApiIgnore Authentication authentication) {
-        // by Authentication
+        // CustomUserDetails.class 정보 가져오기 by Authentication
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
-        log.info("Authentication identifier : {}", userDetails.getIdentifier());
+        log.info("Authentication userId : {}", userDetails.getUserId());
 
         // by. spring security 의 context holder
-        String identifier = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String identifier = (String) SecurityContextHolder.getContext().getAuthentication().getName();
         log.info("SecurityContextHolder identifier : {}", identifier);
-
     }
 
 

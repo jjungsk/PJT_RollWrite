@@ -26,7 +26,7 @@ public class DirectResponse {
         Map<String, Object> data = ImmutableMap.of(
                 "status", httpStatus.value(),
                 "error", ex.getClass().getSimpleName(),
-                "message", message
+                "message", "DI : " + message
 //                "timestamp", Calendar.getInstance().getTime(),
 //                "path", request.getRequestURI()
         );

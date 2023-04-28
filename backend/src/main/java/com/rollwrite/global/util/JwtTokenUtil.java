@@ -27,7 +27,7 @@ public class JwtTokenUtil {
     private static Integer accessTokenExpirationTime;
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String HEADER_STRING = "Authorization";
-    public static final String ISSUER = "rollwrite.com";
+    public static final String ISSUER = "rollwrite.co.kr";
 
     // 기본 생성자 application.yml 설정한 secretKey, atk, rtk 제한 시간 설정
     @Autowired
