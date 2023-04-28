@@ -1,24 +1,17 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
-import Info from "../../components/Info/Info";
+import React, { useEffect, useState } from "react";
+import Info from "../../components/EmojiTitleBtn/Info";
 import { useNavigate } from "react-router-dom";
-import {
-  GroupInput,
-  GroupNameContainer,
-  TagBtn,
-  TagListContainer,
-  ThemaBox,
-  ThemaSelect,
-  Title,
-} from "./style";
-import GhostBtn from "../../elements/Button/GhostBtn";
 import { CreateGroup, Tag } from "../../constants/types";
-import { ReactComponent as Check } from "../../assets/Check.svg";
 import { createGroup, getGroupTag } from "../../apis/home";
 import { isAfter, subDays } from "date-fns";
+import BackNavigation from "../../components/BackNavigation/BackNavigation";
+import CreateGroupStepOne from "../../components/CreateGroupSteps/CreateGroupStepOne";
+import CreateGroupStepTwo from "../../components/CreateGroupSteps/CreateGroupStepTwo";
+import CreateGroupStepThree from "../../components/CreateGroupSteps/CreateGroupStepThree";
 
 function CreateGroupPage() {
   const navigate = useNavigate();
-  const [createState, setCreateState] = useState(0);
+  const [GruopCreatStep, setGruopCreatStep] = useState(0);
   const [tagList, setTagList] = useState<Tag[]>([]);
 
   useEffect(() => {
@@ -39,57 +32,7 @@ function CreateGroupPage() {
     endDay: "",
     color: "",
   });
-  const { title, tag, startDay, endDay, color } = groupInfo;
-
-  const handleChangeGroupInfo = (e: ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = e.target as HTMLInputElement;
-    setGroupInfo({
-      ...groupInfo,
-      [name]: value,
-    });
-  };
-
-  const handleClickThemaBtn = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const { value, name } = e.target as HTMLButtonElement;
-    setGroupInfo({
-      ...groupInfo,
-      [name]: value,
-    });
-  };
-
-  const handleClickTagBtn = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const { value, name } = e.target as HTMLButtonElement;
-
-    tag.includes(parseInt(value))
-      ? setGroupInfo({
-          ...groupInfo,
-          [name]: tag.filter((item) => item !== parseInt(value)),
-        })
-      : tag.length > 3
-      ? alert("최대 4개까지 가능합니다")
-      : setGroupInfo({
-          ...groupInfo,
-          [name]: [...tag, parseInt(value)],
-        });
-    console.log(groupInfo);
-  };
-
-  const handelClickNextBtn = () => {
-    if (!validateForm()) {
-      return;
-    }
-    setCreateState(2);
-  };
-  const handelClickCreateGroup = () => {
-    createGroup(groupInfo)
-      .then((res) => {
-        console.log(res);
-        setCreateState(3);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
+  const { title, startDay, endDay, color } = groupInfo;
 
   const validateForm = () => {
     const titleLength = title.trim().length;
@@ -127,131 +70,59 @@ function CreateGroupPage() {
     return true;
   };
 
+  const handleClickBackBtn = () => {
+    if (GruopCreatStep === 0) navigate(-1);
+
+    setGruopCreatStep(GruopCreatStep - 1);
+  };
+
+  const handleClickConfirmBtn = () => {
+    if (GruopCreatStep === 1 && !validateForm()) return;
+
+    if (GruopCreatStep === 2)
+      createGroup(groupInfo)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((error) => {
+          console.error(error);
+          return;
+        });
+
+    if (GruopCreatStep === 3) navigate("/home");
+
+    setGruopCreatStep(GruopCreatStep + 1);
+  };
+
   return (
     <>
-      {createState === 0 && (
-        <Info
-          emoji="👋"
-          title="새로운 모임을"
-          subTitle="생성하시겠어요?"
-          ghostLabel="확인"
-          ghostOnClick={() => setCreateState(1)}
+      <BackNavigation onClick={handleClickBackBtn} />
+      {GruopCreatStep === 0 && (
+        <CreateGroupStepOne onClick={handleClickConfirmBtn} />
+      )}
+      {GruopCreatStep === 1 && (
+        <CreateGroupStepTwo
+          onClick={handleClickConfirmBtn}
+          groupInfo={groupInfo}
+          setGroupInfo={setGroupInfo}
         />
       )}
-      {createState === 1 && (
-        <>
-          <Title>
-            <div>정보를 입력하고</div>
-            <div> 아래 확인 버튼을 누르세요</div>
-          </Title>
-
-          <GroupNameContainer>
-            <p>모임명</p>
-            <GroupInput
-              name="title"
-              onChange={handleChangeGroupInfo}
-              value={title}
-            />
-          </GroupNameContainer>
-          <GroupNameContainer>
-            <p>모임 시작일</p>
-            <GroupInput
-              type="date"
-              name="startDay"
-              onChange={handleChangeGroupInfo}
-              value={startDay}
-            />
-          </GroupNameContainer>
-          <GroupNameContainer>
-            <p>모임 종료일</p>
-            <GroupInput
-              type="date"
-              name="endDay"
-              onChange={handleChangeGroupInfo}
-              value={endDay}
-            />
-          </GroupNameContainer>
-          <GroupNameContainer>
-            <p>모임 테마</p>
-            <ThemaSelect>
-              <ThemaBox
-                color="var(--orange-color)"
-                name="color"
-                onClick={handleClickThemaBtn}
-                value="#FFD4B2"
-              >
-                {color === "#FFD4B2" && <Check />}
-              </ThemaBox>
-              <ThemaBox
-                color="var(--yellow-color)"
-                name="color"
-                onClick={handleClickThemaBtn}
-                value="#FFF6BD"
-              >
-                {color === "#FFF6BD" && <Check />}
-              </ThemaBox>
-              <ThemaBox
-                color="var(--green-color)"
-                name="color"
-                onClick={handleClickThemaBtn}
-                value="#CEEDC7"
-              >
-                {color === "#CEEDC7" && <Check />}
-              </ThemaBox>
-
-              <ThemaBox
-                color="var(--blue-color)"
-                name="color"
-                onClick={handleClickThemaBtn}
-                value="#D1D9F8"
-              >
-                {color === "#D1D9F8" && <Check />}
-              </ThemaBox>
-            </ThemaSelect>
-          </GroupNameContainer>
-
-          <GhostBtn
-            label="확인"
-            margin="64px 0px"
-            onClick={handelClickNextBtn}
-          />
-        </>
+      {GruopCreatStep === 2 && (
+        <CreateGroupStepThree
+          tagList={tagList}
+          onClick={handleClickConfirmBtn}
+          groupInfo={groupInfo}
+          setGroupInfo={setGroupInfo}
+        />
       )}
-      {createState === 2 && (
-        <>
-          <Title>
-            <div>{title}은</div>
-            <div> 어떤 모임인가요?</div>
-            <p> 최대 4개를 선택할수 있습니다.</p>
-          </Title>
-          <TagListContainer>
-            {tagList.map((tagListTag) => (
-              <TagBtn
-                name="tag"
-                value={tagListTag.tagId}
-                onClick={handleClickTagBtn}
-                isTagged={tag.includes(tagListTag.tagId)}
-              >
-                {tagListTag.content}
-              </TagBtn>
-            ))}
-          </TagListContainer>
-
-          <GhostBtn
-            label="확인"
-            margin="64px 0px"
-            onClick={handelClickCreateGroup}
-          />
-        </>
-      )}
-      {createState === 3 && (
+      {GruopCreatStep === 3 && (
         <Info
           title="자율 PJT 팀 가보자구"
           subTitle="모임을 만들었어요."
           fillLabel="초대하기"
           ghostLabel="홈으로"
-          fillOnClick={() => setCreateState(0)}
-          ghostOnClick={() => navigate("/home")}
+          fillOnClick={() => setGruopCreatStep(0)}
+          ghostOnClick={handleClickConfirmBtn}
         />
       )}
     </>

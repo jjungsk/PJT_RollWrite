@@ -62,11 +62,11 @@ function App() {
       <Route path="/" element={<SubLayout />}>
         <Route path="/notify" element={<NotifyPage />} />
         <Route path="/setting" element={<SettingPage />} />
-        <Route path="/create" element={<CreateGroupPage />} />
         <Route path="/invite" element={<InvitePage />} />
         <Route path="/answer" element={<AnswerPage />} />
       </Route>
       <Route path="/result/:meetingId" element={<ResultPage />} />
+      <Route path="/create" element={<CreateGroupPage />} />
     </Routes>
   );
 }
