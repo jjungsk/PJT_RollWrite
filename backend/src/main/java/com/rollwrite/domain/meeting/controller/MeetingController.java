@@ -106,7 +106,6 @@ public class MeetingController {
                 HttpStatus.OK);
     }
 
-
     @GetMapping("/result/{meetingId}")
     public ResponseEntity<ApiResponse> meetingResultDetails(Long meetingId) {
         Long userId = 1L;
