@@ -58,6 +58,24 @@ export interface Profile {
   completeGroupCnt: number;
 }
 
+export interface QuestionInfo {
+  meetingId: number;
+  title: string;
+  day: number;
+  questionId: number;
+  question: string;
+  emoji: string;
+  answer: string;
+  image: string;
+}
+
+export interface AnswerInfo {
+  answer: string;
+  meetingId: number;
+  questionId: number;
+  image?: string;
+}
+
 export interface Chat {
   questionId: number;
   question: string;
@@ -95,3 +113,4 @@ export interface Notify {
   type: number;
   content: string;
 }
+

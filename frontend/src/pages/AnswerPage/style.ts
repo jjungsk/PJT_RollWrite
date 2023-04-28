@@ -22,24 +22,25 @@ const ImgContainer = styled.div`
   display: flex;
   width: 300px;
   height: 15vh;
-  background: rgba(0, 0, 0, 0.4);
-  opacity: 0.8;
-  border: 1px solid #7A7E80;
-  border-radius: 10px;
   margin: auto;
   align-items: center;
   justify-content: center;
+  border: 1px solid #7A7E80;
+  border-radius: 10px;
   position: relative;
+  opacity: 0.8;
+  background-color: rgba(0, 0, 0, 0.4);
+  object-fit: cover;
 `;
 
-const BtnContainer = styled.div`
+const IconContainer = styled.div`
   position: absolute;
-  top: 10%;
+  width: 100%
 `;
 
 export {
     NameContainer, 
     QuestionDiv,
     ImgContainer,
-    BtnContainer
+    IconContainer
 };

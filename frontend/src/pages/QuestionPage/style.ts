@@ -5,7 +5,7 @@ const InfoContainer = styled.div`
   height: 8vh;
 `;
 
-const DateDiv = styled.div`
+const DateContainer = styled.div`
   width: 100%;
   font-size: 18px;
   color: var(--darkgray-color);
@@ -13,7 +13,7 @@ const DateDiv = styled.div`
   margin-block: 5px;
 `;
 
-const NameDiv = styled.div`
+const NameContainer = styled.div`
   width: 100%;
   font-size: 20px;
   color: var(--black-color);
@@ -32,7 +32,7 @@ const ArrowContainer = styled.div`
   margin: auto 15px;
 `;
 
-const TextDiv = styled.div`
+const TextContainer = styled.div`
   width: 100%;
   height: 8vh;
   font-size: 20px;
@@ -50,10 +50,10 @@ const BtnContainer = styled.div`
 
 export {
     InfoContainer, 
-    DateDiv, 
-    NameDiv, 
+    DateContainer, 
+    NameContainer, 
     EmojiContainer,
     ArrowContainer, 
-    TextDiv, 
+    TextContainer, 
     BtnContainer 
 };
