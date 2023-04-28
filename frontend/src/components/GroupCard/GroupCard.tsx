@@ -14,15 +14,22 @@ import { useNavigate } from "react-router-dom";
 
 interface Props {
   groupInfo?: GroupInfo;
+  complete?: boolean;
   width?: string;
+  height?: string;
   margin?: string;
 }
 
-function GroupCard({ groupInfo }: Props) {
+function GroupCard({ groupInfo, complete, width, height, margin }: Props) {
   const navigate = useNavigate();
   return (
     <>
-      <GroupCardContainer color={groupInfo?.color}>
+      <GroupCardContainer
+        width={width}
+        height={height}
+        margin={margin}
+        color={groupInfo?.color}
+      >
         <div>
           <Title>
             <div>{groupInfo?.title}</div>
@@ -31,6 +38,7 @@ function GroupCard({ groupInfo }: Props) {
             {groupInfo?.startDay}~{groupInfo?.endDay}
           </SubTitle>
         </div>
+
         <GroupCardContent>
           {groupInfo?.tag.map((tag, i) => (
             <GroupTag label={tag.content} key={i} />
@@ -41,14 +49,17 @@ function GroupCard({ groupInfo }: Props) {
           <Person />
           {groupInfo?.participantCnt}
         </HorizontalBtn>
-        <GroupCardFooter>
-          <div onClick={() => navigate(`/invite/${groupInfo?.meetingId}`)}>
-            초대하기
-          </div>
-          <div onClick={() => navigate(`/invite/${groupInfo?.meetingId}`)}>
-            참여자 보기
-          </div>
-        </GroupCardFooter>
+
+        {!complete && (
+          <GroupCardFooter>
+            <div onClick={() => navigate(`/invite/${groupInfo?.meetingId}`)}>
+              초대하기
+            </div>
+            <div onClick={() => navigate(`/invite/${groupInfo?.meetingId}`)}>
+              참여자 보기
+            </div>
+          </GroupCardFooter>
+        )}
       </GroupCardContainer>
     </>
   );
