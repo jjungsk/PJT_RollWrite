@@ -9,10 +9,7 @@ import com.rollwrite.domain.user.entity.User;
 import com.rollwrite.domain.user.repository.UserRepository;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
@@ -121,15 +118,16 @@ public class MeetingService {
 
         Meeting meeting = meetingRepository.findByInviteCode(inviteCode)
                 .orElseThrow(() -> new IllegalArgumentException("올바르지 않은 초대코드 입니다."));
-        Participant participant = participantRepository.findByMeetingAndUser(meeting,user).get();
-        if(participant == null){
-            participant = Participant.builder()
+
+        Optional<Participant> isExistedUser = participantRepository.findByMeetingAndUser(meeting, user);
+        if (isExistedUser.isPresent()) {
+            throw new IllegalArgumentException("이미 참여한 사용자입니다.");
+        } else {
+            Participant participant = Participant.builder()
                     .user(user)
                     .meeting(meeting)
                     .build();
             participantRepository.save(participant);
-        }else{
-             throw new IllegalArgumentException("이미 참여한 사용자입니다.");
         }
     }
 
@@ -250,8 +248,7 @@ public class MeetingService {
         int participantCnt = participantRepository.findByMeeting(meeting).size();
 
         // 모임에 해당하는 태그 가져오기
-        List<TagMeeting> tagMeetingList = tagMeetingRepository.findTagMeetingByMeeting
-                (meeting);
+        List<TagMeeting> tagMeetingList = tagMeetingRepository.findTagMeetingByMeeting(meeting);
         List<TagDto> tagDtoList = tagMeetingList.stream()
                 .map(tagMeeting -> TagDto.of(tagMeeting.getTag()))
                 .collect(Collectors.toList());
@@ -269,7 +266,7 @@ public class MeetingService {
                 statisticDto.addProGagler(statisticUserDto);
             }
         }
-        
+
         // 내가 답변한 날의 Question 목록
         List<Question> questionList = answerRepository.findMeetingQuestion(user, meeting);
         List<ChatDto> chatDtoList = new ArrayList<>();
