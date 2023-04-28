@@ -68,6 +68,7 @@ function App() {
       </Route>
       <Route path="/result/:meetingId" element={<ResultPage />} />
       <Route path="/join/:inviteCode" element={<JoinPage />} />
+      <Route path="/award/:meetingId" element={<JoinPage />} />
       <Route path="/create" element={<CreateGroupPage />} />
     </Routes>
   );

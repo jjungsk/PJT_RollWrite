@@ -1,7 +1,7 @@
 import React from "react";
-import { HomePageContainer, Header, HeaderTitle } from "./style";
+import { HomePageContainer, HomePageHeader } from "./style";
 import useHomePage from "./useHomePage";
-import PlusIcon from "../../assets/Plus.svg";
+import { ReactComponent as Plus } from "../../assets/Plus.svg";
 import GroupList from "../../components/GroupList/GroupList";
 import HomeContent from "../../components/HomeContent/HomeContent";
 
@@ -18,18 +18,16 @@ function HomePage() {
 
   return (
     <HomePageContainer>
-      <Header>
-        <HeaderTitle>
+      <HomePageHeader>
+        <div>
           <span>주대선</span> 님의 모임
-        </HeaderTitle>
-        <img
-          src={PlusIcon}
-          alt="plus"
+        </div>
+        <Plus
           onClick={() => {
             navigate("/create");
           }}
         />
-      </Header>
+      </HomePageHeader>
 
       <GroupList
         groupList={groupList}
