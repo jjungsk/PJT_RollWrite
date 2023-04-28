@@ -65,15 +65,6 @@ public class AuthService {
         return redisTemplate.hasKey(identifier);
     }
 
-    // Local 함수 (1-4). 로그인 처리
-//    private Authentication login(User kakoUser) {
-//
-//        UserDetails userDetails = new CustomUserDetails(kakoUser);
-//        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//        return authentication;
-//    }
-
     // Local 함수 (1-3). 회원 가입
     @Transactional
     public User registKakaoUser(AddKakaoUserResDto addKakaoUserResDto) {
@@ -183,14 +174,12 @@ public class AuthService {
         String accessToken = JwtTokenUtil.createAccessToken(identifier);
         String refreshToken = JwtTokenUtil.createRefreshToken(identifier);
 
-        // 5. redis 에 identifier(key) refreshToken(value) 저장
         RefreshToken refreshTokenEntity = RefreshToken.builder()
                 .identifier(identifier)
                 .refreshToken(refreshToken)
                 .build();
         refreshTokenRepository.saveRefreshToken(refreshTokenEntity);
 
-        // 6. cookie 에 refreshToken 저장
         ResponseCookie responseCookie = ResponseCookie.from("refreshToken", refreshToken)
                 .maxAge(REFRESH_TOKEN_EXPIRATION / 1000) // 초 단위
                 .path("/")
@@ -199,7 +188,6 @@ public class AuthService {
                 .httpOnly(true)
                 .build();
 
-        // Dto 에 accessToken, refreshToken, cookie 담아서 controller 에 보내기
         return AddTokenCookieDto.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)

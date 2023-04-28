@@ -82,13 +82,6 @@ public class JwtTokenUtil {
         return new Date(now.getTime() + expirationTime);
     }
 
-//    public static String getAccessToken(String identifier) {
-//        String accessToken = null;
-//        return accessToken;
-//    }
-
-
-
     public static void handleError(String token) {
         JWTVerifier verifier = JWT
                 .require(Algorithm.HMAC512(secretKeyAT.getBytes()))
