@@ -4,20 +4,21 @@ import com.rollwrite.domain.meeting.entity.Participant;
 import com.rollwrite.domain.meeting.entity.Statistics;
 import com.rollwrite.domain.notification.entity.Notification;
 import com.rollwrite.domain.question.entity.Answer;
-import com.rollwrite.domain.question.entity.QuestionGpt;
 import com.rollwrite.domain.question.entity.QuestionParticipant;
 import com.rollwrite.global.model.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Main User Entity
+ */
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -58,5 +59,13 @@ public class User extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Notification> notificationiList = new ArrayList<>();
+
+    @Builder
+    public User(String identifier, String nickname, String profileImage, UserType type) {
+        this.identifier = identifier;
+        this.nickname = nickname;
+        this.profileImage = profileImage;
+        this.type = type;
+    }
 
 }

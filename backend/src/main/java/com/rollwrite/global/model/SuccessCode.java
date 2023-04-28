@@ -9,9 +9,11 @@ import lombok.RequiredArgsConstructor;
 public enum SuccessCode {
 
     // user
-    TEST(StatusCode.SUCCESS, "테스트 입니다."),
     SIGNUP_SUCCESS(StatusCode.SUCCESS, "회원가입 완료되었습니다."),
     LOGIN_SUCCESS(StatusCode.SUCCESS, "로그인 완료되었습니다."),
+    REISSUE_SUCCESS(StatusCode.SUCCESS, "accessToken 재발급이 완료되었습니다."),
+    FIND_USER_SUCCESS(StatusCode.SUCCESS, "유저 조회가 완료되었습니다."),
+    LOGOUT_SUCCESS(StatusCode.SUCCESS, "로그아웃 되었습니다."),
 
     // meeting
     GET_MEETING_IN_PROGRESS_SUCCESS(StatusCode.SUCCESS, "진행 중인 전체 모임 조회했습니다."),
