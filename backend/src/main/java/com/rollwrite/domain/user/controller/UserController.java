@@ -1,5 +1,7 @@
 package com.rollwrite.domain.user.controller;
 
+import com.rollwrite.domain.user.dto.AddUserResDto;
+import com.rollwrite.domain.user.service.UserService;
 import com.rollwrite.global.model.ApiResponse;
 import com.rollwrite.global.model.SuccessCode;
 import lombok.RequiredArgsConstructor;
@@ -8,16 +10,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * 구현 methods
+ * 1. user 정보 조회 by. identifier
+ */
 @Slf4j
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
 
-    @GetMapping()
-    public ResponseEntity<ApiResponse<?>> test() {
-        log.info("test");
-        return new ResponseEntity<>(ApiResponse.success(SuccessCode.TEST, "test"), HttpStatus.OK);
+    private final UserService userService;
+
+    // 1. User 정보 조회
+    @GetMapping("/{identifier}")
+    public ResponseEntity<ApiResponse<?>> findUserByIdentifier(@PathVariable String identifier) {
+        AddUserResDto addUserResDto = userService.findUserByIdentifier(identifier);
+
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_USER_SUCCESS, addUserResDto), HttpStatus.OK);
     }
 
 }
