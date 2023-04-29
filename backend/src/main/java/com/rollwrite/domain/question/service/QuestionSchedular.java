@@ -18,8 +18,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class QuestionSchedular {
 
-    private final JobLauncher jobLauncher;
     private final Job questionJob;
+    private final JobLauncher jobLauncher;
 
     // 매일 오전 8시
     @Scheduled(cron = "0 0 8 * * *")
