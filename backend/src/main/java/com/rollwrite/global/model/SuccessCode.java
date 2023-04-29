@@ -9,15 +9,20 @@ import lombok.RequiredArgsConstructor;
 public enum SuccessCode {
 
     // user
-    TEST(StatusCode.SUCCESS, "테스트 입니다."),
     SIGNUP_SUCCESS(StatusCode.SUCCESS, "회원가입 완료되었습니다."),
     LOGIN_SUCCESS(StatusCode.SUCCESS, "로그인 완료되었습니다."),
+    REISSUE_SUCCESS(StatusCode.SUCCESS, "accessToken 재발급이 완료되었습니다."),
+    FIND_USER_SUCCESS(StatusCode.SUCCESS, "유저 조회가 완료되었습니다."),
+    LOGOUT_SUCCESS(StatusCode.SUCCESS, "로그아웃 되었습니다."),
 
     // meeting
     GET_MEETING_IN_PROGRESS_SUCCESS(StatusCode.SUCCESS, "진행 중인 전체 모임 조회했습니다."),
     GET_MEETING_CALENDER_SUCCESS(StatusCode.SUCCESS, "진행 중인 모임 캘린더 조회했습니다."),
+    GET_MEETING_INVITE_URL_SUCCESS(StatusCode.SUCCESS, "모임 초대 링크를 조회했습니다."),
     ADD_MEETING_SUCCESS(StatusCode.SUCCESS, "모임이 생성되었습니다."),
     JOIN_MEETING_SUCCESS(StatusCode.SUCCESS, "모임에 가입되었습니다."),
+    GET_MEETING_RESULT_SUCCESS(StatusCode.SUCCESS, "전체 모임 결과 조회했습니다."),
+    GET_MEETING_DETAIL_RESULT_SUCCESS(StatusCode.SUCCESS, "모임 상세 결과 조회했습니다."),
     GET_TAG_SUCCESS(StatusCode.SUCCESS, "태그를 가져왔습니다."),
 
     // question

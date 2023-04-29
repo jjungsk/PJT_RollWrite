@@ -17,12 +17,14 @@ import java.util.*;
 @EnableOpenApi
 public class SwaggerConfig {
 
+    private static final String REFERENCE = "Bearer ";
+
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-            .title("RollWrite API")
-            .description("RollWrite API Document")
-            .version("1.0")
-            .build();
+                .title("RollWrite API")
+                .description("RollWrite API Document")
+                .version("1.0")
+                .build();
     }
 
     private Set<String> consumeContentTypes() {
@@ -40,39 +42,40 @@ public class SwaggerConfig {
 
     private SecurityContext securityContext() {
         return SecurityContext.builder()
-            .securityReferences(defaultAuth())
-            .build();
+                .securityReferences(defaultAuth())
+                .build();
     }
 
     private List<SecurityReference> defaultAuth() {
-        AuthorizationScope authorizationScope = new AuthorizationScope("global",
-            "accessEverything");
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
-        authorizationScopes[0] = authorizationScope;
-        return Arrays.asList(new SecurityReference("Authorization", authorizationScopes));
+        authorizationScopes[0] = new AuthorizationScope("global", "accessEverything");
+        return List.of(new SecurityReference(REFERENCE, authorizationScopes));
     }
 
-    private ApiKey apiKey() {
-        return new ApiKey("Authorization", "Authorization", "header");
+    // Authorization : Bearer 추가
+    private HttpAuthenticationScheme bearerAuthSecuritySchema() {
+        return HttpAuthenticationScheme.JWT_BEARER_BUILDER
+                .name(REFERENCE)
+                .build();
     }
 
     @Bean
     public Docket api() {
         Server serverLocal = new Server("local server", "http://localhost:8081", "for local usages",
-            Collections.emptyList(), Collections.emptyList());
+                Collections.emptyList(), Collections.emptyList());
         Server testServer = new Server("deploy server", "https://k8a508.p.ssafy.io",
-            "for deploy server", Collections.emptyList(), Collections.emptyList());
+                "for deploy server", Collections.emptyList(), Collections.emptyList());
         return new Docket(DocumentationType.OAS_30)
-            .servers(serverLocal, testServer)
-            .securityContexts(Arrays.asList(securityContext()))
-            .securitySchemes(Arrays.asList(apiKey()))
-            .consumes(consumeContentTypes())
-            .produces(produceContentTypes())
-            .useDefaultResponseMessages(false)
-            .apiInfo(apiInfo())
-            .select()
-            .apis(RequestHandlerSelectors.basePackage("com.rollwrite"))
-            .paths(PathSelectors.any())
-            .build();
+                .servers(serverLocal, testServer)
+                .securityContexts(List.of(securityContext()))
+                .securitySchemes(List.of(bearerAuthSecuritySchema()))
+                .consumes(consumeContentTypes())
+                .produces(produceContentTypes())
+                .useDefaultResponseMessages(false)
+                .apiInfo(apiInfo())
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.rollwrite"))
+                .paths(PathSelectors.any())
+                .build();
     }
 }
