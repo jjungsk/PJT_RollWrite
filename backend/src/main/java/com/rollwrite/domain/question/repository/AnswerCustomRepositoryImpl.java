@@ -69,14 +69,6 @@ public class AnswerCustomRepositoryImpl implements AnswerCustomRepository {
                 .where(answer.question.eq(q))
                 .where(answer.meeting.eq(meeting))
                 .fetch();
-                .select(Projections.constructor(MeetingCalenderResDto.class,
-                        answer.question.createdAt.as("day"),
-                        answer.question.content.as("question")))
-                .from(answer)
-                .join(answer.question, question)// TODO: .fetchJoin() 안 되는 이유 해결하기
-                .where(answer.user.eq(user))
-                .where(answer.meeting.eq(meeting))
-                .fetch();
     }
 
     @Override
