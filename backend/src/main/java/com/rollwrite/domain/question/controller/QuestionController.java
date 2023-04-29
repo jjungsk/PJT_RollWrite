@@ -29,9 +29,9 @@ import java.util.Map;
 @RequestMapping("/question")
 public class QuestionController {
 
-    private final QuestionService questionService;
-    private final JobLauncher jobLauncher;
     private final Job notificationAlarmJob;
+    private final JobLauncher jobLauncher;
+    private final QuestionService questionService;
 
     @PostMapping
     public ResponseEntity<ApiResponse> addQuestion(@ApiIgnore Authentication authentication,
