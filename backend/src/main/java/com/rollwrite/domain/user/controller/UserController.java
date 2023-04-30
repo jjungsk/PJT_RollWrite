@@ -23,7 +23,7 @@ import java.io.IOException;
  * 구현 methods
  * 1. user 회원 정보 조회
  * 2. User 회원 정보 수정
- * 3. User 회원 탈최
+ * 3. User 회원 탈퇴
  */
 @Slf4j
 @RestController
