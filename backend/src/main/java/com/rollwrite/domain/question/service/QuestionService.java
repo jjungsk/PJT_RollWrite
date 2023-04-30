@@ -1,6 +1,7 @@
 package com.rollwrite.domain.question.service;
 
 import com.rollwrite.domain.meeting.entity.Meeting;
+import com.rollwrite.domain.meeting.entity.Participant;
 import com.rollwrite.domain.meeting.repository.MeetingRepository;
 import com.rollwrite.domain.meeting.repository.ParticipantRepository;
 import com.rollwrite.domain.question.dto.*;
@@ -87,6 +88,14 @@ public class QuestionService {
                 .imageUrl(imageUrl)
                 .build();
         answerRepository.save(answer);
+
+        // 마지막 질문에 답했을 때 질문 종료
+        if (meeting.getEndDay().equals(question.getCreatedAt().toLocalDate())) {
+            Participant participant = participantRepository.findByMeetingAndUser(meeting, user)
+                    .orElseThrow(() -> new IllegalArgumentException("참여자를 찾을 수 없습니다"));
+
+            participant.updateIsDone(true);
+        }
     }
 
     @Transactional
