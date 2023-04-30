@@ -13,6 +13,7 @@ public enum SuccessCode {
     LOGIN_SUCCESS(StatusCode.SUCCESS, "로그인 완료되었습니다."),
     REISSUE_SUCCESS(StatusCode.SUCCESS, "accessToken 재발급이 완료되었습니다."),
     FIND_USER_SUCCESS(StatusCode.SUCCESS, "유저 조회가 완료되었습니다."),
+    MODIFY_USER_SUCCESS(StatusCode.SUCCESS, "유저 정보가 정상 변경되었습니다."),
     LOGOUT_SUCCESS(StatusCode.SUCCESS, "로그아웃 되었습니다."),
     REMOVE_SUCCESS(StatusCode.SUCCESS, "회원탈퇴가 정상적으로 되었습니다."),
 
