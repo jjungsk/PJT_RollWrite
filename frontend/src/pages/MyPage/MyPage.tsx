@@ -176,15 +176,6 @@ function MyPage() {
     navigate(`/result/${meetingId}`);
   };
 
-  var groupListContainer = groupList.map((group: GroupInfo) => (
-    <div
-      key={group.meetingId}
-      onClick={() => handleClickGroup(group.meetingId)}
-    >
-      <GroupCard width="320px" groupInfo={group} margin="16px auto" />
-    </div>
-  ));
-
   return (
     <div>
       <ProfileContainer style={{ backgroundImage: `url(${ProfileCard})` }}>
@@ -217,7 +208,20 @@ function MyPage() {
       <Contour text="참여한 모임" />
 
       <GroupListContainer>
-        {groupListContainer}
+        {groupList.map((group: GroupInfo) => (
+          <div
+            key={group.meetingId}
+            onClick={() => handleClickGroup(group.meetingId)}
+          >
+            <GroupCard
+              complete
+              width="320px"
+              height="90px"
+              groupInfo={group}
+              margin="16px auto"
+            />
+          </div>
+        ))}
         <div></div>
       </GroupListContainer>
     </div>
