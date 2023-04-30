@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.io.IOException;
+
 /**
  * 구현 methods
  * 1. user 회원 정보 조회
@@ -62,5 +64,17 @@ public class UserController {
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.REMOVE_SUCCESS), HttpStatus.OK);
     }
 
+    // *. Test Controller
+    @PostMapping("/test")
+    public String testContoller(MultipartFile fileStoreName) {
+//        s3Service.deleteFile(fileStoreName);
+//        log.info(fileStoreName);
+
+//        MultipartFile multipartFile = s3Service.getMultipartFile(fileStoreName);
+        String storeFileUrl = s3Service.addFile(fileStoreName);
+        log.info("profileImage : {}", storeFileUrl);
+
+        return "Test";
+    }
 
 }
