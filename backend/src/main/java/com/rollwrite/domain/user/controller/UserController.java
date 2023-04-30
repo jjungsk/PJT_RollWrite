@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
@@ -43,12 +44,12 @@ public class UserController {
 
     // 2. User 회원 정보 수정
     @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<ApiResponse<?>> modifyUser(@RequestPart(required = false) String nickname,
-                                                     @RequestPart(required = false) MultipartFile profileImage) {
-        log.info("nickname : {}", nickname);
+    public ResponseEntity<ApiResponse<?>> modifyUser(@ApiIgnore Authentication authentication
+            ,@RequestPart(required = false) String nickname, @RequestPart(required = false) MultipartFile profileImage) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
+        Long userId = userDetails.getUserId();
 
-        String storeFileUrl = s3Service.addFile(profileImage);
-        log.info("profileImage : {}", storeFileUrl);
+        userService.modifyUser(userId, nickname, profileImage);
 
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.MODIFY_USER_SUCCESS), HttpStatus.OK);
     }
