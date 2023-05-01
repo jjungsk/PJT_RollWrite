@@ -18,7 +18,7 @@ public class QuestionGptCustomRepositoryImpl implements QuestionGptCustomReposit
     QQuestionGpt questionGpt = QQuestionGpt.questionGpt;
 
     @Override
-    public Optional<QuestionGpt> findRandomByMeetingAndIsChoosed(Long meetingId, boolean isChoosed) {
+    public Optional<QuestionGpt> chooseRandomQuestionGpt(Long meetingId, boolean isChoosed) {
         return Optional.ofNullable(jpaQueryFactory
                 .select(questionGpt)
                 .from(questionGpt)

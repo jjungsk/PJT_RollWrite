@@ -5,7 +5,7 @@ import com.rollwrite.domain.question.entity.QuestionParticipant;
 import java.util.Optional;
 
 public interface QuestionParticipantCustomRepository {
-    Optional<Long> findRandomUserByMeetingAndIsChoosed(Long meetingId, boolean isChoosed);
+    Optional<Long> chooseRandomParticipant(Long meetingId, boolean isChoosed);
 
-    Optional<QuestionParticipant> findRandomByMeetingAndIsChoosedAndUser(Long meetingId, boolean isChoosed, Long userId);
+    Optional<QuestionParticipant> chooseRandomQuestionParticipant(Long meetingId, boolean isChoosed, Long userId);
 }

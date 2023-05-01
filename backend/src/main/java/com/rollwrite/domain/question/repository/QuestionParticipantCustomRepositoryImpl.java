@@ -18,7 +18,7 @@ public class QuestionParticipantCustomRepositoryImpl implements QuestionParticip
     QQuestionParticipant questionParticipant = QQuestionParticipant.questionParticipant;
 
     @Override
-    public Optional<Long> findRandomUserByMeetingAndIsChoosed(Long meetingId, boolean isChoosed) {
+    public Optional<Long> chooseRandomParticipant(Long meetingId, boolean isChoosed) {
         return Optional.ofNullable(jpaQueryFactory
                 .select(questionParticipant.user.id)
                 .from(questionParticipant)
@@ -31,7 +31,7 @@ public class QuestionParticipantCustomRepositoryImpl implements QuestionParticip
     }
 
     @Override
-    public Optional<QuestionParticipant> findRandomByMeetingAndIsChoosedAndUser(Long meetingId, boolean isChoosed, Long userId) {
+    public Optional<QuestionParticipant> chooseRandomQuestionParticipant(Long meetingId, boolean isChoosed, Long userId) {
         return Optional.ofNullable(jpaQueryFactory
                 .select(questionParticipant)
                 .from(questionParticipant)
