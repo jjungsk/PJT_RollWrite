@@ -77,7 +77,7 @@ public class MeetingController {
     }
 
     @PostMapping("/join/{inviteCode}/{userId}")
-    public ResponseEntity<ApiResponse> joinMeeting(@PathVariable String inviteCode,@PathVariable Long userId) {
+    public ResponseEntity<ApiResponse> joinMeeting(@PathVariable String inviteCode, @PathVariable Long userId) {
         // TODO: Test하기 위해 직접  userId 입력 받음 (후에 userId는 삭제 예정)
         log.info("Meeting 참여자 추가 userId : " + userId + " inviteCode : " + inviteCode);
         meetingService.joinMeeting(userId, inviteCode);
@@ -106,13 +106,22 @@ public class MeetingController {
                 HttpStatus.OK);
     }
 
-    @GetMapping("/result/{meetingId}")
-    public ResponseEntity<ApiResponse> meetingResultDetails(Long meetingId) {
+    @GetMapping("/chat/{meetingId}")
+    public ResponseEntity<ApiResponse> meetingChatDetails(Long meetingId) {
         Long userId = 1L;
-        log.info("내 모임 결과 전체 조회 userId : " + userId + " meetingId : " + meetingId);
-        MeetingResultDetailsDto meetingResultDetailsDto = meetingService.findMeetingResult(userId, meetingId);
+        log.info("모임 결과 채팅 상세 조회 userId : " + userId + " meetingId : " + meetingId);
+        MeetingChatDetailsDto meetingChatDetailsDto = meetingService.findMeetingChat(userId, meetingId);
         return new ResponseEntity<>(
-                ApiResponse.success(SuccessCode.GET_MEETING_RESULT_SUCCESS, meetingResultDetailsDto),
+                ApiResponse.success(SuccessCode.GET_MEETING_RESULT_SUCCESS, meetingChatDetailsDto),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("/award/{meetingId}")
+    public ResponseEntity<ApiResponse> meetingAwardDetails(Long meetingId) {
+        log.info("모임 결과 통계 상세 조회  meetingId : " + meetingId);
+        MeetingAwardDetailsDto meetingAwardDetailsDto = meetingService.findMeetingAward(meetingId);
+        return new ResponseEntity<>(
+                ApiResponse.success(SuccessCode.GET_MEETING_RESULT_SUCCESS, meetingAwardDetailsDto),
                 HttpStatus.OK);
     }
 }

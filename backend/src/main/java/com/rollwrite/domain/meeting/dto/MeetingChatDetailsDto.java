@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Getter
-public class MeetingResultDetailsDto {
+public class MeetingChatDetailsDto {
     private final Long meetingId;
     private final String title;
     private final LocalDate startDay;
@@ -16,11 +16,10 @@ public class MeetingResultDetailsDto {
     private final String color;
     private final int participantCnt;
     private final List<TagDto> tag;
-    private final AwardDto award;
     private final List<ChatDto> chat;
 
     @Builder
-    public MeetingResultDetailsDto(Meeting meeting, int participantCnt, List<TagDto> tag, AwardDto award, List<ChatDto> chat) {
+    public MeetingChatDetailsDto(Meeting meeting, int participantCnt, List<TagDto> tag, List<ChatDto> chat) {
         this.meetingId = meeting.getId();
         this.title = meeting.getTitle();
         this.startDay = meeting.getStartDay();
@@ -28,7 +27,6 @@ public class MeetingResultDetailsDto {
         this.color = meeting.getColor();
         this.participantCnt = participantCnt;
         this.tag = tag;
-        this.award = award;
         this.chat = chat;
     }
 }
