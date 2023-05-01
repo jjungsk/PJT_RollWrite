@@ -90,7 +90,7 @@ export interface Chat {
   }[];
 }
 
-export interface Statistic {
+export interface Award {
   taleteller: Participant[];
   photographer: Participant[];
   proGagler: Participant[];
@@ -105,7 +105,7 @@ export interface GroupResult {
   color: string;
   participant: Participant[];
   participantCnt: number;
-  statistic: Statistic;
+  award: Award;
   chat: Chat[];
 }
 
