@@ -307,9 +307,7 @@ public class MeetingService {
             @Override
             public int compare(Participant o1, Participant o2) {
                 // 나를 최우선으로
-                if (o1.getUser().getId() == userId) {
-                    return -1;
-                } else if (o2.getUser().getId() == userId) {
+                if (o2.getUser().getId() == userId) {
                     return 1;
                 } else {
                     // 닉네임 사전순
