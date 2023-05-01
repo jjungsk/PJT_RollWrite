@@ -10,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.checkerframework.checker.index.qual.LowerBoundUnknown;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -40,6 +41,9 @@ public class User extends BaseTimeEntity {
     @Column(length = 2083)
     private String profileImage;
 
+    @Column(length = 2083)
+    private String firebaseToken;
+
     @NotNull
     @Column
     @Enumerated(EnumType.STRING)
@@ -66,6 +70,11 @@ public class User extends BaseTimeEntity {
         this.nickname = nickname;
         this.profileImage = profileImage;
         this.type = type;
+    }
+
+    public void update(String nickname, String profileImage) {
+        this.nickname = nickname;
+        this.profileImage = profileImage;
     }
 
 }

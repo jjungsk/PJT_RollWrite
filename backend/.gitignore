@@ -5,6 +5,9 @@
 application.yml
 application-auth-key.yml
 
+### FCM.json ###
+rollwrite-1c979-firebase-adminsdk-4e75m-de6b0ec02f.json
+
 # Created by https://www.toptal.com/developers/gitignore/api/java,intellij,git,gradle
 # Edit at https://www.toptal.com/developers/gitignore?templates=java,intellij,git,gradle
 
