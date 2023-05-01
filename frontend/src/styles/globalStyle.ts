@@ -18,22 +18,7 @@ const GlobalStyle = createGlobalStyle`
     font-display: block;
     src: url("/TossFaceFontMac.woff2") format("woff");
   }
-
-  @keyframes spread {
-    from {
-      margin-top: -50%;
-    }
-    to {
-      margin-top: 0;
-    }
-  }
-  .spreadOpenAnimation {
-    animation: spread 0.4s ease-in-out 0s 1 normal forwards;
-  }
-  .spreadCloseAnimation {
-    animation: spread 0.4s ease-in-out 0s 1 reverse forwards;
-  }
-
+  
   :root {
     /* Colors */
     --bg-color: #F0EDE6;

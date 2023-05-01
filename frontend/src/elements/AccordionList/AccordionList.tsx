@@ -1,14 +1,11 @@
 import React, { useState } from "react";
-import {
-  AccordionItem,
-  AccordionItemContent,
-  AccordionItemTitle,
-} from "./style";
+import { motion, AnimatePresence } from "framer-motion";
+import { AccordionItem, AccordionItemTitle } from "./style";
 import { ReactComponent as Arrow } from "../../assets/Arrow.svg";
 import { AccordionItemType } from "../../constants/types";
 
 function AccordionList(props: { items: AccordionItemType[] }) {
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [activeIndex, setActiveIndex] = useState<number | null>(0);
 
   const handleClick = (index: number) => {
     setActiveIndex(index === activeIndex ? null : index);
@@ -25,11 +22,17 @@ function AccordionList(props: { items: AccordionItemType[] }) {
             {item.title}
             <Arrow />
           </AccordionItemTitle>
-          {activeIndex === index && (
-            <AccordionItemContent isOpen={activeIndex === index}>
-              {item.content}
-            </AccordionItemContent>
-          )}
+          <AnimatePresence>
+            {activeIndex === index && (
+              <motion.div
+                initial={{ height: "0px", opacity: 0 }}
+                animate={{ height: "fit-content", opacity: 1 }}
+                exit={{ height: "0px", opacity: 0 }}
+              >
+                {item.content}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </AccordionItem>
       ))}
     </div>

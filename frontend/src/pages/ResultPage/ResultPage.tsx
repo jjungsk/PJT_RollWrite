@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Chat, GroupResult, Participant } from "../../constants/types";
+import { AnimatePresence } from "framer-motion";
+import { Chat, GroupResult } from "../../constants/types";
 import {
   HeaderContainer,
   HeaderGroupTitle,
@@ -8,22 +9,11 @@ import {
 import { ReactComponent as Back } from "../../assets/Back.svg";
 import { ReactComponent as HamburgerMenu } from "../../assets/Hamburger_Menu.svg";
 import { ReactComponent as Person } from "../../assets/Person.svg";
-import Contour from "../../elements/Contour/Contour";
-import {
-  AnswerContainer,
-  AnswerContent,
-  AnswerDate,
-  AnswerDetail,
-  ChatContainer,
-  QuestionContainer,
-  ResultContainer,
-  StatisticContainer,
-  StatisticUserList,
-} from "./style";
-import { ProfileImg } from "../MyPage/style";
+import { ResultContainer } from "./style";
 import format from "date-fns/format";
-import { ko } from "date-fns/locale";
 import SideMenu from "../../components/SideMenu/SideMenu";
+import ChatItem from "../../components/ChatItem/ChatItem";
+import ChatAwardItem from "../../components/ChatAwardItem/ChatAwardItem";
 
 function ResultPage() {
   const navigate = useNavigate();
@@ -137,6 +127,13 @@ function ResultPage() {
               content: "모두 사랑합니다",
               time: "2023-03-16 14:21:52",
             },
+            {
+              nickname: "닉네임3",
+              profileImage: "/sample_profile_image.png",
+              isMe: false,
+              content: "대선이가 이 세상에서 가장 좋아요!!",
+              time: "2023-03-16 15:45:12",
+            },
           ],
         },
         {
@@ -199,12 +196,15 @@ function ResultPage() {
 
   return (
     <>
-      {sideMenuOpen && (
-        <SideMenu
-          sideMenuOpen={sideMenuOpen}
-          handleSideMenuOpen={setSideMenuOpen}
-        />
-      )}
+      <AnimatePresence>
+        {sideMenuOpen && (
+          <SideMenu
+            groupResult={groupResult}
+            sideMenuOpen={sideMenuOpen}
+            handleSideMenuOpen={setSideMenuOpen}
+          />
+        )}
+      </AnimatePresence>
       <HeaderContainer padding={"0px 24px 0px 24px"}>
         <Back onClick={handleClickBackBtn} />
         <HeaderGroupTitle>
@@ -222,73 +222,15 @@ function ResultPage() {
         <HamburgerMenu onClick={handleClickMenuBtn} />
       </HeaderContainer>
 
-      <ResultContainer>
+      <ResultContainer id="Result-Container">
         {groupResult.chat.map((chat: Chat) => (
-          <ChatContainer key={chat.questionId}>
-            <Contour text={format(new Date(chat.day), "yy.MM.dd")} />
-            <QuestionContainer bgColor={groupResult.color}>
-              {chat.question}
-            </QuestionContainer>
-            {chat.answer.map((answer, idx) => (
-              <AnswerContainer key={idx} isMe={answer.isMe}>
-                {!answer.isMe && (
-                  <ProfileImg size={40} bgImg={answer.profileImg} />
-                )}
-                <AnswerDetail isMe={answer.isMe}>
-                  <div>{answer.nickname}</div>
-                  <div>
-                    {answer.isMe && (
-                      <AnswerDate>
-                        {format(new Date(answer.time), "a", { locale: ko })}
-                        <br />
-                        {format(new Date(answer.time), "hh:mm")}
-                      </AnswerDate>
-                    )}
-                    <AnswerContent>{answer.content}</AnswerContent>
-                    {!answer.isMe && (
-                      <AnswerDate>
-                        {format(new Date(answer.time), "a", { locale: ko })}
-                        <br />
-                        {format(new Date(answer.time), "hh:mm")}
-                      </AnswerDate>
-                    )}
-                  </div>
-                </AnswerDetail>
-                {answer.isMe && (
-                  <ProfileImg size={40} bgImg={answer.profileImg} />
-                )}
-              </AnswerContainer>
-            ))}
-          </ChatContainer>
+          <ChatItem
+            key={chat.questionId}
+            chat={chat}
+            bgColor={groupResult.color}
+          />
         ))}
-
-        <StatisticContainer>
-          <Contour text={"업적"} />
-          <QuestionContainer width={"240px"} bgColor={groupResult.color}>
-            이야기 보따리 📚
-          </QuestionContainer>
-          <StatisticUserList>
-            {groupResult.award.taleteller.map((user: Participant) => (
-              <ProfileImg key={user.userId} size={40} bgImg={user.profileImg} />
-            ))}
-          </StatisticUserList>
-          <QuestionContainer width={"240px"} bgColor={groupResult.color}>
-            포토 그래퍼 📷
-          </QuestionContainer>
-          <StatisticUserList>
-            {groupResult.award.photographer.map((user: Participant) => (
-              <ProfileImg key={user.userId} size={40} bgImg={user.profileImg} />
-            ))}
-          </StatisticUserList>
-          <QuestionContainer width={"240px"} bgColor={groupResult.color}>
-            프로 개근러 👍
-          </QuestionContainer>
-          <StatisticUserList>
-            {groupResult.award.proGagler.map((user: Participant) => (
-              <ProfileImg key={user.userId} size={40} bgImg={user.profileImg} />
-            ))}
-          </StatisticUserList>
-        </StatisticContainer>
+        <ChatAwardItem award={groupResult.award} bgColor={groupResult.color} />
         <div></div>
       </ResultContainer>
     </>
