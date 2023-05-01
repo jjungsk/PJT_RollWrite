@@ -275,25 +275,22 @@ public class MeetingService {
                 .build();
     }
 
-    public MeetingAwardDto findMeetingAward(Long meetingId) {
+    public List<MeetingAwardDto> findMeetingAward(Long meetingId) {
         Meeting meeting = meetingRepository.findById(meetingId)
                 .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
 
         // 해당 Meeting에 해당하는 모든 통계 가져오기
-        List<AwardUserDto> awardUserDtoList = awardRepository.findAwardUser(meeting);
-        MeetingAwardDto meetingAwardDto = new MeetingAwardDto();
-        for (AwardUserDto awardUserDto : awardUserDtoList) {
-            AwardType awardType = awardUserDto.getAwardType();
-            if (awardType == AwardType.TALETELLER) {
-                meetingAwardDto.addTaleteller(awardUserDto);
-            } else if (awardType == AwardType.PHOTOGRAPHER) {
-                meetingAwardDto.addPhotographer(awardUserDto);
-            } else if (awardType == AwardType.PERFECTATTENDANCE) {
-                meetingAwardDto.addPerfectAttendance(awardUserDto);
-            }
-        }
+        List<MeetingAwardDto> meetingAwardDtoList = awardRepository.findAwardUser(meeting);
 
-        return meetingAwardDto;
+        // Type 별로 정렬
+        Collections.sort(meetingAwardDtoList, new Comparator<MeetingAwardDto>() {
+            @Override
+            public int compare(MeetingAwardDto o1, MeetingAwardDto o2) {
+                return o1.getType().compareTo(o2.getType());
+            }
+        });
+
+        return meetingAwardDtoList;
     }
 
     public List<FindUserResDto> findParticipant(Long userId, Long meetingId) {

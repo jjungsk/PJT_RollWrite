@@ -1,25 +1,21 @@
 package com.rollwrite.domain.meeting.dto;
 
+import com.rollwrite.domain.meeting.entity.AwardType;
+import lombok.Builder;
 import lombok.Getter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 public class MeetingAwardDto {
-    private List<AwardUserDto> taleteller = new ArrayList<>();
-    private List<AwardUserDto> photographer = new ArrayList<>();
-    private List<AwardUserDto> perfectAttendance = new ArrayList<>();
+    private final Long userId;
+    private final String nickname;
+    private final String profileImage;
+    private final AwardType type;
 
-    public void addTaleteller(AwardUserDto awardUserDto) {
-        taleteller.add(awardUserDto);
-    }
-
-    public void addPhotographer(AwardUserDto awardUserDto) {
-        photographer.add(awardUserDto);
-    }
-
-    public void addPerfectAttendance(AwardUserDto awardUserDto) {
-        perfectAttendance.add(awardUserDto);
+    @Builder
+    public MeetingAwardDto(Long userId, String nickname, String profileImage, AwardType type) {
+        this.userId = userId;
+        this.nickname = nickname;
+        this.profileImage = profileImage;
+        this.type = type;
     }
 }
