@@ -23,12 +23,20 @@ import ResultPage from "./pages/ResultPage/ResultPage";
 import JoinPage from "./pages/JoinPage/JoinPage";
 import AwardPage from "./pages/AwardPage/AwardPage";
 import OauthPage from "./pages/OauthPage/OauthPage";
+import { axiosInstance } from "./apis/instance";
 
 function App() {
+  const accessToken = useAppSelector((state) => state.auth.accessToken);
+  // 헤더 디폴트 추가
+  if (accessToken) {
+    axiosInstance.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${accessToken}`;
+  }
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const isLogin = useAppSelector((state) => state.auth.isLogin);
+  const isLogin = useAppSelector((state) => state.auth.accessToken).length > 0;
   const routeHistory = useAppSelector((state) => state.auth.routeHistory);
   const location = useLocation();
 
@@ -37,8 +45,10 @@ function App() {
 
     if (!isLogin) {
       if (currentPath !== "/login") {
+        console.log("a");
         dispatch(updateRouteHistory(currentPath));
       }
+      console.log("b");
       navigate("/login");
     }
 
@@ -51,7 +61,7 @@ function App() {
         dispatch(updateRouteHistory(""));
       }
     }
-  }, [dispatch, isLogin, location, navigate, routeHistory]);
+  }, []);
 
   return (
     <Routes>

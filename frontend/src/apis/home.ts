@@ -54,11 +54,15 @@ export const getAwardMember = async (meetingId: string) => {
 
 // 로그인
 // 카카오 로그인 리다이렉트
-export const redirectKakao = async () => {
+export const redirectKakao = () => {
   const CLIENT_ID = "88cb08e0de73021429ec359e909db650";
-  // const REDIRECT_URI = "http://localhost:3000/login/oauth";
-  const REDIRECT_URI = `https://k8a508.p.ssafy.io/api/auth/kakao/login`;
+  const REDIRECT_URI = "http://localhost:3000/oauth";
+  // const REDIRECT_URI = `https://k8a508.p.ssafy.io/api/auth/kakao/login`;
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-  const response = await axiosInstance.get(KAKAO_AUTH_URL);
+  window.location.href = KAKAO_AUTH_URL;
+};
+
+export const kakaoOuath = async (code: string) => {
+  const response = await axiosInstance.get(`auth/kakao/login?code=${code}`);
   return response.data;
 };
