@@ -152,9 +152,13 @@ public class MeetingController {
     }
 
     @GetMapping("/participant/{meetingId}")
-    public ResponseEntity<ApiResponse> participantList(@PathVariable Long meetingId) {
-        log.info("모임 참여자 전체 조회 meetingId : " + meetingId);
-        List<FindUserResDto> findUserResDtoList = meetingService.findParticipant(1L, meetingId);
+    public ResponseEntity<ApiResponse> participantList(@ApiIgnore Authentication authentication, @PathVariable Long meetingId) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
+        Long userId = userDetails.getUserId();
+        log.info("모임 참여자 전체 조회 meetingId : " + meetingId+" userId : "+userId);
+
+        List<FindUserResDto> findUserResDtoList = meetingService.findParticipant(userId, meetingId);
+
         return new ResponseEntity<>(
                 ApiResponse.success(SuccessCode.GET_PARTICIPANT_SUCCESS, findUserResDtoList),
                 HttpStatus.OK);
