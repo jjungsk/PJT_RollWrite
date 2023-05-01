@@ -107,7 +107,7 @@ public class MeetingController {
     }
 
     @GetMapping("/chat/{meetingId}")
-    public ResponseEntity<ApiResponse> meetingChatDetails(Long meetingId) {
+    public ResponseEntity<ApiResponse> meetingChatDetails(@PathVariable Long meetingId) {
         Long userId = 1L;
         log.info("모임 결과 채팅 상세 조회 userId : " + userId + " meetingId : " + meetingId);
         MeetingChatDto meetingChatDto = meetingService.findMeetingChat(userId, meetingId);
@@ -117,7 +117,7 @@ public class MeetingController {
     }
 
     @GetMapping("/award/{meetingId}")
-    public ResponseEntity<ApiResponse> meetingAwardDetails(Long meetingId) {
+    public ResponseEntity<ApiResponse> meetingAwardDetails(@PathVariable Long meetingId) {
         log.info("모임 결과 통계 상세 조회  meetingId : " + meetingId);
         MeetingAwardDto meetingAwardDto = meetingService.findMeetingAward(meetingId);
         return new ResponseEntity<>(

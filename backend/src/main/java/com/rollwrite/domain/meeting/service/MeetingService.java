@@ -279,20 +279,18 @@ public class MeetingService {
 
         // 해당 Meeting에 해당하는 모든 통계 가져오기
         List<AwardUserDto> awardUserDtoList = awardRepository.findAwardUser(meeting);
-        AwardDto awardDto = new AwardDto();
+        MeetingAwardDto meetingAwardDto = new MeetingAwardDto();
         for (AwardUserDto awardUserDto : awardUserDtoList) {
             AwardType awardType = awardUserDto.getAwardType();
             if (awardType == AwardType.TALETELLER) {
-                awardDto.addTaleteller(awardUserDto);
+                meetingAwardDto.addTaleteller(awardUserDto);
             } else if (awardType == AwardType.PHTOGRAPHER) {
-                awardDto.addPhotographer(awardUserDto);
+                meetingAwardDto.addPhotographer(awardUserDto);
             } else if (awardType == AwardType.PERFECTATTENDANCE) {
-                awardDto.addPerfectAttendance(awardUserDto);
+                meetingAwardDto.addPerfectAttendance(awardUserDto);
             }
         }
 
-        return MeetingAwardDto.builder()
-                .award(awardDto)
-                .build();
+        return meetingAwardDto;
     }
 }
