@@ -36,6 +36,10 @@ public class QuestionGpt extends BaseTimeEntity {
     @JoinColumn(name = "meeting_id")
     private Meeting meeting;
 
+    public void updateIsChoosed(boolean isChoosed) {
+        this.isChoosed = isChoosed;
+    }
+
     @Builder
     public QuestionGpt(Long id, String content, boolean isChoosed, String emoji, Meeting meeting) {
         this.id = id;

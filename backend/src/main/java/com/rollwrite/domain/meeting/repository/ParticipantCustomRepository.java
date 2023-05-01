@@ -16,4 +16,6 @@ public interface ParticipantCustomRepository {
     Optional<Meeting> findMeetingByUserAndMeetingAndIsDone(Long userId, Long meetingId,
                                                            boolean isDone);
 
+    List<Long> findMeetingByIsDone(boolean isDone);
+
 }

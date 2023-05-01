@@ -1,6 +1,8 @@
 package com.rollwrite.domain.question.service;
 
+import com.google.gson.Gson;
 import com.rollwrite.domain.meeting.entity.Meeting;
+import com.rollwrite.domain.meeting.entity.Participant;
 import com.rollwrite.domain.meeting.repository.MeetingRepository;
 import com.rollwrite.domain.meeting.repository.ParticipantRepository;
 import com.rollwrite.domain.question.dto.*;
@@ -12,7 +14,9 @@ import com.rollwrite.domain.question.repository.QuestionParticipantRepository;
 import com.rollwrite.domain.question.repository.QuestionRepository;
 import com.rollwrite.domain.user.entity.User;
 import com.rollwrite.domain.user.repository.UserRepository;
+import com.rollwrite.global.model.chatgpt.ChatGPTResDto;
 import com.rollwrite.global.service.FileService;
+import com.rollwrite.global.service.GptService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -31,6 +35,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class QuestionService {
 
+    private final GptService gptService;
     private final FileService fileService;
     private final UserRepository userRepository;
     private final AnswerRepository answerRepository;
@@ -48,8 +53,13 @@ public class QuestionService {
         Meeting meeting = participantRepository.findMeetingByUserAndMeetingAndIsDone(userId, addQuestionReqDto.getMeetingId(), false)
                 .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
 
-        // TODO : call GPT api for picking emoji!
-        String emoji = "";
+        ChatGPTResDto chatGPTResDto = gptService.chatGpt(addQuestionReqDto.getQuestion() + "라는 질문에 어울리는 이모지 딱 한 개만 추천해줘, 형식은 json이야, {\"emoji\":\"😎\"}");
+        String response = chatGPTResDto.getChoices().get(0).getMessage().getContent();
+
+        // 이모지 파싱
+        Gson gson = new Gson();
+        Map<String, String> jsonObj = gson.fromJson(response, Map.class);
+        String emoji = jsonObj.get("emoji");
 
         // question_participant insert
         QuestionParticipant questionParticipant = QuestionParticipant.builder()
@@ -87,6 +97,14 @@ public class QuestionService {
                 .imageUrl(imageUrl)
                 .build();
         answerRepository.save(answer);
+
+        // 마지막 질문에 답했을 때 질문 종료
+        if (meeting.getEndDay().equals(question.getCreatedAt().toLocalDate())) {
+            Participant participant = participantRepository.findByMeetingAndUser(meeting, user)
+                    .orElseThrow(() -> new IllegalArgumentException("참여자를 찾을 수 없습니다"));
+
+            participant.updateIsDone(true);
+        }
     }
 
     @Transactional

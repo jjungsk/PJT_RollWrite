@@ -25,12 +25,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class MeetingService {
 
+    private final AsyncMeetingService asyncMeetingService;
+
     private final TagRepository tagRepository;
     private final UserRepository userRepository;
+    private final AwardRepository awardRepository;
     private final AnswerRepository answerRepository;
     private final MeetingRepository meetingRepository;
-    private final AsyncMeetingService asyncMeetingService;
-    private final AwardRepository awardRepository;
     private final TagMeetingRepository tagMeetingRepository;
     private final ParticipantRepository participantRepository;
 

@@ -41,6 +41,10 @@ public class QuestionParticipant extends BaseTimeEntity {
     @JoinColumn(name = "meeting_id")
     private Meeting meeting;
 
+    public void updateIsChoosed(boolean isChoosed) {
+        this.isChoosed = isChoosed;
+    }
+
     @Builder
     public QuestionParticipant(String content, boolean isChoosed, String emoji, User user, Meeting meeting) {
         this.content = content;

@@ -31,6 +31,10 @@ public class Participant extends BaseTimeEntity {
     @JoinColumn(name = "meeting_id")
     private Meeting meeting;
 
+    public void updateIsDone(boolean isDone) {
+        this.isDone = isDone;
+    }
+
     @Builder
     public Participant(Long id, boolean isDone, User user, Meeting meeting) {
         this.id = id;

@@ -3,6 +3,7 @@ package com.rollwrite.domain.meeting.entity;
 import com.rollwrite.domain.user.entity.User;
 import com.rollwrite.global.model.BaseTimeEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,4 +32,10 @@ public class Award extends BaseTimeEntity {
     @JoinColumn(name = "meeting_id")
     private Meeting meeting;
 
+    @Builder
+    public Award(AwardType type, User user, Meeting meeting) {
+        this.type = type;
+        this.user = user;
+        this.meeting = meeting;
+    }
 }
