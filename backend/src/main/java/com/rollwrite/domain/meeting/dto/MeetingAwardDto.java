@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class AwardDto {
+public class MeetingAwardDto {
     private List<AwardUserDto> taleteller = new ArrayList<>();
     private List<AwardUserDto> photographer = new ArrayList<>();
     private List<AwardUserDto> perfectAttendance = new ArrayList<>();

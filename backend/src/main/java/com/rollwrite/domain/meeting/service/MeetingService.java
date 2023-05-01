@@ -238,7 +238,7 @@ public class MeetingService {
                 .build();
     }
 
-    public MeetingResultDetailsDto findMeetingResult(Long userId, Long meetingId) {
+    public MeetingChatDto findMeetingChat(Long userId, Long meetingId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
@@ -254,20 +254,6 @@ public class MeetingService {
                 .map(tagMeeting -> TagDto.of(tagMeeting.getTag()))
                 .collect(Collectors.toList());
 
-        // 해당 Meeting에 해당하는 모든 통계 가져오기
-        List<AwardUserDto> awardUserDtoList = awardRepository.findAwardUser(meeting);
-        AwardDto awardDto = new AwardDto();
-        for (AwardUserDto awardUserDto : awardUserDtoList) {
-            AwardType awardType = awardUserDto.getAwardType();
-            if (awardType == AwardType.TALETELLER) {
-                awardDto.addTaleteller(awardUserDto);
-            } else if (awardType == AwardType.PHOTOGRAPHER) {
-                awardDto.addPhotographer(awardUserDto);
-            } else if (awardType == AwardType.PERFECTATTENDANCE) {
-                awardDto.addPerfectAttendance(awardUserDto);
-            }
-        }
-
         // 내가 답변한 날의 Question 목록
         List<Question> questionList = answerRepository.findMeetingQuestion(user, meeting);
         List<ChatDto> chatDtoList = new ArrayList<>();
@@ -280,12 +266,32 @@ public class MeetingService {
             chatDtoList.add(chatDto);
         }
 
-        return MeetingResultDetailsDto.builder()
+        return MeetingChatDto.builder()
                 .meeting(meeting)
                 .participantCnt(participantCnt)
-                .award(awardDto)
                 .tag(tagDtoList)
                 .chat(chatDtoList)
                 .build();
+    }
+
+    public MeetingAwardDto findMeetingAward(Long meetingId) {
+        Meeting meeting = meetingRepository.findById(meetingId)
+                .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
+
+        // 해당 Meeting에 해당하는 모든 통계 가져오기
+        List<AwardUserDto> awardUserDtoList = awardRepository.findAwardUser(meeting);
+        MeetingAwardDto meetingAwardDto = new MeetingAwardDto();
+        for (AwardUserDto awardUserDto : awardUserDtoList) {
+            AwardType awardType = awardUserDto.getAwardType();
+            if (awardType == AwardType.TALETELLER) {
+                meetingAwardDto.addTaleteller(awardUserDto);
+            } else if (awardType == AwardType.PHOTOGRAPHER) {
+                meetingAwardDto.addPhotographer(awardUserDto);
+            } else if (awardType == AwardType.PERFECTATTENDANCE) {
+                meetingAwardDto.addPerfectAttendance(awardUserDto);
+            }
+        }
+
+        return meetingAwardDto;
     }
 }
