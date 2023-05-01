@@ -2,6 +2,7 @@ package com.rollwrite.domain.meeting.controller;
 
 import com.rollwrite.domain.meeting.dto.*;
 import com.rollwrite.domain.meeting.service.MeetingService;
+import com.rollwrite.global.auth.CustomUserDetails;
 import com.rollwrite.global.model.ApiResponse;
 import com.rollwrite.global.model.SuccessCode;
 
@@ -141,9 +142,11 @@ public class MeetingController {
     @GetMapping("/award/{meetingId}")
     public ResponseEntity<ApiResponse> meetingAwardDetails(@PathVariable Long meetingId) {
         log.info("모임 결과 통계 상세 조회  meetingId : " + meetingId);
-        MeetingAwardDto meetingAwardDto = meetingService.findMeetingAward(meetingId);
+
+        List<MeetingAwardDto> meetingAwardDtoList = meetingService.findMeetingAward(meetingId);
+
         return new ResponseEntity<>(
-                ApiResponse.success(SuccessCode.GET_MEETING_RESULT_SUCCESS, meetingAwardDto),
+                ApiResponse.success(SuccessCode.GET_MEETING_RESULT_SUCCESS, meetingAwardDtoList),
                 HttpStatus.OK);
     }
 }
