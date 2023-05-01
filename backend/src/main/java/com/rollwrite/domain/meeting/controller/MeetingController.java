@@ -2,6 +2,7 @@ package com.rollwrite.domain.meeting.controller;
 
 import com.rollwrite.domain.meeting.dto.*;
 import com.rollwrite.domain.meeting.service.MeetingService;
+import com.rollwrite.domain.user.dto.FindUserResDto;
 import com.rollwrite.global.auth.CustomUserDetails;
 import com.rollwrite.global.model.ApiResponse;
 import com.rollwrite.global.model.SuccessCode;
@@ -135,7 +136,7 @@ public class MeetingController {
         MeetingChatDto meetingChatDto = meetingService.findMeetingChat(userId, meetingId);
 
         return new ResponseEntity<>(
-                ApiResponse.success(SuccessCode.GET_MEETING_RESULT_SUCCESS, meetingChatDto),
+                ApiResponse.success(SuccessCode.GET_MEETING_CHAT_SUCCESS, meetingChatDto),
                 HttpStatus.OK);
     }
 
@@ -146,7 +147,16 @@ public class MeetingController {
         List<MeetingAwardDto> meetingAwardDtoList = meetingService.findMeetingAward(meetingId);
 
         return new ResponseEntity<>(
-                ApiResponse.success(SuccessCode.GET_MEETING_RESULT_SUCCESS, meetingAwardDtoList),
+                ApiResponse.success(SuccessCode.GET_MEETING_AWARD_SUCCESS, meetingAwardDtoList),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("/participant/{meetingId}")
+    public ResponseEntity<ApiResponse> participantList(@PathVariable Long meetingId) {
+        log.info("모임 참여자 전체 조회 meetingId : " + meetingId);
+        List<FindUserResDto> findUserResDtoList = meetingService.findParticipant(1L, meetingId);
+        return new ResponseEntity<>(
+                ApiResponse.success(SuccessCode.GET_PARTICIPANT_SUCCESS, findUserResDtoList),
                 HttpStatus.OK);
     }
 }
