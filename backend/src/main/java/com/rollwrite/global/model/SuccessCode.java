@@ -26,6 +26,7 @@ public enum SuccessCode {
     GET_MEETING_RESULT_SUCCESS(StatusCode.SUCCESS, "전체 모임 결과 조회했습니다."),
     GET_MEETING_DETAIL_RESULT_SUCCESS(StatusCode.SUCCESS, "모임 상세 결과 조회했습니다."),
     GET_TAG_SUCCESS(StatusCode.SUCCESS, "태그를 가져왔습니다."),
+    GET_PARTICIPANT_SUCCESS(StatusCode.SUCCESS, "참여자 목록을 가져왔습니다."),
 
     // question
     ADD_QUESTION_SUCCESS(StatusCode.SUCCESS, "질문이 생성되었습니다."),

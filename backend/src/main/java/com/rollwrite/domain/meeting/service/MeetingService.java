@@ -5,6 +5,7 @@ import com.rollwrite.domain.meeting.entity.*;
 import com.rollwrite.domain.meeting.repository.*;
 import com.rollwrite.domain.question.entity.Question;
 import com.rollwrite.domain.question.repository.AnswerRepository;
+import com.rollwrite.domain.user.dto.FindUserResDto;
 import com.rollwrite.domain.user.entity.User;
 import com.rollwrite.domain.user.repository.UserRepository;
 
@@ -293,5 +294,33 @@ public class MeetingService {
         }
 
         return meetingAwardDto;
+    }
+
+    public List<FindUserResDto> findParticipant(Long userId, Long meetingId) {
+        Meeting meeting = meetingRepository.findById(meetingId)
+                .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
+
+        List<Participant> participantList = participantRepository.findByMeeting(meeting);
+
+        // sort
+        Collections.sort(participantList, new Comparator<Participant>() {
+            @Override
+            public int compare(Participant o1, Participant o2) {
+                // 나를 최우선으로
+                if (o2.getUser().getId() == userId) {
+                    return 1;
+                } else {
+                    // 닉네임 사전순
+                    return o1.getUser().getNickname().compareTo(o2.getUser().getNickname());
+                }
+            }
+        });
+
+        //  List<Participant> -> List<FindUserResDto>
+        return participantList.stream().map(participant -> FindUserResDto.builder()
+                .userId(participant.getUser().getId())
+                .nickname(participant.getUser().getNickname())
+                .profileImage(participant.getUser().getProfileImage())
+                .build()).collect(Collectors.toList());
     }
 }
