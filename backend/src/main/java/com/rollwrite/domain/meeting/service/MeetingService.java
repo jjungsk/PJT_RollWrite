@@ -10,6 +10,7 @@ import com.rollwrite.domain.user.entity.User;
 import com.rollwrite.domain.user.repository.UserRepository;
 
 import java.security.NoSuchAlgorithmException;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -73,8 +74,12 @@ public class MeetingService {
         for (TagDto tagDto : tagList) {
             tag += tagDto.getContent() + ",";
         }
+
+        // 날짜 계산
+        long period = ChronoUnit.DAYS.between(meeting.getEndDay(), meeting.getStartDay());
+
         // Chat GPT 생성 질문 10개 저장
-        asyncMeetingService.saveGptQuestion(tag, meeting);
+        asyncMeetingService.saveGptQuestion(tag, meeting, period);
 
         // Meeting 생성자 Meeting에 추가
         Participant participant = Participant.builder()
