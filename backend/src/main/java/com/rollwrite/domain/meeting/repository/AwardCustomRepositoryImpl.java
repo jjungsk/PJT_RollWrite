@@ -2,7 +2,7 @@ package com.rollwrite.domain.meeting.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.rollwrite.domain.meeting.dto.AwardUserDto;
+import com.rollwrite.domain.meeting.dto.MeetingAwardDto;
 import com.rollwrite.domain.meeting.entity.Meeting;
 import com.rollwrite.domain.meeting.entity.QAward;
 import com.rollwrite.domain.user.entity.QUser;
@@ -20,9 +20,9 @@ public class AwardCustomRepositoryImpl implements AwardCustomRepository {
 
 
     @Override
-    public List<AwardUserDto> findAwardUser(Meeting meeting) {
+    public List<MeetingAwardDto> findAwardUser(Meeting meeting) {
         return jpaQueryFactory
-                .select(Projections.constructor(AwardUserDto.class,
+                .select(Projections.constructor(MeetingAwardDto.class,
                         award.user.id.as("userId"),
                         award.user.nickname,
                         award.user.profileImage,
