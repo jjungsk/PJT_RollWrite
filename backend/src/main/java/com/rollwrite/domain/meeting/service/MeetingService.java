@@ -262,8 +262,8 @@ public class MeetingService {
                 awardDto.addTaleteller(awardUserDto);
             } else if (awardType == AwardType.PHTOGRAPHER) {
                 awardDto.addPhotographer(awardUserDto);
-            } else if (awardType == AwardType.PROGAGLER) {
-                awardDto.addProGagler(awardUserDto);
+            } else if (awardType == AwardType.PERFECTATTENDANCE) {
+                awardDto.addPerfectAttendance(awardUserDto);
             }
         }
 

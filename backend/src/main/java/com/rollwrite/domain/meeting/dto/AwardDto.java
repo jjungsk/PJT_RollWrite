@@ -9,7 +9,7 @@ import java.util.List;
 public class AwardDto {
     private List<AwardUserDto> taleteller = new ArrayList<>();
     private List<AwardUserDto> photographer = new ArrayList<>();
-    private List<AwardUserDto> proGagler = new ArrayList<>();
+    private List<AwardUserDto> perfectAttendance = new ArrayList<>();
 
     public void addTaleteller(AwardUserDto awardUserDto) {
         taleteller.add(awardUserDto);
@@ -19,7 +19,7 @@ public class AwardDto {
         photographer.add(awardUserDto);
     }
 
-    public void addProGagler(AwardUserDto awardUserDto) {
-        proGagler.add(awardUserDto);
+    public void addPerfectAttendance(AwardUserDto awardUserDto) {
+        perfectAttendance.add(awardUserDto);
     }
 }
