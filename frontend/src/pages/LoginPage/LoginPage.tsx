@@ -14,7 +14,13 @@ function LoginPage() {
   dispatch(updateLoginStatus(false));
   const handleClickLoginBtn = () => {
     // TODO: 카카오 로그인 구현
-    redirectKakao();
+    redirectKakao()
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
     // dispatch(updateLoginStatus(true));
     // navigate(routeHistory);
     // dispatch(updateRouteHistory(""));
