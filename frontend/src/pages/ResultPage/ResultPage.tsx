@@ -129,7 +129,7 @@ function ResultPage() {
             },
             {
               nickname: "닉네임3",
-              profileImage: "/sample_profile_image.png",
+              profileImg: "/sample_profile_image.png",
               isMe: false,
               content: "대선이가 이 세상에서 가장 좋아요!!",
               time: "2023-03-16 15:45:12",

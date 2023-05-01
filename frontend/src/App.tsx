@@ -22,6 +22,7 @@ import AnswerPage from "./pages/AnswerPage/AnswerPage";
 import ResultPage from "./pages/ResultPage/ResultPage";
 import JoinPage from "./pages/JoinPage/JoinPage";
 import AwardPage from "./pages/AwardPage/AwardPage";
+import OauthPage from "./pages/OauthPage/OauthPage";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -55,6 +56,7 @@ function App() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/oauth" element={<OauthPage />} />
       <Route path="/" element={<MainLayout />}>
         <Route path="/" element={<Navigate to="/question" />} />
         <Route path="/home" element={<HomePage />} />

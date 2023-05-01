@@ -22,7 +22,7 @@ function ChatItem(props: { chat: Chat; bgColor: string }) {
       </QuestionContainer>
       {props.chat.answer.map((answer, idx) => (
         <AnswerContainer key={idx} isMe={answer.isMe}>
-          {!answer.isMe && <ProfileImg size={40} bgImg={answer.profileImage} />}
+          {!answer.isMe && <ProfileImg size={40} bgImg={answer.profileImg} />}
           <AnswerDetail isMe={answer.isMe}>
             <div>{answer.nickname}</div>
             <div>
@@ -43,7 +43,7 @@ function ChatItem(props: { chat: Chat; bgColor: string }) {
               )}
             </div>
           </AnswerDetail>
-          {answer.isMe && <ProfileImg size={40} bgImg={answer.profileImage} />}
+          {answer.isMe && <ProfileImg size={40} bgImg={answer.profileImg} />}
         </AnswerContainer>
       ))}
     </ChatContainer>
