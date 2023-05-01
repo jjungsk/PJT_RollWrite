@@ -36,7 +36,6 @@ import java.util.concurrent.TimeUnit;
 @Transactional(readOnly = true)
 public class AuthService {
 
-
     @Value("${auth.kakao.redirect-uri}")
     private String REDIRECT_URL;
     @Value("${auth.kakao.rest-key}")

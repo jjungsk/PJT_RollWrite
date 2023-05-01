@@ -1,7 +1,7 @@
 package com.rollwrite.domain.user.entity;
 
 import com.rollwrite.domain.meeting.entity.Participant;
-import com.rollwrite.domain.meeting.entity.Statistics;
+import com.rollwrite.domain.meeting.entity.Award;
 import com.rollwrite.domain.notification.entity.Notification;
 import com.rollwrite.domain.question.entity.Answer;
 import com.rollwrite.domain.question.entity.QuestionParticipant;
@@ -53,7 +53,7 @@ public class User extends BaseTimeEntity {
     private List<Participant> participantList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Statistics> statisticsList = new ArrayList<>();
+    private List<Award> awardList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<QuestionParticipant> questionParticipantList = new ArrayList<>();

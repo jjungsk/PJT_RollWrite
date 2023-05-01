@@ -16,11 +16,11 @@ public class MeetingResultDetailsDto {
     private final String color;
     private final int participantCnt;
     private final List<TagDto> tag;
-    private final StatisticDto statistic;
+    private final AwardDto award;
     private final List<ChatDto> chat;
 
     @Builder
-    public MeetingResultDetailsDto(Meeting meeting, int participantCnt, List<TagDto> tag, StatisticDto statistic, List<ChatDto> chat) {
+    public MeetingResultDetailsDto(Meeting meeting, int participantCnt, List<TagDto> tag, AwardDto award, List<ChatDto> chat) {
         this.meetingId = meeting.getId();
         this.title = meeting.getTitle();
         this.startDay = meeting.getStartDay();
@@ -28,7 +28,7 @@ public class MeetingResultDetailsDto {
         this.color = meeting.getColor();
         this.participantCnt = participantCnt;
         this.tag = tag;
-        this.statistic = statistic;
+        this.award = award;
         this.chat = chat;
     }
 }
