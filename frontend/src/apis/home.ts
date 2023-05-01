@@ -45,3 +45,9 @@ export const joinGroup = async (inviteCode: string) => {
   const response = await axiosInstance.post(`/meeting/join/${inviteCode}/2`);
   return response.data;
 };
+
+// 상장수여
+export const getAwardMember = async (meetingId: string) => {
+  const response = await axiosInstance.get(`meeting/award/${meetingId}`);
+  return response.data;
+};

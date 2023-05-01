@@ -21,7 +21,7 @@ import InvitePage from "./pages/InvitePage/InvitePage";
 import AnswerPage from "./pages/AnswerPage/AnswerPage";
 import ResultPage from "./pages/ResultPage/ResultPage";
 import JoinPage from "./pages/JoinPage/JoinPage";
-import AwardPage from "./pages/Award/AwardPage";
+import AwardPage from "./pages/AwardPage/AwardPage";
 
 function App() {
   const dispatch = useAppDispatch();

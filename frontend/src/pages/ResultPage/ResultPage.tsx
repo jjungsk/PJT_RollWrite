@@ -37,7 +37,7 @@ function ResultPage() {
     participant: [],
     participantCnt: 0,
     tag: [],
-    statistic: {
+    award: {
       taleteller: [],
       photographer: [],
       proGagler: [],
@@ -59,27 +59,27 @@ function ResultPage() {
         {
           userId: 1,
           nickname: "닉네임1",
-          profileImage: "/sample_profile_image.png",
+          profileImg: "/sample_profile_image.png",
         },
         {
           userId: 2,
           nickname: "닉네임2",
-          profileImage: "/sample_profile_image.png",
+          profileImg: "/sample_profile_image.png",
         },
         {
           userId: 3,
           nickname: "닉네임3",
-          profileImage: "/sample_profile_image.png",
+          profileImg: "/sample_profile_image.png",
         },
         {
           userId: 4,
           nickname: "닉네임4",
-          profileImage: "/sample_profile_image.png",
+          profileImg: "/sample_profile_image.png",
         },
         {
           userId: 5,
           nickname: "닉네임5",
-          profileImage: "/sample_profile_image.png",
+          profileImg: "/sample_profile_image.png",
         },
       ],
       participantCnt: 5,
@@ -88,31 +88,31 @@ function ResultPage() {
         { tagId: 2, content: "학생" },
         { tagId: 3, content: "취업" },
       ],
-      statistic: {
+      award: {
         taleteller: [
           {
             userId: 1,
             nickname: "닉네임1",
-            profileImage: "/sample_profile_image.png",
+            profileImg: "/sample_profile_image.png",
           },
           {
             userId: 2,
             nickname: "닉네임2",
-            profileImage: "/sample_profile_image.png",
+            profileImg: "/sample_profile_image.png",
           },
         ],
         photographer: [
           {
             userId: 1,
             nickname: "닉네임1",
-            profileImage: "/sample_profile_image.png",
+            profileImg: "/sample_profile_image.png",
           },
         ],
         proGagler: [
           {
             userId: 1,
             nickname: "닉네임1",
-            profileImage: "/sample_profile_image.png",
+            profileImg: "/sample_profile_image.png",
           },
         ],
       },
@@ -124,7 +124,7 @@ function ResultPage() {
           answer: [
             {
               nickname: "닉네임1",
-              profileImage: "/sample_profile_image.png",
+              profileImg: "/sample_profile_image.png",
               isMe: true,
               content:
                 "내가 가장 좋은 팀원이지!!! 블라블라 블라블라 블라블라 블라블라 블라블라 블라블라 블라블라 ",
@@ -132,7 +132,7 @@ function ResultPage() {
             },
             {
               nickname: "닉네임2",
-              profileImage: "/sample_profile_image.png",
+              profileImg: "/sample_profile_image.png",
               isMe: false,
               content: "모두 사랑합니다",
               time: "2023-03-16 14:21:52",
@@ -147,7 +147,7 @@ function ResultPage() {
           answer: [
             {
               nickname: "닉네임1",
-              profileImage: "/sample_profile_image.png",
+              profileImg: "/sample_profile_image.png",
               isMe: false,
               content:
                 "이건 답변 내용이야 이건 답변 내용이야 이건 답변 내용이야 이건 답변 내용이야 이건 답변 내용이야 이건 답변 내용이야 이건 답변 내용이야 이건 답변 내용이야",
@@ -155,7 +155,7 @@ function ResultPage() {
             },
             {
               nickname: "닉네임2",
-              profileImage: "/sample_profile_image.png",
+              profileImg: "/sample_profile_image.png",
               isMe: true,
               content: "이건 짧은 답변이야",
               time: "2023-03-17 15:41:31",
@@ -169,14 +169,14 @@ function ResultPage() {
           answer: [
             {
               nickname: "닉네임1",
-              profileImage: "/sample_profile_image.png",
+              profileImg: "/sample_profile_image.png",
               isMe: false,
               content: "이건 답변 내용이야 이건 답변 내용이야",
               time: "2023-03-18 16:52:10",
             },
             {
               nickname: "닉네임2",
-              profileImage: "/sample_profile_image.png",
+              profileImg: "/sample_profile_image.png",
               isMe: false,
               content: "이건 짧은 답변이야",
               time: "2023-03-18 17:38:31",
@@ -232,7 +232,7 @@ function ResultPage() {
             {chat.answer.map((answer, idx) => (
               <AnswerContainer key={idx} isMe={answer.isMe}>
                 {!answer.isMe && (
-                  <ProfileImg size={40} bgImg={answer.profileImage} />
+                  <ProfileImg size={40} bgImg={answer.profileImg} />
                 )}
                 <AnswerDetail isMe={answer.isMe}>
                   <div>{answer.nickname}</div>
@@ -255,7 +255,7 @@ function ResultPage() {
                   </div>
                 </AnswerDetail>
                 {answer.isMe && (
-                  <ProfileImg size={40} bgImg={answer.profileImage} />
+                  <ProfileImg size={40} bgImg={answer.profileImg} />
                 )}
               </AnswerContainer>
             ))}
@@ -268,36 +268,24 @@ function ResultPage() {
             이야기 보따리 📚
           </QuestionContainer>
           <StatisticUserList>
-            {groupResult.statistic.taleteller.map((user: Participant) => (
-              <ProfileImg
-                key={user.userId}
-                size={40}
-                bgImg={user.profileImage}
-              />
+            {groupResult.award.taleteller.map((user: Participant) => (
+              <ProfileImg key={user.userId} size={40} bgImg={user.profileImg} />
             ))}
           </StatisticUserList>
           <QuestionContainer width={"240px"} bgColor={groupResult.color}>
             포토 그래퍼 📷
           </QuestionContainer>
           <StatisticUserList>
-            {groupResult.statistic.photographer.map((user: Participant) => (
-              <ProfileImg
-                key={user.userId}
-                size={40}
-                bgImg={user.profileImage}
-              />
+            {groupResult.award.photographer.map((user: Participant) => (
+              <ProfileImg key={user.userId} size={40} bgImg={user.profileImg} />
             ))}
           </StatisticUserList>
           <QuestionContainer width={"240px"} bgColor={groupResult.color}>
             프로 개근러 👍
           </QuestionContainer>
           <StatisticUserList>
-            {groupResult.statistic.proGagler.map((user: Participant) => (
-              <ProfileImg
-                key={user.userId}
-                size={40}
-                bgImg={user.profileImage}
-              />
+            {groupResult.award.proGagler.map((user: Participant) => (
+              <ProfileImg key={user.userId} size={40} bgImg={user.profileImg} />
             ))}
           </StatisticUserList>
         </StatisticContainer>
