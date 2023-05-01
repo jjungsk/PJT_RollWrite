@@ -285,7 +285,7 @@ public class MeetingService {
             AwardType awardType = awardUserDto.getAwardType();
             if (awardType == AwardType.TALETELLER) {
                 meetingAwardDto.addTaleteller(awardUserDto);
-            } else if (awardType == AwardType.PHTOGRAPHER) {
+            } else if (awardType == AwardType.PHOTOGRAPHER) {
                 meetingAwardDto.addPhotographer(awardUserDto);
             } else if (awardType == AwardType.PERFECTATTENDANCE) {
                 meetingAwardDto.addPerfectAttendance(awardUserDto);
