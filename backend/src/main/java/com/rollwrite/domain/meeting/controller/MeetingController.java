@@ -110,18 +110,18 @@ public class MeetingController {
     public ResponseEntity<ApiResponse> meetingChatDetails(Long meetingId) {
         Long userId = 1L;
         log.info("모임 결과 채팅 상세 조회 userId : " + userId + " meetingId : " + meetingId);
-        MeetingChatDetailsDto meetingChatDetailsDto = meetingService.findMeetingChat(userId, meetingId);
+        MeetingChatDto meetingChatDto = meetingService.findMeetingChat(userId, meetingId);
         return new ResponseEntity<>(
-                ApiResponse.success(SuccessCode.GET_MEETING_RESULT_SUCCESS, meetingChatDetailsDto),
+                ApiResponse.success(SuccessCode.GET_MEETING_RESULT_SUCCESS, meetingChatDto),
                 HttpStatus.OK);
     }
 
     @GetMapping("/award/{meetingId}")
     public ResponseEntity<ApiResponse> meetingAwardDetails(Long meetingId) {
         log.info("모임 결과 통계 상세 조회  meetingId : " + meetingId);
-        MeetingAwardDetailsDto meetingAwardDetailsDto = meetingService.findMeetingAward(meetingId);
+        MeetingAwardDto meetingAwardDto = meetingService.findMeetingAward(meetingId);
         return new ResponseEntity<>(
-                ApiResponse.success(SuccessCode.GET_MEETING_RESULT_SUCCESS, meetingAwardDetailsDto),
+                ApiResponse.success(SuccessCode.GET_MEETING_RESULT_SUCCESS, meetingAwardDto),
                 HttpStatus.OK);
     }
 }

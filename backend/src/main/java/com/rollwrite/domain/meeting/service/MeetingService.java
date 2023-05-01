@@ -237,7 +237,7 @@ public class MeetingService {
                 .build();
     }
 
-    public MeetingChatDetailsDto findMeetingChat(Long userId, Long meetingId) {
+    public MeetingChatDto findMeetingChat(Long userId, Long meetingId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
@@ -265,7 +265,7 @@ public class MeetingService {
             chatDtoList.add(chatDto);
         }
 
-        return MeetingChatDetailsDto.builder()
+        return MeetingChatDto.builder()
                 .meeting(meeting)
                 .participantCnt(participantCnt)
                 .tag(tagDtoList)
@@ -273,7 +273,7 @@ public class MeetingService {
                 .build();
     }
 
-    public MeetingAwardDetailsDto findMeetingAward(Long meetingId) {
+    public MeetingAwardDto findMeetingAward(Long meetingId) {
         Meeting meeting = meetingRepository.findById(meetingId)
                 .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
 
@@ -291,7 +291,7 @@ public class MeetingService {
             }
         }
 
-        return MeetingAwardDetailsDto.builder()
+        return MeetingAwardDto.builder()
                 .award(awardDto)
                 .build();
     }

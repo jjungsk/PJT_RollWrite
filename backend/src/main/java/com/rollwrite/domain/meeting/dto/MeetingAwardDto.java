@@ -4,11 +4,11 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class MeetingAwardDetailsDto {
+public class MeetingAwardDto {
     private final AwardDto award;
 
     @Builder
-    public MeetingAwardDetailsDto(AwardDto award) {
+    public MeetingAwardDto(AwardDto award) {
         this.award = award;
     }
 }

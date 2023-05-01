@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Getter
-public class MeetingChatDetailsDto {
+public class MeetingChatDto {
     private final Long meetingId;
     private final String title;
     private final LocalDate startDay;
@@ -19,7 +19,7 @@ public class MeetingChatDetailsDto {
     private final List<ChatDto> chat;
 
     @Builder
-    public MeetingChatDetailsDto(Meeting meeting, int participantCnt, List<TagDto> tag, List<ChatDto> chat) {
+    public MeetingChatDto(Meeting meeting, int participantCnt, List<TagDto> tag, List<ChatDto> chat) {
         this.meetingId = meeting.getId();
         this.title = meeting.getTitle();
         this.startDay = meeting.getStartDay();
