@@ -14,7 +14,7 @@ function ChatAwardItem(props: { award: Award; bgColor: string }) {
       </QuestionContainer>
       <ResultAwardUserList>
         {props.award.taleteller.map((user: Participant) => (
-          <ProfileImg key={user.userId} size={40} bgImg={user.profileImage} />
+          <ProfileImg key={user.userId} size={40} bgImg={user.profileImg} />
         ))}
       </ResultAwardUserList>
       <QuestionContainer width={"240px"} bgColor={props.bgColor}>
@@ -22,7 +22,7 @@ function ChatAwardItem(props: { award: Award; bgColor: string }) {
       </QuestionContainer>
       <ResultAwardUserList>
         {props.award.photographer.map((user: Participant) => (
-          <ProfileImg key={user.userId} size={40} bgImg={user.profileImage} />
+          <ProfileImg key={user.userId} size={40} bgImg={user.profileImg} />
         ))}
       </ResultAwardUserList>
       <QuestionContainer width={"240px"} bgColor={props.bgColor}>
@@ -30,7 +30,7 @@ function ChatAwardItem(props: { award: Award; bgColor: string }) {
       </QuestionContainer>
       <ResultAwardUserList>
         {props.award.proGagler.map((user: Participant) => (
-          <ProfileImg key={user.userId} size={40} bgImg={user.profileImage} />
+          <ProfileImg key={user.userId} size={40} bgImg={user.profileImg} />
         ))}
       </ResultAwardUserList>
     </ResultAwardContainer>
