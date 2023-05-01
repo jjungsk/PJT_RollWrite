@@ -30,7 +30,7 @@ public class MeetingService {
     private final AnswerRepository answerRepository;
     private final MeetingRepository meetingRepository;
     private final AsyncMeetingService asyncMeetingService;
-    private final StatisticsRepository statisticsRepository;
+    private final AwardRepository awardRepository;
     private final TagMeetingRepository tagMeetingRepository;
     private final ParticipantRepository participantRepository;
 
@@ -254,16 +254,16 @@ public class MeetingService {
                 .collect(Collectors.toList());
 
         // 해당 Meeting에 해당하는 모든 통계 가져오기
-        List<StatisticUserDto> statisticsList = statisticsRepository.findStatisticUser(meeting);
-        StatisticDto statisticDto = new StatisticDto();
-        for (StatisticUserDto statisticUserDto : statisticsList) {
-            StatisticsType statisticsType = statisticUserDto.getStatisticsType();
-            if (statisticsType == StatisticsType.TALETELLER) {
-                statisticDto.addTaleteller(statisticUserDto);
-            } else if (statisticsType == StatisticsType.PHTOGRAPHER) {
-                statisticDto.addPhotographer(statisticUserDto);
-            } else if (statisticsType == StatisticsType.PROGAGLER) {
-                statisticDto.addProGagler(statisticUserDto);
+        List<AwardUserDto> awardUserDtoList = awardRepository.findAwardUser(meeting);
+        AwardDto awardDto = new AwardDto();
+        for (AwardUserDto awardUserDto : awardUserDtoList) {
+            AwardType awardType = awardUserDto.getAwardType();
+            if (awardType == AwardType.TALETELLER) {
+                awardDto.addTaleteller(awardUserDto);
+            } else if (awardType == AwardType.PHTOGRAPHER) {
+                awardDto.addPhotographer(awardUserDto);
+            } else if (awardType == AwardType.PROGAGLER) {
+                awardDto.addProGagler(awardUserDto);
             }
         }
 
@@ -282,7 +282,7 @@ public class MeetingService {
         return MeetingResultDetailsDto.builder()
                 .meeting(meeting)
                 .participantCnt(participantCnt)
-                .statistic(statisticDto)
+                .award(awardDto)
                 .tag(tagDtoList)
                 .chat(chatDtoList)
                 .build();

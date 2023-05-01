@@ -47,7 +47,7 @@ public class Meeting extends BaseTimeEntity {
     private List<Participant> participantList = new ArrayList<>();
 
     @OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL)
-    private List<Statistics> statisticsList = new ArrayList<>();
+    private List<Award> awardList = new ArrayList<>();
 
     @OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL)
     private List<Question> questionList = new ArrayList<>();

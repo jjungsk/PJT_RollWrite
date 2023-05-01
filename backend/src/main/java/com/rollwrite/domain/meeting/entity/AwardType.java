@@ -1,5 +1,5 @@
 package com.rollwrite.domain.meeting.entity;
 
-public enum StatisticsType {
+public enum AwardType {
     TALETELLER, PHTOGRAPHER, PROGAGLER
 }
