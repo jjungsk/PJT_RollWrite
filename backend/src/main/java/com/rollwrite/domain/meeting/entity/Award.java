@@ -33,7 +33,7 @@ public class Award extends BaseTimeEntity {
     private Meeting meeting;
 
     @Builder
-    public Statistics(StatisticsType type, User user, Meeting meeting) {
+    public Award(AwardType type, User user, Meeting meeting) {
         this.type = type;
         this.user = user;
         this.meeting = meeting;

@@ -1,12 +1,12 @@
 package com.rollwrite.domain.question.service;
 
+import com.rollwrite.domain.meeting.entity.Award;
+import com.rollwrite.domain.meeting.entity.AwardType;
 import com.rollwrite.domain.meeting.entity.Meeting;
 import com.rollwrite.domain.meeting.entity.Participant;
-import com.rollwrite.domain.meeting.entity.Statistics;
-import com.rollwrite.domain.meeting.entity.StatisticsType;
+import com.rollwrite.domain.meeting.repository.AwardRepository;
 import com.rollwrite.domain.meeting.repository.MeetingRepository;
 import com.rollwrite.domain.meeting.repository.ParticipantRepository;
-import com.rollwrite.domain.meeting.repository.StatisticsRepository;
 import com.rollwrite.domain.question.dto.AnswerLengthSumDto;
 import com.rollwrite.domain.question.dto.AnswerRecordDto;
 import com.rollwrite.domain.question.dto.ImageCountDto;
@@ -43,10 +43,10 @@ public class QuestionBatch {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
 
+    private final AwardRepository awardRepository;
     private final AnswerRepository answerRepository;
     private final MeetingRepository meetingRepository;
     private final QuestionRepository questionRepository;
-    private final StatisticsRepository statisticsRepository;
     private final ParticipantRepository participantRepository;
     private final QuestionGptRepository questionGptRepository;
     private final QuestionParticipantRepository questionParticipantRepository;
@@ -229,7 +229,7 @@ public class QuestionBatch {
                             }
                         });
 
-                        List<User> proGgr = new ArrayList<>();
+                        List<User> perfectAttendance = new ArrayList<>();
                         int maxRecord = Integer.MIN_VALUE;
                         for (AnswerRecordDto answerRecord : answerRecordDtoList) {
                             User user = answerRecord.getUser();
@@ -237,7 +237,7 @@ public class QuestionBatch {
 
                             if (record >= maxRecord) {
                                 maxRecord = record;
-                                proGgr.add(user);
+                                perfectAttendance.add(user);
                             } else {
                                 break;
                             }
@@ -255,35 +255,34 @@ public class QuestionBatch {
                                 .build();
                         questionRepository.save(question);
 
-                        // TODO : 여기 이름 바꿔야 됨!!!
-                        // statistics insert - taleteller
+                        // award insert - taleteller
                         for (User user : taleteller) {
-                            Statistics statistics = Statistics.builder()
-                                    .type(StatisticsType.TALETELLER)
+                            Award award = Award.builder()
+                                    .type(AwardType.TALETELLER)
                                     .meeting(meeting)
                                     .user(user)
                                     .build();
-                            statisticsRepository.save(statistics);
+                            awardRepository.save(award);
                         }
 
-                        // statistics insert - photographer
+                        // award insert - photographer
                         for (User user : photographer) {
-                            Statistics statistics = Statistics.builder()
-                                    .type(StatisticsType.PHTOGRAPHER)
+                            Award award = Award.builder()
+                                    .type(AwardType.PHOTOGRAPHER)
                                     .meeting(meeting)
                                     .user(user)
                                     .build();
-                            statisticsRepository.save(statistics);
+                            awardRepository.save(award);
                         }
 
-                        // statistics insert - PROGAGLER
-                        for (User user : proGgr) {
-                            Statistics statistics = Statistics.builder()
-                                    .type(StatisticsType.PROGAGLER)
+                        // award insert - PERFECTATTENDANCE
+                        for (User user : perfectAttendance) {
+                            Award award = Award.builder()
+                                    .type(AwardType.PERFECTATTENDANCE)
                                     .meeting(meeting)
                                     .user(user)
                                     .build();
-                            statisticsRepository.save(statistics);
+                            awardRepository.save(award);
                         }
 
                         // 다음 모임으로 넘어감
