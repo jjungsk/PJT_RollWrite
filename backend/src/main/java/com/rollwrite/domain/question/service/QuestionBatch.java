@@ -248,8 +248,8 @@ public class QuestionBatch {
 
                         // question insert
                         Question question = Question.builder()
-                                .content("마지막 고정 질문은 뭐로 할까요?")
-                                .emoji("마지막 이모지")
+                                .content("마지막으로 우리에 대해 하고 싶은 말이 뭐야?")
+                                .emoji("🎉")
                                 .meeting(meeting)
                                 .expireTime(infiniteTime)
                                 .build();
@@ -294,7 +294,7 @@ public class QuestionBatch {
 
                     // 해당 모임에서 질문을 한 참여자 중 랜덤 한 명
                     // SELECT qp.user.id FROM QuestionParticipant qp WHERE qp.meeting.id = :meetingId AND qp.isChoosed = false GROUP BY qp.user ORDER BY RAND()
-                    Optional<Long> participantId = questionParticipantRepository.findRandomUserByMeetingAndIsChoosed(meetingId, false);
+                    Optional<Long> participantId = questionParticipantRepository.chooseRandomParticipant(meetingId, false);
 
                     String content = "";
                     String emoji = "";
@@ -303,7 +303,7 @@ public class QuestionBatch {
                         // 참여자가 없으면
                         // 해당 모임에 만들어진 gpt 질문 중 랜덤 하나
                         // SELECT qg FROM QuestionGpt qg WHERE qg.meeting.id = :meetingId AND qg.isChoosed = false ORDER BY RAND()
-                        Optional<QuestionGpt> questionGptOptional = questionGptRepository.findRandomByMeetingAndIsChoosed(meetingId, false);
+                        Optional<QuestionGpt> questionGptOptional = questionGptRepository.chooseRandomQuestionGpt(meetingId, false);
 
                         // gpt 질문이 없으면 다음 모임으로 넘어감
                         if (questionGptOptional.isEmpty()) {
@@ -324,7 +324,7 @@ public class QuestionBatch {
                         // 참여자가 있으면
                         // 해당 모임에 만들어진 당첨된 참여자 질문 중 랜덤 하나
                         // SELECT qp FROM QuestionParticipant qp WHERE qp.meeting.id = :meetingId AND qp.isChoosed = false AND qp.user.id = :userId ORDER BY RAND()
-                        Optional<QuestionParticipant> questionParticipantOptional = questionParticipantRepository.findRandomByMeetingAndIsChoosedAndUser(meetingId, false, participantId.get());
+                        Optional<QuestionParticipant> questionParticipantOptional = questionParticipantRepository.chooseRandomQuestionParticipant(meetingId, false, participantId.get());
 
                         // 참여자 질문이 없으면 다음 모임으로 넘어감
                         if (questionParticipantOptional.isEmpty()) {
