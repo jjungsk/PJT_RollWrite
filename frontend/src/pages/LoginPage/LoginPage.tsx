@@ -2,28 +2,12 @@ import React from "react";
 import { LogoContainer, BtnContainer } from "./style";
 import { ReactComponent as Logo } from "../../assets/Logo.svg";
 import { ReactComponent as KakaoBtn } from "../../assets/Kakao.svg";
-import { updateLoginStatus, updateRouteHistory } from "../../store/authReducer";
-import { useAppDispatch, useAppSelector } from "../../constants/types";
-import { useNavigate } from "react-router-dom";
+
 import { redirectKakao } from "../../apis/home";
 
 function LoginPage() {
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const routeHistory = useAppSelector((state) => state.auth.routeHistory);
-  dispatch(updateLoginStatus(false));
   const handleClickLoginBtn = () => {
-    // TODO: 카카오 로그인 구현
-    redirectKakao()
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-    // dispatch(updateLoginStatus(true));
-    // navigate(routeHistory);
-    // dispatch(updateRouteHistory(""));
+    redirectKakao();
   };
 
   return (
