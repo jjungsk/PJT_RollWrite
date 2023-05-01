@@ -2,7 +2,6 @@ package com.rollwrite.domain.meeting.controller;
 
 import com.rollwrite.domain.meeting.dto.*;
 import com.rollwrite.domain.meeting.service.MeetingService;
-import com.rollwrite.global.auth.CustomUserDetails;
 import com.rollwrite.global.model.ApiResponse;
 import com.rollwrite.global.model.SuccessCode;
 
@@ -47,10 +46,9 @@ public class MeetingController {
     }
 
     @PostMapping()
-    public ResponseEntity<ApiResponse> addMeeting(@ApiIgnore Authentication authentication,
-                                                  @RequestBody AddMeetingRequestDto addMeetingRequestDto) throws NoSuchAlgorithmException {
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
-        Long userId = userDetails.getUserId();
+    public ResponseEntity<ApiResponse> addMeeting(
+            @RequestBody AddMeetingRequestDto addMeetingRequestDto) throws NoSuchAlgorithmException {
+        Long userId = 1L;
         log.info("Meeting 생성" + addMeetingRequestDto.toString());
 
         AddMeetingResponseDto addMeetingResponseDto = meetingService.addMeeting(userId,
@@ -143,9 +141,7 @@ public class MeetingController {
     @GetMapping("/award/{meetingId}")
     public ResponseEntity<ApiResponse> meetingAwardDetails(@PathVariable Long meetingId) {
         log.info("모임 결과 통계 상세 조회  meetingId : " + meetingId);
-
         MeetingAwardDto meetingAwardDto = meetingService.findMeetingAward(meetingId);
-
         return new ResponseEntity<>(
                 ApiResponse.success(SuccessCode.GET_MEETING_RESULT_SUCCESS, meetingAwardDto),
                 HttpStatus.OK);

@@ -5,10 +5,12 @@ import com.rollwrite.domain.meeting.entity.*;
 import com.rollwrite.domain.meeting.repository.*;
 import com.rollwrite.domain.question.entity.Question;
 import com.rollwrite.domain.question.repository.AnswerRepository;
+import com.rollwrite.domain.user.dto.FindUserResDto;
 import com.rollwrite.domain.user.entity.User;
 import com.rollwrite.domain.user.repository.UserRepository;
 
 import java.security.NoSuchAlgorithmException;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -72,8 +74,12 @@ public class MeetingService {
         for (TagDto tagDto : tagList) {
             tag += tagDto.getContent() + ",";
         }
+
+        // 날짜 계산
+        long period = ChronoUnit.DAYS.between(meeting.getEndDay(), meeting.getStartDay());
+
         // Chat GPT 생성 질문 10개 저장
-        asyncMeetingService.saveGptQuestion(tag, meeting);
+        asyncMeetingService.saveGptQuestion(tag, meeting, period);
 
         // Meeting 생성자 Meeting에 추가
         Participant participant = Participant.builder()
@@ -274,24 +280,49 @@ public class MeetingService {
                 .build();
     }
 
-    public MeetingAwardDto findMeetingAward(Long meetingId) {
+    public List<MeetingAwardDto> findMeetingAward(Long meetingId) {
         Meeting meeting = meetingRepository.findById(meetingId)
                 .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
 
         // 해당 Meeting에 해당하는 모든 통계 가져오기
-        List<AwardUserDto> awardUserDtoList = awardRepository.findAwardUser(meeting);
-        MeetingAwardDto meetingAwardDto = new MeetingAwardDto();
-        for (AwardUserDto awardUserDto : awardUserDtoList) {
-            AwardType awardType = awardUserDto.getAwardType();
-            if (awardType == AwardType.TALETELLER) {
-                meetingAwardDto.addTaleteller(awardUserDto);
-            } else if (awardType == AwardType.PHOTOGRAPHER) {
-                meetingAwardDto.addPhotographer(awardUserDto);
-            } else if (awardType == AwardType.PERFECTATTENDANCE) {
-                meetingAwardDto.addPerfectAttendance(awardUserDto);
-            }
-        }
+        List<MeetingAwardDto> meetingAwardDtoList = awardRepository.findAwardUser(meeting);
 
-        return meetingAwardDto;
+        // Type 별로 정렬
+        Collections.sort(meetingAwardDtoList, new Comparator<MeetingAwardDto>() {
+            @Override
+            public int compare(MeetingAwardDto o1, MeetingAwardDto o2) {
+                return o1.getType().compareTo(o2.getType());
+            }
+        });
+
+        return meetingAwardDtoList;
+    }
+
+    public List<FindUserResDto> findParticipant(Long userId, Long meetingId) {
+        Meeting meeting = meetingRepository.findById(meetingId)
+                .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
+
+        List<Participant> participantList = participantRepository.findByMeeting(meeting);
+
+        // sort
+        Collections.sort(participantList, new Comparator<Participant>() {
+            @Override
+            public int compare(Participant o1, Participant o2) {
+                // 나를 최우선으로
+                if (o2.getUser().getId() == userId) {
+                    return 1;
+                } else {
+                    // 닉네임 사전순
+                    return o1.getUser().getNickname().compareTo(o2.getUser().getNickname());
+                }
+            }
+        });
+
+        //  List<Participant> -> List<FindUserResDto>
+        return participantList.stream().map(participant -> FindUserResDto.builder()
+                .userId(participant.getUser().getId())
+                .nickname(participant.getUser().getNickname())
+                .profileImage(participant.getUser().getProfileImage())
+                .build()).collect(Collectors.toList());
     }
 }
