@@ -6,8 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 
 @Getter
 @ToString
+@RequiredArgsConstructor
 public class ModifyUserReqDto {
-    private String nickname;
-    private String profileImage;
+    private final String nickname;
+    private final String profileImage;
 
 }

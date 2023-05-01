@@ -56,10 +56,9 @@ dependencies {
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '3.1.1'
     implementation "io.github.openfeign:feign-httpclient:11.9.1"
 
-    // S3
-    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
-    compile group: 'commons-fileupload', name: 'commons-fileupload', version: '1.4'
-    compile group: 'commons-io', name: 'commons-io', version: '2.4'
+    // FCM (Firebase Cloud Messaging
+    implementation 'com.google.firebase:firebase-admin:6.8.1'
+    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.2.2'
 
 }
 
