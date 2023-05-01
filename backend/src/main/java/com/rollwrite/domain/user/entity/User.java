@@ -1,7 +1,7 @@
 package com.rollwrite.domain.user.entity;
 
 import com.rollwrite.domain.meeting.entity.Participant;
-import com.rollwrite.domain.meeting.entity.Statistics;
+import com.rollwrite.domain.meeting.entity.Award;
 import com.rollwrite.domain.notification.entity.Notification;
 import com.rollwrite.domain.question.entity.Answer;
 import com.rollwrite.domain.question.entity.QuestionParticipant;
@@ -10,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.checkerframework.checker.index.qual.LowerBoundUnknown;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -40,6 +41,9 @@ public class User extends BaseTimeEntity {
     @Column(length = 2083)
     private String profileImage;
 
+    @Column(length = 2083)
+    private String firebaseToken;
+
     @NotNull
     @Column
     @Enumerated(EnumType.STRING)
@@ -49,7 +53,7 @@ public class User extends BaseTimeEntity {
     private List<Participant> participantList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Statistics> statisticsList = new ArrayList<>();
+    private List<Award> awardList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<QuestionParticipant> questionParticipantList = new ArrayList<>();
@@ -66,6 +70,11 @@ public class User extends BaseTimeEntity {
         this.nickname = nickname;
         this.profileImage = profileImage;
         this.type = type;
+    }
+
+    public void update(String nickname, String profileImage) {
+        this.nickname = nickname;
+        this.profileImage = profileImage;
     }
 
 }

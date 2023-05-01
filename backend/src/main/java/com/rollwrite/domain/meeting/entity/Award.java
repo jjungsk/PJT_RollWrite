@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Statistics extends BaseTimeEntity {
+public class Award extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +22,7 @@ public class Statistics extends BaseTimeEntity {
     @NotNull
     @Column
     @Enumerated(EnumType.STRING)
-    private StatisticsType type;
+    private AwardType type;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

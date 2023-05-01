@@ -36,7 +36,6 @@ import java.util.concurrent.TimeUnit;
 @Transactional(readOnly = true)
 public class AuthService {
 
-
     @Value("${auth.kakao.redirect-uri}")
     private String REDIRECT_URL;
     @Value("${auth.kakao.rest-key}")
@@ -153,6 +152,7 @@ public class AuthService {
     }
 
     // Main 함수 1. 카카오 로그인 메인 로직
+    @Transactional
     public AddTokenCookieDto kakaoLogin(String code) throws JsonProcessingException {
 
         // 1. "인가 코드"로 "accessToken" 요청

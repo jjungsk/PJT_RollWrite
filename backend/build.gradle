@@ -63,6 +63,10 @@ dependencies {
     // gson
     implementation 'com.google.code.gson:gson:2.9.0'
 
+    // FCM (Firebase Cloud Messaging
+    implementation 'com.google.firebase:firebase-admin:6.8.1'
+    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.2.2'
+
 }
 
 tasks.named('test') {

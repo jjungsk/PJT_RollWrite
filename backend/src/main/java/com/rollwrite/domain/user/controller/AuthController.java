@@ -72,13 +72,13 @@ public class AuthController {
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.LOGOUT_SUCCESS), HttpStatus.OK);
     }
 
-
     // * spring security 에서 로그인한 유저 정보 중 identifier 값 가져오는 방법
     @GetMapping("/search/me")
     public void searchMe(@ApiIgnore Authentication authentication) {
         // CustomUserDetails.class 정보 가져오기 by Authentication
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
-        log.info("Authentication userId : {}", userDetails.getUserId());
+        Long userId = userDetails.getUserId();
+        log.info("Authentication userId : {}", userId);
 
         // by. spring security 의 context holder
         String identifier = (String) SecurityContextHolder.getContext().getAuthentication().getName();
