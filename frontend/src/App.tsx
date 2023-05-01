@@ -21,6 +21,7 @@ import InvitePage from "./pages/InvitePage/InvitePage";
 import AnswerPage from "./pages/AnswerPage/AnswerPage";
 import ResultPage from "./pages/ResultPage/ResultPage";
 import JoinPage from "./pages/JoinPage/JoinPage";
+import AwardPage from "./pages/AwardPage/AwardPage";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -68,7 +69,7 @@ function App() {
       </Route>
       <Route path="/result/:meetingId" element={<ResultPage />} />
       <Route path="/join/:inviteCode" element={<JoinPage />} />
-      <Route path="/award/:meetingId" element={<JoinPage />} />
+      <Route path="/award/:meetingId" element={<AwardPage />} />
       <Route path="/create" element={<CreateGroupPage />} />
     </Routes>
   );
