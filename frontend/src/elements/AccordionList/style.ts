@@ -1,17 +1,22 @@
 import styled from "styled-components";
 
 const AccordionItem = styled.div`
-  width: 80%;
+  width: 86%;
   margin: auto;
   border-bottom: 1px solid var(--darkgray-color);
   overflow: hidden;
+
+  & > div:last-child {
+    position: relative;
+    padding-inline: 4px;
+  }
 `;
 
 const AccordionItemTitle = styled.div<{ isOpen: boolean }>`
   position: relative;
   display: flex;
-  height: 48px;
-  padding-block: 13px;
+  height: 44px;
+  padding-block: 11px;
   font-weight: bold;
   font-size: 18px;
   line-height: 22px;
@@ -20,18 +25,13 @@ const AccordionItemTitle = styled.div<{ isOpen: boolean }>`
   z-index: 99;
 
   & > svg {
-    width: 24px;
-    height: 24px;
+    position: absolute;
+    right: 5%;
+    width: 20px;
+    height: 20px;
     transform: ${(props) => (props.isOpen ? "rotate(180deg)" : "rotate(0deg)")};
+    transition: 0.3s;
   }
 `;
 
-const AccordionItemContent = styled.div<{ isOpen: boolean }>`
-  position: relative;
-  height: fit-content;
-  padding-block: 8px 16px;
-
-  animation: spread 0.4s;
-`;
-
-export { AccordionItem, AccordionItemTitle, AccordionItemContent };
+export { AccordionItem, AccordionItemTitle };
