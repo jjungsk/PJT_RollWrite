@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, { useRef, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import {
   NameContainer,
@@ -9,7 +9,6 @@ import {
 import TextArea from "../../elements/TextArea/TextArea";
 import GhostBtn from "../../elements/Button/GhostBtn";
 import { ReactComponent as ImgBtn } from "../../assets/AddImgBtn.svg";
-import { ReactComponent as ImgIcon } from "../../assets/ImgIcon.svg";
 
 // 추가로 구현해야할 부분
 // 1. 데이터 저장, 수정 api 연결

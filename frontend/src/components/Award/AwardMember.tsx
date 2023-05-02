@@ -41,7 +41,7 @@ function AwardMember({
           },
         }}
       >
-        <ProfileImg size={280} bgImg={profile.profileImg} />
+        <ProfileImg size={280} bgImg={profile.profileImage} />
       </motion.div>
       <GhostBtn
         label="확인"

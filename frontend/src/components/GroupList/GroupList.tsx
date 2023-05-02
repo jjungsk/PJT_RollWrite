@@ -5,12 +5,19 @@ import "swiper/css/navigation";
 import GroupCard from "../../components/GroupCard/GroupCard";
 import { GroupInfo } from "../../constants/types";
 
-interface GroupListProps {
+interface Props {
   groupList?: GroupInfo[];
   onIndexChanged: (index: number) => void;
+  setHomeContent: React.Dispatch<React.SetStateAction<number>>;
+  homeContent: number;
 }
 
-function GroupList({ groupList, onIndexChanged }: GroupListProps) {
+function GroupList({
+  groupList,
+  onIndexChanged,
+  setHomeContent,
+  homeContent,
+}: Props) {
   return (
     <Swiper
       style={{ height: "128px", width: "100vw", maxWidth: "450px" }}
@@ -20,7 +27,11 @@ function GroupList({ groupList, onIndexChanged }: GroupListProps) {
     >
       {groupList?.map((groupInfo, i) => (
         <SwiperSlide key={i}>
-          <GroupCard groupInfo={groupInfo} />
+          <GroupCard
+            groupInfo={groupInfo}
+            setHomeContent={setHomeContent}
+            homeContent={homeContent}
+          />
         </SwiperSlide>
       ))}
     </Swiper>

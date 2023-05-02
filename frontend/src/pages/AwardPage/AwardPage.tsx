@@ -9,32 +9,32 @@ function AwardPage() {
     {
       userId: number;
       nickname: string;
-      profileImg: string;
+      profileImage: string;
       type: string;
     }[]
   >([
     {
       userId: 1,
       nickname: "닉네임1",
-      profileImg: "/sample_profile_image.png",
+      profileImage: "/sample_profile_image.png",
       type: "TALETELLER",
     },
     {
       userId: 2,
       nickname: "닉네임2",
-      profileImg: "/sample_profile_image.png",
+      profileImage: "/sample_profile_image.png",
       type: "TALETELLER",
     },
     {
       userId: 1,
       nickname: "닉네임1",
-      profileImg: "/sample_profile_image.png",
+      profileImage: "/sample_profile_image.png",
       type: "PHOTOGRAPHER",
     },
     {
       userId: 1,
       nickname: "닉네임1",
-      profileImg: "/sample_profile_image.png",
+      profileImage: "/sample_profile_image.png",
       type: "PERFECTATTENDANCE",
     },
   ]);
