@@ -17,7 +17,7 @@ function Oauth() {
         .then((res) => {
           dispatch(updateLoginStatus(true));
           dispatch(updateAccessToken(res.data.accessToken));
-          navigate(routeHistory || "/"); // 실패할 경우 기본 경로로 이동
+          navigate(routeHistory || "/question"); // 실패할 경우 기본 경로로 이동
         })
         .catch((err) => {
           console.error(err);
