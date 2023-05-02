@@ -6,7 +6,7 @@ export const handleKakaoClick = (url: string) => {
     content: {
       title: "안녕하세요",
       description: `모임에 초대합니다.`,
-      imageUrl: "/logo512.png",
+      imageUrl: "https://k8a508.p.ssafy.io/box.png",
       link: {
         mobileWebUrl: shareUrl,
         webUrl: shareUrl,
