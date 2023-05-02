@@ -19,8 +19,8 @@ public class MeetingCustomRepositoryImpl implements MeetingCustomRepository {
         return jpaQueryFactory
                 .select(meeting.id)
                 .from(meeting)
-                .where(meeting.startDay.before(LocalDate.now()))
-                .where(meeting.endDay.after(LocalDate.now()))
+                .where(meeting.startDay.before(LocalDate.now()).or(meeting.startDay.eq(LocalDate.now())))
+                .where(meeting.endDay.after(LocalDate.now()).or(meeting.endDay.eq(LocalDate.now())))
                 .fetch();
     }
 
