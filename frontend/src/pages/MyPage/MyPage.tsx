@@ -215,7 +215,7 @@ function MyPage() {
           >
             <GroupCard
               complete
-              width="320px"
+              width="calc(100% - 60px)"
               height="90px"
               groupInfo={group}
               margin="16px auto"

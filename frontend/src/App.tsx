@@ -1,5 +1,11 @@
 import React, { useEffect } from "react";
-import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import {
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "./constants/types";
 import { updateRouteHistory } from "./store/authReducer";
 import { axiosInstance } from "./apis/instance";
@@ -45,6 +51,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<MainLayout />}>
+        <Route path="/" element={<Navigate to="/question" />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/question" element={<QuestionPage />} />
         <Route path="/my" element={<MyPage />} />

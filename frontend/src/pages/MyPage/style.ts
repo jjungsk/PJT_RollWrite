@@ -72,7 +72,7 @@ const GroupListContainer = styled.div`
   overflow-y: scroll;
 
   & > div {
-    width: fit-content;
+    width: 100%;
     margin: auto;
   }
 
