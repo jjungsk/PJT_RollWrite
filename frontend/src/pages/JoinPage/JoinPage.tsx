@@ -10,7 +10,7 @@ function JoinPage() {
       joinGroup(inviteCode)
         .then((res) => {
           console.log(res);
-          navigate("/");
+          navigate("/question ");
         })
         .catch((err) => {
           console.error(err);
