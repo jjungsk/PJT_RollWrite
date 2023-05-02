@@ -108,8 +108,7 @@ public class QuestionService {
         }
 
         return AddAnswerResDto.builder()
-                .meetingId(meeting.getId())
-                .isDone(participant.isDone())
+                .participant(participant)
                 .build();
     }
 
