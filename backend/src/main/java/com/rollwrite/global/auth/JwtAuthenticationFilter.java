@@ -12,6 +12,8 @@ import org.springframework.security.authentication.AuthenticationCredentialsNotF
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -85,6 +89,14 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
                     log.info("Redis Black List에 등록된 accessToken 입니다.");
                     return new TokenExpiredException("재 로그인이 필요합니다.");
                 });
+
+        // setAuthorities
+        List<GrantedAuthority> roles = new ArrayList<>();
+        roles.add(new SimpleGrantedAuthority("ROLE_USER"));
+        if("ADMIN".equals(decodedJWT.getClaim("role").asString())) {
+            roles.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
+        userDetails.setAuthorities(roles);
 
         UsernamePasswordAuthenticationToken jwtAuthentication = new UsernamePasswordAuthenticationToken(identifier,
                 null, userDetails.getAuthorities());

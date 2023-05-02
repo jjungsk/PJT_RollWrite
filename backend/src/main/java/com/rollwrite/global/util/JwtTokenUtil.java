@@ -55,10 +55,11 @@ public class JwtTokenUtil {
                 .build();
     }
 
-    public static String createAccessToken(String identifier) {
+    public static String createAccessToken(String identifier, String role) {
         Date expires = JwtTokenUtil.createTokenExpiration(accessTokenExpirationTime);
         log.info("accessToken 암호화 전 시간 : {}", expires);
         return JWT.create()
+                .withClaim("role", role)
                 .withSubject(identifier)
                 .withExpiresAt(expires)
                 .withIssuer(ISSUER)
@@ -66,9 +67,10 @@ public class JwtTokenUtil {
                 .sign(Algorithm.HMAC512(secretKeyAT.getBytes()));
     }
 
-    public static String createRefreshToken(String identifier) {
+    public static String createRefreshToken(String identifier, String role) {
         Date expires = JwtTokenUtil.createTokenExpiration(refreshTokenExpirationTime);
         return JWT.create()
+                .withClaim("role", role)
                 .withSubject(identifier)
                 .withExpiresAt(expires)
                 .withIssuer(ISSUER)
