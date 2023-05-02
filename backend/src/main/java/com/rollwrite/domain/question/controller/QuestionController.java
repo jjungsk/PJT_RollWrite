@@ -46,14 +46,14 @@ public class QuestionController {
     }
 
     @PostMapping("/answer")
-    public ResponseEntity<ApiResponse> addAnswer(@ApiIgnore Authentication authentication,
-                                                 @RequestPart AddAnswerReqDto addAnswerReqDto,
-                                                 @RequestPart(required = false) MultipartFile image) throws IOException {
+    public ResponseEntity<ApiResponse<AddAnswerResDto>> addAnswer(@ApiIgnore Authentication authentication,
+                                                                  @RequestPart AddAnswerReqDto addAnswerReqDto,
+                                                                  @RequestPart(required = false) MultipartFile image) throws IOException {
         log.info("답변 생성 addAnswerReqDto : {}", addAnswerReqDto);
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
         Long userId = userDetails.getUserId();
-        questionService.addAnswer(userId, addAnswerReqDto, image);
-        return new ResponseEntity<>(ApiResponse.success(SuccessCode.ADD_ANSWER_SUCCESS), HttpStatus.OK);
+        AddAnswerResDto addAnswerResDto = questionService.addAnswer(userId, addAnswerReqDto, image);
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.ADD_ANSWER_SUCCESS, addAnswerResDto), HttpStatus.OK);
     }
 
     @PatchMapping("/answer")
