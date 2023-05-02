@@ -27,48 +27,41 @@ import { axiosInstance } from "./apis/instance";
 
 function App() {
   const accessToken = useAppSelector((state) => state.auth.accessToken);
+  const isLogin = useAppSelector((state) => state.auth.isLogin);
+  const routeHistory = useAppSelector((state) => state.auth.routeHistory);
+
   // 헤더 디폴트 추가
   if (accessToken) {
     axiosInstance.defaults.headers.common[
       "Authorization"
     ] = `Bearer ${accessToken}`;
   }
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
-  const isLogin = useAppSelector((state) => state.auth.accessToken).length > 0;
-  const routeHistory = useAppSelector((state) => state.auth.routeHistory);
   const location = useLocation();
+  console.log("시작");
+  console.log(location.pathname);
+  console.log(isLogin);
+  console.log(accessToken);
+  console.log(routeHistory);
 
   useEffect(() => {
     const currentPath = location.pathname;
-
-    if (!isLogin) {
-      if (currentPath !== "/login") {
-        console.log("a");
-        dispatch(updateRouteHistory(currentPath));
-      }
-      console.log("b");
+    if (!isLogin && currentPath !== "/login" && currentPath !== "/oauth") {
+      console.log("a");
       navigate("/login");
+      dispatch(updateRouteHistory(currentPath));
+    } else if (isLogin && currentPath === "/oauth") {
+      navigate(routeHistory);
     }
-
-    if (isLogin) {
-      if (currentPath === "/login") {
-        navigate("");
-      }
-      if (routeHistory !== "") {
-        navigate(routeHistory);
-        dispatch(updateRouteHistory(""));
-      }
-    }
-  }, []);
+  }, [dispatch, isLogin, location.pathname, navigate, routeHistory]);
 
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/oauth" element={<OauthPage />} />
       <Route path="/" element={<MainLayout />}>
-        <Route path="/" element={<Navigate to="/question" />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/question" element={<QuestionPage />} />
         <Route path="/my" element={<MyPage />} />
