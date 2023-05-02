@@ -9,14 +9,16 @@ public class ParticipantDto {
 
     private final Long userId;
     private final String profileImage;
+    private final String nickname;
 
-    public ParticipantDto(Long id, String content) {
+    public ParticipantDto(Long id, String content, String nickname) {
         this.userId = id;
         this.profileImage = content;
+        this.nickname = nickname;
     }
 
     public static ParticipantDto of(Participant participant) {
         User user = participant.getUser();
-        return new ParticipantDto(user.getId(), user.getProfileImage());
+        return new ParticipantDto(user.getId(), user.getProfileImage(), user.getNickname());
     }
 }

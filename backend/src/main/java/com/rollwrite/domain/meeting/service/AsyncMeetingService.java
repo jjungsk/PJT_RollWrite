@@ -59,6 +59,7 @@ public class AsyncMeetingService {
         // 파싱된 객체 저장
         for (AsyncChatGptDto asyncChatGptDto : answerList) {
             log.info("질문 : " + asyncChatGptDto.getQuestion());
+            log.info("이모지 : " + asyncChatGptDto.getEmoji());
             log.info("이모지 : " + asyncChatGptDto.getEmoji().substring(0, 1));
             QuestionGpt questionGpt = QuestionGpt.builder()
                     .emoji(asyncChatGptDto.getEmoji().substring(0, 1))
