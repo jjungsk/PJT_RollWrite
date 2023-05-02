@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * 구현 methods
@@ -32,9 +33,13 @@ public class UserController {
     private final UserService userService;
 
     // 1. User 회원 정보 조회
-    @GetMapping("/{identifier}")
-    public ResponseEntity<ApiResponse<?>> userDetails(@PathVariable String identifier) {
-        FindUserResDto findUserResDto = userService.findUser(identifier);
+    @GetMapping({"/", "/{userId}"})
+    public ResponseEntity<ApiResponse<?>> userDetails(@ApiIgnore Authentication authentication,
+                                                      @PathVariable(required = false) Optional<Long> userId) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
+        Long id = userId.orElse(userDetails.getUserId());
+
+        FindUserResDto findUserResDto = userService.findUser(id);
 
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_USER_SUCCESS, findUserResDto), HttpStatus.OK);
     }

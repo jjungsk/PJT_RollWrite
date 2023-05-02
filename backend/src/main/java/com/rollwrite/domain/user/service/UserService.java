@@ -25,8 +25,8 @@ public class UserService {
     private final UserRepository userRepository;
 
     // 1. User 회원 정보 조희
-    public FindUserResDto findUser(String identifier) {
-        User user = userRepository.findByIdentifier(identifier)
+    public FindUserResDto findUser(Long userId) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
         return FindUserResDto.builder()
