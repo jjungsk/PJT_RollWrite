@@ -1,5 +1,6 @@
 package com.rollwrite.domain.user.controller;
 
+import com.rollwrite.domain.user.dto.DetailsUserResDto;
 import com.rollwrite.domain.user.dto.FindUserResDto;
 import com.rollwrite.domain.user.service.UserService;
 import com.rollwrite.global.auth.CustomUserDetails;
@@ -39,9 +40,9 @@ public class UserController {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
         Long id = userId.orElse(userDetails.getUserId());
 
-        FindUserResDto findUserResDto = userService.findUser(id);
+        DetailsUserResDto detailsUserResDto = userService.findUser(id);
 
-        return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_USER_SUCCESS, findUserResDto), HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_USER_SUCCESS, detailsUserResDto), HttpStatus.OK);
     }
 
     // 2. User 회원 정보 수정
