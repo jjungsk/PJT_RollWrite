@@ -31,7 +31,7 @@ public class AsyncMeetingService {
 
     @Async
     public void saveGptQuestion(String tag, Meeting meeting, long period) {
-        String query = "를 공통으로 이루어진 모임이 있어. 이 모임에서 서로 에게 물어볼 만한 20자 이내의 흥미로운 질문 " + period + "개와 그와 연관된 이모지도 같이 추천해줘, 형식은 json 배열이야, {\"question\":\"content\",\"emoji\": \"🍕\"}";
+        String query = "를 공통으로 이루어진 모임이 있어. 이 모임에서 서로 에게 물어볼 만한 20자 이내의 흥미로운 질문 " + period + "개와 그와 연관된 이모지도 딱 1개씩만 같이 추천해줘, 형식은 json 배열이야, {\"question\":\"content\",\"emoji\": \"🍕\"}";
         List<MessageDto> messageDtoList = new ArrayList<>();
         MessageDto messageDto = MessageDto.builder()
                 .role("user")
@@ -53,7 +53,8 @@ public class AsyncMeetingService {
         Gson gson = new Gson();
 
         // List<AsyncChatGptDto> 타입으로 파싱
-        Type answerListType = new com.google.gson.reflect.TypeToken<List<AsyncChatGptDto>>() {}.getType();
+        Type answerListType = new com.google.gson.reflect.TypeToken<List<AsyncChatGptDto>>() {
+        }.getType();
         List<AsyncChatGptDto> answerList = gson.fromJson(response, answerListType);
 
         // 파싱된 객체 저장
@@ -61,7 +62,7 @@ public class AsyncMeetingService {
             log.info("질문 : " + asyncChatGptDto.getQuestion());
             log.info("이모지 : " + asyncChatGptDto.getEmoji());
             QuestionGpt questionGpt = QuestionGpt.builder()
-                    .emoji(asyncChatGptDto.getEmoji().split("")[0])
+                    .emoji(asyncChatGptDto.getEmoji())
                     .content(asyncChatGptDto.getQuestion())
                     .meeting(meeting)
                     .build();
