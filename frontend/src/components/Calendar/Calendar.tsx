@@ -28,7 +28,7 @@ import {
   isAfter,
   isBefore,
 } from "date-fns";
-import { initTouch, swipeDirection } from "../../apis/swipeDetector";
+import { initTouch, swipeDirection } from "../../utils/swipeDetector";
 import { GroupInfo } from "../../constants/types";
 
 const SPROUT_LIST = [

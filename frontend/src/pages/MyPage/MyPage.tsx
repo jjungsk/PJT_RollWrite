@@ -27,6 +27,13 @@ function MyPage() {
 
   useEffect(() => {
     // TODO: 프로필 데이터 API 호출
+    // getUserDetail()
+    //   .then((res) => {
+    //     setProfile(res.data);
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
     const profileData = {
       nickname: "내이름은닉네임이다앙",
       profileImage: "/sample_profile_image.png",

@@ -65,10 +65,38 @@ const SettingMenuItemText = styled.div`
   }
 `;
 
+const SettingBtnContainer = styled.div`
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  & > div {
+    margin: 3vh 10px 0;
+
+    button {
+      width: 160px;
+      height: 52px;
+    }
+  }
+
+  @media (height < 700px) {
+    display: flex;
+    justify-content: center;
+
+    & > div > button {
+      width: 140px;
+      height: 48px;
+    }
+  }
+`;
+
 export {
   SettingContainer,
   SettingSection,
   SettingSectionTitle,
   SettingMenuItem,
   SettingMenuItemText,
+  SettingBtnContainer,
 };

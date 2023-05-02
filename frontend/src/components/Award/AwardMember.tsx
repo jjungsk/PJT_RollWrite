@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { ProfileImg } from "../../pages/MyPage/style";
 import GhostBtn from "../../elements/Button/GhostBtn";
 import { Profile } from "../../constants/types";
-import { pop } from "../../apis/pop";
+import { pop } from "../../utils/pop";
 
 interface Props {
   profile: Profile;

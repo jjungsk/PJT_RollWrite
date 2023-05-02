@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion, useAnimation } from "framer-motion";
-import { pop, render } from "../../apis/pop";
+import { pop, render } from "../../utils/pop";
 
 interface Props {
   setAwardSteps: React.Dispatch<React.SetStateAction<number>>;
