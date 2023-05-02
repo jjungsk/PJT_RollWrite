@@ -10,6 +10,7 @@ import {
 } from "./style";
 import GhostBtn from "../../elements/Button/GhostBtn";
 import Btn from "../../assets/AddImgBtn.svg";
+import { createAnswer, updateAnswer } from "../../apis/question";
 
 export default function AnswerPage() {
   // const location = useLocation();
@@ -26,27 +27,24 @@ export default function AnswerPage() {
   // const questionId = state.questionId;
   // const meetingId = state.meetingId;
 
+  // 테스트용 데이터
   const title = "테스트입니다";
   const day = "날짜입니다";
   const question = "테스트질문입니다";
+  const questionId = 1;
+  const meetingId = 1;
 
+  // 이미지
   const [ImgFile, setImgFile] = useState<File | undefined>();
   const [tmpImg, settmpImg] = useState<string>("");
   // 답변
-  const [answer, setAnswer] = useState<string>();
+  const [answer, setAnswer] = useState<string>("");
   // 답변 입력하면 answer에 넣어줌
   const handleAnswer = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setAnswer(e.target.value);
-    console.log(e.target.value);
   };
 
-  // form 데이터에 사진, 답변 저장
-  // const formData = new FormData();
-  // formData.append("answer", answer);
-  // formData.append("image", ImgFile);
-
-  // api 연결해서 데이터 저장
-
+  // 이미지 업로드 및 미리보기
   const handleImg = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files[0]) {
@@ -61,6 +59,31 @@ export default function AnswerPage() {
     }
   };
 
+  // 버튼 눌렀을 때 api로 데이터 전송
+  const handleSaveBtn = () => {
+    // formData에 이미지, 답변 저장
+    const formData = new FormData();
+    const data = JSON.stringify({
+      answer: answer,
+      meetingId: meetingId,
+      questionId: questionId,
+    });
+    const jsonData = new Blob([data], { type: "application/json" });
+    formData.append("data", jsonData);
+    if (ImgFile) {
+      formData.append("image", ImgFile);
+    }
+    // @ts-ignore
+    for (let value of formData.values()) {
+      console.log(value);
+    }
+
+    // 최초 입력
+    createAnswer(formData);
+
+    // 수정
+  };
+
   return (
     <>
       <NameContainer>
@@ -70,7 +93,7 @@ export default function AnswerPage() {
       <ImgContainer BgImg={tmpImg}>
         <IconContainer>
           <label htmlFor="profile-img">
-            <img src={Btn} alt="" />
+            <img src={Btn} alt="img" />
           </label>
         </IconContainer>
         <input
@@ -82,9 +105,9 @@ export default function AnswerPage() {
         />
       </ImgContainer>
       <TextContainer>
-        <ContentContainer onChange={handleAnswer}></ContentContainer>
+        <ContentContainer onChange={handleAnswer}>{answer}</ContentContainer>
       </TextContainer>
-      <GhostBtn label="저장하기"></GhostBtn>
+      <GhostBtn label="저장하기" onClick={handleSaveBtn}></GhostBtn>
     </>
   );
 }
