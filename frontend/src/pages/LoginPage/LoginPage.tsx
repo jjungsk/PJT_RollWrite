@@ -3,7 +3,7 @@ import { LogoContainer, BtnContainer } from "./style";
 import { ReactComponent as Logo } from "../../assets/Logo.svg";
 import { ReactComponent as KakaoBtn } from "../../assets/Kakao.svg";
 
-import { redirectKakao } from "../../apis/home";
+import { redirectKakao } from "../../apis/user";
 
 function LoginPage() {
   const handleClickLoginBtn = () => {

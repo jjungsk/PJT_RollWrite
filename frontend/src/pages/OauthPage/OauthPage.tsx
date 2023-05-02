@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { kakaoOuath } from "../../apis/home";
+import { kakaoOuath } from "../../apis/user";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { updateAccessToken, updateLoginStatus } from "../../store/authReducer";
 import { useAppDispatch, useAppSelector } from "../../constants/types";

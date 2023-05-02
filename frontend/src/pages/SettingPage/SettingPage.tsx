@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  SettingBtnContainer,
   SettingContainer,
   SettingMenuItem,
   SettingMenuItemText,
@@ -8,8 +9,57 @@ import {
 } from "./style";
 import SwitchBtn from "../../elements/Button/SwitchBtn";
 import { ReactComponent as Back } from "../../assets/Back.svg";
+import FillBtn from "../../elements/Button/FillBtn";
+import GhostBtn from "../../elements/Button/GhostBtn";
+import { logout, withdraw } from "../../apis/user";
+import { updateAccessToken, updateLoginStatus } from "../../store/authReducer";
+import { useAppDispatch } from "../../constants/types";
+import { useNavigate } from "react-router-dom";
 
 function SettingPage() {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const handleClickLogoutBtn = () => {
+    logout()
+      .then((res) => {
+        if (res.statusCode === 200) {
+          alert("정상적으로 로그아웃이 되었습니다.");
+          dispatch(updateLoginStatus(false));
+          dispatch(updateAccessToken(""));
+          navigate("/login");
+        } else {
+          alert("로그아웃 중 문제가 발생하였습니다.");
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        alert("로그아웃 중 문제가 발생하였습니다.");
+      });
+  };
+
+  const handleClickWithdrawBtn = () => {
+    var checkWithdraw = window.confirm("정말 탈퇴하시겠습니까?");
+
+    if (checkWithdraw) {
+      withdraw()
+        .then((res) => {
+          if (res.statusCode === 200) {
+            alert("정상적으로 탈퇴하었습니다.");
+            dispatch(updateLoginStatus(false));
+            dispatch(updateAccessToken(""));
+            navigate("/login");
+          } else {
+            alert("회원탈퇴 중 문제가 발생하였습니다.");
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          alert("회원탈퇴 중 문제가 발생하였습니다.");
+        });
+    }
+  };
+
   return (
     <SettingContainer>
       <SettingSection>
@@ -48,6 +98,15 @@ function SettingPage() {
           <div>1.1.1</div>
         </SettingMenuItem>
       </SettingSection>
+
+      <SettingBtnContainer>
+        <div>
+          <FillBtn label="로그아웃" onClick={handleClickLogoutBtn} />
+        </div>
+        <div>
+          <GhostBtn label="회원탈퇴" onClick={handleClickWithdrawBtn} />
+        </div>
+      </SettingBtnContainer>
     </SettingContainer>
   );
 }
