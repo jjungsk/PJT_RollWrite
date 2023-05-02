@@ -24,6 +24,8 @@ services:
   db-redis:
     container_name: db-redis
     image: redis:alpine
+    environment:
+      - TZ=Asia/Seoul
     hostname: db-redis
     labels:
       - "name=db-redis"
@@ -34,6 +36,8 @@ services:
 
   backend:
     build: .
+    environment:
+      - TZ=Asia/Seoul
     ports:
       - 8081:8081
     restart: always
