@@ -181,11 +181,12 @@ public class AuthService {
         refreshTokenRepository.saveRefreshToken(refreshTokenEntity);
 
         ResponseCookie responseCookie = ResponseCookie.from("refreshToken", refreshToken)
-                .maxAge(REFRESH_TOKEN_EXPIRATION / 1000) // 초 단위
                 .path("/")
-                .secure(true)
                 .sameSite("None")
                 .httpOnly(true)
+                .secure(true)
+                .maxAge(REFRESH_TOKEN_EXPIRATION / 1000) // 초 단위
+                .domain("localhost")
                 .build();
 
         return AddTokenCookieDto.builder()
