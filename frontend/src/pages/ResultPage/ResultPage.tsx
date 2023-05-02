@@ -187,7 +187,7 @@ function ResultPage() {
   }, [meetingId]);
 
   const handleClickBackBtn = () => {
-    navigate(-1);
+    navigate("/my");
   };
 
   const handleClickMenuBtn = () => {
