@@ -7,7 +7,7 @@ function useHomePage() {
   const navigate = useNavigate();
   const [homeContent, setHomeContent] = useState(0); // 0:달력, 1:질문, 2:참여지
   const [groupList, setGroupList] = useState<GroupInfo[]>([]);
-  const [nowIndex, setNowIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [questionList, setQuestionList] = useState<Question[]>();
 
   useEffect(() => {
@@ -22,24 +22,23 @@ function useHomePage() {
   }, []);
 
   useEffect(() => {
-    groupList?.length > 0
-      ? getQuestionList(groupList[nowIndex].meetingId)
-          .then((res) => {
-            setQuestionList(res.data);
-          })
-          .catch((error) => {
-            console.error(error);
-          })
-      : alert("모임이 없습니다");
-  }, [nowIndex, groupList]);
+    groupList?.length > 0 &&
+      getQuestionList(groupList[currentIndex].meetingId)
+        .then((res) => {
+          setQuestionList(res.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+  }, [currentIndex, groupList]);
 
   return {
     navigate,
     homeContent,
     setHomeContent,
     groupList,
-    nowIndex,
-    setNowIndex,
+    currentIndex,
+    setCurrentIndex,
     questionList,
   };
 }

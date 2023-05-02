@@ -11,9 +11,9 @@ function HomePage() {
     homeContent,
     setHomeContent,
     groupList,
-    nowIndex,
+    currentIndex,
     questionList,
-    setNowIndex,
+    setCurrentIndex,
   } = useHomePage();
 
   return (
@@ -31,7 +31,7 @@ function HomePage() {
 
       <GroupList
         groupList={groupList}
-        onIndexChanged={(index) => setNowIndex(index)}
+        onIndexChanged={(index) => setCurrentIndex(index)}
       />
 
       {groupList && questionList && (
@@ -39,9 +39,11 @@ function HomePage() {
           homeContent={homeContent}
           setHomeContent={setHomeContent}
           questionList={questionList}
-          groupInfo={groupList[nowIndex]}
+          groupInfo={groupList[currentIndex]}
         />
       )}
+
+      {groupList.length === 0 && <div>모임이없습니다</div>}
     </HomePageContainer>
   );
 }
