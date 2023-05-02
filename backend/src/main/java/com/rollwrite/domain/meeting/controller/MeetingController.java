@@ -48,9 +48,10 @@ public class MeetingController {
     }
 
     @PostMapping()
-    public ResponseEntity<ApiResponse> addMeeting(
-            @RequestBody AddMeetingRequestDto addMeetingRequestDto) throws NoSuchAlgorithmException {
-        Long userId = 1L;
+    public ResponseEntity<ApiResponse> addMeeting(@ApiIgnore Authentication authentication,
+                                                  @RequestBody AddMeetingRequestDto addMeetingRequestDto) throws NoSuchAlgorithmException {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
+        Long userId = userDetails.getUserId();
         log.info("Meeting 생성" + addMeetingRequestDto.toString());
 
         AddMeetingResponseDto addMeetingResponseDto = meetingService.addMeeting(userId,
@@ -155,7 +156,7 @@ public class MeetingController {
     public ResponseEntity<ApiResponse> participantList(@ApiIgnore Authentication authentication, @PathVariable Long meetingId) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
         Long userId = userDetails.getUserId();
-        log.info("모임 참여자 전체 조회 meetingId : " + meetingId+" userId : "+userId);
+        log.info("모임 참여자 전체 조회 meetingId : " + meetingId + " userId : " + userId);
 
         List<FindUserResDto> findUserResDtoList = meetingService.findParticipant(userId, meetingId);
 
