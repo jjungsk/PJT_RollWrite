@@ -74,7 +74,7 @@ public class QuestionService {
     }
 
     @Transactional
-    public void addAnswer(Long userId, AddAnswerReqDto addAnswerReqDto, MultipartFile image) throws IOException {
+    public AddAnswerResDto addAnswer(Long userId, AddAnswerReqDto addAnswerReqDto, MultipartFile image) throws IOException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
@@ -101,12 +101,15 @@ public class QuestionService {
         answerRepository.save(answer);
 
         // 마지막 질문에 답했을 때 질문 종료
+        Participant participant = participantRepository.findByMeetingAndUser(meeting, user)
+                .orElseThrow(() -> new IllegalArgumentException("참여자를 찾을 수 없습니다"));
         if (meeting.getEndDay().equals(question.getCreatedAt().toLocalDate())) {
-            Participant participant = participantRepository.findByMeetingAndUser(meeting, user)
-                    .orElseThrow(() -> new IllegalArgumentException("참여자를 찾을 수 없습니다"));
-
             participant.updateIsDone(true);
         }
+
+        return AddAnswerResDto.builder()
+                .participant(participant)
+                .build();
     }
 
     @Transactional

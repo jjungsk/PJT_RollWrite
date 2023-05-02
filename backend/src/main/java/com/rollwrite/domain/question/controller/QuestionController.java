@@ -14,6 +14,7 @@ import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,14 +46,14 @@ public class QuestionController {
     }
 
     @PostMapping("/answer")
-    public ResponseEntity<ApiResponse> addAnswer(@ApiIgnore Authentication authentication,
-                                                 @RequestPart AddAnswerReqDto addAnswerReqDto,
-                                                 @RequestPart(required = false) MultipartFile image) throws IOException {
+    public ResponseEntity<ApiResponse<AddAnswerResDto>> addAnswer(@ApiIgnore Authentication authentication,
+                                                                  @RequestPart AddAnswerReqDto addAnswerReqDto,
+                                                                  @RequestPart(required = false) MultipartFile image) throws IOException {
         log.info("답변 생성 addAnswerReqDto : {}", addAnswerReqDto);
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
         Long userId = userDetails.getUserId();
-        questionService.addAnswer(userId, addAnswerReqDto, image);
-        return new ResponseEntity<>(ApiResponse.success(SuccessCode.ADD_ANSWER_SUCCESS), HttpStatus.OK);
+        AddAnswerResDto addAnswerResDto = questionService.addAnswer(userId, addAnswerReqDto, image);
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.ADD_ANSWER_SUCCESS, addAnswerResDto), HttpStatus.OK);
     }
 
     @PatchMapping("/answer")
@@ -84,6 +85,7 @@ public class QuestionController {
 
     // 수동으로 오늘 질문 생성
     @GetMapping("/job")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ApiResponse<String>> startJob() throws Exception {
         Map<String, JobParameter> parameters = new HashMap<>();
         parameters.put("timestamp", new JobParameter(System.currentTimeMillis()));
