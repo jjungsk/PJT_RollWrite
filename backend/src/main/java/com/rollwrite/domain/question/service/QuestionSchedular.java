@@ -22,7 +22,9 @@ public class QuestionSchedular {
     private final JobLauncher jobLauncher;
 
     // 매일 오전 8시
-    @Scheduled(cron = "0 0 8 * * *")
+//    @Scheduled(cron = "0 0 8 * * *")
+    // 2분마다
+    @Scheduled(cron = "0 */2 * * * *")
     public void runJob() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
         log.info("Starting the batch job");
         Map<String, JobParameter> parameters = new HashMap<>();
