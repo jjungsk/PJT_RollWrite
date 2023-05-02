@@ -29,6 +29,7 @@ const ImgContainer = styled.div<{ BgImg: string }>`
   border-radius: 10px;
   position: relative;
   background-color: rgb(0, 0, 0, 0.4);
+  background-position: center;
   ${(props: any) =>
     props.BgImg &&
     css`

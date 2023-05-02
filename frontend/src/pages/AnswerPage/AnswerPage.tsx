@@ -8,13 +8,11 @@ import {
 } from "./style";
 import TextArea from "../../elements/TextArea/TextArea";
 import GhostBtn from "../../elements/Button/GhostBtn";
-import { ReactComponent as ImgBtn } from "../../assets/AddImgBtn.svg";
-import { ReactComponent as ImgIcon } from "../../assets/ImgIcon.svg";
+import Btn from "../../assets/AddImgBtn.svg";
 
 // 추가로 구현해야할 부분
 // 1. 데이터 저장, 수정 api 연결
-// 2. 이미지 업로드
-// 3. 이미지 미리보기
+// 2. 디폴트 이미지 넣기
 
 export default function AnswerPage() {
   // const location = useLocation();
@@ -57,7 +55,7 @@ export default function AnswerPage() {
       <ImgContainer BgImg={tmpProfileImg}>
         <IconContainer>
           <label htmlFor="profile-img">
-            <ImgBtn></ImgBtn>
+            <img src={Btn} alt="" />
           </label>
         </IconContainer>
         <input
