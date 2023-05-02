@@ -96,6 +96,8 @@ function QuestionPage() {
                     title: questionList[currentSlide].title,
                     day: questionList[currentSlide].day,
                     question: questionList[currentSlide].question,
+                    questionId: questionList[currentSlide].questionId,
+                    meetingId: questionList[currentSlide].meetingId,
                   },
                 })
               }
