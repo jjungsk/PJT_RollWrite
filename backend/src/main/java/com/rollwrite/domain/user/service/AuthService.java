@@ -171,8 +171,9 @@ public class AuthService {
 
         // 4. 새로운 accessToken과 refreshToken 을 생성하여 redis에 refreshToken 저장
         String identifier = user.get().getIdentifier();
-        String accessToken = JwtTokenUtil.createAccessToken(identifier);
-        String refreshToken = JwtTokenUtil.createRefreshToken(identifier);
+        String role = user.get().getType().name();
+        String accessToken = JwtTokenUtil.createAccessToken(identifier, role);
+        String refreshToken = JwtTokenUtil.createRefreshToken(identifier, role);
 
         RefreshToken refreshTokenEntity = RefreshToken.builder()
                 .identifier(identifier)
@@ -212,7 +213,7 @@ public class AuthService {
         }
 
         // (3) accessToken 재발급
-        String accessToken = JwtTokenUtil.createAccessToken(identifier);
+        String accessToken = JwtTokenUtil.createAccessToken(identifier, decodedJWT.getClaim("role").asString());
         return AddAccessTokenResDto.builder()
                 .accessToken(accessToken)
                 .build();

@@ -12,13 +12,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * 구현 methods
@@ -85,5 +85,16 @@ public class AuthController {
         log.info("SecurityContextHolder identifier : {}", identifier);
     }
 
+    // 권한 테스트
+    @GetMapping("/test/admin")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<ApiResponse> testAdmin() throws Exception {
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.TEST, "Admin만 접근 가능합니다."), HttpStatus.OK);
+    }
 
+    @GetMapping("/test/user")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public ResponseEntity<ApiResponse> testUser() throws Exception {
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.TEST, "User도 접근 가능합니다."), HttpStatus.OK);
+    }
 }
