@@ -44,20 +44,20 @@ function AwardEnd({ award }: Props) {
       <AwardPageHeader>명예의 전당 🏆</AwardPageHeader>
       이야기 보따리 📚
       <AwardPageContent>
-        {t.map((profile) => {
-          return <ProfileImg size={80} bgImg={profile.profileImage} />;
+        {t.map((profile, i) => {
+          return <ProfileImg size={80} bgImg={profile.profileImage} key={i} />;
         })}
       </AwardPageContent>
       포토 그래퍼 📷
       <AwardPageContent>
-        {ph.map((profile) => {
-          return <ProfileImg size={80} bgImg={profile.profileImage} />;
+        {ph.map((profile, i) => {
+          return <ProfileImg size={80} bgImg={profile.profileImage} key={i} />;
         })}
       </AwardPageContent>
       프로 개근러 👍
       <AwardPageContent>
-        {pe.map((profile) => {
-          return <ProfileImg size={80} bgImg={profile.profileImage} />;
+        {pe.map((profile, i) => {
+          return <ProfileImg size={80} bgImg={profile.profileImage} key={i} />;
         })}
       </AwardPageContent>
       <GhostBtn

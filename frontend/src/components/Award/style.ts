@@ -21,4 +21,5 @@ const AwardPageContent = styled.div`
   display: flex;
   gap: 16px;
 `;
+
 export { AwardPageContainer, AwardPageHeader, AwardPageContent };
