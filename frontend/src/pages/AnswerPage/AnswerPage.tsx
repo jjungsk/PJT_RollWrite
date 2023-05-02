@@ -17,43 +17,36 @@ import { ReactComponent as ImgIcon } from "../../assets/ImgIcon.svg";
 // 3. 이미지 미리보기
 
 export default function AnswerPage() {
-  const location = useLocation();
-  const state = location.state as {
-    title: string;
-    day: number;
-    question: string;
-  };
-  const title = state.title;
-  const day = state.day;
-  const question = state.question;
+  // const location = useLocation();
+  // const state = location.state as {
+  //   title: string;
+  //   day: number;
+  //   question: string;
+  // };
+  // const title = state.title;
+  // const day = state.day;
+  // const question = state.question;
 
-  const imgRef = useRef<HTMLInputElement | null>(null);
-  const onImageChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (!e.target.files) {
-        return;
-      }
-      console.log(e.target.files[0].name);
-    },
-    []
-  );
+  const title = "테스트입니다";
+  const day = "날짜입니다";
+  const question = "테스트질문입니다";
 
-  //   const [imgFile, setImgFile] = useState<string | null>(null);
-  //   const saveImgFile = () => {
-  //     const file = imgRef.current.files[0];
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-  //     reader.onloadend = () => {
-  //       setImgFile(reader.result);
-  //     };
-  //   };
+  const [profileImgFile, setProfileImgFile] = useState<File | undefined>();
+  const [tmpProfileImg, setTmpProfileImg] = useState<string>("");
 
-  const handleImgBtn = useCallback(() => {
-    if (!imgRef.current) {
-      return;
+  const handleProfileImg = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files[0]) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (e.target) {
+          setTmpProfileImg(e.target.result as string);
+          setProfileImgFile(files[0]);
+        }
+      };
+      reader.readAsDataURL(files[0]);
     }
-    imgRef.current.click();
-  }, []);
+  };
 
   return (
     <>
@@ -61,16 +54,17 @@ export default function AnswerPage() {
         {title} D-{day}
       </NameContainer>
       <QuestionDiv>{question}</QuestionDiv>
-      <ImgContainer style={{ backgroundImage: "url()" }}>
+      <ImgContainer BgImg={tmpProfileImg}>
         <IconContainer>
-          <ImgBtn onClick={handleImgBtn}></ImgBtn>
+          <label htmlFor="profile-img">
+            <ImgBtn></ImgBtn>
+          </label>
         </IconContainer>
         <input
+          id="profile-img"
           type="file"
           accept="image/*"
-          id="img"
-          ref={imgRef}
-          onChange={onImageChange}
+          onChange={handleProfileImg}
           style={{ display: "none" }}
         />
       </ImgContainer>
