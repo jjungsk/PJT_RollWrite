@@ -8,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum SuccessCode {
 
+    // test
+    TEST(StatusCode.SUCCESS, "테스트 중입니다."),
+
     // user
     SIGNUP_SUCCESS(StatusCode.SUCCESS, "회원가입 완료되었습니다."),
     LOGIN_SUCCESS(StatusCode.SUCCESS, "로그인 완료되었습니다."),

@@ -88,6 +88,6 @@ public class QuestionController {
         Map<String, JobParameter> parameters = new HashMap<>();
         parameters.put("timestamp", new JobParameter(System.currentTimeMillis()));
         JobExecution jobExecution = jobLauncher.run(notificationAlarmJob, new JobParameters(parameters));
-        return new ResponseEntity<>(ApiResponse.success(SuccessCode.ADD_TODAY_QUESTION_SUCCESS, "Batch job "+ jobExecution.getStatus()), HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.ADD_TODAY_QUESTION_SUCCESS, "Batch job " + jobExecution.getStatus()), HttpStatus.OK);
     }
 }

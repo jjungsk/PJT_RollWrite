@@ -25,6 +25,7 @@ public class QuestionGptCustomRepositoryImpl implements QuestionGptCustomReposit
                 .where(questionGpt.meeting.id.eq(meetingId))
                 .where(questionGpt.isChoosed.eq(isChoosed))
                 .orderBy(Expressions.numberTemplate(Double.class, "function('rand')").asc())
-                .fetchOne());
+                .limit(1)
+                .fetchFirst());
     }
 }

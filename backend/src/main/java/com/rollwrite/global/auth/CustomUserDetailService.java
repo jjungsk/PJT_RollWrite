@@ -9,8 +9,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
 /**
  * 현재 Access Token으로 부터 인증된 유저의
  * 상세정보 (활성화 여부, 만료, 룰 등) 관련 서비스 정의
@@ -24,8 +22,8 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String identifier) throws UsernameNotFoundException {
-        Optional<User> user =
-                Optional.ofNullable(userRepository.findByIdentifier(identifier).get());
-        return new CustomUserDetails(user.orElse(null));
+        User user = userRepository.findByIdentifier(identifier)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
+        return new CustomUserDetails(user);
     }
 }
