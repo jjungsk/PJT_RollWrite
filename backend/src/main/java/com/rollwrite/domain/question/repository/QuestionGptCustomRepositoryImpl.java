@@ -26,6 +26,6 @@ public class QuestionGptCustomRepositoryImpl implements QuestionGptCustomReposit
                 .where(questionGpt.isChoosed.eq(isChoosed))
                 .orderBy(Expressions.numberTemplate(Double.class, "function('rand')").asc())
                 .limit(1)
-                .fetchOne());
+                .fetchFirst());
     }
 }
