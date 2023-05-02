@@ -56,7 +56,7 @@ function SideMenu(props: {
 
     const participantList = props.groupResult.participant.map((item) => (
       <ProfileItem key={item.userId}>
-        <ProfileImg size={40} bgImg={item.profileImg} />
+        <ProfileImg size={40} bgImg={item.profileImage} />
         {item.nickname}
       </ProfileItem>
     ));

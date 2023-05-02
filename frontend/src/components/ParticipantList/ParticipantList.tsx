@@ -14,23 +14,11 @@ function ParticipantList({ groupInfo }: Props) {
       {groupInfo.participant.map((item) => {
         return (
           <ProfileItem key={item.userId}>
-            <ProfileImg size={40} bgImg={item.profileImg} />
-            주대선
+            <ProfileImg size={40} bgImg={item.profileImage} />
+            {item.nickname}
           </ProfileItem>
         );
       })}
-      <ProfileItem>
-        <ProfileImg size={40} bgImg={""} />
-        주대선
-      </ProfileItem>
-      <ProfileItem>
-        <ProfileImg size={40} bgImg={""} />
-        주대선
-      </ProfileItem>
-      <ProfileItem>
-        <ProfileImg size={40} bgImg={""} />
-        주대선
-      </ProfileItem>
     </ParticipantListContainer>
   );
 }

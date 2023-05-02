@@ -7,7 +7,7 @@ interface Props {
   award: {
     userId: number;
     nickname: string;
-    profileImg: string;
+    profileImage: string;
     type: string;
   }[];
 }
@@ -18,19 +18,19 @@ function AwardEnd({ award }: Props) {
   let t: {
     userId: number;
     nickname: string;
-    profileImg: string;
+    profileImage: string;
     type: string;
   }[] = [];
   let ph: {
     userId: number;
     nickname: string;
-    profileImg: string;
+    profileImage: string;
     type: string;
   }[] = [];
   let pe: {
     userId: number;
     nickname: string;
-    profileImg: string;
+    profileImage: string;
     type: string;
   }[] = [];
   award.map((profile) => {
@@ -45,19 +45,19 @@ function AwardEnd({ award }: Props) {
       이야기 보따리 📚
       <AwardPageContent>
         {t.map((profile) => {
-          return <ProfileImg size={80} bgImg={profile.profileImg} />;
+          return <ProfileImg size={80} bgImg={profile.profileImage} />;
         })}
       </AwardPageContent>
       포토 그래퍼 📷
       <AwardPageContent>
         {ph.map((profile) => {
-          return <ProfileImg size={80} bgImg={profile.profileImg} />;
+          return <ProfileImg size={80} bgImg={profile.profileImage} />;
         })}
       </AwardPageContent>
       프로 개근러 👍
       <AwardPageContent>
         {pe.map((profile) => {
-          return <ProfileImg size={80} bgImg={profile.profileImg} />;
+          return <ProfileImg size={80} bgImg={profile.profileImage} />;
         })}
       </AwardPageContent>
       <GhostBtn

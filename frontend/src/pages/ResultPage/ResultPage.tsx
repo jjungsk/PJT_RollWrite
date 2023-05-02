@@ -49,27 +49,27 @@ function ResultPage() {
         {
           userId: 1,
           nickname: "닉네임1",
-          profileImg: "/sample_profile_image.png",
+          profileImage: "/sample_profile_image.png",
         },
         {
           userId: 2,
           nickname: "닉네임2",
-          profileImg: "/sample_profile_image.png",
+          profileImage: "/sample_profile_image.png",
         },
         {
           userId: 3,
           nickname: "닉네임3",
-          profileImg: "/sample_profile_image.png",
+          profileImage: "/sample_profile_image.png",
         },
         {
           userId: 4,
           nickname: "닉네임4",
-          profileImg: "/sample_profile_image.png",
+          profileImage: "/sample_profile_image.png",
         },
         {
           userId: 5,
           nickname: "닉네임5",
-          profileImg: "/sample_profile_image.png",
+          profileImage: "/sample_profile_image.png",
         },
       ],
       participantCnt: 5,
@@ -83,26 +83,26 @@ function ResultPage() {
           {
             userId: 1,
             nickname: "닉네임1",
-            profileImg: "/sample_profile_image.png",
+            profileImage: "/sample_profile_image.png",
           },
           {
             userId: 2,
             nickname: "닉네임2",
-            profileImg: "/sample_profile_image.png",
+            profileImage: "/sample_profile_image.png",
           },
         ],
         photographer: [
           {
             userId: 1,
             nickname: "닉네임1",
-            profileImg: "/sample_profile_image.png",
+            profileImage: "/sample_profile_image.png",
           },
         ],
         proGagler: [
           {
             userId: 1,
             nickname: "닉네임1",
-            profileImg: "/sample_profile_image.png",
+            profileImage: "/sample_profile_image.png",
           },
         ],
       },
@@ -114,7 +114,7 @@ function ResultPage() {
           answer: [
             {
               nickname: "닉네임1",
-              profileImg: "/sample_profile_image.png",
+              profileImage: "/sample_profile_image.png",
               isMe: true,
               content:
                 "내가 가장 좋은 팀원이지!!! 블라블라 블라블라 블라블라 블라블라 블라블라 블라블라 블라블라 ",
@@ -122,14 +122,14 @@ function ResultPage() {
             },
             {
               nickname: "닉네임2",
-              profileImg: "/sample_profile_image.png",
+              profileImage: "/sample_profile_image.png",
               isMe: false,
               content: "모두 사랑합니다",
               time: "2023-03-16 14:21:52",
             },
             {
               nickname: "닉네임3",
-              profileImg: "/sample_profile_image.png",
+              profileImage: "/sample_profile_image.png",
               isMe: false,
               content: "대선이가 이 세상에서 가장 좋아요!!",
               time: "2023-03-16 15:45:12",
@@ -144,7 +144,7 @@ function ResultPage() {
           answer: [
             {
               nickname: "닉네임1",
-              profileImg: "/sample_profile_image.png",
+              profileImage: "/sample_profile_image.png",
               isMe: false,
               content:
                 "이건 답변 내용이야 이건 답변 내용이야 이건 답변 내용이야 이건 답변 내용이야 이건 답변 내용이야 이건 답변 내용이야 이건 답변 내용이야 이건 답변 내용이야",
@@ -152,7 +152,7 @@ function ResultPage() {
             },
             {
               nickname: "닉네임2",
-              profileImg: "/sample_profile_image.png",
+              profileImage: "/sample_profile_image.png",
               isMe: true,
               content: "이건 짧은 답변이야",
               time: "2023-03-17 15:41:31",
@@ -166,14 +166,14 @@ function ResultPage() {
           answer: [
             {
               nickname: "닉네임1",
-              profileImg: "/sample_profile_image.png",
+              profileImage: "/sample_profile_image.png",
               isMe: false,
               content: "이건 답변 내용이야 이건 답변 내용이야",
               time: "2023-03-18 16:52:10",
             },
             {
               nickname: "닉네임2",
-              profileImg: "/sample_profile_image.png",
+              profileImage: "/sample_profile_image.png",
               isMe: false,
               content: "이건 짧은 답변이야",
               time: "2023-03-18 17:38:31",
