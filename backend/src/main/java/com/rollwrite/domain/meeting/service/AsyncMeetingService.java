@@ -53,13 +53,15 @@ public class AsyncMeetingService {
         Gson gson = new Gson();
 
         // List<AsyncChatGptDto> 타입으로 파싱
-        Type answerListType = new com.google.gson.reflect.TypeToken<List<AsyncChatGptDto>>(){}.getType();
+        Type answerListType = new com.google.gson.reflect.TypeToken<List<AsyncChatGptDto>>() {}.getType();
         List<AsyncChatGptDto> answerList = gson.fromJson(response, answerListType);
 
         // 파싱된 객체 저장
         for (AsyncChatGptDto asyncChatGptDto : answerList) {
+            log.info("질문 : " + asyncChatGptDto.getQuestion());
+            log.info("이모지 : " + asyncChatGptDto.getEmoji().substring(0, 1));
             QuestionGpt questionGpt = QuestionGpt.builder()
-                    .emoji(asyncChatGptDto.getEmoji().substring(0,1))
+                    .emoji(asyncChatGptDto.getEmoji().substring(0, 1))
                     .content(asyncChatGptDto.getQuestion())
                     .meeting(meeting)
                     .build();
