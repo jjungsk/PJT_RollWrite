@@ -1,4 +1,44 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+const grow = keyframes`
+  from {
+    height: 50px;
+  }
+  to {
+    height: 32px;
+  }
+`;
+
+const shrink = keyframes`
+  from {
+    height: 32px;
+  }
+  to {
+    height: 50px;
+  }
+`;
+
+const growSVG = keyframes`
+  from {
+    height: 16px;
+    width: 16px;
+  }
+  to {
+    height: 2px;
+    width: 24px;
+  }
+`;
+
+const shrinkSVG = keyframes`
+  from {
+    height: 2px;
+    width: 24px;
+  }
+  to {
+    height: 16px;
+    width: 16px;
+  }
+`;
 
 const CalendarDay = styled.div<{
   isSwipeTop?: boolean;
@@ -17,10 +57,13 @@ const CalendarDay = styled.div<{
   border-radius: 4px;
   width: 46px;
   height: ${(props) => (props.isSwipeTop ? "32px" : "50px")};
+  animation: ${(props) => (props.isSwipeTop ? grow : shrink)} 0.2s linear;
 
   > svg {
     height: ${(props) => (props.isSwipeTop ? "2px" : "16px")};
     width: ${(props) => (props.isSwipeTop ? "24px" : "16px")};
+    animation: ${(props) => (props.isSwipeTop ? growSVG : shrinkSVG)} 0.2s
+      linear;
   }
 
   > div {

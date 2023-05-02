@@ -3,6 +3,7 @@ import Calendar from "../Calendar/Calendar";
 import QuestionOfDay from "../QuestionOfDay/QuestionOfDay";
 import { GroupCalendarContainer } from "./style";
 import { GroupInfo, Question } from "../../constants/types";
+import { AnimatePresence } from "framer-motion";
 
 function UpdateQuestionMap(questionList: Question[]) {
   let map = new Map();
@@ -37,13 +38,15 @@ function GroupCalendar({ groupInfo, questionList }: Props) {
         groupInfo={groupInfo}
         questionMap={questionMap}
       />
-      {isSwipeTop && (
-        <QuestionOfDay
-          pickedDay={pickedDay}
-          questionMap={questionMap}
-          groupInfo={groupInfo}
-        />
-      )}
+      <AnimatePresence>
+        {isSwipeTop && (
+          <QuestionOfDay
+            pickedDay={pickedDay}
+            questionMap={questionMap}
+            groupInfo={groupInfo}
+          />
+        )}
+      </AnimatePresence>
     </GroupCalendarContainer>
   );
 }
