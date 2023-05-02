@@ -2,6 +2,7 @@ package com.rollwrite.domain.question.controller;
 
 import com.rollwrite.domain.question.dto.*;
 import com.rollwrite.domain.question.service.QuestionService;
+import com.rollwrite.global.auth.CustomUserDetails;
 import com.rollwrite.global.model.ApiResponse;
 import com.rollwrite.global.model.SuccessCode;
 import lombok.RequiredArgsConstructor;
@@ -36,8 +37,10 @@ public class QuestionController {
     @PostMapping
     public ResponseEntity<ApiResponse> addQuestion(@ApiIgnore Authentication authentication,
                                                    @RequestBody AddQuestionReqDto addQuestionReqDto) {
-        log.info("사용자 질문 생성 addQuestionReqDto : " + addQuestionReqDto);
-        questionService.addQuestion(1L, addQuestionReqDto);
+        log.info("사용자 질문 생성 addQuestionReqDto : {}", addQuestionReqDto);
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
+        Long userId = userDetails.getUserId();
+        questionService.addQuestion(userId, addQuestionReqDto);
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.ADD_QUESTION_SUCCESS), HttpStatus.OK);
     }
 
@@ -45,8 +48,10 @@ public class QuestionController {
     public ResponseEntity<ApiResponse> addAnswer(@ApiIgnore Authentication authentication,
                                                  @RequestPart AddAnswerReqDto addAnswerReqDto,
                                                  @RequestPart(required = false) MultipartFile image) throws IOException {
-        log.info("답변 생성 addAnswerReqDto : " + addAnswerReqDto);
-        questionService.addAnswer(1L, addAnswerReqDto, image);
+        log.info("답변 생성 addAnswerReqDto : {}", addAnswerReqDto);
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
+        Long userId = userDetails.getUserId();
+        questionService.addAnswer(userId, addAnswerReqDto, image);
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.ADD_ANSWER_SUCCESS), HttpStatus.OK);
     }
 
@@ -54,22 +59,25 @@ public class QuestionController {
     public ResponseEntity<ApiResponse> modifyAnswer(@ApiIgnore Authentication authentication,
                                                     @RequestPart ModifyAnswerReqDto modifyAnswerReqDto,
                                                     @RequestPart(required = false) MultipartFile image) throws IOException {
-        log.info("답변 수정 modifyAnswerReqDto : " + modifyAnswerReqDto);
-        questionService.modifyAnswer(1L, modifyAnswerReqDto, image);
+        log.info("답변 수정 modifyAnswerReqDto : {}", modifyAnswerReqDto);
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
+        Long userId = userDetails.getUserId();
+        questionService.modifyAnswer(userId, modifyAnswerReqDto, image);
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.MODIFY_ANSWER_SUCCESS), HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<FindTodayQuestionResDto>>> todayQuestionList(@ApiIgnore Authentication authentication) {
         log.info("todayQuestionList 호출");
-        List<FindTodayQuestionResDto> findTodayQuestionResDtoList = questionService.findTodayQuestion(1L);
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
+        Long userId = userDetails.getUserId();
+        List<FindTodayQuestionResDto> findTodayQuestionResDtoList = questionService.findTodayQuestion(userId);
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_TODAY_QUESTION_SUCCESS, findTodayQuestionResDtoList), HttpStatus.OK);
     }
 
     @GetMapping("/{meetingId}")
-    public ResponseEntity<ApiResponse<List<FindQuestionResDto>>> questionList(@ApiIgnore Authentication authentication,
-                                                                              @PathVariable Long meetingId) {
-        log.info("모임 질문 전체 조회 meetingId : " + meetingId);
+    public ResponseEntity<ApiResponse<List<FindQuestionResDto>>> questionList(@PathVariable Long meetingId) {
+        log.info("모임 질문 전체 조회 meetingId : {}", meetingId);
         List<FindQuestionResDto> findQuestionResDtoList = questionService.findQuestion(meetingId);
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_QUESTION_SUCCESS, findQuestionResDtoList), HttpStatus.OK);
     }
