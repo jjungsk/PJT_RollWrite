@@ -42,7 +42,7 @@ export const getInviteUrl = async (meetingId: string) => {
 
 // 모임 가입 하기
 export const joinGroup = async (inviteCode: string) => {
-  const response = await axiosInstance.post(`/meeting/join/${inviteCode}/2`);
+  const response = await axiosInstance.post(`/meeting/join/${inviteCode}`);
   return response.data;
 };
 

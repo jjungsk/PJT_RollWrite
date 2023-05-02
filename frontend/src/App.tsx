@@ -29,14 +29,12 @@ function App() {
   const isLogin = useAppSelector((state) => state.auth.isLogin);
 
   const currentPath = location.pathname;
-
+  if (accessToken) {
+    axiosInstance.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${accessToken}`;
+  }
   useEffect(() => {
-    if (accessToken) {
-      axiosInstance.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${accessToken}`;
-    }
-
     if (!isLogin && currentPath !== "/login" && currentPath !== "/oauth") {
       navigate("/login");
       dispatch(updateRouteHistory(currentPath));
