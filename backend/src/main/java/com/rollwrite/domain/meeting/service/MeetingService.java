@@ -76,7 +76,7 @@ public class MeetingService {
         }
 
         // 날짜 계산
-        long period = ChronoUnit.DAYS.between(meeting.getEndDay(), meeting.getStartDay());
+        long period = ChronoUnit.DAYS.between(meeting.getStartDay(), meeting.getEndDay());
 
         // Chat GPT 생성 질문 10개 저장
         asyncMeetingService.saveGptQuestion(tag, meeting, period);
