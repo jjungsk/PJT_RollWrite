@@ -5,7 +5,7 @@ import GroupCalendar from "../GroupCalendar/GroupCalendar";
 
 interface HomeContentProps {
   homeContent: number;
-  setHomeContent: (value: number) => void;
+  setHomeContent: React.Dispatch<React.SetStateAction<number>>;
   questionList: Question[];
   groupInfo: GroupInfo;
 }
@@ -22,6 +22,12 @@ function HomeContent({
         <GroupCalendar groupInfo={groupInfo} questionList={questionList} />
       )}
       {homeContent === 1 && (
+        <QuestionWrite
+          setHomeContent={setHomeContent}
+          groupId={groupInfo.meetingId}
+        />
+      )}
+      {homeContent === 2 && (
         <QuestionWrite
           setHomeContent={setHomeContent}
           groupId={groupInfo.meetingId}
