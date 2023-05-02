@@ -9,9 +9,15 @@ interface Props {
   groupList?: GroupInfo[];
   onIndexChanged: (index: number) => void;
   setHomeContent: React.Dispatch<React.SetStateAction<number>>;
+  homeContent: number;
 }
 
-function GroupList({ groupList, onIndexChanged, setHomeContent }: Props) {
+function GroupList({
+  groupList,
+  onIndexChanged,
+  setHomeContent,
+  homeContent,
+}: Props) {
   return (
     <Swiper
       style={{ height: "128px", width: "100vw", maxWidth: "450px" }}
@@ -21,7 +27,11 @@ function GroupList({ groupList, onIndexChanged, setHomeContent }: Props) {
     >
       {groupList?.map((groupInfo, i) => (
         <SwiperSlide key={i}>
-          <GroupCard groupInfo={groupInfo} setHomeContent={setHomeContent} />
+          <GroupCard
+            groupInfo={groupInfo}
+            setHomeContent={setHomeContent}
+            homeContent={homeContent}
+          />
         </SwiperSlide>
       ))}
     </Swiper>

@@ -25,7 +25,8 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const accessToken = useAppSelector((state) => state.auth.accessToken);
+  // const accessToken = useAppSelector((state) => state.auth.accessToken);
+  const accessToken = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzcwNzc4MjAwIiwicm9sZSI6IlVTRVIiLCJpc3MiOiJyb2xsd3JpdGUuY28ua3IiLCJleHAiOjE2ODMwMDgxMDYsImlhdCI6MTY4MzAwNDUwNn0.hyExKjjQHT95A9Tc7LZ_NCrHSFjkaMCkLgeF9GVwuNans7RqK7AdtZNUGJIDtiwwSOsgXXmTay8W_S9IIKUA1g`;
   const isLogin = useAppSelector((state) => state.auth.isLogin);
 
   const currentPath = location.pathname;
@@ -34,12 +35,12 @@ function App() {
       "Authorization"
     ] = `Bearer ${accessToken}`;
   }
-  useEffect(() => {
-    if (!isLogin && currentPath !== "/login" && currentPath !== "/oauth") {
-      navigate("/login");
-      dispatch(updateRouteHistory(currentPath));
-    }
-  });
+  // useEffect(() => {
+  //   if (!isLogin && currentPath !== "/login" && currentPath !== "/oauth") {
+  //     navigate("/login");
+  //     dispatch(updateRouteHistory(currentPath));
+  //   }
+  // });
 
   return (
     <Routes>

@@ -1,7 +1,38 @@
 import React from "react";
+import { ParticipantListContainer } from "./style";
+import { ProfileItem } from "../SideMenu/style";
+import { GroupInfo } from "../../constants/types";
+import { ProfileImg } from "../../pages/MyPage/style";
 
-function ParticipantList() {
-  return <div>ParticipantList</div>;
+interface Props {
+  groupInfo: GroupInfo;
+}
+
+function ParticipantList({ groupInfo }: Props) {
+  return (
+    <ParticipantListContainer>
+      {groupInfo.participant.map((item) => {
+        return (
+          <ProfileItem key={item.userId}>
+            <ProfileImg size={40} bgImg={item.profileImg} />
+            주대선
+          </ProfileItem>
+        );
+      })}
+      <ProfileItem>
+        <ProfileImg size={40} bgImg={""} />
+        주대선
+      </ProfileItem>
+      <ProfileItem>
+        <ProfileImg size={40} bgImg={""} />
+        주대선
+      </ProfileItem>
+      <ProfileItem>
+        <ProfileImg size={40} bgImg={""} />
+        주대선
+      </ProfileItem>
+    </ParticipantListContainer>
+  );
 }
 
 export default ParticipantList;

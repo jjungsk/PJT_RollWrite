@@ -33,6 +33,7 @@ function HomePage() {
         groupList={groupList}
         onIndexChanged={(index) => setCurrentIndex(index)}
         setHomeContent={setHomeContent}
+        homeContent={homeContent}
       />
 
       {groupList && questionList && (
