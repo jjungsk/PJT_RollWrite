@@ -36,6 +36,7 @@ export interface GroupInfo {
   participantCnt: number;
   questionLimit: number;
   questionUsage: number;
+  inviteUrl?: string;
 }
 
 export interface Question {
