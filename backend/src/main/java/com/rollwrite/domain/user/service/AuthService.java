@@ -187,7 +187,6 @@ public class AuthService {
                 .httpOnly(true)
                 .secure(true)
                 .maxAge(REFRESH_TOKEN_EXPIRATION / 1000) // 초 단위
-                .domain("localhost")
                 .build();
 
         return AddTokenCookieDto.builder()
