@@ -7,7 +7,11 @@ import {
   useNavigate,
 } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "./constants/types";
-import { updateRouteHistory } from "./store/authReducer";
+import {
+  updateAccessToken,
+  updateLoginStatus,
+  updateRouteHistory,
+} from "./store/authReducer";
 import { axiosInstance } from "./apis/instance";
 
 import MainLayout from "./Layout/MainLayout";
@@ -40,6 +44,42 @@ function App() {
       "Authorization"
     ] = `Bearer ${accessToken}`;
   }
+
+  // 토큰 갱신
+  axiosInstance.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    async (error) => {
+      const {
+        config,
+        response: { status, data },
+      } = error;
+      const originalRequest = config;
+      if (status === 401 && data.error === "TokenExpiredException") {
+        try {
+          // 갱신 요청
+          const res = await axiosInstance.post<any>(`auth/reissue`);
+          const newAccessToken = res.data.data.accessToken;
+          dispatch(updateAccessToken(newAccessToken));
+          // 실패했던 요청 새로운 accessToken으로 헤더 변경하고 재요청
+          axiosInstance.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${newAccessToken}`;
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          return axiosInstance(originalRequest);
+        } catch (err) {
+          // 갱신 실패시 임의 로그아웃 처리
+          console.log("갱신실패", err);
+          dispatch(updateLoginStatus(false));
+          dispatch(updateAccessToken(""));
+          navigate("/");
+        }
+      }
+      return Promise.reject(error);
+    }
+  );
+
   useEffect(() => {
     if (!isLogin && currentPath !== "/login" && currentPath !== "/oauth") {
       navigate("/login");

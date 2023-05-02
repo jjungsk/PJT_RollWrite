@@ -25,7 +25,7 @@ function Oauth() {
     }
   }, [code, dispatch, navigate, routeHistory]);
 
-  return <div>Oauth</div>;
+  return <div></div>;
 }
 
 export default Oauth;
