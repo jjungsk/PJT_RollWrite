@@ -162,7 +162,7 @@ public class QuestionService {
         // question, answer 조인
         List<FindTodayQuestionResDto> findTodayQuestionResDtoList = new ArrayList<>();
         for (Meeting meeting : meetingList) {
-            Optional<FindTodayQuestionResDto> todayQuestion = questionRepository.findTodayQuestionByMeeting(meeting);
+            Optional<FindTodayQuestionResDto> todayQuestion = questionRepository.findTodayQuestionByMeeting(userId, meeting);
 
             // 오늘의 질문이 있으면 리스트에 추가
             if (todayQuestion.isPresent()) {

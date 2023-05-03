@@ -24,7 +24,7 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository {
     QAnswer answer = QAnswer.answer;
 
     @Override
-    public Optional<FindTodayQuestionResDto> findTodayQuestionByMeeting(Meeting meeting) {
+    public Optional<FindTodayQuestionResDto> findTodayQuestionByMeeting(Long userId, Meeting meeting) {
         LocalDate today = LocalDate.now();
 
         FindTodayQuestionResDto findTodayQuestionResDto = jpaQueryFactory
@@ -42,6 +42,7 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository {
                 .from(question)
                 .leftJoin(answer).on(question.eq(answer.question))
                 .where(question.meeting.eq(meeting))
+                .where(answer.user.id.eq(userId))
                 .where(question.expireTime.after(LocalDateTime.now()))
                 .fetchOne();
 
