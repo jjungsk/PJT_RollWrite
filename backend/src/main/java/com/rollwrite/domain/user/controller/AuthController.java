@@ -7,7 +7,9 @@ import com.rollwrite.domain.user.service.AuthService;
 import com.rollwrite.global.auth.CustomUserDetails;
 import com.rollwrite.global.model.ApiResponse;
 import com.rollwrite.global.model.SuccessCode;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -28,6 +30,7 @@ import java.io.IOException;
  * 2. AccessToken 재발급
  * 3. 카카로 로그아웃
  */
+@Api(tags = {"01. Auth-Controller (카카오, 토큰 재발급)"})
 @Slf4j
 @RestController
 @RequestMapping("/auth")
@@ -37,8 +40,8 @@ public class AuthController {
     private final AuthService authService;
 
     // 1. 카카오 로그인
-    @ApiOperation(value = "카카오 로그인",
-            notes = "카카오에서 받은 Token 값으로 로그인")
+    @ApiOperation(value = "카카오 로그인", notes = "카카오에서 받은 Token 값으로 로그인")
+    @Parameter(name = "code", description = "카카오에서 받은 Token")
     @GetMapping("/kakao/login")
     public ResponseEntity<?> kakaoLogin(@RequestParam("code") String code) throws IOException {
         AddTokenCookieDto addTokenCookieDto = authService.kakaoLogin(code);
@@ -54,6 +57,7 @@ public class AuthController {
     }
 
     // 2. accessToken 재발급 요청 by cookie의 refreshToken
+    @ApiOperation(value = "accessToken 재발급", notes = "Set-Cookie에 저장된 refreshToken 값으로 accessTorkn 재발급")
     @PostMapping("/reissue")
     public ResponseEntity<ApiResponse<?>> reissueAccessToken(@ApiIgnore @CookieValue(value = "refreshToken") Cookie cookie) {
         // cookie에 들어있는 refreshToken 값 String 으로 받기
@@ -66,6 +70,7 @@ public class AuthController {
     }
 
     // 3. 카카오 로그아웃
+    @ApiOperation(value = "카카오 로그아웃", notes = "accessToken 을 redis BlackList 등록")
     @PostMapping("/kakao/logout")
     public ResponseEntity<ApiResponse<?>> kakaoLogout() {
         // 로그 아웃할 유저의 identifier를 sping security에서 가져오기
@@ -76,29 +81,4 @@ public class AuthController {
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.LOGOUT_SUCCESS), HttpStatus.OK);
     }
 
-    // * spring security 에서 로그인한 유저 정보 중 identifier 값 가져오는 방법
-    @GetMapping("/search/me")
-    public void searchMe(@ApiIgnore Authentication authentication) {
-        // CustomUserDetails.class 정보 가져오기 by Authentication
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
-        Long userId = userDetails.getUserId();
-        log.info("Authentication userId : {}", userId);
-
-        // by. spring security 의 context holder
-        String identifier = (String) SecurityContextHolder.getContext().getAuthentication().getName();
-        log.info("SecurityContextHolder identifier : {}", identifier);
-    }
-
-    // 권한 테스트
-    @GetMapping("/test/admin")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<ApiResponse> testAdmin() throws Exception {
-        return new ResponseEntity<>(ApiResponse.success(SuccessCode.TEST, "Admin만 접근 가능합니다."), HttpStatus.OK);
-    }
-
-    @GetMapping("/test/user")
-    @PreAuthorize("hasRole('ROLE_USER')")
-    public ResponseEntity<ApiResponse> testUser() throws Exception {
-        return new ResponseEntity<>(ApiResponse.success(SuccessCode.TEST, "User도 접근 가능합니다."), HttpStatus.OK);
-    }
 }

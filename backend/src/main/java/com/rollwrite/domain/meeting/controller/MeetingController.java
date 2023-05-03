@@ -10,6 +10,9 @@ import com.rollwrite.global.model.SuccessCode;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
+@Api(tags = {"03. Meeting-Controller (모임 관련)"})
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -32,6 +36,7 @@ public class MeetingController {
 
     private final MeetingService meetingService;
 
+    @ApiOperation(value = "로그인한 사용자가 참여하는 진행 중인 모임 목록을 조회", notes = "로그인한 사용자가 참여하는 진행 중인 모임 목록을 조회")
     @GetMapping()
     public ResponseEntity<ApiResponse> meetingInProgressList(@ApiIgnore Authentication authentication) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
@@ -47,6 +52,7 @@ public class MeetingController {
                 HttpStatus.OK);
     }
 
+    @ApiOperation(value = "모임 생성", notes = "본인이 생성 하는 모임")
     @PostMapping()
     public ResponseEntity<ApiResponse> addMeeting(@ApiIgnore Authentication authentication,
                                                   @RequestBody AddMeetingRequestDto addMeetingRequestDto) throws NoSuchAlgorithmException {
@@ -62,6 +68,8 @@ public class MeetingController {
                 HttpStatus.OK);
     }
 
+    @ApiOperation(value = "캘린더에 표시할 정보들을 조회", notes = "캘린더에 표시할 정보들을 조회")
+    @Parameter(name = "meetingId", description = "진행 중인 모임 중 조회 할 모임 아이디")
     @GetMapping("/{meetingId}")
     public ResponseEntity<ApiResponse> meetingCalenderList(@ApiIgnore Authentication authentication, @PathVariable Long meetingId) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
@@ -77,6 +85,8 @@ public class MeetingController {
                 HttpStatus.OK);
     }
 
+    @ApiOperation(value = "초대 링크", notes = "Meeting 초대 링크 가져오기")
+    @Parameter(name = "meetingId", description = "초대 할 미팅 아이디")
     @GetMapping("/join/{meetingId}")
     public ResponseEntity<ApiResponse> getMeetingInviteUrl(@ApiIgnore Authentication authentication, @PathVariable Long meetingId) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
@@ -90,6 +100,8 @@ public class MeetingController {
                 HttpStatus.OK);
     }
 
+    @ApiOperation(value = "모임 참여", notes = "초대 링크의 모임 참여")
+    @Parameter(name = "inviteCode", description = "초대 링크의 참여 모임 아이디")
     @PostMapping("/join/{inviteCode}")
     public ResponseEntity<ApiResponse> joinMeeting(@ApiIgnore Authentication authentication, @PathVariable String inviteCode) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
@@ -103,6 +115,7 @@ public class MeetingController {
                 HttpStatus.OK);
     }
 
+    @ApiOperation(value = "태그 가져오기", notes = "모임 생성 시 태그 가져오기")
     @GetMapping("/tag")
     public ResponseEntity<ApiResponse> tagList() {
         log.info("Tag 리스트 가져오기 ");
@@ -114,6 +127,9 @@ public class MeetingController {
                 HttpStatus.OK);
     }
 
+    @ApiOperation(value = "완료한 모임 전체 리스트", notes = "내 완료한 모임 전체 리스트 조회")
+    // TODO : pageable 은 태윤이 추가해줘~~
+//    @Parameter(name = "파라미터이름과동일", description = "파라미터설명")
     @GetMapping("/result")
     public ResponseEntity<ApiResponse> meetingResultList(@ApiIgnore Authentication authentication, Pageable pageable) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
@@ -128,6 +144,8 @@ public class MeetingController {
                 HttpStatus.OK);
     }
 
+    @ApiOperation(value = "모임 결과 채팅 상세 조회", notes = "모임 결과 채팅 상세 조회")
+    @Parameter(name = "meetingId", description = "조회할 모임 아이디")
     @GetMapping("/chat/{meetingId}")
     public ResponseEntity<ApiResponse> meetingChatDetails(@ApiIgnore Authentication authentication, @PathVariable Long meetingId) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
@@ -141,6 +159,8 @@ public class MeetingController {
                 HttpStatus.OK);
     }
 
+    @ApiOperation(value = "모임 결과 통계 상세 조회", notes = "모임 결과 통계 상세 조회")
+    @Parameter(name = "meetingId", description = "조회 할 모임 아이디")
     @GetMapping("/award/{meetingId}")
     public ResponseEntity<ApiResponse> meetingAwardDetails(@PathVariable Long meetingId) {
         log.info("모임 결과 통계 상세 조회  meetingId : " + meetingId);
@@ -152,6 +172,8 @@ public class MeetingController {
                 HttpStatus.OK);
     }
 
+    @ApiOperation(value = "모임 참여자 전체 조회", notes = "모임 참여자 전체 조회")
+    @Parameter(name = "meetingId", description = "조회 할 모임 아이디")
     @GetMapping("/participant/{meetingId}")
     public ResponseEntity<ApiResponse> participantList(@ApiIgnore Authentication authentication, @PathVariable Long meetingId) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();

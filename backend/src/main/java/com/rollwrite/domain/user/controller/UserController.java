@@ -5,6 +5,10 @@ import com.rollwrite.domain.user.service.UserService;
 import com.rollwrite.global.auth.CustomUserDetails;
 import com.rollwrite.global.model.ApiResponse;
 import com.rollwrite.global.model.SuccessCode;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,6 +29,7 @@ import java.util.Optional;
  * 2. User 회원 정보 수정
  * 3. User 회원 탈퇴
  */
+@Api(tags = {"02. User-Controller (유저 정보 관련)"})
 @Slf4j
 @RestController
 @RequestMapping("/user")
@@ -34,6 +39,9 @@ public class UserController {
     private final UserService userService;
 
     // 1. User 회원 정보 조회
+    @ApiOperation(value = "본인 및 타인 회원 정보 조회",
+            notes = "PathVariable에 찾고자 하는 userId 값이 없으면 본인 조회 (단, swagger는 불가능 하고 postman 에서는 가능 + api 호출 path 는 '/' 꼭 붙여야 한다!!!)")
+    @Parameter(name = "userId", description = "찾고자 하는 userId 또는 빈 값(본인 조회)")
     @GetMapping({"/", "/{userId}"})
     public ResponseEntity<ApiResponse<?>> userDetails(@ApiIgnore Authentication authentication,
                                                       @PathVariable(required = false) Optional<Long> userId) {
@@ -46,6 +54,11 @@ public class UserController {
     }
 
     // 2. User 회원 정보 수정
+    @ApiOperation(value = "유저의 회원 정보 수정", notes = "유저 이름과 프로필 수정 가능")
+//    @Parameters({
+//            @Parameter(name = "nickname", description = "수정 할 유저 이름"),
+//            @Parameter(name = "profileImage", description = "수정 할 프로필 이미지"),
+//    })
     @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<ApiResponse<?>> modifyUser(@ApiIgnore Authentication authentication
             , @RequestPart(required = false) String nickname, @RequestPart(required = false) MultipartFile profileImage) throws IOException {
@@ -58,6 +71,7 @@ public class UserController {
     }
 
     // 3. USer 프로필 삭제
+    @ApiOperation(value = "프로필 이미지 삭제", notes = "본인 프로필 이미지만 삭제")
     @DeleteMapping("/profile")
     public ResponseEntity<ApiResponse<?>> removeUserProfile(@ApiIgnore Authentication authentication) throws UnknownHostException {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
@@ -69,6 +83,7 @@ public class UserController {
     }
 
     // 4. User 회원 탈퇴
+    @ApiOperation(value = "회원 탈퇴", notes = "본인 회원 탈퇴")
     @DeleteMapping
     public ResponseEntity<ApiResponse<?>> removeUser(@ApiIgnore Authentication authentication) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
