@@ -36,7 +36,7 @@ public class ParticipantCustomRepositoryImpl implements ParticipantCustomReposit
                 .from(participant)
                 .where(participant.user.id.eq(userId))
                 .where(participant.isDone.eq(true))
-                .where(participant.meeting.endDay.before(today))
+                .where(participant.meeting.endDay.before(today).or(participant.meeting.endDay.eq(today)))
                 .offset(pageable.getOffset())   // 페이지 번호
                 .limit(pageable.getPageSize())  // 페이지 사이즈
                 .fetch();
