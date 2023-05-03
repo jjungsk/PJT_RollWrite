@@ -13,10 +13,11 @@ public class AnswerDto {
     private final String profileImage;
     private final Boolean isMe;
     private final String content;
+    private final String imageUrl;
     private final LocalDateTime time;
 
     @Builder
-    public AnswerDto(String nickname, String profileImage, String content, LocalDateTime time, Long myId, Long userId) {
+    public AnswerDto(String nickname, String profileImage, String content, String imageUrl, LocalDateTime time, Long myId, Long userId) {
         if (myId == userId) {
             this.isMe = true;
         } else {
@@ -25,6 +26,7 @@ public class AnswerDto {
         this.nickname = nickname;
         this.profileImage = profileImage;
         this.content = content;
+        this.imageUrl = imageUrl;
         this.time = time;
     }
 }
