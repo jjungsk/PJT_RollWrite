@@ -12,7 +12,7 @@ import {
   updateLoginStatus,
   updateRouteHistory,
 } from "./store/authReducer";
-import { axiosFileInstance, axiosInstance } from "./apis/instance";
+import { axiosInstance } from "./apis/instance";
 
 import MainLayout from "./Layout/MainLayout";
 import SubLayout from "./Layout/SubLayout";
@@ -44,9 +44,6 @@ function App() {
     axiosInstance.defaults.headers.common[
       "Authorization"
     ] = `Bearer ${accessToken}`;
-    axiosFileInstance.defaults.headers.common[
-      "Authorization"
-    ] = `Bearer ${accessToken}`;
   }
 
   // 토큰 갱신
@@ -57,10 +54,10 @@ function App() {
     async (error) => {
       const {
         config,
-        response: { statusCode },
+        response: { statusCode, data },
       } = error;
       const originalRequest = config;
-      if (statusCode === 401) {
+      if (statusCode === 401 && data.error === "TokenExpiredException") {
         try {
           // 갱신 요청
           const res = await axiosInstance.post<any>(`auth/reissue`);
@@ -91,12 +88,12 @@ function App() {
       navigate("/login");
       dispatch(updateRouteHistory(currentPath));
     }
+    if (currentPath === "/") navigate("/question");
   });
 
   return (
     <Routes>
       <Route path="/" element={<MainLayout />}>
-        <Route path="/" element={<Navigate to="/question" />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/question" element={<QuestionPage />} />
         <Route path="/my" element={<MyPage />} />

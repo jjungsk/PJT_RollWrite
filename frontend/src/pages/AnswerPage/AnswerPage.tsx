@@ -10,6 +10,7 @@ import {
 } from "./style";
 import GhostBtn from "../../elements/Button/GhostBtn";
 import Btn from "../../assets/AddImgBtn.svg";
+import { ReactComponent as Trash } from "../../assets/Trash-alt.svg";
 import { createAnswer, updateAnswer } from "../../apis/question";
 import { useLocation, useNavigate } from "react-router-dom";
 import { QuestionInfo } from "../../constants/types";
@@ -18,7 +19,7 @@ export default function AnswerPage() {
   const location = useLocation();
   const navigate = useNavigate();
   // 이미지
-  const [ImgFile, setImgFile] = useState<File | undefined>();
+  const [ImgFile, setImgFile] = useState<File>();
   const [tmpImg, setTmpImg] = useState<string>("");
   // 답변
   const [question, setQuestion] = useState<QuestionInfo>(
@@ -46,18 +47,21 @@ export default function AnswerPage() {
       reader.readAsDataURL(files[0]);
     }
   };
-
+  const formData = new FormData();
   // 버튼 눌렀을 때 api로 데이터 전송
   const handleSaveBtn = () => {
     // formData에 이미지, 답변 저장
-    const formData = new FormData();
+
     const data = JSON.stringify({
       answer: question.answer,
       meetingId: question.meetingId,
       questionId: question.questionId,
     });
     const jsonData = new Blob([data], { type: "application/json" });
-    formData.append("addAnswerReqDto", jsonData);
+    location.state.isModify
+      ? formData.append("modifyAnswerReqDto", jsonData)
+      : formData.append("addAnswerReqDto", jsonData);
+
     if (ImgFile) {
       formData.append("image", ImgFile);
     }
@@ -90,6 +94,11 @@ export default function AnswerPage() {
       </NameContainer>
       <QuestionDiv>{question.question}</QuestionDiv>
       <ImgContainer BgImg={tmpImg ? tmpImg : question.image}>
+        {question.image && (
+          <Trash
+            style={{ position: "absolute", bottom: "8px", right: "8px" }}
+          />
+        )}
         <IconContainer>
           <label htmlFor="profile-img">
             <img src={Btn} alt="img" />
