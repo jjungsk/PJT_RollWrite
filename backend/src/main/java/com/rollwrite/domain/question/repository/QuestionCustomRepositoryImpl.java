@@ -40,9 +40,8 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository {
                         answer.imageUrl.as("image"),
                         question.createdAt.as("questionCreatedAt")))
                 .from(question)
-                .leftJoin(answer).on(question.eq(answer.question))
+                .leftJoin(answer).on(question.eq(answer.question).and(answer.user.id.eq(userId)))
                 .where(question.meeting.eq(meeting))
-                .where(answer.user.id.eq(userId))
                 .where(question.expireTime.after(LocalDateTime.now()))
                 .fetchOne();
 
