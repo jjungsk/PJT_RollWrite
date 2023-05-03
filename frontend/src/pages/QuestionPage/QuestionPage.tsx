@@ -27,11 +27,11 @@ function QuestionPage() {
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const [swiper, setSwiper] = useState<any>(null);
 
-  const nexto = () => {
+  const nextTo = () => {
     swiper?.slideNext();
   };
 
-  const backto = () => {
+  const backTo = () => {
     swiper?.slidePrev();
   };
 
@@ -62,7 +62,7 @@ function QuestionPage() {
           </InfoContainer>
           <EmojiContainer>
             <ArrowContainer>
-              {currentSlide !== 0 && <BackArrow onClick={backto}></BackArrow>}
+              {currentSlide !== 0 && <BackArrow onClick={backTo}></BackArrow>}
             </ArrowContainer>
             <Swiper
               style={{ width: "200px", overflow: "hidden" }}
@@ -82,7 +82,7 @@ function QuestionPage() {
             </Swiper>
             <ArrowContainer>
               {currentSlide !== questionList.length - 1 && (
-                <PrevArrow onClick={nexto}></PrevArrow>
+                <PrevArrow onClick={nextTo}></PrevArrow>
               )}
             </ArrowContainer>
           </EmojiContainer>
@@ -96,6 +96,8 @@ function QuestionPage() {
                     title: questionList[currentSlide].title,
                     day: questionList[currentSlide].day,
                     question: questionList[currentSlide].question,
+                    questionId: questionList[currentSlide].questionId,
+                    meetingId: questionList[currentSlide].meetingId,
                   },
                 })
               }
