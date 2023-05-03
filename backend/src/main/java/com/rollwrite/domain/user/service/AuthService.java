@@ -14,6 +14,7 @@ import com.rollwrite.domain.user.entity.User;
 import com.rollwrite.domain.user.entity.UserType;
 import com.rollwrite.domain.user.repository.RefreshTokenRepository;
 import com.rollwrite.domain.user.repository.UserRepository;
+import com.rollwrite.global.service.FileService;
 import com.rollwrite.global.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -49,6 +51,7 @@ public class AuthService {
     private final String BLACK = "-BlackList";
     private final RedisTemplate<String, String> redisTemplate;
     private final UserRepository userRepository; // DB - user 정보 저장
+    private final FileService fileService;
     private final RefreshTokenRepository refreshTokenRepository; // Redis - refreshToken 저장
 
     // Local 함수 로그아웃 : 로그아웃한 accessToken을 redis 에 -BlackList key로 등록
@@ -66,12 +69,13 @@ public class AuthService {
 
     // Local 함수 (1-3). 회원 가입
     @Transactional
-    public User registKakaoUser(AddKakaoUserResDto addKakaoUserResDto) {
+    public User registKakaoUser(AddKakaoUserResDto addKakaoUserResDto) throws IOException {
+        String imagePath = fileService.transferUrlToFile("profile", addKakaoUserResDto.getProfileImage());
         // User Rentity에 담기
         User user = User.builder()
                 .identifier(addKakaoUserResDto.getId())
                 .nickname(addKakaoUserResDto.getNickname())
-                .profileImage(addKakaoUserResDto.getProfileImage())
+                .profileImage(imagePath)
                 .type(UserType.USER)
                 .build();
         userRepository.save(user);
@@ -153,7 +157,7 @@ public class AuthService {
 
     // Main 함수 1. 카카오 로그인 메인 로직
     @Transactional
-    public AddTokenCookieDto kakaoLogin(String code) throws JsonProcessingException {
+    public AddTokenCookieDto kakaoLogin(String code) throws IOException {
 
         // 1. "인가 코드"로 "accessToken" 요청
         String kakaoAccessToken = getKakaoAccessToken(code);
