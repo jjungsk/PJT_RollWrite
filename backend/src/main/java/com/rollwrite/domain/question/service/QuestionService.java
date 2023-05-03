@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -124,23 +125,35 @@ public class QuestionService {
         Answer answer = answerRepository.findByUserAndQuestion(user, question)
                 .orElseThrow(() -> new IllegalArgumentException("답변을 찾을 수 없습니다"));
 
-        if (image != null) {
-            // 기존 파일 삭제
+        // change image
+        if (image != null && !image.isEmpty()) {
             fileService.fileDelete(answer.getImageUrl());
-            if (image.isEmpty()) {
-                // 사진을 지우고 싶을 때
-                answer.updateImageUrl(null);
-            } else {
-                // 사진을 변경하고 싶을 때
-                String imageUrl = fileService.fileUpload("answer", image);
-                answer.updateImageUrl(imageUrl);
-            }
+            String imageUrl = fileService.fileUpload("answer", image);
+            answer.updateImageUrl(imageUrl);
         }
 
         // change content
         if (modifyAnswerReqDto.getAnswer() != null) {
             answer.updateContent(modifyAnswerReqDto.getAnswer());
         }
+    }
+
+    @Transactional
+    public void removeAnswerImage(Long userId, Long questionId) throws IOException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
+
+        // 만료시간이 지나지 않은 질문
+        Question question = questionRepository.findQuestionByIdAndExpireTime(questionId)
+                .orElseThrow(() -> new IllegalArgumentException("질문을 찾을 수 없습니다"));
+
+        Answer answer = answerRepository.findByUserAndQuestion(user, question)
+                .orElseThrow(() -> new IllegalArgumentException("답변을 찾을 수 없습니다"));
+
+
+        // remove image
+        fileService.fileDelete(answer.getImageUrl());
+        answer.updateImageUrl(null);
     }
 
     public List<FindTodayQuestionResDto> findTodayQuestion(Long userId) {
@@ -194,4 +207,5 @@ public class QuestionService {
                 .question(question)
                 .build()).collect(Collectors.toList());
     }
+
 }

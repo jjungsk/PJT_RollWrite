@@ -67,6 +67,16 @@ public class QuestionController {
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.MODIFY_ANSWER_SUCCESS), HttpStatus.OK);
     }
 
+    @DeleteMapping("/answer/{questionId}")
+    public ResponseEntity<ApiResponse> removeAnswerImage(@ApiIgnore Authentication authentication,
+                                                    @PathVariable Long questionId) throws IOException {
+        log.info("답변 이미지 삭제 questionId : {}", questionId);
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
+        Long userId = userDetails.getUserId();
+        questionService.removeAnswerImage(userId, questionId);
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.DELETE_IMAGE_SUCCESS), HttpStatus.OK);
+    }
+
     @GetMapping
     public ResponseEntity<ApiResponse<List<FindTodayQuestionResDto>>> todayQuestionList(@ApiIgnore Authentication authentication) {
         log.info("todayQuestionList 호출");
