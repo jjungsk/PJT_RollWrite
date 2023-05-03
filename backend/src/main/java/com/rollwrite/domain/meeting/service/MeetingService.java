@@ -21,6 +21,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.html.Option;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -245,6 +247,9 @@ public class MeetingService {
     }
 
     public MeetingChatDto findMeetingChat(Long userId, Long meetingId) {
+        participantRepository.findMeetingByUserAndMeetingAndIsDone(userId, meetingId, true)
+                .orElseThrow(()->new IllegalArgumentException("종료되지 않은 모임입니다."));
+
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
@@ -280,7 +285,10 @@ public class MeetingService {
                 .build();
     }
 
-    public List<MeetingAwardDto> findMeetingAward(Long meetingId) {
+    public List<MeetingAwardDto> findMeetingAward(Long userId, Long meetingId) {
+        participantRepository.findMeetingByUserAndMeetingAndIsDone(userId, meetingId, true)
+                .orElseThrow(()->new IllegalArgumentException("종료되지 않은 모임입니다."));
+
         Meeting meeting = meetingRepository.findById(meetingId)
                 .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
 

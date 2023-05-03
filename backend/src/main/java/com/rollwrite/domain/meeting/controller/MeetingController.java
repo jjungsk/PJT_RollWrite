@@ -142,10 +142,12 @@ public class MeetingController {
     }
 
     @GetMapping("/award/{meetingId}")
-    public ResponseEntity<ApiResponse> meetingAwardDetails(@PathVariable Long meetingId) {
-        log.info("모임 결과 통계 상세 조회  meetingId : " + meetingId);
+    public ResponseEntity<ApiResponse> meetingAwardDetails(@ApiIgnore Authentication authentication, @PathVariable Long meetingId) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
+        Long userId = userDetails.getUserId();
+        log.info("모임 결과 통계 상세 조회 userId : " + userId + " meetingId : " + meetingId);
 
-        List<MeetingAwardDto> meetingAwardDtoList = meetingService.findMeetingAward(meetingId);
+        List<MeetingAwardDto> meetingAwardDtoList = meetingService.findMeetingAward(userId, meetingId);
 
         return new ResponseEntity<>(
                 ApiResponse.success(SuccessCode.GET_MEETING_AWARD_SUCCESS, meetingAwardDtoList),
