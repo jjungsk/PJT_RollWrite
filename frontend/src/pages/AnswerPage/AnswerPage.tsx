@@ -91,7 +91,6 @@ export default function AnswerPage() {
   };
 
   const handelClickDeleteBtn = () => {
-    console.log("?");
     setQuestion({
       ...question,
       image: "/img.png",
