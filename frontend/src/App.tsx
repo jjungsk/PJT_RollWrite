@@ -61,7 +61,7 @@ function App() {
       if (response.data.statusCode === 401) {
         try {
           // 갱신 요청
-          axiosInstance.defaults.headers.common["Authorization"] = "";
+          axiosInstance.defaults.headers.common["Authorization"] = null;
           const res = await axiosInstance.post<any>(`auth/reissue`);
           const newAccessToken = res.data.data.accessToken;
           dispatch(updateAccessToken(newAccessToken));
