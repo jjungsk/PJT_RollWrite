@@ -55,14 +55,13 @@ function App() {
       return response;
     },
     async (error) => {
-      const {
-        config,
-        response: { status },
-      } = error;
+      const { config, response } = error;
       const originalRequest = config;
-      if (status === 401) {
+
+      if (response.data.statusCode === 401) {
         try {
           // 갱신 요청
+          axiosInstance.defaults.headers.common["Authorization"] = "";
           const res = await axiosInstance.post<any>(`auth/reissue`);
           const newAccessToken = res.data.data.accessToken;
           dispatch(updateAccessToken(newAccessToken));
@@ -77,7 +76,7 @@ function App() {
           console.log("갱신실패", err);
           dispatch(updateLoginStatus(false));
           dispatch(updateAccessToken(""));
-          navigate("/");
+          navigate("/error");
         }
       } else {
         navigate("/error");
