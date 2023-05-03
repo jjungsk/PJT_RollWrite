@@ -12,14 +12,13 @@ import { handleKakaoShare } from "../../utils/kakaoShare";
 
 function CreateGroupPage() {
   const navigate = useNavigate();
-  const [GruopCreatStep, setGruopCreatStep] = useState(0);
+  const [groupCreateStep, setGroupCreateStep] = useState(0);
   const [tagList, setTagList] = useState<Tag[]>([]);
   const [newGroupInfo, setNewGroupInfo] = useState<GroupInfo>();
 
   useEffect(() => {
     getGroupTag()
       .then((res) => {
-        console.log(res);
         setTagList(res.data);
       })
       .catch((err) => {
@@ -44,13 +43,8 @@ function CreateGroupPage() {
       return false;
     }
 
-    if (!startDay) {
-      alert("모임 시작일을 선택해주세요.");
-      return false;
-    }
-
-    if (!endDay) {
-      alert("모임 종료일을 선택해주세요.");
+    if (!startDay || !endDay) {
+      alert("모임 시작일과 종료일을 선택해주세요.");
       return false;
     }
 
@@ -72,60 +66,59 @@ function CreateGroupPage() {
     return true;
   };
 
-  const handleClickBackBtn = () => {
-    if (GruopCreatStep === 0) navigate(-1);
-
-    setGruopCreatStep(GruopCreatStep - 1);
+  const handleBackButtonClick = () => {
+    if (groupCreateStep === 0) navigate(-1);
+    setGroupCreateStep(groupCreateStep - 1);
   };
 
-  const handleClickConfirmBtn = () => {
-    if (GruopCreatStep === 1 && !validateForm()) return;
+  const handleConfirmButtonClick = () => {
+    if (groupCreateStep === 1 && !validateForm()) return;
 
-    if (GruopCreatStep === 2)
+    if (groupCreateStep === 2) {
       createGroup(groupInfo)
         .then((res) => {
-          console.log(res);
           setNewGroupInfo(res.data);
         })
         .catch((error) => {
           console.error(error);
           return;
         });
+    }
 
-    if (GruopCreatStep === 3) navigate("/home");
+    if (groupCreateStep === 3) navigate("/home");
 
-    setGruopCreatStep(GruopCreatStep + 1);
+    setGroupCreateStep(groupCreateStep + 1);
   };
 
   return (
     <>
-      <BackNavigation onClick={handleClickBackBtn} />
-      {GruopCreatStep === 0 && (
-        <CreateGroupStepOne onClick={handleClickConfirmBtn} />
+      <BackNavigation onClick={handleBackButtonClick} />
+      {groupCreateStep === 0 && (
+        <CreateGroupStepOne onClick={handleConfirmButtonClick} />
       )}
-      {GruopCreatStep === 1 && (
+      {groupCreateStep === 1 && (
         <CreateGroupStepTwo
-          onClick={handleClickConfirmBtn}
+          onClick={handleConfirmButtonClick}
           groupInfo={groupInfo}
           setGroupInfo={setGroupInfo}
         />
       )}
-      {GruopCreatStep === 2 && (
+      {groupCreateStep === 2 && (
         <CreateGroupStepThree
           tagList={tagList}
-          onClick={handleClickConfirmBtn}
+          onClick={handleConfirmButtonClick}
           groupInfo={groupInfo}
           setGroupInfo={setGroupInfo}
         />
       )}
-      {GruopCreatStep === 3 && newGroupInfo && (
+      {groupCreateStep === 3 && newGroupInfo && (
         <Info
           title={newGroupInfo?.title}
           subTitle="모임을 만들었어요."
           fillLabel="초대하기"
           ghostLabel="홈으로"
           fillOnClick={() => handleKakaoShare(newGroupInfo?.inviteUrl!)}
-          ghostOnClick={handleClickConfirmBtn}
+          ghostOnClick={handleConfirmButtonClick}
         />
       )}
     </>
