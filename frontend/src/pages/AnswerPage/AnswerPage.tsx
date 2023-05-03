@@ -17,6 +17,7 @@ import {
 } from "../../apis/question";
 import { useLocation, useNavigate } from "react-router-dom";
 import { QuestionInfo } from "../../constants/types";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function AnswerPage() {
   const location = useLocation();
@@ -70,7 +71,12 @@ export default function AnswerPage() {
     }
 
     location.state.isModify
-      ? updateAnswer(formData)
+      ? toast
+          .promise(updateAnswer(formData), {
+            loading: "답변을 수정중입니다...",
+            success: <b>답변이 수정됐습니다!</b>,
+            error: <b>수정을 실패했습니다!</b>,
+          })
           .then((res) => {
             console.log(res);
             navigate(-1);
@@ -79,7 +85,12 @@ export default function AnswerPage() {
             console.error(err);
             navigate("/error");
           })
-      : createAnswer(formData)
+      : toast
+          .promise(createAnswer(formData), {
+            loading: "답변을 저장중입니다...",
+            success: <b>답변이 저장됐습니다!</b>,
+            error: <b>저장을 실패했습니다!</b>,
+          })
           .then((res) => {
             console.log(res);
             navigate(-1);
@@ -106,6 +117,7 @@ export default function AnswerPage() {
 
   return (
     <>
+      <Toaster />
       <NameContainer>
         {question.title} D-{question.day}
       </NameContainer>

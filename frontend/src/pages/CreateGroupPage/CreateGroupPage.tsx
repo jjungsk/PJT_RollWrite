@@ -76,7 +76,12 @@ function CreateGroupPage() {
     if (groupCreateStep === 1 && !validateForm()) return;
 
     if (groupCreateStep === 2) {
-      createGroup(groupInfo)
+      toast
+        .promise(createGroup(groupInfo), {
+          loading: "모임을 생성중입니다...",
+          success: <b>생성을 완료했습니다.</b>,
+          error: <b>생성에 실패했습니다.</b>,
+        })
         .then((res) => {
           setNewGroupInfo(res.data);
         })
