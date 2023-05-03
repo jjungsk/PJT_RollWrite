@@ -30,6 +30,7 @@ const EmojiContainer = styled.div`
 
 const ArrowContainer = styled.div`
   margin: auto 15px;
+  width: 30px;
 `;
 
 const TextContainer = styled.div`
@@ -41,6 +42,22 @@ const TextContainer = styled.div`
   font-weight: 700;
   line-height: 24px;
   padding: 0 15px;
+  position: relative;
+`;
+
+const ModifyBtn = styled.button`
+  position: absolute;
+  border: 1px solid black;
+  border-radius: 8px;
+  height: 20px;
+  width: 40px;
+  top: -24px;
+  right: 32px;
+`;
+
+const AnswerContainer = styled.div`
+  width: 100%;
+  font-size: 16px;
 `;
 
 const BtnContainer = styled.div`
@@ -49,11 +66,13 @@ const BtnContainer = styled.div`
 `;
 
 export {
-    InfoContainer, 
-    DateContainer, 
-    NameContainer, 
-    EmojiContainer,
-    ArrowContainer, 
-    TextContainer, 
-    BtnContainer 
+  InfoContainer,
+  DateContainer,
+  NameContainer,
+  EmojiContainer,
+  ArrowContainer,
+  TextContainer,
+  BtnContainer,
+  AnswerContainer,
+  ModifyBtn,
 };

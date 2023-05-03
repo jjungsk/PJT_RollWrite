@@ -25,7 +25,7 @@ const ImgContainer = styled.div<{ BgImg: string }>`
   margin: auto;
   align-items: center;
   justify-content: center;
-  border: 1px solid #7A7E80;
+  border: 1px solid #7a7e80;
   border-radius: 10px;
   position: relative;
   background-color: rgb(0, 0, 0, 0.4);
@@ -40,7 +40,7 @@ const ImgContainer = styled.div<{ BgImg: string }>`
 
 const IconContainer = styled.div`
   position: absolute;
-  width: 100%
+  width: 100%;
 `;
 
 const TextContainer = styled.div`
@@ -60,10 +60,10 @@ const ContentContainer = styled.textarea`
 `;
 
 export {
-    NameContainer, 
-    QuestionDiv,
-    ImgContainer,
-    IconContainer,
-    TextContainer,
-    ContentContainer,
+  NameContainer,
+  QuestionDiv,
+  ImgContainer,
+  IconContainer,
+  TextContainer,
+  ContentContainer,
 };

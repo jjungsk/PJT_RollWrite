@@ -23,7 +23,6 @@ function CreateGroupStepTwo({ groupInfo, setGroupInfo, onClick }: Props) {
       ...groupInfo,
       [name]: value,
     });
-    console.log(groupInfo);
   };
 
   return (

@@ -35,7 +35,6 @@ function CreateGroupStepThree({
           ...groupInfo,
           [name]: [...tag, parseInt(value)],
         });
-    console.log(groupInfo);
   };
 
   return (
