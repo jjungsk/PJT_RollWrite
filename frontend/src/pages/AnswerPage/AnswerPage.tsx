@@ -5,54 +5,84 @@ import {
   QuestionDiv,
   ImgContainer,
   IconContainer,
+  TextContainer,
+  ContentContainer,
 } from "./style";
-import TextArea from "../../elements/TextArea/TextArea";
 import GhostBtn from "../../elements/Button/GhostBtn";
-import { ReactComponent as ImgBtn } from "../../assets/AddImgBtn.svg";
-
-// 추가로 구현해야할 부분
-// 1. 데이터 저장, 수정 api 연결
-// 2. 이미지 업로드
-// 3. 이미지 미리보기
+import Btn from "../../assets/AddImgBtn.svg";
+import { createAnswer, updateAnswer } from "../../apis/question";
 
 export default function AnswerPage() {
-  const location = useLocation();
-  const state = location.state as {
-    title: string;
-    day: number;
-    question: string;
+  // const location = useLocation();
+  // const state = location.state as {
+  //   title: string;
+  //   day: number;
+  //   question: string;
+  //   questionId: number;
+  //   meetingId: number;
+  // };
+  // const title = state.title;
+  // const day = state.day;
+  // const question = state.question;
+  // const questionId = state.questionId;
+  // const meetingId = state.meetingId;
+
+  // 테스트용 데이터
+  const title = "테스트입니다";
+  const day = "날짜입니다";
+  const question = "테스트질문입니다";
+  const questionId = 1;
+  const meetingId = 1;
+
+  // 이미지
+  const [ImgFile, setImgFile] = useState<File | undefined>();
+  const [tmpImg, settmpImg] = useState<string>("");
+  // 답변
+  const [answer, setAnswer] = useState<string>("");
+  // 답변 입력하면 answer에 넣어줌
+  const handleAnswer = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setAnswer(e.target.value);
   };
-  const title = state.title;
-  const day = state.day;
-  const question = state.question;
 
-  const imgRef = useRef<HTMLInputElement | null>(null);
-  const onImageChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (!e.target.files) {
-        return;
-      }
-      console.log(e.target.files[0].name);
-    },
-    []
-  );
-
-  //   const [imgFile, setImgFile] = useState<string | null>(null);
-  //   const saveImgFile = () => {
-  //     const file = imgRef.current.files[0];
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-  //     reader.onloadend = () => {
-  //       setImgFile(reader.result);
-  //     };
-  //   };
-
-  const handleImgBtn = useCallback(() => {
-    if (!imgRef.current) {
-      return;
+  // 이미지 업로드 및 미리보기
+  const handleImg = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files[0]) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (e.target) {
+          settmpImg(e.target.result as string);
+          setImgFile(files[0]);
+        }
+      };
+      reader.readAsDataURL(files[0]);
     }
-    imgRef.current.click();
-  }, []);
+  };
+
+  // 버튼 눌렀을 때 api로 데이터 전송
+  const handleSaveBtn = () => {
+    // formData에 이미지, 답변 저장
+    const formData = new FormData();
+    const data = JSON.stringify({
+      answer: answer,
+      meetingId: meetingId,
+      questionId: questionId,
+    });
+    const jsonData = new Blob([data], { type: "application/json" });
+    formData.append("data", jsonData);
+    if (ImgFile) {
+      formData.append("image", ImgFile);
+    }
+    // @ts-ignore
+    for (let value of formData.values()) {
+      console.log(value);
+    }
+
+    // 최초 입력
+    createAnswer(formData);
+
+    // 수정
+  };
 
   return (
     <>
@@ -60,21 +90,24 @@ export default function AnswerPage() {
         {title} D-{day}
       </NameContainer>
       <QuestionDiv>{question}</QuestionDiv>
-      <ImgContainer style={{ backgroundImage: "url()" }}>
+      <ImgContainer BgImg={tmpImg}>
         <IconContainer>
-          <ImgBtn onClick={handleImgBtn}></ImgBtn>
+          <label htmlFor="profile-img">
+            <img src={Btn} alt="img" />
+          </label>
         </IconContainer>
         <input
+          id="profile-img"
           type="file"
           accept="image/*"
-          id="img"
-          ref={imgRef}
-          onChange={onImageChange}
+          onChange={handleImg}
           style={{ display: "none" }}
         />
       </ImgContainer>
-      <TextArea></TextArea>
-      <GhostBtn label="저장하기"></GhostBtn>
+      <TextContainer>
+        <ContentContainer onChange={handleAnswer}>{answer}</ContentContainer>
+      </TextContainer>
+      <GhostBtn label="저장하기" onClick={handleSaveBtn}></GhostBtn>
     </>
   );
 }

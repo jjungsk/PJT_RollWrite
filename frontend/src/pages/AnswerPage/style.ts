@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 const NameContainer = styled.div`
   width: 100%;
@@ -18,7 +18,7 @@ const QuestionDiv = styled.div`
   line-height: 25px;
 `;
 
-const ImgContainer = styled.div`
+const ImgContainer = styled.div<{ BgImg: string }>`
   display: flex;
   width: 300px;
   height: 15vh;
@@ -28,9 +28,14 @@ const ImgContainer = styled.div`
   border: 1px solid #7A7E80;
   border-radius: 10px;
   position: relative;
-  opacity: 0.8;
-  background-color: rgba(0, 0, 0, 0.4);
-  object-fit: cover;
+  background-color: rgb(0, 0, 0, 0.4);
+  background-position: center;
+  ${(props: any) =>
+    props.BgImg &&
+    css`
+      background-image: url(${props.BgImg});
+      background-size: cover;
+    `}
 `;
 
 const IconContainer = styled.div`
@@ -38,9 +43,27 @@ const IconContainer = styled.div`
   width: 100%
 `;
 
+const TextContainer = styled.div`
+  margin: auto;
+`;
+
+const ContentContainer = styled.textarea`
+  width: 300px;
+  height: 40vh;
+  background: var(--lightgray-color);
+  box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+  border: none;
+  padding: 15px;
+  font-size: 16px;
+  margin-block: 15px;
+`;
+
 export {
     NameContainer, 
     QuestionDiv,
     ImgContainer,
-    IconContainer
+    IconContainer,
+    TextContainer,
+    ContentContainer,
 };
