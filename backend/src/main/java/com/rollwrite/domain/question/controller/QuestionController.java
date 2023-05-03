@@ -56,7 +56,7 @@ public class QuestionController {
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.ADD_ANSWER_SUCCESS, addAnswerResDto), HttpStatus.OK);
     }
 
-    @PatchMapping("/answer")
+    @PutMapping("/answer")
     public ResponseEntity<ApiResponse> modifyAnswer(@ApiIgnore Authentication authentication,
                                                     @RequestPart ModifyAnswerReqDto modifyAnswerReqDto,
                                                     @RequestPart(required = false) MultipartFile image) throws IOException {
