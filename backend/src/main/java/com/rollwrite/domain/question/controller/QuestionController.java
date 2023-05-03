@@ -69,7 +69,7 @@ public class QuestionController {
 
     @DeleteMapping("/answer/{questionId}")
     public ResponseEntity<ApiResponse> removeAnswerImage(@ApiIgnore Authentication authentication,
-                                                    @PathVariable Long questionId) throws IOException {
+                                                         @PathVariable Long questionId) throws IOException {
         log.info("답변 이미지 삭제 questionId : {}", questionId);
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
         Long userId = userDetails.getUserId();
