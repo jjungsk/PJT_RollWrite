@@ -17,6 +17,7 @@ public enum SuccessCode {
     REISSUE_SUCCESS(StatusCode.SUCCESS, "accessToken 재발급이 완료되었습니다."),
     FIND_USER_SUCCESS(StatusCode.SUCCESS, "유저 조회가 완료되었습니다."),
     MODIFY_USER_SUCCESS(StatusCode.SUCCESS, "유저 정보가 정상 변경되었습니다."),
+    REMOVE_USER_PROFILE_SUCCESS(StatusCode.SUCCESS, "유저 프로필 이미지가 정상 삭제 되었습니다."),
     LOGOUT_SUCCESS(StatusCode.SUCCESS, "로그아웃 되었습니다."),
     REMOVE_USER_SUCCESS(StatusCode.SUCCESS, "회원 정보가 삭제 되었습니다."),
 

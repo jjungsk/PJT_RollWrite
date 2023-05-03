@@ -7,6 +7,7 @@ import com.rollwrite.domain.user.service.AuthService;
 import com.rollwrite.global.auth.CustomUserDetails;
 import com.rollwrite.global.model.ApiResponse;
 import com.rollwrite.global.model.SuccessCode;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.Cookie;
+import java.io.IOException;
 
 /**
  * 구현 methods
@@ -35,8 +37,10 @@ public class AuthController {
     private final AuthService authService;
 
     // 1. 카카오 로그인
+    @ApiOperation(value = "카카오 로그인",
+            notes = "카카오에서 받은 Token 값으로 로그인")
     @GetMapping("/kakao/login")
-    public ResponseEntity<?> kakaoLogin(@RequestParam("code") String code) throws JsonProcessingException {
+    public ResponseEntity<?> kakaoLogin(@RequestParam("code") String code) throws IOException {
         AddTokenCookieDto addTokenCookieDto = authService.kakaoLogin(code);
 
         // accessToken Dto 담기

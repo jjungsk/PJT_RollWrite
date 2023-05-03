@@ -5,11 +5,16 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.*;
 import com.rollwrite.domain.user.entity.TokenType;
+import com.rollwrite.global.model.ApiResponse;
+import com.rollwrite.global.exception.DirectExceptionHandler;
+import com.rollwrite.global.model.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -84,7 +89,7 @@ public class JwtTokenUtil {
         return new Date(now.getTime() + expirationTime);
     }
 
-    public static void handleError(String token) {
+    public static void handleError(HttpServletResponse response, String token) throws IOException {
         JWTVerifier verifier = JWT
                 .require(Algorithm.HMAC512(secretKeyAT.getBytes()))
                 .withIssuer(ISSUER)
@@ -100,6 +105,7 @@ public class JwtTokenUtil {
         } catch (SignatureVerificationException ex) {
             throw ex;
         } catch (TokenExpiredException ex) {
+//            DirectExceptionHandler.sendError(response, ApiResponse.error(ErrorCode.UNAUTHORIZED_EXCEPTION));
             throw ex;
         } catch (JWTCreationException ex) {
             throw ex;

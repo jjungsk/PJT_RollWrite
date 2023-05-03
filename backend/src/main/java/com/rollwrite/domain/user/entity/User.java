@@ -37,7 +37,6 @@ public class User extends BaseTimeEntity {
     @Column(length = 15)
     private String nickname;
 
-    @NotNull
     @Column(length = 2083)
     private String profileImage;
 
@@ -74,6 +73,10 @@ public class User extends BaseTimeEntity {
 
     public void update(String nickname, String profileImage) {
         this.nickname = nickname;
+        this.profileImage = profileImage;
+    }
+
+    public void updateImage(String profileImage) {
         this.profileImage = profileImage;
     }
 
