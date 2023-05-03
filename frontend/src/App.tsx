@@ -6,16 +6,22 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "./constants/types";
+import {
+  updateAccessToken,
+  updateLoginStatus,
+  updateRouteHistory,
+} from "./store/authReducer";
+import { axiosInstance } from "./apis/instance";
+
 import MainLayout from "./Layout/MainLayout";
+import SubLayout from "./Layout/SubLayout";
 import HomePage from "./pages/HomePage/HomePage";
 import MyPage from "./pages/MyPage/MyPage";
 import QuestionPage from "./pages/QuestionPage/QuestionPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import NotifyPage from "./pages/NotifyPage/NotifyPage";
 import SettingPage from "./pages/SettingPage/SettingPage";
-import SubLayout from "./Layout/SubLayout";
-import { useAppDispatch, useAppSelector } from "./constants/types";
-import { updateRouteHistory } from "./store/authReducer";
 import CreateGroupPage from "./pages/CreateGroupPage/CreateGroupPage";
 import InvitePage from "./pages/InvitePage/InvitePage";
 import AnswerPage from "./pages/AnswerPage/AnswerPage";
@@ -23,45 +29,68 @@ import ResultPage from "./pages/ResultPage/ResultPage";
 import JoinPage from "./pages/JoinPage/JoinPage";
 import AwardPage from "./pages/AwardPage/AwardPage";
 import OauthPage from "./pages/OauthPage/OauthPage";
-import { axiosInstance } from "./apis/instance";
 
 function App() {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const accessToken = useAppSelector((state) => state.auth.accessToken);
   const isLogin = useAppSelector((state) => state.auth.isLogin);
-  const routeHistory = useAppSelector((state) => state.auth.routeHistory);
 
-  // 헤더 디폴트 추가
+  const currentPath = location.pathname;
   if (accessToken) {
     axiosInstance.defaults.headers.common[
       "Authorization"
     ] = `Bearer ${accessToken}`;
   }
 
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const location = useLocation();
-  console.log("시작");
-  console.log(location.pathname);
-  console.log(isLogin);
-  console.log(accessToken);
-  console.log(routeHistory);
+  // 토큰 갱신
+  axiosInstance.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    async (error) => {
+      const {
+        config,
+        response: { status, data },
+      } = error;
+      const originalRequest = config;
+      if (status === 401 && data.error === "TokenExpiredException") {
+        try {
+          // 갱신 요청
+          const res = await axiosInstance.post<any>(`auth/reissue`);
+          const newAccessToken = res.data.data.accessToken;
+          dispatch(updateAccessToken(newAccessToken));
+          // 실패했던 요청 새로운 accessToken으로 헤더 변경하고 재요청
+          axiosInstance.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${newAccessToken}`;
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          return axiosInstance(originalRequest);
+        } catch (err) {
+          // 갱신 실패시 임의 로그아웃 처리
+          console.log("갱신실패", err);
+          dispatch(updateLoginStatus(false));
+          dispatch(updateAccessToken(""));
+          navigate("/");
+        }
+      }
+      return Promise.reject(error);
+    }
+  );
 
   useEffect(() => {
-    const currentPath = location.pathname;
     if (!isLogin && currentPath !== "/login" && currentPath !== "/oauth") {
-      console.log("a");
       navigate("/login");
       dispatch(updateRouteHistory(currentPath));
-    } else if (isLogin && currentPath === "/oauth") {
-      navigate(routeHistory);
     }
-  }, [dispatch, isLogin, location.pathname, navigate, routeHistory]);
+  });
 
   return (
     <Routes>
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/oauth" element={<OauthPage />} />
       <Route path="/" element={<MainLayout />}>
+        <Route path="/" element={<Navigate to="/question" />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/question" element={<QuestionPage />} />
         <Route path="/my" element={<MyPage />} />
@@ -72,6 +101,8 @@ function App() {
         <Route path="/invite/:meetingId" element={<InvitePage />} />
         <Route path="/answer" element={<AnswerPage />} />
       </Route>
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/oauth" element={<OauthPage />} />
       <Route path="/result/:meetingId" element={<ResultPage />} />
       <Route path="/join/:inviteCode" element={<JoinPage />} />
       <Route path="/award/:meetingId" element={<AwardPage />} />

@@ -18,50 +18,60 @@ interface Props {
   width?: string;
   height?: string;
   margin?: string;
+  setHomeContent?: React.Dispatch<React.SetStateAction<number>>;
+  homeContent?: number;
 }
 
-function GroupCard({ groupInfo, complete, width, height, margin }: Props) {
+function GroupCard({
+  groupInfo,
+  complete,
+  width,
+  height,
+  margin,
+  setHomeContent,
+  homeContent,
+}: Props) {
   const navigate = useNavigate();
   return (
-    <>
-      <GroupCardContainer
-        width={width}
-        height={height}
-        margin={margin}
-        color={groupInfo?.color}
-      >
-        <div>
-          <Title>
-            <div>{groupInfo?.title}</div>
-          </Title>
-          <SubTitle>
-            {groupInfo?.startDay}~{groupInfo?.endDay}
-          </SubTitle>
-        </div>
+    <GroupCardContainer
+      width={width}
+      height={height}
+      margin={margin}
+      color={groupInfo?.color}
+    >
+      <div>
+        <Title>
+          <div>{groupInfo?.title}</div>
+        </Title>
+        <SubTitle>
+          {groupInfo?.startDay}~{groupInfo?.endDay}
+        </SubTitle>
+      </div>
 
-        <GroupCardContent>
-          {groupInfo?.tag.map((tag, i) => (
-            <GroupTag label={tag.content} key={i} />
-          ))}
-        </GroupCardContent>
+      <GroupCardContent>
+        {groupInfo?.tag.map((tag, i) => (
+          <GroupTag label={tag.content} key={i} />
+        ))}
+      </GroupCardContent>
 
-        <HorizontalBtn>
-          <Person />
-          {groupInfo?.participantCnt}
-        </HorizontalBtn>
+      <HorizontalBtn>
+        <Person />
+        {groupInfo?.participantCnt}
+      </HorizontalBtn>
 
-        {!complete && (
-          <GroupCardFooter>
-            <div onClick={() => navigate(`/invite/${groupInfo?.meetingId}`)}>
-              초대하기
-            </div>
-            <div onClick={() => navigate(`/invite/${groupInfo?.meetingId}`)}>
-              참여자 보기
-            </div>
-          </GroupCardFooter>
-        )}
-      </GroupCardContainer>
-    </>
+      {!complete && (
+        <GroupCardFooter>
+          <div onClick={() => navigate(`/invite/${groupInfo?.meetingId}`)}>
+            초대하기
+          </div>
+          {homeContent === 2 ? (
+            <div onClick={() => setHomeContent?.(0)}>달력 보기</div>
+          ) : (
+            <div onClick={() => setHomeContent?.(2)}>참여자 보기</div>
+          )}
+        </GroupCardFooter>
+      )}
+    </GroupCardContainer>
   );
 }
 

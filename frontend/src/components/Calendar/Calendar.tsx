@@ -28,7 +28,7 @@ import {
   isAfter,
   isBefore,
 } from "date-fns";
-import { initTouch, swipeDirection } from "../../apis/swipeDetector";
+import { initTouch, swipeDirection } from "../../utils/swipeDetector";
 import { GroupInfo } from "../../constants/types";
 
 const SPROUT_LIST = [
@@ -145,7 +145,8 @@ function Calendar({
                   ((isAfter(day.currentDay, new Date(groupInfo?.startDay)) &&
                     isBefore(day.currentDay, new Date(groupInfo?.endDay)) &&
                     isSameMonth(day.currentDay, monthStart)) ||
-                    isSameDay(day.currentDay, new Date(groupInfo?.startDay)))
+                    isSameDay(day.currentDay, new Date(groupInfo?.startDay))) &&
+                  isSameMonth(day.currentDay, monthStart)
                 }
                 color={groupInfo?.color}
                 isPicked={day.currentDay === pickedDay}

@@ -22,7 +22,7 @@ export interface Tag {
 export interface Participant {
   userId: number;
   nickname: string;
-  profileImg: string;
+  profileImage: string;
 }
 
 export interface GroupInfo {
@@ -36,6 +36,7 @@ export interface GroupInfo {
   participantCnt: number;
   questionLimit: number;
   questionUsage: number;
+  inviteUrl?: string;
 }
 
 export interface Question {
@@ -54,7 +55,7 @@ export interface DayInfo {
 
 export interface Profile {
   nickname: string;
-  profileImg: string;
+  profileImage: string;
   ongoingGroupCnt?: number;
   completeGroupCnt?: number;
 }
@@ -83,7 +84,7 @@ export interface Chat {
   day: string;
   answer: {
     nickname: string;
-    profileImg: string;
+    profileImage: string;
     isMe: boolean;
     content: string;
     time: string;

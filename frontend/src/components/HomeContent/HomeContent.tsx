@@ -2,10 +2,11 @@ import React from "react";
 import QuestionWrite from "../../components/QuestionWrite/QuestionWrite";
 import { Question, GroupInfo } from "../../constants/types";
 import GroupCalendar from "../GroupCalendar/GroupCalendar";
+import ParticipantList from "../ParticipantList/ParticipantList";
 
 interface HomeContentProps {
   homeContent: number;
-  setHomeContent: (value: number) => void;
+  setHomeContent: React.Dispatch<React.SetStateAction<number>>;
   questionList: Question[];
   groupInfo: GroupInfo;
 }
@@ -27,6 +28,7 @@ function HomeContent({
           groupId={groupInfo.meetingId}
         />
       )}
+      {homeContent === 2 && <ParticipantList groupInfo={groupInfo} />}
     </>
   );
 }

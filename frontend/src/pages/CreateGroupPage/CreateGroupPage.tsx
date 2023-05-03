@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
 import Info from "../../components/EmojiTitleBtn/Info";
 import { useNavigate } from "react-router-dom";
-import { CreateGroup, Tag } from "../../constants/types";
+import { CreateGroup, GroupInfo, Tag } from "../../constants/types";
 import { createGroup, getGroupTag } from "../../apis/home";
 import { isAfter, subDays } from "date-fns";
 import BackNavigation from "../../components/BackNavigation/BackNavigation";
 import CreateGroupStepOne from "../../components/CreateGroupSteps/CreateGroupStepOne";
 import CreateGroupStepTwo from "../../components/CreateGroupSteps/CreateGroupStepTwo";
 import CreateGroupStepThree from "../../components/CreateGroupSteps/CreateGroupStepThree";
+import { handleKakaoClick } from "../../apis/kakaoShare";
 
 function CreateGroupPage() {
   const navigate = useNavigate();
   const [GruopCreatStep, setGruopCreatStep] = useState(0);
   const [tagList, setTagList] = useState<Tag[]>([]);
+  const [newGroupInfo, setNewGroupInfo] = useState<GroupInfo>();
 
   useEffect(() => {
     getGroupTag()
@@ -83,6 +85,7 @@ function CreateGroupPage() {
       createGroup(groupInfo)
         .then((res) => {
           console.log(res);
+          setNewGroupInfo(res.data);
         })
         .catch((error) => {
           console.error(error);
@@ -115,13 +118,13 @@ function CreateGroupPage() {
           setGroupInfo={setGroupInfo}
         />
       )}
-      {GruopCreatStep === 3 && (
+      {GruopCreatStep === 3 && newGroupInfo && (
         <Info
-          title="자율 PJT 팀 가보자구"
+          title={newGroupInfo?.title}
           subTitle="모임을 만들었어요."
           fillLabel="초대하기"
           ghostLabel="홈으로"
-          fillOnClick={() => setGruopCreatStep(0)}
+          fillOnClick={() => handleKakaoClick(newGroupInfo?.inviteUrl!)}
           ghostOnClick={handleClickConfirmBtn}
         />
       )}

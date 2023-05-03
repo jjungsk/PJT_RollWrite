@@ -7,7 +7,7 @@ interface Props {
   award: {
     userId: number;
     nickname: string;
-    profileImg: string;
+    profileImage: string;
     type: string;
   }[];
 }
@@ -18,19 +18,19 @@ function AwardEnd({ award }: Props) {
   let t: {
     userId: number;
     nickname: string;
-    profileImg: string;
+    profileImage: string;
     type: string;
   }[] = [];
   let ph: {
     userId: number;
     nickname: string;
-    profileImg: string;
+    profileImage: string;
     type: string;
   }[] = [];
   let pe: {
     userId: number;
     nickname: string;
-    profileImg: string;
+    profileImage: string;
     type: string;
   }[] = [];
   award.map((profile) => {
@@ -44,20 +44,20 @@ function AwardEnd({ award }: Props) {
       <AwardPageHeader>명예의 전당 🏆</AwardPageHeader>
       이야기 보따리 📚
       <AwardPageContent>
-        {t.map((profile) => {
-          return <ProfileImg size={80} bgImg={profile.profileImg} />;
+        {t.map((profile, i) => {
+          return <ProfileImg size={80} bgImg={profile.profileImage} key={i} />;
         })}
       </AwardPageContent>
       포토 그래퍼 📷
       <AwardPageContent>
-        {ph.map((profile) => {
-          return <ProfileImg size={80} bgImg={profile.profileImg} />;
+        {ph.map((profile, i) => {
+          return <ProfileImg size={80} bgImg={profile.profileImage} key={i} />;
         })}
       </AwardPageContent>
       프로 개근러 👍
       <AwardPageContent>
-        {pe.map((profile) => {
-          return <ProfileImg size={80} bgImg={profile.profileImg} />;
+        {pe.map((profile, i) => {
+          return <ProfileImg size={80} bgImg={profile.profileImage} key={i} />;
         })}
       </AwardPageContent>
       <GhostBtn

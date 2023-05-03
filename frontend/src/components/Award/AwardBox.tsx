@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion, useAnimation } from "framer-motion";
+import { pop, render } from "../../utils/pop";
 
 interface Props {
   setAwardSteps: React.Dispatch<React.SetStateAction<number>>;
@@ -11,6 +12,10 @@ const AwardBox = ({ setAwardSteps }: Props) => {
   const [clickCount, setClickCount] = useState(0);
 
   useEffect(() => {
+    pop(1);
+    setTimeout(render, 700);
+  }, []);
+  useEffect(() => {
     controls.start({ opacity: 1, scale: 1 });
   });
 
@@ -20,6 +25,9 @@ const AwardBox = ({ setAwardSteps }: Props) => {
     setClickCount((prevClickCount) => prevClickCount + 1);
 
     setIsShaking(true);
+    // 쏘기
+    pop(30);
+    //
     await controls.start({
       rotate: [-10, 10, -10, 10, -10, 10, 0],
       transition: { duration: 0.5, ease: "easeInOut" },

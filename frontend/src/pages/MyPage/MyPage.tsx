@@ -19,7 +19,7 @@ function MyPage() {
 
   const [profile, setProfile] = useState<Profile>({
     nickname: "",
-    profileImg: "",
+    profileImage: "",
     ongoingGroupCnt: 0,
     completeGroupCnt: 0,
   });
@@ -27,9 +27,16 @@ function MyPage() {
 
   useEffect(() => {
     // TODO: 프로필 데이터 API 호출
+    // getUserDetail()
+    //   .then((res) => {
+    //     setProfile(res.data);
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
     const profileData = {
       nickname: "내이름은닉네임이다앙",
-      profileImg: "/sample_profile_image.png",
+      profileImage: "/sample_profile_image.png",
       ongoingGroupCnt: 4,
       completeGroupCnt: 6,
     };
@@ -52,17 +59,17 @@ function MyPage() {
           {
             userId: 1,
             nickname: "닉네임1",
-            profileImg: "/sample_profile_image.png",
+            profileImage: "/sample_profile_image.png",
           },
           {
             userId: 2,
             nickname: "닉네임2",
-            profileImg: "/sample_profile_image.png",
+            profileImage: "/sample_profile_image.png",
           },
           {
             userId: 3,
             nickname: "닉네임3",
-            profileImg: "/sample_profile_image.png",
+            profileImage: "/sample_profile_image.png",
           },
         ],
         participantCnt: 3,
@@ -84,27 +91,27 @@ function MyPage() {
           {
             userId: 1,
             nickname: "닉네임1",
-            profileImg: "/sample_profile_image.png",
+            profileImage: "/sample_profile_image.png",
           },
           {
             userId: 2,
             nickname: "닉네임2",
-            profileImg: "/sample_profile_image.png",
+            profileImage: "/sample_profile_image.png",
           },
           {
             userId: 3,
             nickname: "닉네임3",
-            profileImg: "/sample_profile_image.png",
+            profileImage: "/sample_profile_image.png",
           },
           {
             userId: 4,
             nickname: "닉네임4",
-            profileImg: "/sample_profile_image.png",
+            profileImage: "/sample_profile_image.png",
           },
           {
             userId: 5,
             nickname: "닉네임5",
-            profileImg: "/sample_profile_image.png",
+            profileImage: "/sample_profile_image.png",
           },
         ],
         participantCnt: 5,
@@ -122,12 +129,12 @@ function MyPage() {
           {
             userId: 1,
             nickname: "닉네임1",
-            profileImg: "/sample_profile_image.png",
+            profileImage: "/sample_profile_image.png",
           },
           {
             userId: 2,
             nickname: "닉네임2",
-            profileImg: "/sample_profile_image.png",
+            profileImage: "/sample_profile_image.png",
           },
         ],
         participantCnt: 2,
@@ -145,22 +152,22 @@ function MyPage() {
           {
             userId: 1,
             nickname: "닉네임1",
-            profileImg: "/sample_profile_image.png",
+            profileImage: "/sample_profile_image.png",
           },
           {
             userId: 2,
             nickname: "닉네임2",
-            profileImg: "/sample_profile_image.png",
+            profileImage: "/sample_profile_image.png",
           },
           {
             userId: 3,
             nickname: "닉네임3",
-            profileImg: "/sample_profile_image.png",
+            profileImage: "/sample_profile_image.png",
           },
           {
             userId: 4,
             nickname: "닉네임4",
-            profileImg: "/sample_profile_image.png",
+            profileImage: "/sample_profile_image.png",
           },
         ],
         participantCnt: 4,
@@ -179,7 +186,7 @@ function MyPage() {
   return (
     <div>
       <ProfileContainer style={{ backgroundImage: `url(${ProfileCard})` }}>
-        <ProfileImg size={110} bgImg={profile.profileImg} />
+        <ProfileImg size={110} bgImg={profile.profileImage} />
         <ProfileInfo>
           <p>{profile.nickname}</p>
           <ProfileInfoDetail>
@@ -215,7 +222,7 @@ function MyPage() {
           >
             <GroupCard
               complete
-              width="320px"
+              width="calc(100% - 60px)"
               height="90px"
               groupInfo={group}
               margin="16px auto"

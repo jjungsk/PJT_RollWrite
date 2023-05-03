@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { ProfileImg } from "../../pages/MyPage/style";
 import GhostBtn from "../../elements/Button/GhostBtn";
 import { Profile } from "../../constants/types";
-import AwardFallingPollen from "./AwardFallingPollen";
+import { pop } from "../../utils/pop";
 
 interface Props {
   profile: Profile;
@@ -19,6 +19,7 @@ function AwardMember({
   awardSteps,
   awardTitle,
 }: Props) {
+  pop(150);
   return (
     <AwardPageContainer>
       <AwardPageHeader>
@@ -41,13 +42,12 @@ function AwardMember({
           },
         }}
       >
-        <ProfileImg size={280} bgImg={profile.profileImg} />
+        <ProfileImg size={280} bgImg={profile.profileImage} />
       </motion.div>
       <GhostBtn
         label="확인"
         onClick={() => setAwardSteps(awardSteps + 1)}
       ></GhostBtn>
-      <AwardFallingPollen />
     </AwardPageContainer>
   );
 }
