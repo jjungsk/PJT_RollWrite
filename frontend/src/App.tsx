@@ -57,10 +57,10 @@ function App() {
     async (error) => {
       const {
         config,
-        response: { statusCode },
+        response: { status },
       } = error;
       const originalRequest = config;
-      if (statusCode === 401) {
+      if (status === 401) {
         try {
           // 갱신 요청
           const res = await axiosInstance.post<any>(`auth/reissue`);
