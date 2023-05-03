@@ -53,10 +53,10 @@ function App() {
     async (error) => {
       const {
         config,
-        response: { status, data },
+        response: { statusCode, data },
       } = error;
       const originalRequest = config;
-      if (status === 401 && data.error === "TokenExpiredException") {
+      if (statusCode === 401 && data.error === "TokenExpiredException") {
         try {
           // 갱신 요청
           const res = await axiosInstance.post<any>(`auth/reissue`);

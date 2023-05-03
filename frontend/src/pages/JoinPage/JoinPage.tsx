@@ -14,6 +14,7 @@ function JoinPage() {
         })
         .catch((err) => {
           console.error(err);
+          navigate("/question ");
         });
   });
 
