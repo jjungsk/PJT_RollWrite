@@ -74,7 +74,7 @@ public class QuestionController {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
         Long userId = userDetails.getUserId();
         questionService.removeAnswerImage(userId, questionId);
-        return new ResponseEntity<>(ApiResponse.success(SuccessCode.DELETE_IMAGE_SUCCESS), HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.REMOVE_IMAGE_SUCCESS), HttpStatus.OK);
     }
 
     @GetMapping
