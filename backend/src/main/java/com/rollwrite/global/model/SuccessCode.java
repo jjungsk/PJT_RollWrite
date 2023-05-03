@@ -40,6 +40,7 @@ public enum SuccessCode {
     MODIFY_ANSWER_SUCCESS(StatusCode.SUCCESS, "답변이 수정되었습니다."),
     FIND_TODAY_QUESTION_SUCCESS(StatusCode.SUCCESS, "오늘 질문 목록을 조회했습니다."),
     FIND_QUESTION_SUCCESS(StatusCode.SUCCESS, "질문 목록을 조회했습니다."),
+    DELETE_IMAGE_SUCCESS(StatusCode.SUCCESS, "답변 이미지가 삭제되었습니다."),
     ;
 
     private final StatusCode statusCode;
