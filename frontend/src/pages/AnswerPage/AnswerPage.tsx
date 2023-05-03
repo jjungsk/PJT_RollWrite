@@ -74,11 +74,7 @@ export default function AnswerPage() {
       ? modifyAnswer()
       : question.isFinal
       ? toast.custom((t) => (
-          <div
-            className={`${
-              t.visible ? "animate-enter" : "animate-leave"
-            } max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
-          >
+          <div>
             마지막답변은 수정할수없습니다. 저장하사겠습니까?
             <button
               onClick={() => {
@@ -119,7 +115,9 @@ export default function AnswerPage() {
       })
       .then((res) => {
         console.log(res);
-        navigate(-1);
+        question.isFinal
+          ? navigate(`/award/${question.meetingId}`)
+          : navigate(-1);
       })
       .catch((err) => {
         console.error(err);
