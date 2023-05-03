@@ -21,6 +21,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.html.Option;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -248,7 +250,7 @@ public class MeetingService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
-        Meeting meeting = meetingRepository.findById(meetingId)
+        Meeting meeting = participantRepository.findMeetingByUserAndMeetingAndIsDone(userId, meetingId, true)
                 .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
 
         // 참여자 수
@@ -280,8 +282,8 @@ public class MeetingService {
                 .build();
     }
 
-    public List<MeetingAwardDto> findMeetingAward(Long meetingId) {
-        Meeting meeting = meetingRepository.findById(meetingId)
+    public List<MeetingAwardDto> findMeetingAward(Long userId, Long meetingId) {
+        Meeting meeting = participantRepository.findMeetingByUserAndMeetingAndIsDone(userId, meetingId, true)
                 .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
 
         // 해당 Meeting에 해당하는 모든 통계 가져오기

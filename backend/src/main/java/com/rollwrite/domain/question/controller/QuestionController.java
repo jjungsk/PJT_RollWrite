@@ -76,7 +76,19 @@ public class QuestionController {
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.MODIFY_ANSWER_SUCCESS), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "오늘 질문 전체 조회", notes = "사용자가 참여한 각 모임의 오늘 질문 전체 조회")
+    @ApiOperation(value = "답변 이미지 삭제", notes = "답변 이미지 삭제")
+    @Parameter(name = "questionId", description = "삭제할 답변 이미지의 질문 아이디")
+    @DeleteMapping("/answer/{questionId}")
+    public ResponseEntity<ApiResponse> removeAnswerImage(@ApiIgnore Authentication authentication,
+                                                         @PathVariable Long questionId) throws IOException {
+        log.info("답변 이미지 삭제 questionId : {}", questionId);
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
+        Long userId = userDetails.getUserId();
+        questionService.removeAnswerImage(userId, questionId);
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.REMOVE_ANSWER_IMAGE_SUCCESS), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "진행 중인 모임 캘린더", notes = "로그인한 사용자가 참여하는 진행 중인 모임 목록을 조회")
     @GetMapping
     public ResponseEntity<ApiResponse<List<FindTodayQuestionResDto>>> todayQuestionList(@ApiIgnore Authentication authentication) {
         log.info("todayQuestionList 호출");
