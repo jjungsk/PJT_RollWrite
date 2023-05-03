@@ -3,60 +3,33 @@ import { AwardPageContainer, AwardPageContent, AwardPageHeader } from "./style";
 import GhostBtn from "../../elements/Button/GhostBtn";
 import { ProfileImg } from "../../pages/MyPage/style";
 import { useNavigate, useParams } from "react-router-dom";
+import { Award } from "../../constants/types";
 interface Props {
-  award: {
-    userId: number;
-    nickname: string;
-    profileImage: string;
-    type: string;
-  }[];
+  award: Award;
 }
 
 function AwardEnd({ award }: Props) {
   const { meetingId } = useParams();
   const navigate = useNavigate();
-  let t: {
-    userId: number;
-    nickname: string;
-    profileImage: string;
-    type: string;
-  }[] = [];
-  let ph: {
-    userId: number;
-    nickname: string;
-    profileImage: string;
-    type: string;
-  }[] = [];
-  let pe: {
-    userId: number;
-    nickname: string;
-    profileImage: string;
-    type: string;
-  }[] = [];
-  award.map((profile) => {
-    if (profile.type === "PHOTOGRAPHER") ph.push(profile);
-    else if (profile.type === "PERFECTATTENDANCE") pe.push(profile);
-    else t.push(profile);
-    return 0;
-  });
+
   return (
     <AwardPageContainer>
       <AwardPageHeader>명예의 전당 🏆</AwardPageHeader>
       이야기 보따리 📚
       <AwardPageContent>
-        {t.map((profile, i) => {
+        {award.taleteller.map((profile, i) => {
           return <ProfileImg size={80} bgImg={profile.profileImage} key={i} />;
         })}
       </AwardPageContent>
       포토 그래퍼 📷
       <AwardPageContent>
-        {ph.map((profile, i) => {
+        {award.photographer.map((profile, i) => {
           return <ProfileImg size={80} bgImg={profile.profileImage} key={i} />;
         })}
       </AwardPageContent>
       프로 개근러 👍
       <AwardPageContent>
-        {pe.map((profile, i) => {
+        {award.perfectAttendance.map((profile, i) => {
           return <ProfileImg size={80} bgImg={profile.profileImage} key={i} />;
         })}
       </AwardPageContent>
