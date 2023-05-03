@@ -37,7 +37,8 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository {
                         question.content.as("question"),
                         question.emoji.as("emoji"),
                         answer.content.as("answer"),
-                        answer.imageUrl.as("image")))
+                        answer.imageUrl.as("image"),
+                        question.createdAt.as("questionCreatedAt")))
                 .from(question)
                 .leftJoin(answer).on(question.eq(answer.question))
                 .where(question.meeting.eq(meeting))

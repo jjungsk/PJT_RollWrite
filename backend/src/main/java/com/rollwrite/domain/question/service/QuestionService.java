@@ -157,7 +157,7 @@ public class QuestionService {
 
     public List<FindTodayQuestionResDto> findTodayQuestion(Long userId) {
         // 내가 참여한 진행 중인 모임 전체 조회
-        List<Meeting> meetingList = participantRepository.findMeetingByUserAndIsDone(userId, false);
+        List<Meeting> meetingList = participantRepository.findTodayMeetingByUser(userId);
 
         // question, answer 조인
         List<FindTodayQuestionResDto> findTodayQuestionResDtoList = new ArrayList<>();
@@ -165,7 +165,14 @@ public class QuestionService {
             Optional<FindTodayQuestionResDto> todayQuestion = questionRepository.findTodayQuestionByMeeting(meeting);
 
             // 오늘의 질문이 있으면 리스트에 추가
-            todayQuestion.ifPresent(findTodayQuestionResDtoList::add);
+            if (todayQuestion.isPresent()) {
+                FindTodayQuestionResDto todayQuestionResDto = todayQuestion.get();
+                // 마지막 질문일 때
+                if (meeting.getEndDay().equals(todayQuestionResDto.getQuestionCreatedAt().toLocalDate())) {
+                    todayQuestionResDto.updateIsFinal(true);
+                }
+                findTodayQuestionResDtoList.add(todayQuestionResDto);
+            }
         }
 
         // sort
