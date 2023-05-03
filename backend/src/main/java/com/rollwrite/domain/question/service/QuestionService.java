@@ -124,10 +124,7 @@ public class QuestionService {
         Answer answer = answerRepository.findByUserAndQuestion(user, question)
                 .orElseThrow(() -> new IllegalArgumentException("답변을 찾을 수 없습니다"));
 
-        if (image == null) {
-            // 사진 수정을 원하지 않을 때
-            log.info("사진 수정을 원하지 않음");
-        } else {
+        if (image != null) {
             if (image.isEmpty()) {
                 // 사진을 지우고 싶을 때
                 fileService.fileDelete(answer.getImageUrl());
