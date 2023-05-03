@@ -2,8 +2,7 @@ package com.rollwrite.domain.user.service;
 
 import com.rollwrite.domain.meeting.entity.Meeting;
 import com.rollwrite.domain.meeting.repository.ParticipantRepository;
-import com.rollwrite.domain.user.dto.DetailsUserResDto;
-import com.rollwrite.domain.user.dto.FindUserResDto;
+import com.rollwrite.domain.user.dto.FindUserProfileResDto;
 import com.rollwrite.domain.user.entity.User;
 import com.rollwrite.domain.user.repository.UserRepository;
 import com.rollwrite.global.service.FileService;
@@ -14,7 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * User Service Logic
@@ -30,7 +31,7 @@ public class UserService {
     private final ParticipantRepository participantRepository;
 
     // 1. User 회원 정보 조희
-    public DetailsUserResDto findUser(Long userId) {
+    public FindUserProfileResDto findUser(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
@@ -42,19 +43,18 @@ public class UserService {
         log.info(meetingIs.toString());
         log.info(meetingIsDone.toString());
 
-        return DetailsUserResDto.builder()
+        return FindUserProfileResDto.builder()
                 .userId(user.getId())
                 .nickname(user.getNickname())
                 .profileImage(user.getProfileImage())
-                .cntMeetingIs(meetingIs.size())
-                .cntMeetingIsDone(meetingIsDone.size())
+                .cntMeetingProgress(meetingIs.size())
+                .cntMeetingProgressIsDone(meetingIsDone.size())
                 .build();
     }
 
     // 2. User 회원 정보 수정
     @Transactional
     public void modifyUser(Long userId, String nickname, MultipartFile multipartFile) throws IOException {
-        log.info("회원 정보 수정");
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
         String modifyNickname = user.getNickname();
@@ -65,14 +65,25 @@ public class UserService {
         if (multipartFile != null && !multipartFile.isEmpty()) {
             if (user.getProfileImage() != null) fileService.fileDelete(user.getProfileImage());
             modifyProfileImage = fileService.fileUpload("profile", multipartFile);
-//            s3Service.deleteFile(modifyProfileImage);
-//            modifyProfileImage = s3Service.addFile(multipartFile);
         }
 
         user.update(modifyNickname, modifyProfileImage);
     }
 
-    // 3. User 회원 탈퇴
+    // 3. User 프로필 이미지 삭제
+    @Transactional
+    public void removeUserProfile(Long userId) throws UnknownHostException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
+        String image = Optional.ofNullable(user.getProfileImage())
+                .orElseThrow(() -> new IllegalArgumentException("사진이 없습니다."));
+
+        fileService.fileDelete(image);
+        user.updateImage(null);
+
+    }
+
+    // 4. User 회원 탈퇴
     @Transactional
     public void removeUser(Long userId) {
         userRepository.deleteById(userId);

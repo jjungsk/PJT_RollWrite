@@ -18,9 +18,5 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ApiResponse> handleIllegalArgument(IllegalArgumentException e) {
         return new ResponseEntity<>(ApiResponse.error(ErrorCode.VALIDATION_EXCEPTION, e.getMessage()), HttpStatus.BAD_REQUEST);
     }
-
-//    @ExceptionHandler(TokenExpiredException.class)
-//    public ResponseEntity<ApiResponse> handleTokenExpired(TokenExpiredException e) {
-//        return new ResponseEntity<>(ApiResponse.error(ErrorCode.UNAUTHORIZED_EXCEPTION, e.getMessage()), HttpStatus.UNAUTHORIZED);
-//    }
+    
 }

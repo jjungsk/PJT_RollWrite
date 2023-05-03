@@ -21,7 +21,6 @@ public class JwtExceptionHandlerFilter extends OncePerRequestFilter {
      */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        log.info("들어옴?");
         try {
             filterChain.doFilter(request, response);
         } catch (AlgorithmMismatchException ex) {
@@ -31,14 +30,14 @@ public class JwtExceptionHandlerFilter extends OncePerRequestFilter {
         } catch (SignatureGenerationException ex) {
             throw ex;
         } catch (SignatureVerificationException ex) {
+            DirectExceptionHandler.sendError(response, ApiResponse.error(ErrorCode.VALIDATION_EXCEPTION, "잘못된 토큰입니다."));
+            ex.printStackTrace();
             throw ex;
         } catch (IllegalArgumentException ex) {
-            log.error("IllegalArgumentException");
-            DirectExceptionHandler.sendError(response, ApiResponse.error(ErrorCode.VALIDATION_EXCEPTION, "호옹잉"));
+            DirectExceptionHandler.sendError(response, ApiResponse.error(ErrorCode.VALIDATION_EXCEPTION, "요청자가 찾는 정보가 없습니다."));
             ex.printStackTrace();
         } catch (TokenExpiredException ex) {
-            log.error("권한 없는 유저이지롱");
-            DirectExceptionHandler.sendError(response, ApiResponse.error(ErrorCode.UNAUTHORIZED_EXCEPTION, "과연??"));
+            DirectExceptionHandler.sendError(response, ApiResponse.error(ErrorCode.UNAUTHORIZED_EXCEPTION, "토큰이 만료되었습니다."));
             ex.printStackTrace();
         } catch (JWTCreationException ex) {
             throw ex;

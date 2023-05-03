@@ -58,6 +58,7 @@ public class FileService {
     }
 
     public void fileDelete(String path) throws UnknownHostException {
+        log.info("file 삭제 경로 : {}", getPath(path));
         File file = new File(getPath(path));
         file.delete();
     }
