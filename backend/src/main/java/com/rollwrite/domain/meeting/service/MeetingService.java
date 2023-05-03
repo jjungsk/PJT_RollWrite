@@ -247,13 +247,10 @@ public class MeetingService {
     }
 
     public MeetingChatDto findMeetingChat(Long userId, Long meetingId) {
-        participantRepository.findMeetingByUserAndMeetingAndIsDone(userId, meetingId, true)
-                .orElseThrow(()->new IllegalArgumentException("종료되지 않은 모임입니다."));
-
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
-        Meeting meeting = meetingRepository.findById(meetingId)
+        Meeting meeting = participantRepository.findMeetingByUserAndMeetingAndIsDone(userId, meetingId, true)
                 .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
 
         // 참여자 수
@@ -286,10 +283,7 @@ public class MeetingService {
     }
 
     public List<MeetingAwardDto> findMeetingAward(Long userId, Long meetingId) {
-        participantRepository.findMeetingByUserAndMeetingAndIsDone(userId, meetingId, true)
-                .orElseThrow(()->new IllegalArgumentException("종료되지 않은 모임입니다."));
-
-        Meeting meeting = meetingRepository.findById(meetingId)
+        Meeting meeting = participantRepository.findMeetingByUserAndMeetingAndIsDone(userId, meetingId, true)
                 .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
 
         // 해당 Meeting에 해당하는 모든 통계 가져오기
