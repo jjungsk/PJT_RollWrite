@@ -29,6 +29,7 @@ import ResultPage from "./pages/ResultPage/ResultPage";
 import JoinPage from "./pages/JoinPage/JoinPage";
 import AwardPage from "./pages/AwardPage/AwardPage";
 import OauthPage from "./pages/OauthPage/OauthPage";
+import ErrorPage from "./pages/ErrorPage/ErrorPage";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -75,6 +76,8 @@ function App() {
           dispatch(updateAccessToken(""));
           navigate("/");
         }
+      } else {
+        navigate("/error");
       }
       return Promise.reject(error);
     }
@@ -107,6 +110,7 @@ function App() {
       <Route path="/join/:inviteCode" element={<JoinPage />} />
       <Route path="/award/:meetingId" element={<AwardPage />} />
       <Route path="/create" element={<CreateGroupPage />} />
+      <Route path="/error" element={<ErrorPage />} />
     </Routes>
   );
 }
