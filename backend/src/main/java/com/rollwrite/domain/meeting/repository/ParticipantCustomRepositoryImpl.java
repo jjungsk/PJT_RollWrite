@@ -29,6 +29,17 @@ public class ParticipantCustomRepositoryImpl implements ParticipantCustomReposit
     }
 
     @Override
+    public List<Meeting> findTodayMeetingByUser(Long userId) {
+        return jpaQueryFactory
+                .select(participant.meeting)
+                .from(participant)
+                .where(participant.user.id.eq(userId))
+                .where(participant.meeting.startDay.before(LocalDate.now()).or(participant.meeting.startDay.eq(LocalDate.now())))
+                .where(participant.meeting.endDay.after(LocalDate.now()).or(participant.meeting.endDay.eq(LocalDate.now())))
+                .fetch();
+    }
+
+    @Override
     public List<Meeting> findFinisihedMeetingByUser(Long userId, Pageable pageable) {
         LocalDate today = LocalDate.now();
         return jpaQueryFactory
