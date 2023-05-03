@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import InputLine from "../../elements/InputLine/InputLine";
 import { ReactComponent as Copy } from "../../assets/Copy.svg";
 import GhostBtn from "../../elements/Button/GhostBtn";
-import { handleKakaoClick } from "../../apis/kakaoShare";
+import { handleKakaoClick } from "../../utils/kakaoShare";
 
 function InvitePageContinger() {
   const { meetingId } = useParams();

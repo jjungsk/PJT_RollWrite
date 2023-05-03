@@ -15,6 +15,7 @@ const ProfileImg = styled.div<{ size: number; bgImg: string }>`
   border-radius: ${(props) => props.size / 2}px;
   background-image: url(${(props) => props.bgImg});
   background-size: cover;
+  background-position: center;
   background-color: var(--gray-color);
 `;
 

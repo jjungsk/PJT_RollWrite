@@ -113,7 +113,7 @@ function App() {
       <Route path="/join/:inviteCode" element={<JoinPage />} />
       <Route path="/award/:meetingId" element={<AwardPage />} />
       <Route path="/create" element={<CreateGroupPage />} />
-      <Route path="/error" element={<ErrorPage />} />
+      <Route path="*" element={<ErrorPage />} />
     </Routes>
   );
 }

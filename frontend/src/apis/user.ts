@@ -32,3 +32,11 @@ export const getUserDetail = async () => {
   const response = await axiosInstance.get("/user/");
   return response.data;
 };
+
+// 사용자가 참여한 완료된 모임 목록 가져오기
+export const getUserGroupIsDoneList = async (page: number, size: number) => {
+  const response = await axiosInstance.get(
+    `/meeting/result?page=${page}&size=${size}`
+  );
+  return response.data;
+};
