@@ -70,6 +70,7 @@ export interface QuestionInfo {
   emoji: string;
   answer: string;
   image: string;
+  isFinal: boolean;
 }
 
 export interface AnswerInfo {

@@ -71,34 +71,60 @@ export default function AnswerPage() {
     }
 
     location.state.isModify
-      ? toast
-          .promise(updateAnswer(formData), {
-            loading: "답변을 수정중입니다...",
-            success: <b>답변이 수정됐습니다!</b>,
-            error: <b>수정을 실패했습니다!</b>,
-          })
-          .then((res) => {
-            console.log(res);
-            navigate(-1);
-          })
-          .catch((err) => {
-            console.error(err);
-            navigate("/error");
-          })
-      : toast
-          .promise(createAnswer(formData), {
-            loading: "답변을 저장중입니다...",
-            success: <b>답변이 저장됐습니다!</b>,
-            error: <b>저장을 실패했습니다!</b>,
-          })
-          .then((res) => {
-            console.log(res);
-            navigate(-1);
-          })
-          .catch((err) => {
-            console.error(err);
-            navigate("/error");
-          });
+      ? modifyAnswer()
+      : question.isFinal
+      ? toast.custom((t) => (
+          <div
+            className={`${
+              t.visible ? "animate-enter" : "animate-leave"
+            } max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
+          >
+            마지막답변은 수정할수없습니다. 저장하사겠습니까?
+            <button
+              onClick={() => {
+                toast.dismiss(t.id);
+                saveAnswer();
+              }}
+            >
+              네
+            </button>
+            <button onClick={() => toast.dismiss(t.id)}>아니오</button>
+          </div>
+        ))
+      : saveAnswer();
+  };
+
+  const modifyAnswer = () => {
+    toast
+      .promise(updateAnswer(formData), {
+        loading: "답변을 수정중입니다...",
+        success: <b>답변이 수정됐습니다!</b>,
+        error: <b>수정을 실패했습니다!</b>,
+      })
+      .then((res) => {
+        console.log(res);
+        navigate(-1);
+      })
+      .catch((err) => {
+        console.error(err);
+        navigate("/error");
+      });
+  };
+  const saveAnswer = () => {
+    toast
+      .promise(createAnswer(formData), {
+        loading: "답변을 저장중입니다...",
+        success: <b>답변이 저장됐습니다!</b>,
+        error: <b>저장을 실패했습니다!</b>,
+      })
+      .then((res) => {
+        console.log(res);
+        navigate(-1);
+      })
+      .catch((err) => {
+        console.error(err);
+        navigate("/error");
+      });
   };
 
   const handelClickDeleteBtn = () => {
