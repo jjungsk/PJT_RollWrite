@@ -8,7 +8,7 @@ import BackNavigation from "../../components/BackNavigation/BackNavigation";
 import CreateGroupStepOne from "../../components/CreateGroupSteps/CreateGroupStepOne";
 import CreateGroupStepTwo from "../../components/CreateGroupSteps/CreateGroupStepTwo";
 import CreateGroupStepThree from "../../components/CreateGroupSteps/CreateGroupStepThree";
-import { handleKakaoClick } from "../../utils/kakaoShare";
+import { handleKakaoShare } from "../../utils/kakaoShare";
 
 function CreateGroupPage() {
   const navigate = useNavigate();
@@ -124,7 +124,7 @@ function CreateGroupPage() {
           subTitle="모임을 만들었어요."
           fillLabel="초대하기"
           ghostLabel="홈으로"
-          fillOnClick={() => handleKakaoClick(newGroupInfo?.inviteUrl!)}
+          fillOnClick={() => handleKakaoShare(newGroupInfo?.inviteUrl!)}
           ghostOnClick={handleClickConfirmBtn}
         />
       )}
