@@ -31,7 +31,7 @@ import java.util.Map;
 @RequestMapping("/question")
 public class QuestionController {
 
-    private final Job notificationAlarmJob;
+    private final Job Job;
     private final JobLauncher jobLauncher;
     private final QuestionService questionService;
 
@@ -99,7 +99,7 @@ public class QuestionController {
     public ResponseEntity<ApiResponse<String>> startJob() throws Exception {
         Map<String, JobParameter> parameters = new HashMap<>();
         parameters.put("timestamp", new JobParameter(System.currentTimeMillis()));
-        JobExecution jobExecution = jobLauncher.run(notificationAlarmJob, new JobParameters(parameters));
+        JobExecution jobExecution = jobLauncher.run(Job, new JobParameters(parameters));
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.ADD_TODAY_QUESTION_SUCCESS, "Batch job " + jobExecution.getStatus()), HttpStatus.OK);
     }
 }
