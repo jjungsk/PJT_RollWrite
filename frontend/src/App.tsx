@@ -36,8 +36,7 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const accessToken = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzcwNzc4MjAwIiwicm9sZSI6IlVTRVIiLCJpc3MiOiJyb2xsd3JpdGUuY28ua3IiLCJleHAiOjE2ODMxODQyNDcsImlhdCI6MTY4MzA5Nzg0N30.umHq-d0ioV-wavsc-2Nu4XnP0UJL70X6YwAeeyGXSlAIkz--ymlEtXtXtZe19cSlExw7F1WFou2erZYMebZq5Q`;
-  // const accessToken = useAppSelector((state) => state.auth.accessToken);
+  const accessToken = useAppSelector((state) => state.auth.accessToken);
   const isLogin = useAppSelector((state) => state.auth.isLogin);
 
   const currentPath = location.pathname;
@@ -123,10 +122,10 @@ function App() {
   );
 
   useEffect(() => {
-    // if (!isLogin && currentPath !== "/login" && currentPath !== "/oauth") {
-    //   navigate("/login");
-    //   dispatch(updateRouteHistory(currentPath));
-    // }
+    if (!isLogin && currentPath !== "/login" && currentPath !== "/oauth") {
+      navigate("/login");
+      dispatch(updateRouteHistory(currentPath));
+    }
   });
 
   return (
