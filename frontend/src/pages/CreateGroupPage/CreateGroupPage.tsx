@@ -9,6 +9,7 @@ import CreateGroupStepOne from "../../components/CreateGroupSteps/CreateGroupSte
 import CreateGroupStepTwo from "../../components/CreateGroupSteps/CreateGroupStepTwo";
 import CreateGroupStepThree from "../../components/CreateGroupSteps/CreateGroupStepThree";
 import { handleKakaoShare } from "../../utils/kakaoShare";
+import toast, { Toaster } from "react-hot-toast";
 
 function CreateGroupPage() {
   const navigate = useNavigate();
@@ -39,27 +40,27 @@ function CreateGroupPage() {
     const titleLength = title.trim().length;
 
     if (titleLength === 0 || titleLength > 24) {
-      alert("모임명은 1~24 글자로 입력해주세요.");
+      toast.error("모임명은 1~24자 이내로 입력해주세요.");
       return false;
     }
 
     if (!startDay || !endDay) {
-      alert("모임 시작일과 종료일을 선택해주세요.");
+      toast.error("시작일과 종료일을 선택해 주세요.");
       return false;
     }
 
     if (!color) {
-      alert("모임 테마를 선택해주세요.");
+      toast.error("모임 테마를 설정해 주세요");
       return false;
     }
 
     if (isAfter(new Date(startDay), new Date(endDay))) {
-      alert("시작일이 종료일 이후입니다.");
+      toast.error("시작일이 종료일보다 느립니다.");
       return false;
     }
 
     if (isAfter(subDays(new Date(), 1), new Date(startDay))) {
-      alert("시작일이 오늘보다 이전입니다.");
+      toast.error("시작일이 오늘 이전입니다.");
       return false;
     }
 
@@ -92,6 +93,7 @@ function CreateGroupPage() {
 
   return (
     <>
+      <Toaster />
       <BackNavigation onClick={handleBackButtonClick} />
       {groupCreateStep === 0 && (
         <CreateGroupStepOne onClick={handleConfirmButtonClick} />
