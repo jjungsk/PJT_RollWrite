@@ -12,7 +12,7 @@ import {
   updateLoginStatus,
   updateRouteHistory,
 } from "./store/authReducer";
-import { axiosInstance } from "./apis/instance";
+import { axiosFileInstance, axiosInstance } from "./apis/instance";
 
 import MainLayout from "./Layout/MainLayout";
 import SubLayout from "./Layout/SubLayout";
@@ -36,13 +36,15 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const accessToken = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzcwNzc4MjAwIiwicm9sZSI6IlVTRVIiLCJpc3MiOiJyb2xsd3JpdGUuY28ua3IiLCJleHAiOjE2ODMwOTI1MzIsImlhdCI6MTY4MzA4ODkzMn0.dZwiM-lHkSDTg0-Tpeis0pY2hitoHFfTvikQmfm-oJmPg8AIlNnHQIjA8bhVty8C_KSF2NbYr7639ysc3QsWCw`;
-  // const accessToken = useAppSelector((state) => state.auth.accessToken);
+  const accessToken = useAppSelector((state) => state.auth.accessToken);
   const isLogin = useAppSelector((state) => state.auth.isLogin);
 
   const currentPath = location.pathname;
   if (accessToken) {
     axiosInstance.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${accessToken}`;
+    axiosFileInstance.defaults.headers.common[
       "Authorization"
     ] = `Bearer ${accessToken}`;
   }
@@ -55,13 +57,12 @@ function App() {
     async (error) => {
       const {
         config,
-        response: { status },
+        response: { statusCode },
       } = error;
       const originalRequest = config;
-      if (status === 401) {
+      if (statusCode === 401) {
         try {
           // 갱신 요청
-          axiosInstance.defaults.headers.common["Authorization"] = "";
           const res = await axiosInstance.post<any>(`auth/reissue`);
           const newAccessToken = res.data.data.accessToken;
           dispatch(updateAccessToken(newAccessToken));
@@ -76,7 +77,7 @@ function App() {
           console.log("갱신실패", err);
           dispatch(updateLoginStatus(false));
           dispatch(updateAccessToken(""));
-          navigate("/question");
+          navigate("/");
         }
       } else {
         navigate("/error");
@@ -86,16 +87,16 @@ function App() {
   );
 
   useEffect(() => {
-    // if (!isLogin && currentPath !== "/login" && currentPath !== "/oauth") {
-    //   navigate("/login");
-    //   dispatch(updateRouteHistory(currentPath));
-    // }
-    if (currentPath === "/") navigate("/question");
+    if (!isLogin && currentPath !== "/login" && currentPath !== "/oauth") {
+      navigate("/login");
+      dispatch(updateRouteHistory(currentPath));
+    }
   });
 
   return (
     <Routes>
       <Route path="/" element={<MainLayout />}>
+        <Route path="/" element={<Navigate to="/question" />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/question" element={<QuestionPage />} />
         <Route path="/my" element={<MyPage />} />
