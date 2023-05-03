@@ -54,13 +54,4 @@ public class ParticipantCustomRepositoryImpl implements ParticipantCustomReposit
                 .fetchOne());
     }
 
-    @Override
-    public List<Long> findMeetingByIsDone(boolean isDone) {
-        return jpaQueryFactory
-                .select(participant.meeting.id)
-                .distinct()
-                .from(participant)
-                .where(participant.isDone.eq(isDone))
-                .fetch();
-    }
 }

@@ -81,8 +81,7 @@ public class QuestionBatch {
                     log.info("meetingInProgressStep!");
 
                     // 진행 중인 모임 리스트
-                    // SELECT DISTINCT p.meeting.id FROM Participant p WHERE p.isDone = false
-                    List<Long> meetingIdList = participantRepository.findMeetingByIsDone(false);
+                    List<Long> meetingIdList = meetingRepository.findMeetingByToday();
                     log.info("진행 중인 모임 리스트 meetingIdList : " + meetingIdList);
 
                     if (!meetingIdList.isEmpty()) {
