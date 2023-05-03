@@ -89,9 +89,7 @@ export default function AnswerPage() {
         {question.title} D-{question.day}
       </NameContainer>
       <QuestionDiv>{question.question}</QuestionDiv>
-      <ImgContainer
-        BgImg={tmpImg ? tmpImg : `https://k8a508.p.ssafy.io/${question.image}`}
-      >
+      <ImgContainer BgImg={tmpImg ? tmpImg : question.image}>
         <IconContainer>
           <label htmlFor="profile-img">
             <img src={Btn} alt="img" />
