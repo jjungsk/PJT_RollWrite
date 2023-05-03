@@ -1,4 +1,4 @@
-import { axiosInstance } from "./instance";
+import { axiosFileInstance, axiosInstance } from "./instance";
 
 // 카카오 로그인 리다이렉트
 export const redirectKakao = () => {
@@ -30,6 +30,18 @@ export const withdraw = async () => {
 // 사용자 정보 가져오기
 export const getUserDetail = async () => {
   const response = await axiosInstance.get("/user/");
+  return response.data;
+};
+
+// 사용자 정보 수정하기
+export const updateUserDetail = async (formData: FormData) => {
+  const response = await axiosFileInstance.put("/user", formData);
+  return response.data;
+};
+
+// 사용자 프로필 사진 삭제하기
+export const deleteUserProfileImg = async () => {
+  const response = await axiosFileInstance.delete("/user/profile");
   return response.data;
 };
 

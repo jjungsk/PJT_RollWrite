@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { SERVER_URL } from "../../constants/url";
 
 const ProfileContainer = styled.div`
   display: flex;
@@ -10,13 +11,41 @@ const ProfileContainer = styled.div`
 `;
 
 const ProfileImg = styled.div<{ size: number; bgImg: string }>`
+  position: relative;
   width: ${(props) => props.size}px;
   height: ${(props) => props.size}px;
   border-radius: ${(props) => props.size / 2}px;
-  background-image: url(${(props) => props.bgImg});
+  background-image: ${(props) =>
+    props.bgImg === ""
+      ? "url(/default_profile.jpg)"
+      : `url(${SERVER_URL}${props.bgImg})`};
   background-size: cover;
   background-position: center;
   background-color: var(--gray-color);
+`;
+
+const ProfileImgBG = styled.div<{ size: number }>`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: ${(props) => props.size}px;
+  height: ${(props) => props.size}px;
+  border-radius: ${(props) => props.size / 2}px;
+  background-color: rgba(0, 0, 0, 0.55);
+`;
+
+const AddProfileImgBtn = styled.label`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+
+  & > svg {
+    width: 50px !important;
+    height: 50px !important;
+    margin-top: 3px;
+  }
 `;
 
 const ProfileInfo = styled.div`
@@ -24,12 +53,31 @@ const ProfileInfo = styled.div`
   margin-left: 10px;
   text-align: center;
 
-  & > p {
+  button {
+    height: 28px;
     font-weight: bold;
-    font-size: 18px;
-    line-height: 22px;
-    padding-block: 10px;
+    font-size: 10px;
+    line-height: 12px;
   }
+
+  & > button {
+    width: 100px;
+  }
+`;
+
+const Nickname = styled.input.attrs((props) => ({
+  disabled: props.disabled,
+}))`
+  width: 90%;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 22px;
+  text-align: center;
+  align-self: center;
+  color: var(--black-color);
+  padding-block: 2px;
+  border-bottom: ${(props) =>
+    props.disabled ? "3px solid var(--lightgray-color)" : "3px solid #3A3A3A"};
 `;
 
 const ProfileInfoDetail = styled.div`
@@ -67,6 +115,16 @@ const ProfileInfoDetail = styled.div`
   }
 `;
 
+const EditProfileBtnContainer = styled.div`
+  display: flex;
+  justify-content: center;
+
+  & > button {
+    width: 62px;
+    margin-inline: 6px;
+  }
+`;
+
 const GroupListContainer = styled.div`
   width: 100%;
   height: calc(100vh - 360px);
@@ -90,7 +148,11 @@ const GroupListContainer = styled.div`
 export {
   ProfileContainer,
   ProfileImg,
+  ProfileImgBG,
+  AddProfileImgBtn,
   ProfileInfo,
+  Nickname,
   ProfileInfoDetail,
+  EditProfileBtnContainer,
   GroupListContainer,
 };
