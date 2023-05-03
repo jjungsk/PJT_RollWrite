@@ -29,7 +29,7 @@ function ChatAwardItem(props: { award: Award; bgColor: string }) {
         프로 개근러 👍
       </QuestionContainer>
       <ResultAwardUserList>
-        {props.award.proGagler.map((user: Participant) => (
+        {props.award.perfectAttendance.map((user: Participant) => (
           <ProfileImg key={user.userId} size={40} bgImg={user.profileImage} />
         ))}
       </ResultAwardUserList>

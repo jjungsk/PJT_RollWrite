@@ -6,8 +6,8 @@ function useProfile() {
   const [profile, setProfile] = useState<Profile>({
     nickname: "",
     profileImage: "",
-    ongoingGroupCnt: 0,
-    completeGroupCnt: 0,
+    cntMeetingIs: 0,
+    cntMeetingIsDone: 0,
   });
 
   useEffect(() => {

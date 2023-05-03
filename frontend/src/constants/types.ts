@@ -23,6 +23,7 @@ export interface Participant {
   userId: number;
   nickname: string;
   profileImage: string;
+  type?: string;
 }
 
 export interface GroupInfo {
@@ -56,8 +57,8 @@ export interface DayInfo {
 export interface Profile {
   nickname: string;
   profileImage: string;
-  ongoingGroupCnt?: number;
-  completeGroupCnt?: number;
+  cntMeetingIs?: number;
+  cntMeetingIsDone?: number;
 }
 
 export interface QuestionInfo {
@@ -94,7 +95,7 @@ export interface Chat {
 export interface Award {
   taleteller: Participant[];
   photographer: Participant[];
-  proGagler: Participant[];
+  perfectAttendance: Participant[];
 }
 
 export interface GroupResult {

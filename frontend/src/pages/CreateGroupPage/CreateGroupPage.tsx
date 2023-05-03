@@ -8,7 +8,7 @@ import BackNavigation from "../../components/BackNavigation/BackNavigation";
 import CreateGroupStepOne from "../../components/CreateGroupSteps/CreateGroupStepOne";
 import CreateGroupStepTwo from "../../components/CreateGroupSteps/CreateGroupStepTwo";
 import CreateGroupStepThree from "../../components/CreateGroupSteps/CreateGroupStepThree";
-import { handleKakaoClick } from "../../apis/kakaoShare";
+import { handleKakaoClick } from "../../utils/kakaoShare";
 
 function CreateGroupPage() {
   const navigate = useNavigate();
