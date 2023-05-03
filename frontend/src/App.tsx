@@ -12,7 +12,7 @@ import {
   updateLoginStatus,
   updateRouteHistory,
 } from "./store/authReducer";
-import { axiosInstance } from "./apis/instance";
+import { axiosFileInstance, axiosInstance } from "./apis/instance";
 
 import MainLayout from "./Layout/MainLayout";
 import SubLayout from "./Layout/SubLayout";
@@ -29,6 +29,7 @@ import ResultPage from "./pages/ResultPage/ResultPage";
 import JoinPage from "./pages/JoinPage/JoinPage";
 import AwardPage from "./pages/AwardPage/AwardPage";
 import OauthPage from "./pages/OauthPage/OauthPage";
+import ErrorPage from "./pages/ErrorPage/ErrorPage";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -43,6 +44,9 @@ function App() {
     axiosInstance.defaults.headers.common[
       "Authorization"
     ] = `Bearer ${accessToken}`;
+    axiosFileInstance.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${accessToken}`;
   }
 
   // 토큰 갱신
@@ -53,10 +57,10 @@ function App() {
     async (error) => {
       const {
         config,
-        response: { status, data },
+        response: { statusCode },
       } = error;
       const originalRequest = config;
-      if (status === 401 && data.error === "TokenExpiredException") {
+      if (statusCode === 401) {
         try {
           // 갱신 요청
           const res = await axiosInstance.post<any>(`auth/reissue`);
@@ -75,6 +79,8 @@ function App() {
           dispatch(updateAccessToken(""));
           navigate("/");
         }
+      } else {
+        navigate("/error");
       }
       return Promise.reject(error);
     }
@@ -107,6 +113,7 @@ function App() {
       <Route path="/join/:inviteCode" element={<JoinPage />} />
       <Route path="/award/:meetingId" element={<AwardPage />} />
       <Route path="/create" element={<CreateGroupPage />} />
+      <Route path="/error" element={<ErrorPage />} />
     </Routes>
   );
 }

@@ -4,6 +4,8 @@ import useHomePage from "./useHomePage";
 import { ReactComponent as Plus } from "../../assets/Plus.svg";
 import GroupList from "../../components/GroupList/GroupList";
 import HomeContent from "../../components/HomeContent/HomeContent";
+import useProfile from "../../hooks/useProfile";
+import { Profile } from "../../constants/types";
 
 function HomePage() {
   const {
@@ -15,12 +17,12 @@ function HomePage() {
     questionList,
     setCurrentIndex,
   } = useHomePage();
-
+  const profile: Profile = useProfile();
   return (
     <HomePageContainer>
       <HomePageHeader>
         <div>
-          <span>주대선</span> 님의 모임
+          <span>{profile.nickname}</span> 님의 모임
         </div>
         <Plus
           onClick={() => {

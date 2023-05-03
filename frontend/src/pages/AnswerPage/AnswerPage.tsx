@@ -1,5 +1,5 @@
-import React, { useRef, useCallback } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useState } from "react";
+
 import {
   NameContainer,
   QuestionDiv,
@@ -11,37 +11,25 @@ import {
 import GhostBtn from "../../elements/Button/GhostBtn";
 import Btn from "../../assets/AddImgBtn.svg";
 import { createAnswer, updateAnswer } from "../../apis/question";
+import { useLocation, useNavigate } from "react-router-dom";
+import { QuestionInfo } from "../../constants/types";
 
 export default function AnswerPage() {
-  // const location = useLocation();
-  // const state = location.state as {
-  //   title: string;
-  //   day: number;
-  //   question: string;
-  //   questionId: number;
-  //   meetingId: number;
-  // };
-  // const title = state.title;
-  // const day = state.day;
-  // const question = state.question;
-  // const questionId = state.questionId;
-  // const meetingId = state.meetingId;
-
-  // 테스트용 데이터
-  const title = "테스트입니다";
-  const day = "날짜입니다";
-  const question = "테스트질문입니다";
-  const questionId = 1;
-  const meetingId = 1;
-
+  const location = useLocation();
+  const navigate = useNavigate();
   // 이미지
   const [ImgFile, setImgFile] = useState<File | undefined>();
-  const [tmpImg, settmpImg] = useState<string>("");
+  const [tmpImg, setTmpImg] = useState<string>("");
   // 답변
-  const [answer, setAnswer] = useState<string>("");
+  const [question, setQuestion] = useState<QuestionInfo>(
+    location.state.question
+  );
   // 답변 입력하면 answer에 넣어줌
   const handleAnswer = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setAnswer(e.target.value);
+    setQuestion({
+      ...question,
+      answer: e.target.value,
+    });
   };
 
   // 이미지 업로드 및 미리보기
@@ -51,7 +39,7 @@ export default function AnswerPage() {
       const reader = new FileReader();
       reader.onload = (e) => {
         if (e.target) {
-          settmpImg(e.target.result as string);
+          setTmpImg(e.target.result as string);
           setImgFile(files[0]);
         }
       };
@@ -64,33 +52,44 @@ export default function AnswerPage() {
     // formData에 이미지, 답변 저장
     const formData = new FormData();
     const data = JSON.stringify({
-      answer: answer,
-      meetingId: meetingId,
-      questionId: questionId,
+      answer: question.answer,
+      meetingId: question.meetingId,
+      questionId: question.questionId,
     });
     const jsonData = new Blob([data], { type: "application/json" });
-    formData.append("data", jsonData);
+    formData.append("addAnswerReqDto", jsonData);
     if (ImgFile) {
       formData.append("image", ImgFile);
     }
-    // @ts-ignore
-    for (let value of formData.values()) {
-      console.log(value);
-    }
 
-    // 최초 입력
-    createAnswer(formData);
-
-    // 수정
+    location.state.isModify
+      ? updateAnswer(formData)
+          .then((res) => {
+            console.log(res);
+            navigate(-1);
+          })
+          .catch((err) => {
+            console.error(err);
+            navigate("/error");
+          })
+      : createAnswer(formData)
+          .then((res) => {
+            console.log(res);
+            navigate(-1);
+          })
+          .catch((err) => {
+            console.error(err);
+            navigate("/error");
+          });
   };
 
   return (
     <>
       <NameContainer>
-        {title} D-{day}
+        {question.title} D-{question.day}
       </NameContainer>
-      <QuestionDiv>{question}</QuestionDiv>
-      <ImgContainer BgImg={tmpImg}>
+      <QuestionDiv>{question.question}</QuestionDiv>
+      <ImgContainer BgImg={tmpImg ? tmpImg : question.image}>
         <IconContainer>
           <label htmlFor="profile-img">
             <img src={Btn} alt="img" />
@@ -105,9 +104,15 @@ export default function AnswerPage() {
         />
       </ImgContainer>
       <TextContainer>
-        <ContentContainer onChange={handleAnswer}>{answer}</ContentContainer>
+        <ContentContainer
+          onChange={handleAnswer}
+          value={question.answer}
+        ></ContentContainer>
       </TextContainer>
-      <GhostBtn label="저장하기" onClick={handleSaveBtn}></GhostBtn>
+      <GhostBtn
+        label={location.state.isModify ? "수정하기" : "저장하기"}
+        onClick={handleSaveBtn}
+      ></GhostBtn>
     </>
   );
 }
