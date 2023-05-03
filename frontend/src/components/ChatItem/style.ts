@@ -66,8 +66,18 @@ const AnswerContent = styled.div`
   padding: 6px 10px;
   border-radius: 10px;
   background-color: var(--lightgray-color);
-  font-size: 12px;
-  line-height: 15px;
+
+  & > img {
+    width: 90%;
+    height: auto;
+    margin-block: 8px;
+    border-radius: 5px;
+  }
+
+  & > div {
+    font-size: 12px;
+    line-height: 15px;
+  }
 `;
 
 const AnswerDate = styled.div`
