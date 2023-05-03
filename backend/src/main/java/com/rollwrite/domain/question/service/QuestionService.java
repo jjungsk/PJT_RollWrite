@@ -125,13 +125,13 @@ public class QuestionService {
                 .orElseThrow(() -> new IllegalArgumentException("답변을 찾을 수 없습니다"));
 
         if (image != null) {
+            // 기존 파일 삭제
+            fileService.fileDelete(answer.getImageUrl());
             if (image.isEmpty()) {
                 // 사진을 지우고 싶을 때
-                fileService.fileDelete(answer.getImageUrl());
                 answer.updateImageUrl(null);
             } else {
                 // 사진을 변경하고 싶을 때
-                fileService.fileDelete(answer.getImageUrl());
                 String imageUrl = fileService.fileUpload("answer", image);
                 answer.updateImageUrl(imageUrl);
             }
