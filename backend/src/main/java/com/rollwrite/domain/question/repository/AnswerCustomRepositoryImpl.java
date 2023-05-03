@@ -60,6 +60,7 @@ public class AnswerCustomRepositoryImpl implements AnswerCustomRepository {
                         answer.user.nickname,
                         answer.user.profileImage,
                         answer.content,
+                        answer.imageUrl,
                         answer.createdAt,
                         Expressions.constant(myId),
                         answer.user.id
