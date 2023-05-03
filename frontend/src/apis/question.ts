@@ -23,3 +23,9 @@ export const updateAnswer = async (FormData: FormData) => {
   const response = await axiosFileInstance.put(`/question/answer`, FormData);
   return response.data;
 };
+
+// 이미지 지우기
+export const deleteAnswerImg = async (questionId: number) => {
+  const response = await axiosInstance.delete(`/question/answer/${questionId}`);
+  return response.data;
+};

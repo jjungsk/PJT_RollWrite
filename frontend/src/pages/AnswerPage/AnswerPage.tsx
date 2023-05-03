@@ -11,7 +11,11 @@ import {
 import GhostBtn from "../../elements/Button/GhostBtn";
 import Btn from "../../assets/AddImgBtn.svg";
 import { ReactComponent as Trash } from "../../assets/Trash-alt.svg";
-import { createAnswer, updateAnswer } from "../../apis/question";
+import {
+  createAnswer,
+  deleteAnswerImg,
+  updateAnswer,
+} from "../../apis/question";
 import { useLocation, useNavigate } from "react-router-dom";
 import { QuestionInfo } from "../../constants/types";
 
@@ -87,6 +91,21 @@ export default function AnswerPage() {
           });
   };
 
+  const handelClickDeleteBtn = () => {
+    console.log("?");
+    setQuestion({
+      ...question,
+      image: "/img.png",
+    });
+    deleteAnswerImg(question.questionId)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
   return (
     <>
       <NameContainer>
@@ -94,11 +113,6 @@ export default function AnswerPage() {
       </NameContainer>
       <QuestionDiv>{question.question}</QuestionDiv>
       <ImgContainer BgImg={tmpImg ? tmpImg : question.image}>
-        {question.image && (
-          <Trash
-            style={{ position: "absolute", bottom: "8px", right: "8px" }}
-          />
-        )}
         <IconContainer>
           <label htmlFor="profile-img">
             <img src={Btn} alt="img" />
@@ -111,6 +125,12 @@ export default function AnswerPage() {
           onChange={handleImg}
           style={{ display: "none" }}
         />
+        {question.image && (
+          <Trash
+            style={{ position: "absolute", bottom: "8px", right: "8px" }}
+            onClick={handelClickDeleteBtn}
+          />
+        )}
       </ImgContainer>
       <TextContainer>
         <ContentContainer
