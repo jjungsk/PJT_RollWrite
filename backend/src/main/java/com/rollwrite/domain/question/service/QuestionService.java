@@ -25,6 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -46,12 +48,22 @@ public class QuestionService {
 
     @Transactional
     public void addQuestion(Long userId, AddQuestionReqDto addQuestionReqDto) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
+        // 질문의 문장 길이가 40글자를 넘었을 때
+        if (addQuestionReqDto.getQuestion().getBytes(StandardCharsets.ISO_8859_1).length > 40) {
+            throw new IllegalArgumentException("질문 내용이 글자 수를 초과했습니다");
+        }
 
-        // 내가 참여한 진행 중인 모임
-        Meeting meeting = participantRepository.findMeetingByUserAndMeetingAndIsDone(userId, addQuestionReqDto.getMeetingId(), false)
-                .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
+        Participant participant = participantRepository.findParticipantByUserAndMeetingAndIsDone(userId, addQuestionReqDto.getMeetingId(), false)
+                .orElseThrow(() -> new IllegalArgumentException("참여자 정보를 찾을 수 없습니다"));
+
+        User user = participant.getUser();
+
+        Meeting meeting = participant.getMeeting();
+
+        // 모임의 종료 날짜가 지났을 때
+        if (meeting.getEndDay().isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("모임의 종료 시간이 지났습니다");
+        }
 
         ChatGPTResDto chatGPTResDto = gptService.chatGpt(addQuestionReqDto.getQuestion() + "라는 질문에 어울리는 이모지 딱 한 개만 추천해줘, 형식은 json이야, {\"emoji\":\"😎\"}");
         String response = chatGPTResDto.getChoices().get(0).getMessage().getContent();
