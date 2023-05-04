@@ -6,6 +6,7 @@ import InputLine from "../../elements/InputLine/InputLine";
 import { ReactComponent as CopyIcon } from "../../assets/Copy.svg";
 import GhostButton from "../../elements/Button/GhostBtn";
 import { handleKakaoShare } from "../../utils/kakaoShare";
+import toast from "react-hot-toast";
 
 function InvitePage() {
   const { meetingId } = useParams();
@@ -15,9 +16,11 @@ function InvitePage() {
   const handleCopyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(inviteUrl);
-      alert("복사 성공!");
+      toast("복사 성공!", {
+        icon: "📋",
+      });
     } catch (error) {
-      alert("복사 실패!");
+      toast.error("복사 실패");
     }
   };
 
