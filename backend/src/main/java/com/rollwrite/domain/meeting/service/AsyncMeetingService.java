@@ -71,28 +71,30 @@ public class AsyncMeetingService {
                     .build();
             questionGptRepository.save(questionGpt);
         }
+        // 시작일이 오늘인 경우에만 질문 생성
+        if (meeting.getStartDay().isEqual(LocalDate.now())) {
+            // ChatGPT가 만든 질문 중 1개 선택
+            QuestionGpt questionGpt = questionGptRepository.chooseRandomQuestionGpt(meeting.getId(), false)
+                    .orElseThrow(() -> new IllegalArgumentException("Chat GPT가 생성한 질문이 없습니다."));
 
-        // ChatGPT가 만든 질문 중 1개 선택
-        QuestionGpt questionGpt = questionGptRepository.chooseRandomQuestionGpt(meeting.getId(), false)
-                .orElseThrow(() -> new IllegalArgumentException("Chat GPT가 생성한 질문이 없습니다."));
+            // 해당 gpt 질문을 isChoosed = true로 업데이트
+            questionGpt.updateIsChoosed(true);
 
-        // 해당 gpt 질문을 isChoosed = true로 업데이트
-        questionGpt.updateIsChoosed(true);
+            // question, emoji 업데이트
+            String content = questionGpt.getContent();
+            String emoji = questionGpt.getEmoji();
 
-        // question, emoji 업데이트
-        String content = questionGpt.getContent();
-        String emoji = questionGpt.getEmoji();
+            // 다음날 오전 8시
+            LocalDateTime expireTime = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(8, 0));
 
-        // 다음날 오전 8시
-        LocalDateTime expireTime = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(8, 0));
-
-        // question insert
-        Question question = Question.builder()
-                .content(content)
-                .emoji(emoji)
-                .meeting(meeting)
-                .expireTime(expireTime)
-                .build();
-        questionRepository.save(question);
+            // question insert
+            Question question = Question.builder()
+                    .content(content)
+                    .emoji(emoji)
+                    .meeting(meeting)
+                    .expireTime(expireTime)
+                    .build();
+            questionRepository.save(question);
+        }
     }
 }
