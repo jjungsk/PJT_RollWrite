@@ -32,6 +32,7 @@ import OauthPage from "./pages/OauthPage/OauthPage";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
 import NoticePage from "./pages/NoticePage/NoticePage";
 import InquiryPage from "./pages/InquiryPage/InquiryPage";
+import Notification from "./utils/Notification";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -131,29 +132,32 @@ function App() {
   });
 
   return (
-    <Routes>
-      <Route path="/" element={<MainLayout />}>
-        <Route path="/" element={<Navigate to="/question" />} />
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/question" element={<QuestionPage />} />
-        <Route path="/my" element={<MyPage />} />
-      </Route>
-      <Route path="/" element={<SubLayout />}>
-        <Route path="/notify" element={<NotifyPage />} />
-        <Route path="/setting" element={<SettingPage />} />
-        <Route path="/notice" element={<NoticePage />} />
-        <Route path="/inquiry" element={<InquiryPage />} />
-        <Route path="/invite/:meetingId" element={<InvitePage />} />
-        <Route path="/answer" element={<AnswerPage />} />
-      </Route>
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/oauth" element={<OauthPage />} />
-      <Route path="/result/:meetingId" element={<ResultPage />} />
-      <Route path="/join/:inviteCode" element={<JoinPage />} />
-      <Route path="/award/:meetingId" element={<AwardPage />} />
-      <Route path="/create" element={<CreateGroupPage />} />
-      <Route path="*" element={<ErrorPage />} />
-    </Routes>
+    <>
+      <Notification />
+      <Routes>
+        <Route path="/" element={<MainLayout />}>
+          <Route path="/" element={<Navigate to="/question" />} />
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/question" element={<QuestionPage />} />
+          <Route path="/my" element={<MyPage />} />
+        </Route>
+        <Route path="/" element={<SubLayout />}>
+          <Route path="/notify" element={<NotifyPage />} />
+          <Route path="/setting" element={<SettingPage />} />
+          <Route path="/notice" element={<NoticePage />} />
+          <Route path="/inquiry" element={<InquiryPage />} />
+          <Route path="/invite/:meetingId" element={<InvitePage />} />
+          <Route path="/answer" element={<AnswerPage />} />
+        </Route>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/oauth" element={<OauthPage />} />
+        <Route path="/result/:meetingId" element={<ResultPage />} />
+        <Route path="/join/:inviteCode" element={<JoinPage />} />
+        <Route path="/award/:meetingId" element={<AwardPage />} />
+        <Route path="/create" element={<CreateGroupPage />} />
+        <Route path="*" element={<ErrorPage />} />
+      </Routes>
+    </>
   );
 }
 
