@@ -9,7 +9,10 @@ const ProfileContainer = styled.div`
   background-size: cover;
 `;
 
-const ProfileImg = styled.div<{ size: number; bgImg?: string }>`
+const ProfileImg = styled.div<{
+  size: number;
+  bgImg?: string;
+}>`
   position: relative;
   width: ${(props) => props.size}px;
   height: ${(props) => props.size}px;
@@ -21,6 +24,7 @@ const ProfileImg = styled.div<{ size: number; bgImg?: string }>`
   background-size: cover;
   background-position: center;
   background-color: var(--gray-color);
+  margin: auto;
 `;
 
 const ProfileImgBG = styled.div<{ size: number }>`

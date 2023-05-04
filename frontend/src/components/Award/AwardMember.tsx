@@ -44,6 +44,7 @@ function AwardMember({
             restDelta: 0.001,
           },
         }}
+        style={{ margin: "56px 0px" }}
       >
         <ProfileImg size={280} bgImg={profile.profileImage} />
       </motion.div>

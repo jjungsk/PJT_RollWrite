@@ -16,6 +16,7 @@ const AwardPageHeader = styled.div`
 
   & > p {
     font-size: 32px;
+    margin: 16px 0px;
     font-weight: bold;
   }
 `;
