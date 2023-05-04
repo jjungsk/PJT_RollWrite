@@ -8,13 +8,13 @@ import { useParams } from "react-router-dom";
 function AwardPage() {
   const [awardSteps, setAwardSteps] = useState(-1);
   const { meetingId } = useParams();
-  const { award, resData, title } = useGroupIsDoneResultAward(
+  const { award, resData, groupResult } = useGroupIsDoneResultAward(
     Number(meetingId)
   );
   return (
     <div>
       {awardSteps === -1 && (
-        <AwardStart title={title} setAwardSteps={setAwardSteps} />
+        <AwardStart title={groupResult.title} setAwardSteps={setAwardSteps} />
       )}
       {resData?.map((profile, i) => {
         return (

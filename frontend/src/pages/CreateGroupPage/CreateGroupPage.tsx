@@ -9,7 +9,7 @@ import CreateGroupStepOne from "../../components/CreateGroupSteps/CreateGroupSte
 import CreateGroupStepTwo from "../../components/CreateGroupSteps/CreateGroupStepTwo";
 import CreateGroupStepThree from "../../components/CreateGroupSteps/CreateGroupStepThree";
 import { handleKakaoShare } from "../../utils/kakaoShare";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 function CreateGroupPage() {
   const navigate = useNavigate();
@@ -98,7 +98,6 @@ function CreateGroupPage() {
 
   return (
     <>
-      <Toaster />
       <BackNavigation onClick={handleBackButtonClick} />
       {groupCreateStep === 0 && (
         <CreateGroupStepOne onClick={handleConfirmButtonClick} />
@@ -128,6 +127,7 @@ function CreateGroupPage() {
           ghostOnClick={handleConfirmButtonClick}
         />
       )}
+      <div style={{ height: "16px" }} />
     </>
   );
 }

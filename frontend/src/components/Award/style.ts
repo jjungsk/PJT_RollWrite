@@ -14,7 +14,13 @@ const AwardPageHeader = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: start;
+  gap: 24px;
+  align-items: center;
+
+  & > p {
+    font-size: 32px;
+    font-weight: bold;
+  }
 `;
 
 const AwardPageContent = styled.div`

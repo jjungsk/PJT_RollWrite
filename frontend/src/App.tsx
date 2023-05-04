@@ -38,7 +38,6 @@ function App() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-
   const accessToken = useAppSelector((state) => state.auth.accessToken);
   const isLogin = useAppSelector((state) => state.auth.isLogin);
 

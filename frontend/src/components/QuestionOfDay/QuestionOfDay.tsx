@@ -16,9 +16,15 @@ interface Props {
   pickedDay: Date;
   questionMap: Map<string, string>;
   groupInfo: GroupInfo;
+  setHomeContent: React.Dispatch<React.SetStateAction<number>>;
 }
 
-function QuestionOfDay({ pickedDay, groupInfo, questionMap }: Props) {
+function QuestionOfDay({
+  pickedDay,
+  groupInfo,
+  questionMap,
+  setHomeContent,
+}: Props) {
   const variants = {
     hidden: { opacity: 1, y: 100 },
     visible: { opacity: 1, y: 0 },
@@ -49,7 +55,7 @@ function QuestionOfDay({ pickedDay, groupInfo, questionMap }: Props) {
             : "모임기간이 아닙니다."}
         </QuestionOfDayContent>
         <QuestionOfDayFooter>
-          <GhostBtn label={"질문 만들기"} />
+          <GhostBtn label={"질문 만들기"} onClick={() => setHomeContent(1)} />
         </QuestionOfDayFooter>
       </QuestionOfDayContainer>
     </motion.div>

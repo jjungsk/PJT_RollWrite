@@ -17,9 +17,10 @@ function UpdateQuestionMap(questionList: Question[]) {
 interface Props {
   groupInfo: GroupInfo;
   questionList: Question[];
+  setHomeContent: React.Dispatch<React.SetStateAction<number>>;
 }
 
-function GroupCalendar({ groupInfo, questionList }: Props) {
+function GroupCalendar({ groupInfo, questionList, setHomeContent }: Props) {
   const [isSwipeTop, setIsSwipeTop] = useState(false);
   const [pickedDay, setPickedDay] = useState(new Date());
 
@@ -41,6 +42,7 @@ function GroupCalendar({ groupInfo, questionList }: Props) {
       <AnimatePresence>
         {isSwipeTop && (
           <QuestionOfDay
+            setHomeContent={setHomeContent}
             pickedDay={pickedDay}
             questionMap={questionMap}
             groupInfo={groupInfo}

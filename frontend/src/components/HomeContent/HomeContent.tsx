@@ -20,7 +20,11 @@ function HomeContent({
   return (
     <>
       {homeContent === 0 && (
-        <GroupCalendar groupInfo={groupInfo} questionList={questionList} />
+        <GroupCalendar
+          groupInfo={groupInfo}
+          questionList={questionList}
+          setHomeContent={setHomeContent}
+        />
       )}
       {homeContent === 1 && (
         <QuestionWrite
