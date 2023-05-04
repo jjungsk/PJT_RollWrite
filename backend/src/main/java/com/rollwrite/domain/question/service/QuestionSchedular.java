@@ -28,6 +28,6 @@ public class QuestionSchedular {
         Map<String, JobParameter> parameters = new HashMap<>();
         parameters.put("timestamp", new JobParameter(System.currentTimeMillis()));
         JobExecution jobExecution = jobLauncher.run(questionJob, new JobParameters(parameters));
-        log.info("Batch job " + jobExecution.getStatus());
+        log.info("Batch job {}", jobExecution.getStatus());
     }
 }
