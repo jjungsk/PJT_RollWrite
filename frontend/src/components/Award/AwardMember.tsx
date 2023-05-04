@@ -23,9 +23,8 @@ function AwardMember({
   return (
     <AwardPageContainer>
       <AwardPageHeader>
-        <div>{profile.nickname}</div>
         <div>{awardTitle}</div>
-        <div>로 선정되었습니다!</div>
+        <p>{profile.nickname}</p>
       </AwardPageHeader>
       <motion.div
         initial={{ opacity: 0, scale: 0 }}

@@ -20,6 +20,7 @@ const Notification = () => {
     if (notification?.title) {
       notify();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notification]);
 
   requestForToken();

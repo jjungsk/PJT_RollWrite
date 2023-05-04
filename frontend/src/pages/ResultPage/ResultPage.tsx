@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
-import { Award, Chat, GroupResult, Participant } from "../../constants/types";
-import {
-  HeaderContainer,
-  HeaderGroupTitle,
-} from "../../components/Header/style";
 import { ReactComponent as Back } from "../../assets/Back.svg";
 import { ReactComponent as HamburgerMenu } from "../../assets/Hamburger_Menu.svg";
 import { ReactComponent as Person } from "../../assets/Person.svg";
 import { ResultContainer } from "./style";
+import {
+  HeaderContainer,
+  HeaderGroupTitle,
+} from "../../components/Header/style";
 import format from "date-fns/format";
 import SideMenu from "../../components/SideMenu/SideMenu";
 import ChatItem from "../../components/ChatItem/ChatItem";
@@ -62,7 +61,7 @@ function ResultPage() {
       </HeaderContainer>
 
       <ResultContainer id="Result-Container">
-        {groupResult.chat.map((chat: Chat) => (
+        {groupResult.chat.map((chat) => (
           <ChatItem
             key={chat.questionId}
             chat={chat}
