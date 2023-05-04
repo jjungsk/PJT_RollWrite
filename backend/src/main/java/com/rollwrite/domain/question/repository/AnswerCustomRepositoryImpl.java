@@ -66,9 +66,9 @@ public class AnswerCustomRepositoryImpl implements AnswerCustomRepository {
                         answer.user.id
                 ))
                 .from(answer)
-                .join(answer.question, question)
-                .where(answer.question.eq(q))
+                .join(answer.question, question).on(answer.question.eq(q))
                 .where(answer.meeting.eq(meeting))
+                .orderBy(answer.id.desc())
                 .fetch();
     }
 
