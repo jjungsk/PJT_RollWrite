@@ -27,13 +27,15 @@ import { toast } from "react-hot-toast";
 
 function MyPage() {
   const navigate = useNavigate();
-  const profile = useProfile();
+
   const [profileImgFile, setProfileImgFile] = useState<File>();
   const [tmpProfileImg, setTmpProfileImg] = useState<string>("");
   const [isDeleteImg, setIsDeleteImg] = useState<boolean>(false);
   const [tmpNickname, setTmpNickname] = useState<string>("");
   const [editProfileMode, setEditProfileMode] = useState<boolean>(false);
   const [groupList, setGroupList] = useState<GroupInfo[]>([]);
+
+  const profile = useProfile(editProfileMode);
 
   useEffect(() => {
     getUserGroupIsDoneList(0, 10)
