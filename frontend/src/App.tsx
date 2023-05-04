@@ -42,6 +42,7 @@ function App() {
   const isLogin = useAppSelector((state) => state.auth.isLogin);
 
   const currentPath = location.pathname;
+  console.log(currentPath);
   if (accessToken) {
     axiosInstance.defaults.headers.common[
       "Authorization"
