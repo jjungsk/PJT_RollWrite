@@ -2,12 +2,15 @@ import React, { useEffect } from "react";
 import { joinGroup } from "../../apis/home";
 import { useNavigate, useParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
+import { useAppSelector } from "../../constants/types";
 
 function JoinPage() {
   const { inviteCode } = useParams();
   const navigate = useNavigate();
+  const isLogin = useAppSelector((state) => state.auth.isLogin);
+
   useEffect(() => {
-    if (inviteCode)
+    if (isLogin && inviteCode)
       toast
         .promise(joinGroup(inviteCode), {
           loading: "모임에 가입중입니다...",
