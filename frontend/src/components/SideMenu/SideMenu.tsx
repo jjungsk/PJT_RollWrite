@@ -3,12 +3,14 @@ import { motion } from "framer-motion";
 import { ProfileItem, SideMenuContainer, SideMenuHeader } from "./style";
 import { ReactComponent as CloseArrow } from "../../assets/Close_Arrow.svg";
 import AccordionList from "../../elements/AccordionList/AccordionList";
-import { AccordionItemType, GroupResult } from "../../constants/types";
+import { AccordionItemType, Chat, Participant } from "../../constants/types";
 import { ProfileImg } from "../../pages/MyPage/style";
 import { QuestionItem } from "../ChatItem/style";
 
 function SideMenu(props: {
-  groupResult: GroupResult;
+  questionList: Chat[];
+  participantList: Participant[];
+  bgColor: string;
   sideMenuOpen: boolean;
   handleSideMenuOpen: (sideMenuOpen: boolean) => void;
 }) {
@@ -41,10 +43,10 @@ function SideMenu(props: {
       });
     };
 
-    const questionList = props.groupResult.chat.map((item) => (
+    const questionList = props.questionList.map((item) => (
       <QuestionItem
         key={item.questionId}
-        bgColor={props.groupResult.color}
+        bgColor={props.bgColor}
         onClick={() => handleClickQuestion(item.questionId)}
       >
         <div style={{ fontSize: "10px", color: "var(--darkgray-color)" }}>
@@ -54,7 +56,7 @@ function SideMenu(props: {
       </QuestionItem>
     ));
 
-    const participantList = props.groupResult.participant.map((item) => (
+    const participantList = props.participantList.map((item) => (
       <ProfileItem key={item.userId}>
         <ProfileImg size={40} bgImg={item.profileImage} />
         {item.nickname}
@@ -68,7 +70,7 @@ function SideMenu(props: {
           <>
             {questionList}
             <QuestionItem
-              bgColor={props.groupResult.color}
+              bgColor={props.bgColor}
               onClick={() => handleClickQuestion(0)}
             >
               업적

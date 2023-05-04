@@ -30,6 +30,8 @@ import JoinPage from "./pages/JoinPage/JoinPage";
 import AwardPage from "./pages/AwardPage/AwardPage";
 import OauthPage from "./pages/OauthPage/OauthPage";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
+import NoticePage from "./pages/NoticePage/NoticePage";
+import InquiryPage from "./pages/InquiryPage/InquiryPage";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -139,6 +141,8 @@ function App() {
       <Route path="/" element={<SubLayout />}>
         <Route path="/notify" element={<NotifyPage />} />
         <Route path="/setting" element={<SettingPage />} />
+        <Route path="/notice" element={<NoticePage />} />
+        <Route path="/inquiry" element={<InquiryPage />} />
         <Route path="/invite/:meetingId" element={<InvitePage />} />
         <Route path="/answer" element={<AnswerPage />} />
       </Route>

@@ -68,7 +68,7 @@ const SettingMenuItemText = styled.div`
 const SettingBtnContainer = styled.div`
   position: absolute;
   width: 100%;
-  bottom: 50px;
+  bottom: 2vh;
   left: 50%;
   transform: translate(-50%, -50%);
 
@@ -81,7 +81,7 @@ const SettingBtnContainer = styled.div`
     }
   }
 
-  @media (height < 700px) {
+  @media (height < 750px) {
     display: flex;
     justify-content: center;
 

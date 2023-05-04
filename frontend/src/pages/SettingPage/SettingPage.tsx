@@ -20,6 +20,10 @@ function SettingPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
+  const handleClickMenu = (path: string) => {
+    navigate(`/${path}`);
+  };
+
   const handleClickLogoutBtn = () => {
     logout()
       .then((res) => {
@@ -81,11 +85,11 @@ function SettingPage() {
       </SettingSection>
       <SettingSection>
         <SettingSectionTitle>기타 안내</SettingSectionTitle>
-        <SettingMenuItem>
+        <SettingMenuItem onClick={() => handleClickMenu("notice")}>
           <SettingMenuItemText>공지사항</SettingMenuItemText>
           <Back />
         </SettingMenuItem>
-        <SettingMenuItem>
+        <SettingMenuItem onClick={() => handleClickMenu("inquiry")}>
           <SettingMenuItemText>문의사항</SettingMenuItemText>
           <Back />
         </SettingMenuItem>
