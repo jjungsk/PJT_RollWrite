@@ -1,6 +1,7 @@
 package com.rollwrite.domain.user.controller;
 
 import com.rollwrite.domain.user.dto.FindUserProfileResDto;
+import com.rollwrite.domain.user.dto.ModifyUserReqDto;
 import com.rollwrite.domain.user.service.UserService;
 import com.rollwrite.global.auth.CustomUserDetails;
 import com.rollwrite.global.model.ApiResponse;
@@ -55,34 +56,22 @@ public class UserController {
 
     // 2. User 회원 정보 수정
     @ApiOperation(value = "유저의 회원 정보 수정", notes = "유저 이름과 프로필 수정 가능")
-//    @Parameters({
-//            @Parameter(name = "nickname", description = "수정 할 유저 이름"),
-//            @Parameter(name = "profileImage", description = "수정 할 프로필 이미지"),
-//    })
+    @Parameters({
+            @Parameter(name = "profileImage", description = "수정 할 프로필 이미지")
+    })
     @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<ApiResponse<?>> modifyUser(@ApiIgnore Authentication authentication
-            , @RequestPart(required = false) String nickname, @RequestPart(required = false) MultipartFile profileImage) throws IOException {
+    public ResponseEntity<ApiResponse<?>> modifyUser(@ApiIgnore Authentication authentication,
+                                                     @RequestPart(value = "modifyUserReqDto", required = false) ModifyUserReqDto modifyUserReqDto,
+                                                     @RequestPart(value =    "profileImage", required = false) MultipartFile profileImage) throws IOException {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
         Long userId = userDetails.getUserId();
 
-        userService.modifyUser(userId, nickname, profileImage);
+        userService.modifyUser(userId, modifyUserReqDto, profileImage);
 
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.MODIFY_USER_SUCCESS), HttpStatus.OK);
     }
 
-    // 3. USer 프로필 삭제
-    @ApiOperation(value = "프로필 이미지 삭제", notes = "본인 프로필 이미지만 삭제")
-    @DeleteMapping("/profile")
-    public ResponseEntity<ApiResponse<?>> removeUserProfile(@ApiIgnore Authentication authentication) throws UnknownHostException {
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
-        Long userId = userDetails.getUserId();
-
-        userService.removeUserProfile(userId);
-
-        return new ResponseEntity<>(ApiResponse.success(SuccessCode.REMOVE_USER_PROFILE_SUCCESS), HttpStatus.OK);
-    }
-
-    // 4. User 회원 탈퇴
+    // 3. User 회원 탈퇴
     @ApiOperation(value = "회원 탈퇴", notes = "본인 회원 탈퇴")
     @DeleteMapping
     public ResponseEntity<ApiResponse<?>> removeUser(@ApiIgnore Authentication authentication) {

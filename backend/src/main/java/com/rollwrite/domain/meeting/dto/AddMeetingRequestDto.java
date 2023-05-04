@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
-@Schema(description = "모임 생성 정보 Dto")
+@Schema(description = "모임 생성 정보 DTO")
 @Getter
 @ToString
 @RequiredArgsConstructor
