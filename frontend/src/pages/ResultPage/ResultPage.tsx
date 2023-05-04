@@ -14,89 +14,14 @@ import format from "date-fns/format";
 import SideMenu from "../../components/SideMenu/SideMenu";
 import ChatItem from "../../components/ChatItem/ChatItem";
 import ChatAwardItem from "../../components/ChatAwardItem/ChatAwardItem";
-import {
-  getGroupIsDoneResultAward,
-  getGroupIsDoneResultChat,
-  getGroupIsDoneResultParticipantList,
-  getGroupIsDoneResultQuestionList,
-} from "../../apis/result";
+import useGroupIsDoneResultAward from "../../hooks/useGroupIsDoneResultAward";
 
 function ResultPage() {
   const navigate = useNavigate();
   const { meetingId } = useParams();
-  const [groupResult, setGroupResult] = useState<GroupResult>({
-    meetingId: 0,
-    title: "모임명",
-    startDay: "2023-01-01",
-    endDay: "2023-01-01",
-    color: "var(--bg-color)",
-    participantCnt: 0,
-    tag: [],
-    chat: [],
-  });
-  const [award, setAward] = useState<Award>({
-    taleteller: [],
-    photographer: [],
-    perfectAttendance: [],
-  });
-  const [participantList, setParticipantList] = useState<Participant[]>([]);
-  const [questionList, setQuestionList] = useState<Chat[]>([]);
   const [sideMenuOpen, setSideMenuOpen] = useState<boolean>(false);
-
-  useEffect(() => {
-    const parsedMeetingId = Number(meetingId);
-
-    if (isNaN(parsedMeetingId)) {
-      navigate("/404");
-    } else {
-      getGroupIsDoneResultQuestionList(parsedMeetingId)
-        .then((res) => {
-          setQuestionList(res.data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-
-      getGroupIsDoneResultParticipantList(parsedMeetingId)
-        .then((res) => {
-          setParticipantList(res.data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-
-      getGroupIsDoneResultChat(parsedMeetingId)
-        .then((res) => {
-          setGroupResult(res.data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-
-      getGroupIsDoneResultAward(parsedMeetingId)
-        .then((res) => {
-          var award: Award = {
-            taleteller: [],
-            photographer: [],
-            perfectAttendance: [],
-          };
-
-          res.data.map((profile: Participant) => {
-            if (profile.type === "PHOTOGRAPHER")
-              award.photographer.push(profile);
-            else if (profile.type === "PERFECTATTENDANCE")
-              award.perfectAttendance.push(profile);
-            else award.taleteller.push(profile);
-            return 0;
-          });
-
-          setAward(award);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
-  }, [navigate, meetingId]);
+  const { award, participantList, questionList, groupResult } =
+    useGroupIsDoneResultAward(Number(meetingId));
 
   const handleClickBackBtn = () => {
     navigate("/my");
