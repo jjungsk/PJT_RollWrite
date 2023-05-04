@@ -13,6 +13,11 @@ const BackNavigationContainer = styled.div`
   svg {
     cursor: pointer;
   }
+
+  & > div:last-child {
+    width: 30px;
+    height: 30px;
+  }
 `;
 
 const BackNavigationTitle = styled.h1`

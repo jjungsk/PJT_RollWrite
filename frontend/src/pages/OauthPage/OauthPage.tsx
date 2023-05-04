@@ -3,6 +3,7 @@ import { kakaoOuath } from "../../apis/user";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { updateAccessToken, updateLoginStatus } from "../../store/authReducer";
 import { useAppDispatch, useAppSelector } from "../../constants/types";
+import { toast } from "react-hot-toast";
 
 function Oauth() {
   const [searchParams] = useSearchParams();
@@ -19,8 +20,8 @@ function Oauth() {
           dispatch(updateAccessToken(res.data.accessToken));
           navigate(routeHistory || "/question"); // 실패할 경우 기본 경로로 이동
         })
-        .catch((err) => {
-          console.error(err);
+        .catch((error) => {
+          toast.error(error.message);
         });
     }
   }, [code, dispatch, navigate, routeHistory]);

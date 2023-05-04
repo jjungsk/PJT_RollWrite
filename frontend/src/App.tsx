@@ -76,7 +76,6 @@ function App() {
           return axiosInstance(originalRequest);
         } catch (err) {
           // 갱신 실패시 임의 로그아웃 처리
-          console.log("갱신실패", err);
           dispatch(updateLoginStatus(false));
           dispatch(updateAccessToken(""));
           navigate("/error");
@@ -112,7 +111,6 @@ function App() {
           return axiosFileInstance(originalRequest);
         } catch (err) {
           // 갱신 실패시 임의 로그아웃 처리
-          console.log("갱신실패", err);
           dispatch(updateLoginStatus(false));
           dispatch(updateAccessToken(""));
           navigate("/error");

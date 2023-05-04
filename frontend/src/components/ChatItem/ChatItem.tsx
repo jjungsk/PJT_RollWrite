@@ -35,7 +35,9 @@ function ChatItem(props: { chat: Chat; bgColor: string }) {
                 </AnswerDate>
               )}
               <AnswerContent>
-                <img src={`${SERVER_URL}${answer.imageUrl}`} alt="" />
+                {answer.imageUrl && (
+                  <img src={`${SERVER_URL}${answer.imageUrl}`} alt="" />
+                )}
                 <div>{answer.content}</div>
               </AnswerContent>
               {!answer.isMe && (

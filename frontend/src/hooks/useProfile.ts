@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { getUserDetail } from "../apis/user";
 import { Profile } from "../constants/types";
+import { toast } from "react-hot-toast";
 
 function useProfile() {
   const [profile, setProfile] = useState<Profile>({
@@ -13,11 +14,10 @@ function useProfile() {
   useEffect(() => {
     getUserDetail()
       .then((res) => {
-        console.log(res);
         setProfile(res.data);
       })
       .catch((error) => {
-        console.error(error);
+        toast.error(error.message);
       });
   }, []);
 

@@ -89,12 +89,11 @@ export default function AnswerPage() {
         success: <b>답변이 수정됐습니다!</b>,
         error: <b>수정을 실패했습니다!</b>,
       })
-      .then((res) => {
-        console.log(res);
+      .then(() => {
         navigate(-1);
       })
-      .catch((err) => {
-        console.error(err);
+      .catch((error) => {
+        toast.error(error.message);
         navigate("/error");
       });
   };
@@ -105,14 +104,13 @@ export default function AnswerPage() {
         success: <b>답변이 저장됐습니다!</b>,
         error: <b>저장을 실패했습니다!</b>,
       })
-      .then((res) => {
-        console.log(res);
+      .then(() => {
         question.isFinal
           ? navigate(`/award/${question.meetingId}`)
           : navigate(-1);
       })
-      .catch((err) => {
-        console.error(err);
+      .catch((error) => {
+        toast.error(error.message);
         navigate("/error");
       });
   };
@@ -123,11 +121,13 @@ export default function AnswerPage() {
       image: "/img.png",
     });
     deleteAnswerImg(question.questionId)
-      .then((res) => {
-        console.log(res);
+      .then(() => {
+        toast("이미지가 삭제되었습니다.", {
+          icon: "🗑",
+        });
       })
-      .catch((err) => {
-        console.error(err);
+      .catch((error) => {
+        toast.error(error.message);
       });
   };
 

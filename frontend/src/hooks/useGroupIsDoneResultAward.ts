@@ -7,6 +7,7 @@ import {
   getGroupIsDoneResultQuestionList,
 } from "../apis/result";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 interface Props {
   award: Award;
@@ -42,7 +43,7 @@ function useGroupIsDoneResultAward(parsedMeetingId: number): Props {
 
   useEffect(() => {
     if (isNaN(parsedMeetingId)) {
-      navigate("/404");
+      navigate("/error");
     } else {
       getGroupIsDoneResultQuestionList(parsedMeetingId)
         .then((res) => {
@@ -52,7 +53,7 @@ function useGroupIsDoneResultAward(parsedMeetingId: number): Props {
           }));
         })
         .catch((error) => {
-          console.error(error);
+          toast.error(error.message);
         });
 
       getGroupIsDoneResultParticipantList(parsedMeetingId)
@@ -63,7 +64,7 @@ function useGroupIsDoneResultAward(parsedMeetingId: number): Props {
           }));
         })
         .catch((error) => {
-          console.error(error);
+          toast.error(error.message);
         });
 
       getGroupIsDoneResultChat(parsedMeetingId)
@@ -74,13 +75,11 @@ function useGroupIsDoneResultAward(parsedMeetingId: number): Props {
           }));
         })
         .catch((error) => {
-          console.error(error);
+          toast.error(error.message);
         });
 
       getGroupIsDoneResultAward(parsedMeetingId)
         .then((res) => {
-          console.log(res);
-
           const award: Award = {
             taleteller: [],
             photographer: [],
@@ -103,7 +102,7 @@ function useGroupIsDoneResultAward(parsedMeetingId: number): Props {
           }));
         })
         .catch((error) => {
-          console.error(error);
+          toast.error(error.message);
           navigate("/error");
         });
     }
