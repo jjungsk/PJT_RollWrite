@@ -47,3 +47,10 @@ export function render(): void {
   }
   requestAnimationFrame(render);
 }
+export async function removeAll() {
+  for (let i = particles.length - 1; i--; i > -1) {
+    const p = particles[i];
+    p.remove();
+    particles.splice(i, 1);
+  }
+}

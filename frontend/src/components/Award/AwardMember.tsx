@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { ProfileImg } from "../../pages/MyPage/style";
 import GhostBtn from "../../elements/Button/GhostBtn";
 import { Profile } from "../../constants/types";
-import { pop } from "../../utils/pop";
+import { pop, removeAll } from "../../utils/pop";
 
 interface Props {
   profile: Profile;
@@ -19,7 +19,11 @@ function AwardMember({
   awardSteps,
   awardTitle,
 }: Props) {
-  pop(150);
+  pop(100);
+  const handelClickBtn = async () => {
+    await removeAll();
+    setAwardSteps(awardSteps + 1);
+  };
   return (
     <AwardPageContainer>
       <AwardPageHeader>
@@ -43,10 +47,7 @@ function AwardMember({
       >
         <ProfileImg size={280} bgImg={profile.profileImage} />
       </motion.div>
-      <GhostBtn
-        label="확인"
-        onClick={() => setAwardSteps(awardSteps + 1)}
-      ></GhostBtn>
+      <GhostBtn label="확인" onClick={handelClickBtn}></GhostBtn>
     </AwardPageContainer>
   );
 }
