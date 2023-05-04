@@ -15,6 +15,7 @@ import { logout, withdraw } from "../../apis/user";
 import { updateAccessToken, updateLoginStatus } from "../../store/authReducer";
 import { useAppDispatch } from "../../constants/types";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 function SettingPage() {
   const dispatch = useAppDispatch();
@@ -28,17 +29,16 @@ function SettingPage() {
     logout()
       .then((res) => {
         if (res.statusCode === 200) {
-          alert("정상적으로 로그아웃이 되었습니다.");
+          toast("정상적으로 로그아웃이 되었습니다.", {
+            icon: "🚪",
+          });
           dispatch(updateLoginStatus(false));
           dispatch(updateAccessToken(""));
           navigate("/login");
-        } else {
-          alert("로그아웃 중 문제가 발생하였습니다.");
         }
       })
-      .catch((error) => {
-        console.error(error);
-        alert("로그아웃 중 문제가 발생하였습니다.");
+      .catch(() => {
+        toast.error("로그아웃 중 문제가 발생하였습니다.");
       });
   };
 
@@ -49,17 +49,16 @@ function SettingPage() {
       withdraw()
         .then((res) => {
           if (res.statusCode === 200) {
-            alert("정상적으로 탈퇴하었습니다.");
+            toast("정상적으로 탈퇴하었습니다.", {
+              icon: "🏃‍♂️",
+            });
             dispatch(updateLoginStatus(false));
             dispatch(updateAccessToken(""));
             navigate("/login");
-          } else {
-            alert("회원탈퇴 중 문제가 발생하였습니다.");
           }
         })
-        .catch((error) => {
-          console.error(error);
-          alert("회원탈퇴 중 문제가 발생하였습니다.");
+        .catch(() => {
+          toast.error("회원탈퇴 중 문제가 발생하였습니다.");
         });
     }
   };

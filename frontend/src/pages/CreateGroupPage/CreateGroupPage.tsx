@@ -22,8 +22,8 @@ function CreateGroupPage() {
       .then((res) => {
         setTagList(res.data);
       })
-      .catch((err) => {
-        console.error(err);
+      .catch((error) => {
+        toast.error(error.message);
       });
   }, []);
 
@@ -86,7 +86,7 @@ function CreateGroupPage() {
           setNewGroupInfo(res.data);
         })
         .catch((error) => {
-          console.error(error);
+          toast.error(error.message);
           return;
         });
     }

@@ -4,6 +4,7 @@ import GhostBtn from "../../elements/Button/GhostBtn";
 import { Title, SubTitle, QuestionInput } from "./style";
 import FillBtn from "../../elements/Button/FillBtn";
 import { createQuestion } from "../../apis/home";
+import { toast } from "react-hot-toast";
 
 function QuestionWrite(props: {
   setHomeContent: (homeContent: number) => void;
@@ -18,11 +19,13 @@ function QuestionWrite(props: {
   const handleClickCreateBtn = () => {
     createQuestion(props.groupId, question)
       .then((res) => {
-        alert(res.message);
+        toast(res.message, {
+          icon: "🙋‍♂️",
+        });
         props.setHomeContent(0);
       })
       .catch((err) => {
-        alert(err.message);
+        toast.error(err.message);
       });
   };
   return (

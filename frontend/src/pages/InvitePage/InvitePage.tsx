@@ -38,7 +38,7 @@ function InvitePage() {
           generateQRCode(url);
         })
         .catch((error) => {
-          console.error(error);
+          toast.error(error.message);
         });
     }
   });

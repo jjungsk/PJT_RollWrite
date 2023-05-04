@@ -19,14 +19,11 @@ import { GroupInfo } from "../../constants/types";
 import Contour from "../../elements/Contour/Contour";
 import GroupCard from "../../components/GroupCard/GroupCard";
 import { useNavigate } from "react-router-dom";
-import {
-  deleteUserProfileImg,
-  getUserGroupIsDoneList,
-  updateUserDetail,
-} from "../../apis/user";
+import { getUserGroupIsDoneList, updateUserDetail } from "../../apis/user";
 import useProfile from "../../hooks/useProfile";
 import FillBtn from "../../elements/Button/FillBtn";
 import GhostBtn from "../../elements/Button/GhostBtn";
+import { toast } from "react-hot-toast";
 
 function MyPage() {
   const navigate = useNavigate();
@@ -41,11 +38,10 @@ function MyPage() {
   useEffect(() => {
     getUserGroupIsDoneList(0, 10)
       .then((res) => {
-        console.log(res);
         setGroupList(res.data);
       })
       .catch((error) => {
-        console.error(error);
+        toast.error(error.message);
       });
   }, []);
 
@@ -88,30 +84,29 @@ function MyPage() {
   };
 
   const editProfile = () => {
-    if (isDeleteImg) {
-      deleteUserProfileImg()
-        .then((res) => {
-          if (res.statusCode === 200) {
-            setIsDeleteImg(false);
-          }
-        })
-        .catch((err) => console.log(err));
-    }
+    const data = JSON.stringify({
+      isRemoveImage: isDeleteImg,
+      nickname: tmpNickname,
+    });
+    const jsonData = new Blob([data], { type: "application/json" });
 
     const formData = new FormData();
-    formData.append("nickname", tmpNickname);
-    if (profileImgFile) {
+    formData.append("modifyUserReqDto", jsonData);
+    if (!isDeleteImg && profileImgFile) {
       formData.append("profileImage", profileImgFile);
     }
 
     updateUserDetail(formData)
       .then((res) => {
         if (res.statusCode === 200) {
-          alert("정상적으로 수정되었습니다!");
+          toast("정상적으로 수정되었습니다!", {
+            icon: "✔️",
+          });
+          setIsDeleteImg(false);
           setEditProfileMode(false);
         }
       })
-      .catch((err) => console.log(err));
+      .catch(() => toast.error("회원정보 수정 중에 문제가 발생하였습니다."));
   };
 
   const handelClickDeleteBtn = () => {
