@@ -13,7 +13,6 @@ import com.rollwrite.domain.question.repository.AnswerRepository;
 import com.rollwrite.domain.question.repository.QuestionParticipantRepository;
 import com.rollwrite.domain.question.repository.QuestionRepository;
 import com.rollwrite.domain.user.entity.User;
-import com.rollwrite.domain.user.repository.UserRepository;
 import com.rollwrite.global.model.chatgpt.ChatGPTResDto;
 import com.rollwrite.global.service.FileService;
 import com.rollwrite.global.service.GptService;
@@ -39,7 +38,6 @@ public class QuestionService {
 
     private final GptService gptService;
     private final FileService fileService;
-    private final UserRepository userRepository;
     private final AnswerRepository answerRepository;
     private final MeetingRepository meetingRepository;
     private final QuestionRepository questionRepository;
@@ -136,14 +134,12 @@ public class QuestionService {
 
     @Transactional
     public void modifyAnswer(Long userId, ModifyAnswerReqDto modifyAnswerReqDto, MultipartFile image) throws IOException {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
+        // 답변의 문장 길이가 400글자를 넘었을 때
+        if (modifyAnswerReqDto.getAnswer().getBytes(StandardCharsets.ISO_8859_1).length > 400) {
+            throw new IllegalArgumentException("답변 내용이 글자 수를 초과했습니다");
+        }
 
-        // 만료시간이 지나지 않은 질문
-        Question question = questionRepository.findQuestionByIdAndExpireTime(modifyAnswerReqDto.getQuestionId())
-                .orElseThrow(() -> new IllegalArgumentException("질문을 찾을 수 없습니다"));
-
-        Answer answer = answerRepository.findByUserAndQuestion(user, question)
+        Answer answer = answerRepository.findAnswerByUserAndQuestionAndExpireTime(userId, modifyAnswerReqDto.getQuestionId())
                 .orElseThrow(() -> new IllegalArgumentException("답변을 찾을 수 없습니다"));
 
         // change image
@@ -161,16 +157,8 @@ public class QuestionService {
 
     @Transactional
     public void removeAnswerImage(Long userId, Long questionId) throws IOException {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
-
-        // 만료시간이 지나지 않은 질문
-        Question question = questionRepository.findQuestionByIdAndExpireTime(questionId)
-                .orElseThrow(() -> new IllegalArgumentException("질문을 찾을 수 없습니다"));
-
-        Answer answer = answerRepository.findByUserAndQuestion(user, question)
+        Answer answer = answerRepository.findAnswerByUserAndQuestionAndExpireTime(userId, questionId)
                 .orElseThrow(() -> new IllegalArgumentException("답변을 찾을 수 없습니다"));
-
 
         // remove image
         fileService.fileDelete(answer.getImageUrl());
