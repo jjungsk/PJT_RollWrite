@@ -12,24 +12,16 @@ function useHomePage() {
   const [questionList, setQuestionList] = useState<Question[]>();
 
   useEffect(() => {
-    getGroupList()
-      .then((res) => {
-        setGroupList(res.data);
-      })
-      .catch((error) => {
-        toast.error(error.message);
-      });
+    getGroupList().then((res) => {
+      setGroupList(res.data);
+    });
   }, []);
 
   useEffect(() => {
     groupList?.length > 0 &&
-      getQuestionList(groupList[currentIndex].meetingId)
-        .then((res) => {
-          setQuestionList(res.data);
-        })
-        .catch((error) => {
-          toast.error(error.message);
-        });
+      getQuestionList(groupList[currentIndex].meetingId).then((res) => {
+        setQuestionList(res.data);
+      });
   }, [currentIndex, groupList]);
 
   return {

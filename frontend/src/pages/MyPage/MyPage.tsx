@@ -38,13 +38,9 @@ function MyPage() {
   const profile = useProfile(editProfileMode);
 
   useEffect(() => {
-    getUserGroupIsDoneList(0, 10)
-      .then((res) => {
-        setGroupList(res.data);
-      })
-      .catch((error) => {
-        toast.error(error.message);
-      });
+    getUserGroupIsDoneList(0, 10).then((res) => {
+      setGroupList(res.data);
+    });
   }, []);
 
   useEffect(() => {

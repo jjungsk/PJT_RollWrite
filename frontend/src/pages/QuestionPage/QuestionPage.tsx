@@ -38,13 +38,9 @@ function QuestionPage() {
   };
 
   useEffect(() => {
-    getQuestionList()
-      .then((res) => {
-        setQuestionList(res.data);
-      })
-      .catch((error) => {
-        toast.error(error.message);
-      });
+    getQuestionList().then((res) => {
+      setQuestionList(res.data);
+    });
   }, []);
 
   return (

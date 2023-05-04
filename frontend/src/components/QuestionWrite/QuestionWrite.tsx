@@ -24,8 +24,8 @@ function QuestionWrite(props: {
         });
         props.setHomeContent(0);
       })
-      .catch((err) => {
-        toast.error(err.message);
+      .catch(() => {
+        toast.error("질문 생성 중 문제가 발생하였습니다.");
       });
   };
   return (
