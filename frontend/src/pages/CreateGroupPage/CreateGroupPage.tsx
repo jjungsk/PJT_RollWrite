@@ -8,18 +8,18 @@ import BackNavigation from "../../components/BackNavigation/BackNavigation";
 import CreateGroupStepOne from "../../components/CreateGroupSteps/CreateGroupStepOne";
 import CreateGroupStepTwo from "../../components/CreateGroupSteps/CreateGroupStepTwo";
 import CreateGroupStepThree from "../../components/CreateGroupSteps/CreateGroupStepThree";
-import { handleKakaoClick } from "../../utils/kakaoShare";
+import { handleKakaoShare } from "../../utils/kakaoShare";
+import toast, { Toaster } from "react-hot-toast";
 
 function CreateGroupPage() {
   const navigate = useNavigate();
-  const [GruopCreatStep, setGruopCreatStep] = useState(0);
+  const [groupCreateStep, setGroupCreateStep] = useState(0);
   const [tagList, setTagList] = useState<Tag[]>([]);
   const [newGroupInfo, setNewGroupInfo] = useState<GroupInfo>();
 
   useEffect(() => {
     getGroupTag()
       .then((res) => {
-        console.log(res);
         setTagList(res.data);
       })
       .catch((err) => {
@@ -40,92 +40,92 @@ function CreateGroupPage() {
     const titleLength = title.trim().length;
 
     if (titleLength === 0 || titleLength > 24) {
-      alert("모임명은 1~24 글자로 입력해주세요.");
+      toast.error("모임명은 1~24자 이내로 입력해주세요.");
       return false;
     }
 
-    if (!startDay) {
-      alert("모임 시작일을 선택해주세요.");
-      return false;
-    }
-
-    if (!endDay) {
-      alert("모임 종료일을 선택해주세요.");
+    if (!startDay || !endDay) {
+      toast.error("시작일과 종료일을 선택해 주세요.");
       return false;
     }
 
     if (!color) {
-      alert("모임 테마를 선택해주세요.");
+      toast.error("모임 테마를 설정해 주세요");
       return false;
     }
 
     if (isAfter(new Date(startDay), new Date(endDay))) {
-      alert("시작일이 종료일 이후입니다.");
+      toast.error("시작일이 종료일보다 느립니다.");
       return false;
     }
 
     if (isAfter(subDays(new Date(), 1), new Date(startDay))) {
-      alert("시작일이 오늘보다 이전입니다.");
+      toast.error("시작일이 오늘 이전입니다.");
       return false;
     }
 
     return true;
   };
 
-  const handleClickBackBtn = () => {
-    if (GruopCreatStep === 0) navigate(-1);
-
-    setGruopCreatStep(GruopCreatStep - 1);
+  const handleBackButtonClick = () => {
+    if (groupCreateStep === 0) navigate(-1);
+    setGroupCreateStep(groupCreateStep - 1);
   };
 
-  const handleClickConfirmBtn = () => {
-    if (GruopCreatStep === 1 && !validateForm()) return;
+  const handleConfirmButtonClick = () => {
+    if (groupCreateStep === 1 && !validateForm()) return;
 
-    if (GruopCreatStep === 2)
-      createGroup(groupInfo)
+    if (groupCreateStep === 2) {
+      toast
+        .promise(createGroup(groupInfo), {
+          loading: "모임을 생성중입니다...",
+          success: <b>생성을 완료했습니다.</b>,
+          error: <b>생성에 실패했습니다.</b>,
+        })
         .then((res) => {
-          console.log(res);
           setNewGroupInfo(res.data);
         })
         .catch((error) => {
           console.error(error);
           return;
         });
+    }
 
-    if (GruopCreatStep === 3) navigate("/home");
+    if (groupCreateStep === 3) navigate("/home");
 
-    setGruopCreatStep(GruopCreatStep + 1);
+    setGroupCreateStep(groupCreateStep + 1);
   };
 
   return (
     <>
-      <BackNavigation onClick={handleClickBackBtn} />
-      {GruopCreatStep === 0 && (
-        <CreateGroupStepOne onClick={handleClickConfirmBtn} />
+      <Toaster />
+      <BackNavigation onClick={handleBackButtonClick} />
+      {groupCreateStep === 0 && (
+        <CreateGroupStepOne onClick={handleConfirmButtonClick} />
       )}
-      {GruopCreatStep === 1 && (
+      {groupCreateStep === 1 && (
         <CreateGroupStepTwo
-          onClick={handleClickConfirmBtn}
+          onClick={handleConfirmButtonClick}
           groupInfo={groupInfo}
           setGroupInfo={setGroupInfo}
         />
       )}
-      {GruopCreatStep === 2 && (
+      {groupCreateStep === 2 && (
         <CreateGroupStepThree
           tagList={tagList}
-          onClick={handleClickConfirmBtn}
+          onClick={handleConfirmButtonClick}
           groupInfo={groupInfo}
           setGroupInfo={setGroupInfo}
         />
       )}
-      {GruopCreatStep === 3 && newGroupInfo && (
+      {groupCreateStep === 3 && newGroupInfo && (
         <Info
           title={newGroupInfo?.title}
           subTitle="모임을 만들었어요."
           fillLabel="초대하기"
           ghostLabel="홈으로"
-          fillOnClick={() => handleKakaoClick(newGroupInfo?.inviteUrl!)}
-          ghostOnClick={handleClickConfirmBtn}
+          fillOnClick={() => handleKakaoShare(newGroupInfo?.inviteUrl!)}
+          ghostOnClick={handleConfirmButtonClick}
         />
       )}
     </>

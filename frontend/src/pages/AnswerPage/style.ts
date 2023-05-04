@@ -59,6 +59,9 @@ const ContentContainer = styled.textarea`
   margin-block: 15px;
 `;
 
+const ToastModal = styled.textarea`
+  background-color: white;
+`;
 export {
   NameContainer,
   QuestionDiv,
@@ -66,4 +69,5 @@ export {
   IconContainer,
   TextContainer,
   ContentContainer,
+  ToastModal,
 };

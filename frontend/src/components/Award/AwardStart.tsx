@@ -4,12 +4,13 @@ import AwardBox from "./AwardBox";
 
 interface Props {
   setAwardSteps: React.Dispatch<React.SetStateAction<number>>;
+  title: string;
 }
-function Start({ setAwardSteps }: Props) {
+function Start({ setAwardSteps, title }: Props) {
   return (
     <AwardPageContainer padding="32px 32px">
       <AwardPageHeader>
-        <div>싸피8기모임</div>
+        <div>{title}</div>
         <div>롤링페이퍼가 완성되었습니다!</div>
         <div>결과를 확인해보세요</div>
       </AwardPageHeader>

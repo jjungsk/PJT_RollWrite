@@ -2,47 +2,21 @@ import { useState } from "react";
 import AwardStart from "../../components/Award/AwardStart";
 import AwardMember from "../../components/Award/AwardMember";
 import AwardEnd from "../../components/Award/AwardEnd";
+import useGroupIsDoneResultAward from "../../hooks/useGroupIsDoneResultAward";
+import { useParams } from "react-router-dom";
 
 function AwardPage() {
   const [awardSteps, setAwardSteps] = useState(-1);
-  const [award, setAward] = useState<
-    {
-      userId: number;
-      nickname: string;
-      profileImage: string;
-      type: string;
-    }[]
-  >([
-    {
-      userId: 1,
-      nickname: "닉네임1",
-      profileImage: "/sample_profile_image.png",
-      type: "TALETELLER",
-    },
-    {
-      userId: 2,
-      nickname: "닉네임2",
-      profileImage: "/sample_profile_image.png",
-      type: "TALETELLER",
-    },
-    {
-      userId: 1,
-      nickname: "닉네임1",
-      profileImage: "/sample_profile_image.png",
-      type: "PHOTOGRAPHER",
-    },
-    {
-      userId: 1,
-      nickname: "닉네임1",
-      profileImage: "/sample_profile_image.png",
-      type: "PERFECTATTENDANCE",
-    },
-  ]);
-
+  const { meetingId } = useParams();
+  const { award, resData, title } = useGroupIsDoneResultAward(
+    Number(meetingId)
+  );
   return (
     <div>
-      {awardSteps === -1 && <AwardStart setAwardSteps={setAwardSteps} />}
-      {award?.map((profile, i) => {
+      {awardSteps === -1 && (
+        <AwardStart title={title} setAwardSteps={setAwardSteps} />
+      )}
+      {resData?.map((profile, i) => {
         return (
           awardSteps === i && (
             <AwardMember
@@ -61,7 +35,7 @@ function AwardPage() {
           )
         );
       })}
-      {awardSteps === award.length && <AwardEnd award={award} />}
+      {awardSteps === resData.length && <AwardEnd award={award} />}
     </div>
   );
 }

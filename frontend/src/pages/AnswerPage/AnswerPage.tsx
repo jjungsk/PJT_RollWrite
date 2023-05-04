@@ -17,6 +17,8 @@ import {
 } from "../../apis/question";
 import { useLocation, useNavigate } from "react-router-dom";
 import { QuestionInfo } from "../../constants/types";
+import toast, { Toaster } from "react-hot-toast";
+import { showToastModal } from "../../utils/ToastModal";
 
 export default function AnswerPage() {
   const location = useLocation();
@@ -70,24 +72,49 @@ export default function AnswerPage() {
     }
 
     location.state.isModify
-      ? updateAnswer(formData)
-          .then((res) => {
-            console.log(res);
-            navigate(-1);
-          })
-          .catch((err) => {
-            console.error(err);
-            navigate("/error");
-          })
-      : createAnswer(formData)
-          .then((res) => {
-            console.log(res);
-            navigate(-1);
-          })
-          .catch((err) => {
-            console.error(err);
-            navigate("/error");
-          });
+      ? modifyAnswer()
+      : question.isFinal
+      ? showToastModal(
+          saveAnswer,
+          "마지막 질문은 수정이 불가능합니다.",
+          "저장하시겠습니까?"
+        )
+      : saveAnswer();
+  };
+
+  const modifyAnswer = () => {
+    toast
+      .promise(updateAnswer(formData), {
+        loading: "답변을 수정중입니다...",
+        success: <b>답변이 수정됐습니다!</b>,
+        error: <b>수정을 실패했습니다!</b>,
+      })
+      .then((res) => {
+        console.log(res);
+        navigate(-1);
+      })
+      .catch((err) => {
+        console.error(err);
+        navigate("/error");
+      });
+  };
+  const saveAnswer = () => {
+    toast
+      .promise(createAnswer(formData), {
+        loading: "답변을 저장중입니다...",
+        success: <b>답변이 저장됐습니다!</b>,
+        error: <b>저장을 실패했습니다!</b>,
+      })
+      .then((res) => {
+        console.log(res);
+        question.isFinal
+          ? navigate(`/award/${question.meetingId}`)
+          : navigate(-1);
+      })
+      .catch((err) => {
+        console.error(err);
+        navigate("/error");
+      });
   };
 
   const handelClickDeleteBtn = () => {
@@ -106,6 +133,7 @@ export default function AnswerPage() {
 
   return (
     <>
+      <Toaster />
       <NameContainer>
         {question.title} D-{question.day}
       </NameContainer>

@@ -1,4 +1,4 @@
-export const handleKakaoClick = (url: string) => {
+export const handleKakaoShare = (url: string) => {
   const shareUrl = url;
 
   (window as any).Kakao.Share.sendDefault({
