@@ -19,6 +19,7 @@ import { ReactComponent as BackArrow } from "../../assets/Back_Btn.svg";
 import { ReactComponent as PrevArrow } from "../../assets/Prev_Btn.svg";
 import { QuestionInfo } from "../../constants/types";
 import { getQuestionList } from "../../apis/question";
+import { toast } from "react-hot-toast";
 
 function QuestionPage() {
   const navigate = useNavigate();
@@ -39,11 +40,10 @@ function QuestionPage() {
   useEffect(() => {
     getQuestionList()
       .then((res) => {
-        console.log(res);
         setQuestionList(res.data);
       })
-      .catch((err) => {
-        console.error(err);
+      .catch((error) => {
+        toast.error(error.message);
       });
   }, []);
 

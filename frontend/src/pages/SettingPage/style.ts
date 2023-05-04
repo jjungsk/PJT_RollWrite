@@ -68,7 +68,7 @@ const SettingMenuItemText = styled.div`
 const SettingBtnContainer = styled.div`
   position: absolute;
   width: 100%;
-  bottom: 2vh;
+  bottom: 5vh;
   left: 50%;
   transform: translate(-50%, -50%);
 

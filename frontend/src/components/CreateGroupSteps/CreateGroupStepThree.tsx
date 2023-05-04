@@ -7,6 +7,7 @@ import {
 } from "./style";
 import GhostBtn from "../../elements/Button/GhostBtn";
 import SelectTag from "../../elements/SelectTag/SelectTag";
+import { toast } from "react-hot-toast";
 
 interface Props {
   onClick: () => void;
@@ -30,7 +31,9 @@ function CreateGroupStepThree({
           [name]: tag.filter((item) => item !== parseInt(value)),
         })
       : tag.length > 3
-      ? alert("최대 4개까지 가능합니다")
+      ? toast("최대 4개까지 가능합니다", {
+          icon: "🚫",
+        })
       : setGroupInfo({
           ...groupInfo,
           [name]: [...tag, parseInt(value)],

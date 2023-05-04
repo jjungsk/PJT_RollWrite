@@ -17,12 +17,11 @@ function JoinPage() {
           success: <b>가입을 완료했습니다.</b>,
           error: <b>가입에 실패했습니다.</b>,
         })
-        .then((res) => {
-          console.log(res);
+        .then(() => {
           navigate("/home");
         })
-        .catch((err) => {
-          console.error(err);
+        .catch((error) => {
+          toast.error(error.message);
           navigate("/question");
         });
   });

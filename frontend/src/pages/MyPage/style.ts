@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { SERVER_URL } from "../../constants/url";
 
 const ProfileContainer = styled.div`
   display: flex;
@@ -10,15 +9,15 @@ const ProfileContainer = styled.div`
   background-size: cover;
 `;
 
-const ProfileImg = styled.div<{ size: number; bgImg: string }>`
+const ProfileImg = styled.div<{ size: number; bgImg?: string }>`
   position: relative;
   width: ${(props) => props.size}px;
   height: ${(props) => props.size}px;
   border-radius: ${(props) => props.size / 2}px;
   background-image: ${(props) =>
-    props.bgImg === ""
+    props.bgImg === "" || props.bgImg === null
       ? "url(/default_profile.jpg)"
-      : `url(${SERVER_URL}${props.bgImg})`};
+      : `url(${props.bgImg})`};
   background-size: cover;
   background-position: center;
   background-color: var(--gray-color);
