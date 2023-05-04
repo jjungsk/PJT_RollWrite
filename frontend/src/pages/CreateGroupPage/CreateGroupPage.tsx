@@ -127,7 +127,6 @@ function CreateGroupPage() {
           ghostOnClick={handleConfirmButtonClick}
         />
       )}
-      <div style={{ height: "16px" }} />
     </>
   );
 }
