@@ -87,16 +87,28 @@ public class QuestionService {
 
     @Transactional
     public AddAnswerResDto addAnswer(Long userId, AddAnswerReqDto addAnswerReqDto, MultipartFile image) throws IOException {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
+        // 답변의 문장 길이가 400글자를 넘었을 때
+        if (addAnswerReqDto.getAnswer().getBytes(StandardCharsets.ISO_8859_1).length > 400) {
+            throw new IllegalArgumentException("답변 내용이 글자 수를 초과했습니다");
+        }
 
-        // 내가 참여한 진행 중인 모임
-        Meeting meeting = participantRepository.findMeetingByUserAndMeetingAndIsDone(userId, addAnswerReqDto.getMeetingId(), false)
-                .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
+        Participant participant = participantRepository.findParticipantByUserAndMeetingAndIsDone(userId, addAnswerReqDto.getMeetingId(), false)
+                .orElseThrow(() -> new IllegalArgumentException("참여자 정보를 찾을 수 없습니다"));
 
-        // 만료시간이 지나지 않은 질문
+        User user = participant.getUser();
+
+        Meeting meeting = participant.getMeeting();
+
+        // 만료시간이 지나지 않은 질문의 답변
         Question question = questionRepository.findQuestionByIdAndExpireTime(addAnswerReqDto.getQuestionId())
                 .orElseThrow(() -> new IllegalArgumentException("질문을 찾을 수 없습니다"));
+
+        Optional<Answer> optionalAnswer = answerRepository.findByUserAndQuestion(user, question);
+
+        // 답변이 이미 있을 때
+        if (optionalAnswer.isPresent()) {
+            throw new IllegalArgumentException("이미 답변한 질문입니다");
+        }
 
         String imageUrl = null;
         if (image != null && !image.isEmpty())
@@ -113,8 +125,6 @@ public class QuestionService {
         answerRepository.save(answer);
 
         // 마지막 질문에 답했을 때 질문 종료
-        Participant participant = participantRepository.findByMeetingAndUser(meeting, user)
-                .orElseThrow(() -> new IllegalArgumentException("참여자를 찾을 수 없습니다"));
         if (meeting.getEndDay().equals(question.getCreatedAt().toLocalDate())) {
             participant.updateIsDone(true);
         }
