@@ -57,8 +57,8 @@ export interface DayInfo {
 export interface Profile {
   nickname: string;
   profileImage: string;
-  cntMeetingIs?: number;
-  cntMeetingIsDone?: number;
+  cntMeetingProgress?: number;
+  cntMeetingProgressIsDone?: number;
 }
 
 export interface QuestionInfo {
@@ -85,6 +85,7 @@ export interface Chat {
   day: string;
   answer?: {
     nickname: string;
+    imageUrl: string;
     profileImage: string;
     isMe: boolean;
     content: string;

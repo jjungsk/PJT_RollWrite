@@ -12,6 +12,7 @@ import Contour from "../../elements/Contour/Contour";
 import { format } from "date-fns";
 import { ProfileImg } from "../../pages/MyPage/style";
 import { ko } from "date-fns/locale";
+import { SERVER_URL } from "../../constants/url";
 
 function ChatItem(props: { chat: Chat; bgColor: string }) {
   return (
@@ -33,7 +34,10 @@ function ChatItem(props: { chat: Chat; bgColor: string }) {
                   {format(new Date(answer.time), "hh:mm")}
                 </AnswerDate>
               )}
-              <AnswerContent>{answer.content}</AnswerContent>
+              <AnswerContent>
+                <img src={`${SERVER_URL}${answer.imageUrl}`} alt="" />
+                <div>{answer.content}</div>
+              </AnswerContent>
               {!answer.isMe && (
                 <AnswerDate>
                   {format(new Date(answer.time), "a", { locale: ko })}
