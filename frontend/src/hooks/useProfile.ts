@@ -12,13 +12,9 @@ function useProfile(editProfileMode?: boolean) {
   });
 
   useEffect(() => {
-    getUserDetail()
-      .then((res) => {
-        setProfile(res.data);
-      })
-      .catch((error) => {
-        toast.error(error.message);
-      });
+    getUserDetail().then((res) => {
+      setProfile(res.data);
+    });
   }, [editProfileMode]);
 
   return profile;

@@ -18,13 +18,9 @@ function CreateGroupPage() {
   const [newGroupInfo, setNewGroupInfo] = useState<GroupInfo>();
 
   useEffect(() => {
-    getGroupTag()
-      .then((res) => {
-        setTagList(res.data);
-      })
-      .catch((error) => {
-        toast.error(error.message);
-      });
+    getGroupTag().then((res) => {
+      setTagList(res.data);
+    });
   }, []);
 
   const [groupInfo, setGroupInfo] = useState<CreateGroup>({
@@ -85,8 +81,7 @@ function CreateGroupPage() {
         .then((res) => {
           setNewGroupInfo(res.data);
         })
-        .catch((error) => {
-          toast.error(error.message);
+        .catch(() => {
           return;
         });
     }

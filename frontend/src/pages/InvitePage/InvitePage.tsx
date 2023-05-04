@@ -31,15 +31,11 @@ function InvitePage() {
 
   useEffect(() => {
     if (meetingId) {
-      getInviteUrl(meetingId)
-        .then((response) => {
-          const url = response.data.inviteUrl;
-          setInviteUrl(url);
-          generateQRCode(url);
-        })
-        .catch((error) => {
-          toast.error(error.message);
-        });
+      getInviteUrl(meetingId).then((response) => {
+        const url = response.data.inviteUrl;
+        setInviteUrl(url);
+        generateQRCode(url);
+      });
     }
   });
 

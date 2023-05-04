@@ -20,8 +20,8 @@ function Oauth() {
           dispatch(updateAccessToken(res.data.accessToken));
           navigate(routeHistory || "/question"); // 실패할 경우 기본 경로로 이동
         })
-        .catch((error) => {
-          toast.error(error.message);
+        .catch(() => {
+          toast.error("로그인 중 문제가 발생하였습니다.");
         });
     }
   }, [code, dispatch, navigate, routeHistory]);

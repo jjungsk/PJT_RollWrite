@@ -20,8 +20,7 @@ function JoinPage() {
         .then(() => {
           navigate("/home");
         })
-        .catch((error) => {
-          toast.error(error.message);
+        .catch(() => {
           navigate("/question");
         });
   });
