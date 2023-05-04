@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const CreateGroupStepsContainer = styled.div`
-  height: calc(100vh - 60px);
+  height: calc(100vh - 120px);
   padding: 0px 32px;
 `;
 
