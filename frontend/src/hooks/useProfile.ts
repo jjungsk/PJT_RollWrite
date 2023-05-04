@@ -3,7 +3,7 @@ import { getUserDetail } from "../apis/user";
 import { Profile } from "../constants/types";
 import { toast } from "react-hot-toast";
 
-function useProfile() {
+function useProfile(editProfileMode?: boolean) {
   const [profile, setProfile] = useState<Profile>({
     nickname: "",
     profileImage: "",
@@ -19,7 +19,7 @@ function useProfile() {
       .catch((error) => {
         toast.error(error.message);
       });
-  }, []);
+  }, [editProfileMode]);
 
   return profile;
 }
