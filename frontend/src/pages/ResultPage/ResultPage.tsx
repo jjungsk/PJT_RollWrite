@@ -18,6 +18,7 @@ import {
   getGroupIsDoneResultAward,
   getGroupIsDoneResultChat,
   getGroupIsDoneResultParticipantList,
+  getGroupIsDoneResultQuestionList,
 } from "../../apis/result";
 
 function ResultPage() {
@@ -29,16 +30,17 @@ function ResultPage() {
     startDay: "2023-01-01",
     endDay: "2023-01-01",
     color: "var(--bg-color)",
-    participant: [],
     participantCnt: 0,
     tag: [],
-    award: {
-      taleteller: [],
-      photographer: [],
-      perfectAttendance: [],
-    },
     chat: [],
   });
+  const [award, setAward] = useState<Award>({
+    taleteller: [],
+    photographer: [],
+    perfectAttendance: [],
+  });
+  const [participantList, setParticipantList] = useState<Participant[]>([]);
+  const [questionList, setQuestionList] = useState<Chat[]>([]);
   const [sideMenuOpen, setSideMenuOpen] = useState<boolean>(false);
 
   useEffect(() => {
@@ -47,22 +49,25 @@ function ResultPage() {
     if (isNaN(parsedMeetingId)) {
       navigate("/404");
     } else {
+      getGroupIsDoneResultQuestionList(parsedMeetingId)
+        .then((res) => {
+          setQuestionList(res.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
+      getGroupIsDoneResultParticipantList(parsedMeetingId)
+        .then((res) => {
+          setParticipantList(res.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
       getGroupIsDoneResultChat(parsedMeetingId)
         .then((res) => {
-          console.log(res);
-
-          setGroupResult((prevGroupResult) => ({
-            meetingId: res.data.meetingId,
-            title: res.data.title,
-            startDay: res.data.startDay,
-            endDay: res.data.endDay,
-            color: res.data.color,
-            participant: res.data.participant,
-            participantCnt: res.data.participantCnt,
-            tag: res.data.tag,
-            chat: res.data.chat,
-            award: prevGroupResult.award,
-          }));
+          setGroupResult(res.data);
         })
         .catch((error) => {
           console.error(error);
@@ -70,8 +75,6 @@ function ResultPage() {
 
       getGroupIsDoneResultAward(parsedMeetingId)
         .then((res) => {
-          console.log(res);
-
           var award: Award = {
             taleteller: [],
             photographer: [],
@@ -87,23 +90,7 @@ function ResultPage() {
             return 0;
           });
 
-          setGroupResult((prevGroupResult) => ({
-            ...prevGroupResult,
-            award: award,
-          }));
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-
-      getGroupIsDoneResultParticipantList(parsedMeetingId)
-        .then((res) => {
-          console.log(res);
-
-          setGroupResult((prevGroupResult) => ({
-            ...prevGroupResult,
-            participant: res.data,
-          }));
+          setAward(award);
         })
         .catch((error) => {
           console.error(error);
@@ -124,7 +111,9 @@ function ResultPage() {
       <AnimatePresence>
         {sideMenuOpen && (
           <SideMenu
-            groupResult={groupResult}
+            questionList={questionList}
+            participantList={participantList}
+            bgColor={groupResult.color}
             sideMenuOpen={sideMenuOpen}
             handleSideMenuOpen={setSideMenuOpen}
           />
@@ -155,7 +144,7 @@ function ResultPage() {
             bgColor={groupResult.color}
           />
         ))}
-        <ChatAwardItem award={groupResult.award} bgColor={groupResult.color} />
+        <ChatAwardItem award={award} bgColor={groupResult.color} />
         <div></div>
       </ResultContainer>
     </>
