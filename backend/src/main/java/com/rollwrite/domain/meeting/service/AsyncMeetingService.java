@@ -3,8 +3,10 @@ package com.rollwrite.domain.meeting.service;
 import com.google.gson.Gson;
 import com.rollwrite.domain.meeting.dto.AsyncChatGptDto;
 import com.rollwrite.domain.meeting.entity.Meeting;
+import com.rollwrite.domain.question.entity.Question;
 import com.rollwrite.domain.question.entity.QuestionGpt;
 import com.rollwrite.domain.question.repository.QuestionGptRepository;
+import com.rollwrite.domain.question.repository.QuestionRepository;
 import com.rollwrite.global.model.chatgpt.ChatGPTReqDto;
 import com.rollwrite.global.model.chatgpt.ChatGPTResDto;
 import com.rollwrite.global.model.chatgpt.MessageDto;
@@ -15,17 +17,18 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class AsyncMeetingService {
 
+    private final QuestionRepository questionRepository;
     private final OpenAIClientService openAIClientService;
     private final QuestionGptRepository questionGptRepository;
 
@@ -68,5 +71,28 @@ public class AsyncMeetingService {
                     .build();
             questionGptRepository.save(questionGpt);
         }
+
+        // ChatGPT가 만든 질문 중 1개 선택
+        QuestionGpt questionGpt = questionGptRepository.chooseRandomQuestionGpt(meeting.getId(), false)
+                .orElseThrow(() -> new IllegalArgumentException("Chat GPT가 생성한 질문이 없습니다."));
+
+        // 해당 gpt 질문을 isChoosed = true로 업데이트
+        questionGpt.updateIsChoosed(true);
+
+        // question, emoji 업데이트
+        String content = questionGpt.getContent();
+        String emoji = questionGpt.getEmoji();
+
+        // 다음날 오전 8시
+        LocalDateTime expireTime = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(8, 0));
+
+        // question insert
+        Question question = Question.builder()
+                .content(content)
+                .emoji(emoji)
+                .meeting(meeting)
+                .expireTime(expireTime)
+                .build();
+        questionRepository.save(question);
     }
 }
