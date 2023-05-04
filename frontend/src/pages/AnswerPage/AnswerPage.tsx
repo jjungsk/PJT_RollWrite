@@ -18,6 +18,7 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import { QuestionInfo } from "../../constants/types";
 import toast, { Toaster } from "react-hot-toast";
+import { showToastModal } from "../../utils/ToastModal";
 
 export default function AnswerPage() {
   const location = useLocation();
@@ -73,20 +74,11 @@ export default function AnswerPage() {
     location.state.isModify
       ? modifyAnswer()
       : question.isFinal
-      ? toast.custom((t) => (
-          <div>
-            마지막답변은 수정할수없습니다. 저장하사겠습니까?
-            <button
-              onClick={() => {
-                toast.dismiss(t.id);
-                saveAnswer();
-              }}
-            >
-              네
-            </button>
-            <button onClick={() => toast.dismiss(t.id)}>아니오</button>
-          </div>
-        ))
+      ? showToastModal(
+          saveAnswer,
+          "마지막 질문은 수정이 불가능합니다.",
+          "저장하시겠습니까?"
+        )
       : saveAnswer();
   };
 

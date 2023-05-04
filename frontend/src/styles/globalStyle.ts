@@ -145,6 +145,47 @@ const GlobalStyle = createGlobalStyle`
       height: 30px;
       box-shadow: 1px 1px 4px #eb6383;
     }
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
+    .toastModal {
+      padding-top: 8px;
+      width: 300px;
+      height: 104px;
+      background-color: var(--lightgray-color);
+      justify-content: space-around;
+      display: flex;
+      flex-direction: column;
+      border-radius: 8px;
+      box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+      animation: fadeIn 0.5s;
+
+
+      font-size: 16px;
+      font-weight: bold; 
+
+      & > div > button {
+        border-radius: 4px;
+        margin: 8px;
+        padding: 4px;
+        width: 64px;
+        font-size: 14px;
+        font-weight: bold; 
+      }
+    }
+
+    .yesBtn {
+      background-color: var(--blue-color);
+    }
+    .noBtn {
+      background-color: var(--orange-color);
+    }
 `;
 
 export { GlobalStyle };
