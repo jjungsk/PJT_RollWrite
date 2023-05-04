@@ -5,6 +5,9 @@ import com.rollwrite.domain.question.service.QuestionService;
 import com.rollwrite.global.auth.CustomUserDetails;
 import com.rollwrite.global.model.ApiResponse;
 import com.rollwrite.global.model.SuccessCode;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -25,16 +28,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Api(tags = {"04. Question-Controller (질문 관련)"})
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/question")
 public class QuestionController {
 
-    private final Job notificationAlarmJob;
+    private final Job job;
     private final JobLauncher jobLauncher;
     private final QuestionService questionService;
 
+    @ApiOperation(value = "사용자 질문 생성", notes = "사용자 질문 생성")
     @PostMapping
     public ResponseEntity<ApiResponse> addQuestion(@ApiIgnore Authentication authentication,
                                                    @RequestBody AddQuestionReqDto addQuestionReqDto) {
@@ -45,6 +50,8 @@ public class QuestionController {
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.ADD_QUESTION_SUCCESS), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "질문 답변 생성", notes = "질문 답변 생성")
+    @Parameter(name = "image", description = "답변에 등록할 이미지")
     @PostMapping("/answer")
     public ResponseEntity<ApiResponse<AddAnswerResDto>> addAnswer(@ApiIgnore Authentication authentication,
                                                                   @RequestPart AddAnswerReqDto addAnswerReqDto,
@@ -56,6 +63,8 @@ public class QuestionController {
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.ADD_ANSWER_SUCCESS, addAnswerResDto), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "답변 수정", notes = "답변 수정")
+    @Parameter(name = "image", description = "수정 할 답변 이미지")
     @PutMapping("/answer")
     public ResponseEntity<ApiResponse> modifyAnswer(@ApiIgnore Authentication authentication,
                                                     @RequestPart ModifyAnswerReqDto modifyAnswerReqDto,
@@ -67,6 +76,8 @@ public class QuestionController {
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.MODIFY_ANSWER_SUCCESS), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "답변 이미지 삭제", notes = "답변 이미지 삭제")
+    @Parameter(name = "questionId", description = "삭제할 답변 이미지의 질문 아이디")
     @DeleteMapping("/answer/{questionId}")
     public ResponseEntity<ApiResponse> removeAnswerImage(@ApiIgnore Authentication authentication,
                                                          @PathVariable Long questionId) throws IOException {
@@ -77,6 +88,7 @@ public class QuestionController {
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.REMOVE_ANSWER_IMAGE_SUCCESS), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "진행 중인 모임 캘린더", notes = "로그인한 사용자가 참여하는 진행 중인 모임 목록을 조회")
     @GetMapping
     public ResponseEntity<ApiResponse<List<FindTodayQuestionResDto>>> todayQuestionList(@ApiIgnore Authentication authentication) {
         log.info("todayQuestionList 호출");
@@ -86,6 +98,8 @@ public class QuestionController {
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_TODAY_QUESTION_SUCCESS, findTodayQuestionResDtoList), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "특정 모임 질문 전체 조회", notes = "특정 모임 질문 전체 조회")
+    @Parameter(name = "meetingId", description = "질문 조회 할 모임 아이디")
     @GetMapping("/{meetingId}")
     public ResponseEntity<ApiResponse<List<FindQuestionResDto>>> questionList(@PathVariable Long meetingId) {
         log.info("모임 질문 전체 조회 meetingId : {}", meetingId);
@@ -94,12 +108,13 @@ public class QuestionController {
     }
 
     // 수동으로 오늘 질문 생성
+    @ApiOperation(value = "[Admin] 수동으로 오늘 질문 생성", notes = "Admin 용 - 수동으로 오늘 질문 생성")
     @GetMapping("/job")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ApiResponse<String>> startJob() throws Exception {
         Map<String, JobParameter> parameters = new HashMap<>();
         parameters.put("timestamp", new JobParameter(System.currentTimeMillis()));
-        JobExecution jobExecution = jobLauncher.run(notificationAlarmJob, new JobParameters(parameters));
+        JobExecution jobExecution = jobLauncher.run(job, new JobParameters(parameters));
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.ADD_TODAY_QUESTION_SUCCESS, "Batch job " + jobExecution.getStatus()), HttpStatus.OK);
     }
 }

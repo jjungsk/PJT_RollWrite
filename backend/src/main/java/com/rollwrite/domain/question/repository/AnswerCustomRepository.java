@@ -11,6 +11,7 @@ import com.rollwrite.domain.question.entity.Question;
 import com.rollwrite.domain.user.entity.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AnswerCustomRepository {
 
@@ -25,5 +26,7 @@ public interface AnswerCustomRepository {
     List<ImageCountDto> findImageCountByMeeting(Meeting meeting);
 
     List<Answer> findAnswerByUserAndMeeting(User user, Meeting meeting);
+
+    Optional<Answer> findAnswerByUserAndQuestionAndExpireTime(Long userId, Long questionId);
 
 }

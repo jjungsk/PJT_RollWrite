@@ -3,6 +3,7 @@ package com.rollwrite.domain.user.service;
 import com.rollwrite.domain.meeting.entity.Meeting;
 import com.rollwrite.domain.meeting.repository.ParticipantRepository;
 import com.rollwrite.domain.user.dto.FindUserProfileResDto;
+import com.rollwrite.domain.user.dto.ModifyUserReqDto;
 import com.rollwrite.domain.user.entity.User;
 import com.rollwrite.domain.user.repository.UserRepository;
 import com.rollwrite.global.service.FileService;
@@ -54,14 +55,22 @@ public class UserService {
 
     // 2. User 회원 정보 수정
     @Transactional
-    public void modifyUser(Long userId, String nickname, MultipartFile multipartFile) throws IOException {
+    public void modifyUser(Long userId, ModifyUserReqDto modifyUserReqDto, MultipartFile multipartFile) throws IOException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
         String modifyNickname = user.getNickname();
         String modifyProfileImage = user.getProfileImage();
-        if (nickname != null) {
-            modifyNickname = nickname;
+
+        // 수정 할 이름이 있다면 수정 이름으로 변환
+        if (modifyUserReqDto.getNickname() != null && !modifyUserReqDto.getNickname().isEmpty()) {
+            modifyNickname = modifyUserReqDto.getNickname();
         }
+        // 프로필 이미지 삭제가 true 라면 기존 이미지 삭제
+        if (modifyUserReqDto.getIsRemoveImage()) {
+            if (user.getProfileImage() != null) fileService.fileDelete(user.getProfileImage());
+            modifyProfileImage = null;
+        }
+        // 수정 할 프로필 이미지 존재 한다면 기존 이지미가 있다면 삭제하고 이미지 업데이트
         if (multipartFile != null && !multipartFile.isEmpty()) {
             if (user.getProfileImage() != null) fileService.fileDelete(user.getProfileImage());
             modifyProfileImage = fileService.fileUpload("profile", multipartFile);
@@ -70,20 +79,7 @@ public class UserService {
         user.update(modifyNickname, modifyProfileImage);
     }
 
-    // 3. User 프로필 이미지 삭제
-    @Transactional
-    public void removeUserProfile(Long userId) throws UnknownHostException {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
-        String image = Optional.ofNullable(user.getProfileImage())
-                .orElseThrow(() -> new IllegalArgumentException("사진이 없습니다."));
-
-        fileService.fileDelete(image);
-        user.updateImage(null);
-
-    }
-
-    // 4. User 회원 탈퇴
+    // 3. User 회원 탈퇴
     @Transactional
     public void removeUser(Long userId) {
         userRepository.deleteById(userId);

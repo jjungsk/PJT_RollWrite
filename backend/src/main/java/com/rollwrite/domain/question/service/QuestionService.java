@@ -13,7 +13,6 @@ import com.rollwrite.domain.question.repository.AnswerRepository;
 import com.rollwrite.domain.question.repository.QuestionParticipantRepository;
 import com.rollwrite.domain.question.repository.QuestionRepository;
 import com.rollwrite.domain.user.entity.User;
-import com.rollwrite.domain.user.repository.UserRepository;
 import com.rollwrite.global.model.chatgpt.ChatGPTResDto;
 import com.rollwrite.global.service.FileService;
 import com.rollwrite.global.service.GptService;
@@ -25,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -37,7 +38,6 @@ public class QuestionService {
 
     private final GptService gptService;
     private final FileService fileService;
-    private final UserRepository userRepository;
     private final AnswerRepository answerRepository;
     private final MeetingRepository meetingRepository;
     private final QuestionRepository questionRepository;
@@ -46,12 +46,22 @@ public class QuestionService {
 
     @Transactional
     public void addQuestion(Long userId, AddQuestionReqDto addQuestionReqDto) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
+        // 질문의 문장 길이가 40글자를 넘었을 때
+        if (addQuestionReqDto.getQuestion().getBytes(StandardCharsets.ISO_8859_1).length > 40) {
+            throw new IllegalArgumentException("질문 내용이 글자 수를 초과했습니다");
+        }
 
-        // 내가 참여한 진행 중인 모임
-        Meeting meeting = participantRepository.findMeetingByUserAndMeetingAndIsDone(userId, addQuestionReqDto.getMeetingId(), false)
-                .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
+        Participant participant = participantRepository.findParticipantByUserAndMeetingAndIsDone(userId, addQuestionReqDto.getMeetingId(), false)
+                .orElseThrow(() -> new IllegalArgumentException("참여자 정보를 찾을 수 없습니다"));
+
+        User user = participant.getUser();
+
+        Meeting meeting = participant.getMeeting();
+
+        // 모임의 종료 날짜가 지났을 때
+        if (meeting.getEndDay().isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("모임의 종료 시간이 지났습니다");
+        }
 
         ChatGPTResDto chatGPTResDto = gptService.chatGpt(addQuestionReqDto.getQuestion() + "라는 질문에 어울리는 이모지 딱 한 개만 추천해줘, 형식은 json이야, {\"emoji\":\"😎\"}");
         String response = chatGPTResDto.getChoices().get(0).getMessage().getContent();
@@ -61,7 +71,7 @@ public class QuestionService {
         Map<String, String> jsonObj = gson.fromJson(response, Map.class);
         String emoji = jsonObj.get("emoji");
 
-        log.info("emoji : " + emoji);
+        log.info("emoji : {}", emoji);
 
         // question_participant insert
         QuestionParticipant questionParticipant = QuestionParticipant.builder()
@@ -75,16 +85,28 @@ public class QuestionService {
 
     @Transactional
     public AddAnswerResDto addAnswer(Long userId, AddAnswerReqDto addAnswerReqDto, MultipartFile image) throws IOException {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
+        // 답변의 문장 길이가 400글자를 넘었을 때
+        if (addAnswerReqDto.getAnswer().getBytes(StandardCharsets.ISO_8859_1).length > 400) {
+            throw new IllegalArgumentException("답변 내용이 글자 수를 초과했습니다");
+        }
 
-        // 내가 참여한 진행 중인 모임
-        Meeting meeting = participantRepository.findMeetingByUserAndMeetingAndIsDone(userId, addAnswerReqDto.getMeetingId(), false)
-                .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
+        Participant participant = participantRepository.findParticipantByUserAndMeetingAndIsDone(userId, addAnswerReqDto.getMeetingId(), false)
+                .orElseThrow(() -> new IllegalArgumentException("참여자 정보를 찾을 수 없습니다"));
 
-        // 만료시간이 지나지 않은 질문
+        User user = participant.getUser();
+
+        Meeting meeting = participant.getMeeting();
+
+        // 만료시간이 지나지 않은 질문의 답변
         Question question = questionRepository.findQuestionByIdAndExpireTime(addAnswerReqDto.getQuestionId())
                 .orElseThrow(() -> new IllegalArgumentException("질문을 찾을 수 없습니다"));
+
+        Optional<Answer> optionalAnswer = answerRepository.findByUserAndQuestion(user, question);
+
+        // 답변이 이미 있을 때
+        if (optionalAnswer.isPresent()) {
+            throw new IllegalArgumentException("이미 답변한 질문입니다");
+        }
 
         String imageUrl = null;
         if (image != null && !image.isEmpty())
@@ -101,8 +123,6 @@ public class QuestionService {
         answerRepository.save(answer);
 
         // 마지막 질문에 답했을 때 질문 종료
-        Participant participant = participantRepository.findByMeetingAndUser(meeting, user)
-                .orElseThrow(() -> new IllegalArgumentException("참여자를 찾을 수 없습니다"));
         if (meeting.getEndDay().equals(question.getCreatedAt().toLocalDate())) {
             participant.updateIsDone(true);
         }
@@ -114,14 +134,12 @@ public class QuestionService {
 
     @Transactional
     public void modifyAnswer(Long userId, ModifyAnswerReqDto modifyAnswerReqDto, MultipartFile image) throws IOException {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
+        // 답변의 문장 길이가 400글자를 넘었을 때
+        if (modifyAnswerReqDto.getAnswer().getBytes(StandardCharsets.ISO_8859_1).length > 400) {
+            throw new IllegalArgumentException("답변 내용이 글자 수를 초과했습니다");
+        }
 
-        // 만료시간이 지나지 않은 질문
-        Question question = questionRepository.findQuestionByIdAndExpireTime(modifyAnswerReqDto.getQuestionId())
-                .orElseThrow(() -> new IllegalArgumentException("질문을 찾을 수 없습니다"));
-
-        Answer answer = answerRepository.findByUserAndQuestion(user, question)
+        Answer answer = answerRepository.findAnswerByUserAndQuestionAndExpireTime(userId, modifyAnswerReqDto.getQuestionId())
                 .orElseThrow(() -> new IllegalArgumentException("답변을 찾을 수 없습니다"));
 
         // change image
@@ -139,16 +157,8 @@ public class QuestionService {
 
     @Transactional
     public void removeAnswerImage(Long userId, Long questionId) throws IOException {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
-
-        // 만료시간이 지나지 않은 질문
-        Question question = questionRepository.findQuestionByIdAndExpireTime(questionId)
-                .orElseThrow(() -> new IllegalArgumentException("질문을 찾을 수 없습니다"));
-
-        Answer answer = answerRepository.findByUserAndQuestion(user, question)
+        Answer answer = answerRepository.findAnswerByUserAndQuestionAndExpireTime(userId, questionId)
                 .orElseThrow(() -> new IllegalArgumentException("답변을 찾을 수 없습니다"));
-
 
         // remove image
         fileService.fileDelete(answer.getImageUrl());
@@ -162,10 +172,17 @@ public class QuestionService {
         // question, answer 조인
         List<FindTodayQuestionResDto> findTodayQuestionResDtoList = new ArrayList<>();
         for (Meeting meeting : meetingList) {
-            Optional<FindTodayQuestionResDto> todayQuestion = questionRepository.findTodayQuestionByMeeting(meeting);
+            Optional<FindTodayQuestionResDto> todayQuestion = questionRepository.findTodayQuestionByMeeting(userId, meeting);
 
             // 오늘의 질문이 있으면 리스트에 추가
-            todayQuestion.ifPresent(findTodayQuestionResDtoList::add);
+            if (todayQuestion.isPresent()) {
+                FindTodayQuestionResDto todayQuestionResDto = todayQuestion.get();
+                // 마지막 질문일 때
+                if (meeting.getEndDay().equals(todayQuestionResDto.getQuestionCreatedAt().toLocalDate())) {
+                    todayQuestionResDto.updateIsFinal(true);
+                }
+                findTodayQuestionResDtoList.add(todayQuestionResDto);
+            }
         }
 
         // sort

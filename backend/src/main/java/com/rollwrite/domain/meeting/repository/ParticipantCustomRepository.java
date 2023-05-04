@@ -5,6 +5,7 @@ import com.rollwrite.domain.meeting.entity.Meeting;
 import java.util.List;
 import java.util.Optional;
 
+import com.rollwrite.domain.meeting.entity.Participant;
 import org.springframework.data.domain.Pageable;
 
 public interface ParticipantCustomRepository {
@@ -15,5 +16,7 @@ public interface ParticipantCustomRepository {
 
     Optional<Meeting> findMeetingByUserAndMeetingAndIsDone(Long userId, Long meetingId,
                                                            boolean isDone);
+
+    Optional<Participant> findParticipantByUserAndMeetingAndIsDone(Long userId, Long meetingId, boolean isDone);
 
 }
