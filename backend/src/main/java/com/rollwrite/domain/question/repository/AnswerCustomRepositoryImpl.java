@@ -14,7 +14,9 @@ import com.rollwrite.domain.question.entity.QQuestion;
 import com.rollwrite.domain.question.entity.Question;
 import com.rollwrite.domain.user.entity.User;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -110,6 +112,16 @@ public class AnswerCustomRepositoryImpl implements AnswerCustomRepository {
                 .where(answer.meeting.eq(meeting))
                 .orderBy(answer.createdAt.asc())
                 .fetch();
+    }
+
+    @Override
+    public Optional<Answer> findAnswerByUserAndQuestionAndExpireTime(Long userId, Long questionId) {
+        return Optional.ofNullable(jpaQueryFactory
+                .selectFrom(answer)
+                .where(answer.user.id.eq(userId))
+                .where(answer.question.id.eq(questionId))
+                .where(answer.question.expireTime.after(LocalDateTime.now()))
+                .fetchOne());
     }
 
 }
