@@ -6,10 +6,12 @@ import { ReactComponent as Notification } from "../../assets/Notification.svg";
 import NavBtn from "../../elements/Button/NavBtn";
 import { useLocation, useNavigate } from "react-router-dom";
 import BackNavigation from "../BackNavigation/BackNavigation";
+import { useAppSelector } from "../../constants/types";
 
 function Header(props: { sub?: boolean }) {
   const navigate = useNavigate();
   const location = useLocation();
+  const routeHistory = useAppSelector((state) => state.auth.routeHistory);
   const [title, setTitle] = useState<string>("");
 
   useEffect(() => {
@@ -30,7 +32,18 @@ function Header(props: { sub?: boolean }) {
   };
 
   const handleClickBackBtn = () => {
-    navigate(-1);
+    if (location.pathname === "/inquiry" || location.pathname === "/notice") {
+      navigate("/setting");
+    } else if (
+      (location.pathname === "/setting" || location.pathname === "/notify") &&
+      (routeHistory === "/question" ||
+        routeHistory === "/home" ||
+        routeHistory === "/my")
+    ) {
+      navigate(routeHistory);
+    } else {
+      navigate("");
+    }
   };
 
   return props.sub ? (
