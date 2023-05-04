@@ -71,7 +71,7 @@ public class QuestionService {
         Map<String, String> jsonObj = gson.fromJson(response, Map.class);
         String emoji = jsonObj.get("emoji");
 
-        log.info("emoji : " + emoji);
+        log.info("emoji : {}", emoji);
 
         // question_participant insert
         QuestionParticipant questionParticipant = QuestionParticipant.builder()

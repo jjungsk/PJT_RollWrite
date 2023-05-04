@@ -82,7 +82,7 @@ public class QuestionBatch {
 
                     // 진행 중인 모임 리스트
                     List<Long> meetingIdList = meetingRepository.findMeetingByToday();
-                    log.info("진행 중인 모임 리스트 meetingIdList : " + meetingIdList);
+                    log.info("진행 중인 모임 리스트 meetingIdList : {}", meetingIdList);
 
                     if (!meetingIdList.isEmpty()) {
                         ExecutionContext executionContext = chunkContext.getStepContext().getStepExecution().getJobExecution().getExecutionContext();
@@ -107,7 +107,7 @@ public class QuestionBatch {
                     // 반복문으로 meetingId 저장
                     int idx = 0;
                     for (Long meetingId : meetingIdList) {
-                        log.info("meetingId 저장 : " + meetingId);
+                        log.info("meetingId 저장 : {}", meetingId);
                         executionContext.put("meetingId" + idx, meetingId);
                         idx++;
                     }
@@ -128,7 +128,7 @@ public class QuestionBatch {
                     ExecutionContext executionContext = chunkContext.getStepContext().getStepExecution().getJobExecution().getExecutionContext();
                     int idx = (int) executionContext.get("idx");
                     Long meetingId = (Long) executionContext.get("meetingId" + idx);
-                    log.info("현재 meetingId : " + meetingId);
+                    log.info("현재 meetingId : {}", meetingId);
 
                     // 더 이상 진행 중인 모임이 없다면 끝
                     if (meetingId == null) {
