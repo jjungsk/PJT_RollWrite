@@ -6,13 +6,14 @@ function useProfile() {
   const [profile, setProfile] = useState<Profile>({
     nickname: "",
     profileImage: "",
-    cntMeetingIs: 0,
-    cntMeetingIsDone: 0,
+    cntMeetingProgress: 0,
+    cntMeetingProgressIsDone: 0,
   });
 
   useEffect(() => {
     getUserDetail()
       .then((res) => {
+        console.log(res);
         setProfile(res.data);
       })
       .catch((error) => {
