@@ -20,7 +20,7 @@ function ChatItem(props: { chat: Chat; bgColor: string }) {
       <QuestionContainer bgColor={props.bgColor}>
         {props.chat.question}
       </QuestionContainer>
-      {props.chat.answer.map((answer, idx) => (
+      {props.chat.answer?.map((answer, idx) => (
         <AnswerContainer key={idx} isMe={answer.isMe}>
           {!answer.isMe && <ProfileImg size={40} bgImg={answer.profileImage} />}
           <AnswerDetail isMe={answer.isMe}>

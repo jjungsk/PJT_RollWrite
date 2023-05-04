@@ -83,7 +83,7 @@ export interface Chat {
   questionId: number;
   question: string;
   day: string;
-  answer: {
+  answer?: {
     nickname: string;
     profileImage: string;
     isMe: boolean;
@@ -105,9 +105,7 @@ export interface GroupResult {
   startDay: string;
   endDay: string;
   color: string;
-  participant: Participant[];
   participantCnt: number;
-  award: Award;
   chat: Chat[];
 }
 

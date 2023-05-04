@@ -20,6 +20,12 @@ export const getGroupIsDoneResultAward = async (meetingId: number) => {
   return response.data;
 };
 
+// 완료된 모임 결과 질문 목록 조회하기
+export const getGroupIsDoneResultQuestionList = async (meetingId: number) => {
+  const response = await axiosInstance.get(`/question/${meetingId}`);
+  return response.data;
+};
+
 // 완료된 모임 결과 참여자 목록 조회하기
 export const getGroupIsDoneResultParticipantList = async (
   meetingId: number

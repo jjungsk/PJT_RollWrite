@@ -30,6 +30,8 @@ import JoinPage from "./pages/JoinPage/JoinPage";
 import AwardPage from "./pages/AwardPage/AwardPage";
 import OauthPage from "./pages/OauthPage/OauthPage";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
+import NoticePage from "./pages/NoticePage/NoticePage";
+import InquiryPage from "./pages/InquiryPage/InquiryPage";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -55,13 +57,14 @@ function App() {
       return response;
     },
     async (error) => {
-      const { config, response } = error;
+      const {
+        config,
+        response: { statusCode },
+      } = error;
       const originalRequest = config;
-
-      if (response.data.statusCode === 401) {
+      if (statusCode === 401) {
         try {
           // 갱신 요청
-          axiosInstance.defaults.headers.common["Authorization"] = null;
           const res = await axiosInstance.post<any>(`auth/reissue`);
           const newAccessToken = res.data.data.accessToken;
           dispatch(updateAccessToken(newAccessToken));
@@ -76,43 +79,7 @@ function App() {
           console.log("갱신실패", err);
           dispatch(updateLoginStatus(false));
           dispatch(updateAccessToken(""));
-          navigate("/error");
-        }
-      } else {
-        navigate("/error");
-      }
-      return Promise.reject(error);
-    }
-  );
-
-  // 토큰 갱신
-  axiosFileInstance.interceptors.response.use(
-    (response) => {
-      return response;
-    },
-    async (error) => {
-      const { config, response } = error;
-      const originalRequest = config;
-
-      if (response.data.statusCode === 401) {
-        try {
-          // 갱신 요청
-          axiosInstance.defaults.headers.common["Authorization"] = null;
-          const res = await axiosInstance.post<any>(`auth/reissue`);
-          const newAccessToken = res.data.data.accessToken;
-          dispatch(updateAccessToken(newAccessToken));
-          // 실패했던 요청 새로운 accessToken으로 헤더 변경하고 재요청
-          axiosFileInstance.defaults.headers.common[
-            "Authorization"
-          ] = `Bearer ${newAccessToken}`;
-          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-          return axiosFileInstance(originalRequest);
-        } catch (err) {
-          // 갱신 실패시 임의 로그아웃 처리
-          console.log("갱신실패", err);
-          dispatch(updateLoginStatus(false));
-          dispatch(updateAccessToken(""));
-          navigate("/error");
+          navigate("/");
         }
       } else {
         navigate("/error");
@@ -139,6 +106,8 @@ function App() {
       <Route path="/" element={<SubLayout />}>
         <Route path="/notify" element={<NotifyPage />} />
         <Route path="/setting" element={<SettingPage />} />
+        <Route path="/notice" element={<NoticePage />} />
+        <Route path="/inquiry" element={<InquiryPage />} />
         <Route path="/invite/:meetingId" element={<InvitePage />} />
         <Route path="/answer" element={<AnswerPage />} />
       </Route>
