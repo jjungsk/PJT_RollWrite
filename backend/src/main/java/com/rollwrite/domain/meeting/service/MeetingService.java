@@ -306,7 +306,6 @@ public class MeetingService {
 
         List<Participant> participantList = participantRepository.findByMeeting(meeting);
 
-        // sort
         Collections.sort(participantList, new Comparator<Participant>() {
             @Override
             public int compare(Participant o1, Participant o2) {
