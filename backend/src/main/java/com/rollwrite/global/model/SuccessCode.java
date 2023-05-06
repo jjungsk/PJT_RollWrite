@@ -42,6 +42,10 @@ public enum SuccessCode {
     FIND_TODAY_QUESTION_SUCCESS(StatusCode.SUCCESS, "오늘 질문 목록을 조회했습니다."),
     FIND_QUESTION_SUCCESS(StatusCode.SUCCESS, "질문 목록을 조회했습니다."),
     REMOVE_ANSWER_IMAGE_SUCCESS(StatusCode.SUCCESS, "답변 이미지가 삭제되었습니다."),
+
+    // notification
+    MODIFY_FCM_TOKEN_SUCCESS(StatusCode.SUCCESS, "FCM Token이 성공적으로 저장되었습니다."),
+    SEND_MESSAGE_TO(StatusCode.SUCCESS, "알림을 성공적으로 보냈습니다."),
     ;
 
     private final StatusCode statusCode;

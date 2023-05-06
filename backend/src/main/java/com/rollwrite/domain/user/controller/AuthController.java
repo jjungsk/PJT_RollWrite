@@ -62,6 +62,7 @@ public class AuthController {
     public ResponseEntity<ApiResponse<?>> reissueAccessToken(@ApiIgnore @CookieValue(value = "refreshToken") Cookie cookie) {
         // cookie에 들어있는 refreshToken 값 String 으로 받기
         String cookieRefreshToken = cookie.getValue();
+        log.info("test");
 
         // 새로 발급 받은 accessToken을 Dto에 담기
         AddAccessTokenResDto addAccessTokenResDto = authService.reissueAccessToken(cookieRefreshToken);

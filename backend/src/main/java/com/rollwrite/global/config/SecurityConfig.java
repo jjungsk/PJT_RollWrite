@@ -6,6 +6,7 @@ import com.rollwrite.global.auth.CustomUserDetailService;
 import com.rollwrite.global.auth.JwtAuthenticationFilter;
 import com.rollwrite.global.exception.JwtExceptionHandlerFilter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -23,6 +24,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.ArrayList;
+
 /**
  * 인증(authentication) 과 인가(authorization) 처리를 위한 spring security 설정 정의
  */
@@ -35,6 +38,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CustomUserDetailService customUserDetailService;
     private final AuthService authService;
+    @Value("${security.passuri}")
+    public ArrayList<String> passuri;
 
     // Password 인코딩 방식에 BCrypt 암호화 방식 사용
     @Bean
@@ -69,7 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 토큰 기반 인증이므로 세션 사용 하지않음
                 .and()
-                .addFilter(new JwtAuthenticationFilter(authenticationManager(), authService)) //HTTP 요청에 JWT 토큰 인증 필터를 거치도록 필터를 추가
+                .addFilter(new JwtAuthenticationFilter(authenticationManager(), authService, passuri)) // HTTP 요청에 JWT 토큰 인증 필터를 거치도록 필터를 추가
                 .addFilterBefore(new JwtExceptionHandlerFilter(), JwtAuthenticationFilter.class)
                 //인증이 필요한 URL과 필요하지 않은 URL에 대하여 설정
                 .authorizeRequests()
