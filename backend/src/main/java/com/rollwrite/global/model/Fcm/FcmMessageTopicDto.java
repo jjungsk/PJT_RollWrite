@@ -1,34 +1,26 @@
 package com.rollwrite.global.model.Fcm;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.ToString;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Builder
 @ToString
 @AllArgsConstructor
-public class FcmMessageManyDto {
-    private boolean validateOnly;
-    private Message message;
+public class FcmMessageTopicDto {
 
+    private Message message;
 
     @Getter
     @Builder
     @AllArgsConstructor
     public static class Message {
-        private ArrayList<String> registration_ids;
-//        private Data data;
+        private String topic;
         private Notification notification; // 모든 mobile od
-    }
-
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    public static class Data {
-        private String Nick;
-        private String Room;
     }
 
     @Getter
@@ -37,7 +29,6 @@ public class FcmMessageManyDto {
     public static class Notification {
         private String title;
         private String body;
-//        private String image;
     }
 
 }

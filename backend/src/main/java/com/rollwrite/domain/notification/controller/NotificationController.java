@@ -1,5 +1,6 @@
 package com.rollwrite.domain.notification.controller;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.rollwrite.domain.notification.service.NotificationService;
 import com.rollwrite.global.auth.CustomUserDetails;
 import com.rollwrite.global.model.ApiResponse;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 @Api(tags = {"05. Notification-Controller (FCM, 공지 관련)"})
 @Slf4j
@@ -28,6 +30,7 @@ public class NotificationController {
     private final FcmService fcmService;
     private final NotificationService notificationService;
 
+    // 1. 유저별 개인 FCM Token 저장
     @ApiOperation(value = "FCM 토큰 저장", notes = "알림 허용 유저에 한해 Token은 DB에 저장")
     @Parameter(name = "firebaseToekn", description = "FCM에서 받은 유저의 Token")
     @PutMapping("/token/{firebaseToken}")
@@ -35,18 +38,42 @@ public class NotificationController {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
         Long userId = userDetails.getUserId();
 
-        notificationService.updateFirebaseToken(userId,firebaseToken);
+        notificationService.updateFirebaseToken(userId, firebaseToken);
 
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.MODIFY_FCM_TOKEN_SUCCESS), HttpStatus.OK);
     }
 
+    // 2. FCM 알림 보내기 - 개인
     @ApiOperation(value = "(개인) FCM 알림 보내기", notes = "Token 한개에 알람 보내기")
-    @Parameter(name = "firebaseToekn", description = "FCM에서 받은 유저의 Token")
+    @Parameter(name = "firebaseToken", description = "FCM에서 받은 유저의 Token")
     @PostMapping("/individual")
     public ResponseEntity<ApiResponse<?>> sendMessageTo(String targetToken, String title, String body) throws IOException {
 
-        fcmService.sendMessageTo(targetToken, title, body);
+        fcmService.sendMessageOne(targetToken, title, body);
 
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.SEND_MESSAGE_TO), HttpStatus.OK);
     }
+
+    // 3. FCM 알림 보내기 - 다수 (한번에 최대 1000명)
+    @ApiOperation(value = "(다수) FCM 알림 보내기", notes = "ArrayList<String> 알람 보내기")
+    @Parameter(name = "firebaseToekn", description = "알림 보낼 Token List")
+    @PostMapping("/multi")
+    public ResponseEntity<ApiResponse<?>> sendMessageMany(@RequestParam ArrayList<String> tokenList, String title, String body) throws IOException {
+        log.info("FCM tokenList : {}", tokenList.toString());
+        fcmService.sendMessageMany(tokenList, title, body);
+
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.SEND_MESSAGE_TO), HttpStatus.OK);
+    }
+
+    // 4. FCM 자동 알림 보내기 Main
+    @ApiOperation(value = "(자동) FCM 알림 보내기", notes = "ArrayList<String> 알람 보내기")
+    @Parameter(name = "firebaseToekn", description = "알림 보낼 Token List")
+    @PostMapping("/auto")
+    public ResponseEntity<ApiResponse<?>> sendMessageAuto() {
+        log.info("FCM 자동 알림 보내기");
+        notificationService.findUserAndMeeting();
+
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.SEND_MESSAGE_TO), HttpStatus.OK);
+    }
+
 }
