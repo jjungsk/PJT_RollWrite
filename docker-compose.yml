@@ -3,7 +3,7 @@ version: "3.7"
 
 services:
   db-mysql:
-    container_name: db-mysql
+    container_name: db-mysql-release
     image: mysql/mysql-server:8.0
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
