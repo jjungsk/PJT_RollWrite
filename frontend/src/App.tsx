@@ -33,6 +33,7 @@ import ErrorPage from "./pages/ErrorPage/ErrorPage";
 import NoticePage from "./pages/NoticePage/NoticePage";
 import InquiryPage from "./pages/InquiryPage/InquiryPage";
 import Notification from "./utils/Notification";
+import { AxiosInstance } from "axios";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -54,7 +55,7 @@ function App() {
   }
 
   // 토큰 갱신
-  const updateToken = async (instance: any, error: any) => {
+  const updateToken = async (instance: AxiosInstance, error: any) => {
     const { config, response } = error;
     const originalRequest = config;
 
