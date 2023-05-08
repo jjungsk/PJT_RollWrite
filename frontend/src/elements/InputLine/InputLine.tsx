@@ -1,5 +1,10 @@
 import React from "react";
-import { InputLineContainer, InputLineBox, InputLineBoxInput } from "./style";
+import {
+  InputLineContainer,
+  InputLineBox,
+  InputLineBoxInput,
+  InputLineInfo,
+} from "./style";
 
 interface Props {
   Icon?: React.FC<React.SVGProps<SVGSVGElement>>;
@@ -12,6 +17,7 @@ interface Props {
   min?: string;
   max?: string;
   placeholder?: string;
+  info?: string;
 }
 function InputLine({
   Icon,
@@ -24,6 +30,7 @@ function InputLine({
   min,
   max,
   placeholder,
+  info,
 }: Props) {
   return (
     <InputLineContainer>
@@ -41,6 +48,7 @@ function InputLine({
 
         {Icon && <Icon onClick={onClick} />}
       </InputLineBox>
+      <InputLineInfo>{info}</InputLineInfo>
     </InputLineContainer>
   );
 }

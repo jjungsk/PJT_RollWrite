@@ -62,6 +62,11 @@ function CreateGroupStepTwo({ groupInfo, setGroupInfo, onClick }: Props) {
           min={minDayString}
           max={maxDayString}
           value={groupInfo.endDay}
+          info={
+            groupInfo.endDay.length > 0
+              ? undefined
+              : "모임 기간은 최소 3일입니다."
+          }
         />
         <SelectThema color={groupInfo.color} onClick={handleChangeGroupInfo} />
         <GhostBtn label="확인" onClick={onClick} />
