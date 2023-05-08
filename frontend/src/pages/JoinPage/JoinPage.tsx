@@ -10,19 +10,22 @@ function JoinPage() {
   const isLogin = useAppSelector((state) => state.auth.isLogin);
 
   useEffect(() => {
-    if (isLogin && inviteCode)
-      toast
-        .promise(joinGroup(inviteCode), {
-          loading: "모임에 가입중입니다...",
-          success: <b>가입을 완료했습니다.</b>,
-          error: <b>로그인을 먼저 해주세요!</b>,
-        })
+    if (isLogin && inviteCode) {
+      joinGroup(inviteCode)
         .then(() => {
+          toast("가입을 완료했습니다.");
           navigate("/home");
         })
-        .catch(() => {
-          navigate("/question");
+        .catch((error) => {
+          if (error.status === 400) {
+            toast.error(error.message);
+            navigate("/question");
+          } else {
+            toast.error("로그인을 먼저 해주세요!");
+            navigate("/login");
+          }
         });
+    }
   });
 
   return (
