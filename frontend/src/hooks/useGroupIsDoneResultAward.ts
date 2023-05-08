@@ -7,7 +7,6 @@ import {
   getGroupIsDoneResultQuestionList,
 } from "../apis/result";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-hot-toast";
 
 interface Props {
   award: Award;

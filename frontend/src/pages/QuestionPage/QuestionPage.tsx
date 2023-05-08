@@ -11,7 +11,6 @@ import {
   TextContainer,
   BtnContainer,
   AnswerContainer,
-  ModifyBtn,
 } from "./style";
 import GhostBtn from "../../elements/Button/GhostBtn";
 import Emoji from "../../elements/Emoji/Emoji";
@@ -19,7 +18,6 @@ import { ReactComponent as BackArrow } from "../../assets/Back_Btn.svg";
 import { ReactComponent as PrevArrow } from "../../assets/Prev_Btn.svg";
 import { QuestionInfo } from "../../constants/types";
 import { getQuestionList } from "../../apis/question";
-import { toast } from "react-hot-toast";
 
 function QuestionPage() {
   const navigate = useNavigate();
