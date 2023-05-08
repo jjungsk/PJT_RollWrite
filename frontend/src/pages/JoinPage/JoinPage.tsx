@@ -17,8 +17,11 @@ function JoinPage() {
           navigate("/home");
         })
         .catch((error) => {
-          if (error.statusCode === 400) {
-            toast.error(error.message);
+          console.log("에러 발생!");
+          console.log(error);
+
+          if (error.response.status === 400) {
+            toast.error(error.response.data);
             navigate("/question");
           } else {
             toast.error("로그인을 먼저 해주세요!");
