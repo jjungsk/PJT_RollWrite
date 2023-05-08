@@ -16,6 +16,7 @@ const ErrorPageContainer = styled.div`
     font-weight: bold;
     font-size: 24px;
     line-height: 29px;
+    margin-bottom: 70px;
   }
 `;
 
