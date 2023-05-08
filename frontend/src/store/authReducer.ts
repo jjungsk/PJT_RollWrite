@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { persistor } from "./store";
 
 const authReducer = createSlice({
   name: "auth",
@@ -21,6 +22,7 @@ const authReducer = createSlice({
       state.routeHistory = "";
       state.accessToken = "";
       state.isLogin = false;
+      persistor.purge();
     },
   },
 });
