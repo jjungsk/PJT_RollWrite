@@ -225,7 +225,6 @@ public class QuestionBatch {
                                     .build());
                         }
 
-                        // sort
                         Collections.sort(answerRecordDtoList, new Comparator<>() {
                             @Override
                             public int compare(AnswerRecordDto o1, AnswerRecordDto o2) {

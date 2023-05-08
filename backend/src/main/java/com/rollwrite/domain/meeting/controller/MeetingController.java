@@ -55,16 +55,16 @@ public class MeetingController {
     @ApiOperation(value = "모임 생성", notes = "본인이 생성 하는 모임")
     @PostMapping()
     public ResponseEntity<ApiResponse> addMeeting(@ApiIgnore Authentication authentication,
-                                                  @RequestBody AddMeetingRequestDto addMeetingRequestDto) throws NoSuchAlgorithmException {
+                                                  @RequestBody AddMeetingReqDto addMeetingReqDto) throws NoSuchAlgorithmException {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
         Long userId = userDetails.getUserId();
-        log.info("Meeting 생성" + addMeetingRequestDto.toString());
+        log.info("Meeting 생성" + addMeetingReqDto.toString());
 
-        AddMeetingResponseDto addMeetingResponseDto = meetingService.addMeeting(userId,
-                addMeetingRequestDto);
+        AddMeetingResDto addMeetingResDto = meetingService.addMeeting(userId,
+                addMeetingReqDto);
 
         return new ResponseEntity<>(
-                ApiResponse.success(SuccessCode.ADD_MEETING_SUCCESS, addMeetingResponseDto),
+                ApiResponse.success(SuccessCode.ADD_MEETING_SUCCESS, addMeetingResDto),
                 HttpStatus.OK);
     }
 
