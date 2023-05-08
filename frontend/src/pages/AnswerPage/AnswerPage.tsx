@@ -17,7 +17,7 @@ import {
 } from "../../apis/question";
 import { useLocation, useNavigate } from "react-router-dom";
 import { QuestionInfo } from "../../constants/types";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { showToastModal } from "../../utils/ToastModal";
 
 export default function AnswerPage() {

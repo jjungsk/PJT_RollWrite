@@ -45,15 +45,6 @@ const TextContainer = styled.div`
   position: relative;
 `;
 
-const ModifyBtn = styled.button`
-  border: 1px solid black;
-  border-radius: 8px;
-  height: 20px;
-  width: 40px;
-  top: -24px;
-  right: 32px;
-`;
-
 const AnswerContainer = styled.div`
   padding: 0 36px;
   font-size: 16px;
@@ -76,5 +67,4 @@ export {
   TextContainer,
   BtnContainer,
   AnswerContainer,
-  ModifyBtn,
 };
