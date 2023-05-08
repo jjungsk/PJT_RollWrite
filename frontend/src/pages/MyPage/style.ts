@@ -24,7 +24,6 @@ const ProfileImg = styled.div<{
   background-size: cover;
   background-position: center;
   background-color: var(--gray-color);
-  margin: auto;
 `;
 
 const ProfileImgBG = styled.div<{ size: number }>`
