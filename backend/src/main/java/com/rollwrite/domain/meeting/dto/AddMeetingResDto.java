@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class AddMeetingResponseDto {
+public class AddMeetingResDto {
 
     private final String title;
     private final List<TagDto> tag;
@@ -19,7 +19,7 @@ public class AddMeetingResponseDto {
     private final String inviteUrl;
 
     @Builder
-    public AddMeetingResponseDto(Meeting meeting, String inviteUrl, List<TagDto> tag) {
+    public AddMeetingResDto(Meeting meeting, String inviteUrl, List<TagDto> tag) {
         this.title = meeting.getTitle();
         this.tag = tag;
         this.startDay = meeting.getStartDay();

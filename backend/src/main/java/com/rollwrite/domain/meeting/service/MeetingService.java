@@ -21,8 +21,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.Option;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -43,8 +41,8 @@ public class MeetingService {
     private String baseUrl;
 
     @Transactional
-    public AddMeetingResponseDto addMeeting(Long userId,
-                                            AddMeetingRequestDto addMeetingRequestDto) throws NoSuchAlgorithmException {
+    public AddMeetingResDto addMeeting(Long userId,
+                                       AddMeetingReqDto addMeetingReqDto) throws NoSuchAlgorithmException {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
@@ -60,7 +58,7 @@ public class MeetingService {
 
         // Meeting 생성
         Meeting meeting = Meeting.builder()
-                .addMeetingRequestDto(addMeetingRequestDto)
+                .addMeetingReqDto(addMeetingReqDto)
                 .inviteCode(inviteCode)
                 .build();
         meetingRepository.save(meeting);
@@ -68,7 +66,7 @@ public class MeetingService {
         // tag id에 해당하는 Meeting(tagMeetingList)에 추가
         List<TagDto> tagList = new ArrayList<>();
         List<TagMeeting> tagMeetingList = tagIdToTagMeetingList(
-                meeting, addMeetingRequestDto.getTag(), tagList);
+                meeting, addMeetingReqDto.getTag(), tagList);
         meeting.updateTagMeetingList(tagMeetingList);
 
         // 질문에 사용 될 Tag
@@ -90,7 +88,7 @@ public class MeetingService {
                 .build();
         participantRepository.save(participant);
 
-        return AddMeetingResponseDto.builder()
+        return AddMeetingResDto.builder()
                 .meeting(meeting)
                 .tag(tagList)
                 .inviteUrl(baseUrl + inviteCode)
