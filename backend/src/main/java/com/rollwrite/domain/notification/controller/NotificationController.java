@@ -1,6 +1,7 @@
 package com.rollwrite.domain.notification.controller;
 
 import com.google.firebase.messaging.FirebaseMessagingException;
+import com.google.firebase.messaging.Notification;
 import com.rollwrite.domain.notification.service.NotificationService;
 import com.rollwrite.global.auth.CustomUserDetails;
 import com.rollwrite.global.model.ApiResponse;
@@ -13,11 +14,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 @Api(tags = {"05. Notification-Controller (FCM, 공지 관련)"})
@@ -58,19 +61,23 @@ public class NotificationController {
     @ApiOperation(value = "(다수) FCM 알림 보내기", notes = "ArrayList<String> 알람 보내기")
     @Parameter(name = "firebaseToekn", description = "알림 보낼 Token List")
     @PostMapping("/multi")
-    public ResponseEntity<ApiResponse<?>> sendMessageMany(@RequestParam ArrayList<String> tokenList, String title, String body) throws IOException {
+    public ResponseEntity<ApiResponse<?>> sendMessageMany(@RequestParam ArrayList<String> tokenList, String title, String body) throws FirebaseMessagingException {
         log.info("FCM tokenList : {}", tokenList.toString());
-        fcmService.sendMessageMany(tokenList, title, body);
+
+        Notification notification = new Notification(title, body);
+        fcmService.sendMessageMany(notification, tokenList);
 
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.SEND_MESSAGE_TO), HttpStatus.OK);
     }
 
     // 4. FCM 자동 알림 보내기 Main
-    @ApiOperation(value = "(자동) FCM 알림 보내기", notes = "ArrayList<String> 알람 보내기")
+    @Scheduled(cron = "0 0 8 * * *") // sec min hour(24) day month dayOfWeek(ex.MON-FRI)
+    @ApiOperation(value = "(자동) FCM 알림 보내기", notes = "오전 8시 질문 생성 알람 보내기")
     @Parameter(name = "firebaseToekn", description = "알림 보낼 Token List")
     @PostMapping("/auto")
-    public ResponseEntity<ApiResponse<?>> sendMessageAuto() {
-        log.info("FCM 자동 알림 보내기");
+    public ResponseEntity<ApiResponse<?>> sendMessageAuto() throws FirebaseMessagingException {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        log.info("FCM 자동 알림 보내기 동작 시간 : {}", localDateTime);
         notificationService.findUserAndMeeting();
 
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.SEND_MESSAGE_TO), HttpStatus.OK);

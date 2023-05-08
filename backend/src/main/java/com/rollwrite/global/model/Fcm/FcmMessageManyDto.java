@@ -23,13 +23,13 @@ public class FcmMessageManyDto {
         private Notification notification; // 모든 mobile od
     }
 
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    public static class Data {
-        private String Nick;
-        private String Room;
-    }
+//    @Getter
+//    @Builder
+//    @AllArgsConstructor
+//    public static class Data {
+//        private String Nick;
+//        private String Room;
+//    }
 
     @Getter
     @Builder

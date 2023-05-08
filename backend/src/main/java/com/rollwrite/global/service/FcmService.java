@@ -10,6 +10,7 @@ import com.rollwrite.global.model.Fcm.FcmMessageOneDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
+import okhttp3.internal.ws.RealWebSocket;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
@@ -61,14 +62,22 @@ public class FcmService {
 
         OkHttpClient client = new OkHttpClient();
         Response response = client.newCall(request).execute();
-        log.info("Fcm accessToken : {}", getAccessToken());
-        log.info("Fcm Send Message : {}", response.toString());
-    }
+        log.info("Fcm response : {}", response);
+        }
 
 
     // 2-1. 알림 파라미터들을 FCM이 요구하는 body 형태로 가공
     public String makeMessageOne(String targetToken, String title, String body) throws JsonProcessingException {
-        FcmMessageOneDto fcmMessageOneDto = FcmMessageOneDto.builder().message(FcmMessageOneDto.Message.builder().token(targetToken).notification(FcmMessageOneDto.Notification.builder().title(title).body(body).build()).build()).validateOnly(false).build();
+        FcmMessageOneDto fcmMessageOneDto = FcmMessageOneDto.builder()
+                .message(FcmMessageOneDto.Message.builder()
+                        .token(targetToken)
+                        .notification(FcmMessageOneDto.Notification.builder()
+                                .title(title)
+                                .body(body)
+                                .build())
+                        .build())
+                .validateOnly(false)
+                .build();
 
         return objectMapper.writeValueAsString(fcmMessageOneDto);
     }
@@ -79,28 +88,31 @@ public class FcmService {
         sendMessage(message);
     }
 
-    // 3-1. 알림 파라미터들을 FCM이 요구하는 body 형태로 가공
-    public String makeMessageMany(ArrayList<String> tokenList, String title, String body) throws JsonProcessingException {
-        FcmMessageManyDto fcmMessageManyDto = FcmMessageManyDto.builder().message(FcmMessageManyDto.Message.builder().registration_ids(tokenList).notification(FcmMessageManyDto.Notification.builder().title(title).body(body).build()).build()).validateOnly(false).build();
-
-        return objectMapper.writeValueAsString(fcmMessageManyDto);
-    }
-
     // 3. 다수 (한번에 최대 1000명)에게 알림 (보낼 Token List)
-    public void sendMessageMany(ArrayList<String> tokenList, String title, String body) throws IOException {
-        String message = makeMessageMany(tokenList, title, body);
-        sendMessage(message);
+    public Integer sendMessageMany(Notification notification, List<String> registrationTokens) throws FirebaseMessagingException {
+        MulticastMessage message = MulticastMessage.builder()
+                .setNotification(notification)
+                .putData("title", "dataTitle")
+                .putData("content", "dataContent")
+                .addAllTokens(registrationTokens)
+                .build();
+        BatchResponse response = FirebaseMessaging.getInstance().sendMulticast(message);
+
+        if (response.getFailureCount() > 0) {
+            List<SendResponse> responses = response.getResponses();
+            List<String> failedTokens = new ArrayList<>();
+            for (int i = 0; i < responses.size(); i++) {
+                if (!responses.get(i).isSuccessful()) {
+                    // The order of responses corresponds to the order of the registration tokens.
+                    failedTokens.add(registrationTokens.get(i));
+                }
+            }
+        }
+
+        return response.getFailureCount();  // 실패한 토큰 수
     }
 
-    // TODO : FCM Template Header AcessToken 담아 보내기
-    public void sendTemplate(String token) throws FirebaseMessagingException {
-        Message message = Message.builder()
-                .setNotification(new Notification("title Test", "bodyTest"))
-                .setToken(token).build();
-
-        String response = FirebaseMessaging.getInstance().send(message);
-        log.debug("Successfully sent message: {}", response);
-    }
+    // TODO : 4. FCM Topic 구현
 
 
 }

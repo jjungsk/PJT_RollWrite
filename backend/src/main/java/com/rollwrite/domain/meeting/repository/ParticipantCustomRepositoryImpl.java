@@ -65,6 +65,7 @@ public class ParticipantCustomRepositoryImpl implements ParticipantCustomReposit
         List<MeetingFindUserDto> meetingFindUserDtoList = jpaQueryFactory
                 .select(Projections.constructor(MeetingFindUserDto.class,
                         participant.user.id.as("userId"),
+                        participant.user.firebaseToken,
                         participant.meeting.id.as("meetingId"),
                         participant.meeting.title
                 ))

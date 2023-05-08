@@ -14,12 +14,14 @@ import lombok.ToString;
 @ToString
 public class MeetingFindUserDto {
     private final Long userId;
+    private final String firebaseToken;
     private final Long meetingId;
     private final String title;
 
     @Builder
-    public MeetingFindUserDto(Long userId, Long meetingId, String title) {
+    public MeetingFindUserDto(Long userId, String firebaseToken, Long meetingId, String title) {
         this.userId = userId;
+        this.firebaseToken = firebaseToken;
         this.meetingId = meetingId;
         this.title = title;
     }
