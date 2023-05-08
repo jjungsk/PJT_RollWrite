@@ -54,6 +54,7 @@ function App() {
   const purge = async () => {
     await persistor.purge();
   };
+
   // 토큰 갱신
   const updateToken = async (instance: AxiosInstance, error: any) => {
     const { config, response } = error;
@@ -100,14 +101,11 @@ function App() {
   );
 
   useEffect(() => {
-    if (
-      !isLogin &&
-      currentPath !== "/login" &&
-      currentPath !== "/oauth" &&
-      currentPath !== "/setting"
-    ) {
+    if (!isLogin && currentPath !== "/login" && currentPath !== "/oauth") {
       navigate("/login");
-      dispatch(updateRouteHistory(currentPath));
+      if (currentPath !== "/setting") {
+        dispatch(updateRouteHistory(currentPath));
+      }
     }
   });
 
