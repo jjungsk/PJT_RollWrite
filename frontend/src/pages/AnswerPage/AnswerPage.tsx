@@ -108,10 +108,6 @@ export default function AnswerPage() {
   };
 
   const handelClickDeleteBtn = () => {
-    setQuestion({
-      ...question,
-      image: "/img.png",
-    });
     deleteAnswerImg(question.questionId)
       .then(() => {
         toast("이미지가 삭제되었습니다.", {
@@ -144,7 +140,14 @@ export default function AnswerPage() {
         />
         {question.image && (
           <Trash
-            style={{ position: "absolute", bottom: "8px", right: "8px" }}
+            style={{
+              position: "absolute",
+              top: "-12px",
+              right: "-12px",
+              backgroundColor: "var(--white-color)",
+              borderRadius: "10px",
+              boxShadow: "rgba(0, 0, 0, 0.25) 2px 2px 2px",
+            }}
             onClick={handelClickDeleteBtn}
           />
         )}
