@@ -10,7 +10,7 @@ export const redirectKakao = () => {
 
 // 카카오 로그인
 export const kakaoOuath = async (code: string) => {
-  const response = await axiosInstance.get(`auth/kakao/login?code=${code}`);
+  const response = await axiosInstance.get(`/auth/kakao/login?code=${code}`);
   return response.data;
 };
 

@@ -33,6 +33,7 @@ function SettingPage() {
             icon: "🚪",
           });
           dispatch(resetAuthState);
+          navigate("");
         }
       })
       .catch(() => {
@@ -51,6 +52,7 @@ function SettingPage() {
               icon: "🏃‍♂️",
             });
             dispatch(resetAuthState);
+            navigate("");
           }
         })
         .catch(() => {
