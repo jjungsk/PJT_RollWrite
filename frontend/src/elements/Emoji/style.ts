@@ -4,6 +4,7 @@ const EmojiContainer = styled.div<{ imgSrc?: string }>`
   font-family: "Tossface";
   height: 200px;
   width: 200px;
+  border-radius: 8px;
   line-height: 200px;
   font-size: 180px;
   text-align: center;
@@ -16,10 +17,10 @@ const EmojiContainer = styled.div<{ imgSrc?: string }>`
     `}
 
   @media (height < 700px) {
-    height: 140px;
-    width: 140px;
-    line-height: 140px;
-    font-size: 120px;
+    height: 160px;
+    width: 160px;
+    line-height: 160px;
+    font-size: 160px;
   }
 `;
 

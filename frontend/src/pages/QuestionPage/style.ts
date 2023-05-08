@@ -46,7 +46,6 @@ const TextContainer = styled.div`
 `;
 
 const ModifyBtn = styled.button`
-  position: absolute;
   border: 1px solid black;
   border-radius: 8px;
   height: 20px;
@@ -56,8 +55,11 @@ const ModifyBtn = styled.button`
 `;
 
 const AnswerContainer = styled.div`
-  width: 100%;
+  padding: 0 36px;
   font-size: 16px;
+  word-wrap: break-word;
+  max-height: 110px;
+  overflow: auto;
 `;
 
 const BtnContainer = styled.div`

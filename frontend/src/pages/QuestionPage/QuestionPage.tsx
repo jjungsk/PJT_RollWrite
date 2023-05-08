@@ -82,27 +82,11 @@ function QuestionPage() {
                 )}
               </ArrowContainer>
             </EmojiContainer>
-            <TextContainer>
-              {questionList[currentSlide].question}
-              {questionList[currentSlide].answer && (
-                <ModifyBtn
-                  onClick={() =>
-                    navigate("/answer", {
-                      state: {
-                        question: questionList[currentSlide],
-                        isModify: true,
-                      },
-                    })
-                  }
-                >
-                  수정
-                </ModifyBtn>
-              )}
-            </TextContainer>
+            <TextContainer>{questionList[currentSlide].question}</TextContainer>
             <AnswerContainer>
               {questionList[currentSlide].answer}
             </AnswerContainer>
-            {!questionList[currentSlide].answer && (
+            {!questionList[currentSlide].answer ? (
               <BtnContainer>
                 <GhostBtn
                   label="입력하기"
@@ -116,6 +100,19 @@ function QuestionPage() {
                   }
                 ></GhostBtn>
               </BtnContainer>
+            ) : (
+              <GhostBtn
+                label="수정하기"
+                onClick={() =>
+                  navigate("/answer", {
+                    state: {
+                      question: questionList[currentSlide],
+                      isModify: true,
+                    },
+                  })
+                }
+                margin="16px 0px"
+              ></GhostBtn>
             )}
           </>
         ) : (

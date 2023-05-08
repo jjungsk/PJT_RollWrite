@@ -125,7 +125,6 @@ export default function AnswerPage() {
 
   return (
     <>
-      <Toaster />
       <NameContainer>
         {question.title} D-{question.day}
       </NameContainer>

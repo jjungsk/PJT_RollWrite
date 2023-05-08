@@ -35,6 +35,7 @@ const ImgContainer = styled.div<{ BgImg: string }>`
     css`
       background-image: url(${props.BgImg});
       background-size: cover;
+      background-position: center;
     `}
 `;
 
