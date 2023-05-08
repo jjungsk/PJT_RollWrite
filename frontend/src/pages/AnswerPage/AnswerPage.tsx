@@ -32,7 +32,7 @@ export default function AnswerPage() {
   const formData = new FormData();
 
   const handleSaveBtn = () => {
-    if ((question.answer = "")) {
+    if (question.answer === "") {
       toast.error("내용을 입력해주세요.");
       return;
     }
