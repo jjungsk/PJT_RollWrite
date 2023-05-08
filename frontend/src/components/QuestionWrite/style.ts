@@ -2,11 +2,11 @@ import styled from "styled-components";
 
 const Title = styled.div`
   font-size: 16px;
-  margin: 24px;
+  margin: 16px;
 
   @media (height < 700px) {
     font-size: 14px;
-    margin: 16px;
+    margin: 12px;
   }
 `;
 
