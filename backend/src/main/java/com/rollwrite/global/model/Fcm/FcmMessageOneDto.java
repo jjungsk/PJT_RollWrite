@@ -1,5 +1,6 @@
 package com.rollwrite.global.model.Fcm;
 
+import com.google.firebase.messaging.WebpushConfig;
 import lombok.*;
 
 /**
@@ -19,6 +20,7 @@ public class FcmMessageOneDto {
     public static class Message {
         private String token; // 특정 device에 알림을 보내기 위한 토큰
         private Notification notification; // 모든 mobile od
+        private WebpushConfig webpush;
     }
 
     @Getter
@@ -28,6 +30,13 @@ public class FcmMessageOneDto {
         private String title;
         private String body;
         private String image;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class WebpushConfig {
+        private String link = "https://naver.com";
     }
 
 }

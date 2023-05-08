@@ -2,7 +2,8 @@ package com.rollwrite.domain.notification.service;
 
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Notification;
-import com.rollwrite.domain.meeting.dto.MeetingFindUserDto;
+import com.rollwrite.domain.meeting.dto.FindAllParticipantDto;
+import com.rollwrite.domain.meeting.entity.Participant;
 import com.rollwrite.domain.meeting.repository.ParticipantRepository;
 import com.rollwrite.domain.user.entity.User;
 import com.rollwrite.domain.user.repository.UserRepository;
@@ -34,20 +35,19 @@ public class NotificationService {
     }
 
     // 2. 자동으로 알림을 보낼 tokenList 가져오기
-    @Transactional
-    public void findUserAndMeeting() throws FirebaseMessagingException {
-        List<MeetingFindUserDto> meetingFindUserDtoList = participantRepository.findMeetingAndUserAndTitleByProgress(false);
-        log.info("meetingFindUserDtoList : {}", meetingFindUserDtoList.toString());
+    public void sendMessageAuto() throws FirebaseMessagingException {
+        List<Participant> findAllParticipantDtoList = participantRepository.findMeetingAndUserAndTitleByProgress(false);
+        log.info("meetingFindUserDtoList : {}", findAllParticipantDtoList.toString());
 
         // meetingId & meetingTitle 에 해당하는 userList와 tokenList구하기
         HashMap<Long, String> meetingIdAndTitle = new HashMap<>();
         HashMap<Long, List<Long>> meetingIdAndUser = new HashMap<>();
         HashMap<Long, List<String>> meetingIdAndToken = new HashMap<>();
-        for (MeetingFindUserDto meetingFindUserDto: meetingFindUserDtoList) {
-            Long meetingId = meetingFindUserDto.getMeetingId();
-            String title = meetingFindUserDto.getTitle();
-            Long userId = meetingFindUserDto.getUserId();
-            String token = meetingFindUserDto.getFirebaseToken();
+        for (Participant findAllParticipantDto : findAllParticipantDtoList) {
+            Long meetingId = findAllParticipantDto.getMeeting().getId();
+            String title = findAllParticipantDto.getMeeting().getTitle();
+            Long userId = findAllParticipantDto.getUser().getId();
+            String token = findAllParticipantDto.getUser().getFirebaseToken();
 
             if (token == null || token.isEmpty()) continue;
 

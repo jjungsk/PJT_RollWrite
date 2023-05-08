@@ -37,7 +37,7 @@ public class NotificationController {
     @ApiOperation(value = "FCM 토큰 저장", notes = "알림 허용 유저에 한해 Token은 DB에 저장")
     @Parameter(name = "firebaseToekn", description = "FCM에서 받은 유저의 Token")
     @PutMapping("/token/{firebaseToken}")
-    public ResponseEntity<ApiResponse<?>> updateFirebaseToken(@ApiIgnore Authentication authentication, @PathVariable String firebaseToken) {
+    public ResponseEntity<ApiResponse<?>> saveFirebaseToken(@ApiIgnore Authentication authentication, @PathVariable String firebaseToken) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
         Long userId = userDetails.getUserId();
 
@@ -50,9 +50,10 @@ public class NotificationController {
     @ApiOperation(value = "(개인) FCM 알림 보내기", notes = "Token 한개에 알람 보내기")
     @Parameter(name = "firebaseToken", description = "FCM에서 받은 유저의 Token")
     @PostMapping("/individual")
-    public ResponseEntity<ApiResponse<?>> sendMessageTo(String targetToken, String title, String body) throws IOException {
+    public ResponseEntity<ApiResponse<?>> sendMessageTo(String targetToken, String title, String body) throws IOException, FirebaseMessagingException {
 
         fcmService.sendMessageOne(targetToken, title, body);
+        fcmService.sendMessageFcmForm(targetToken);
 
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.SEND_MESSAGE_TO), HttpStatus.OK);
     }
@@ -78,7 +79,7 @@ public class NotificationController {
     public ResponseEntity<ApiResponse<?>> sendMessageAuto() throws FirebaseMessagingException {
         LocalDateTime localDateTime = LocalDateTime.now();
         log.info("FCM 자동 알림 보내기 동작 시간 : {}", localDateTime);
-        notificationService.findUserAndMeeting();
+        notificationService.sendMessageAuto();
 
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.SEND_MESSAGE_TO), HttpStatus.OK);
     }

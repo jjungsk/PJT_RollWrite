@@ -4,13 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.messaging.*;
-import com.rollwrite.domain.user.repository.UserRepository;
-import com.rollwrite.global.model.Fcm.FcmMessageManyDto;
 import com.rollwrite.global.model.Fcm.FcmMessageOneDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
-import okhttp3.internal.ws.RealWebSocket;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
@@ -39,7 +36,6 @@ public class FcmService {
     @Value("${fcm.key.url}")
     private String FIREBASE_ALARM_SEND_API_URI;
     private final ObjectMapper objectMapper;
-    private final UserRepository userRepository;
 
     // 0. Firebase로 부터 AccessToken 가져오기
     private String getAccessToken() throws IOException {
@@ -88,12 +84,22 @@ public class FcmService {
         sendMessage(message);
     }
 
+    // 2-0. 특정 기기 전송
+    public void sendMessageFcmForm(String token) throws FirebaseMessagingException {
+        Message message = Message.builder()
+                .setNotification(new Notification("제목", "본문"))
+                .setToken(token)
+                .build();
+
+        String response = FirebaseMessaging.getInstance().send(message);
+        log.info("firebase response : {}", response);
+    }
+
+
     // 3. 다수 (한번에 최대 1000명)에게 알림 (보낼 Token List)
     public Integer sendMessageMany(Notification notification, List<String> registrationTokens) throws FirebaseMessagingException {
         MulticastMessage message = MulticastMessage.builder()
                 .setNotification(notification)
-                .putData("title", "dataTitle")
-                .putData("content", "dataContent")
                 .addAllTokens(registrationTokens)
                 .build();
         BatchResponse response = FirebaseMessaging.getInstance().sendMulticast(message);
