@@ -7,11 +7,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "./constants/types";
-import {
-  resetAuthState,
-  updateAccessToken,
-  updateRouteHistory,
-} from "./store/authReducer";
+import { updateAccessToken, updateRouteHistory } from "./store/authReducer";
 import { axiosFileInstance, axiosInstance } from "./apis/instance";
 
 import MainLayout from "./Layout/MainLayout";
@@ -34,6 +30,7 @@ import NoticePage from "./pages/NoticePage/NoticePage";
 import InquiryPage from "./pages/InquiryPage/InquiryPage";
 import Notification from "./utils/Notification";
 import { AxiosInstance } from "axios";
+import { persistor } from "./store/store";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -45,7 +42,7 @@ function App() {
 
   const currentPath = location.pathname;
 
-  if (accessToken) {
+  if (isLogin && accessToken) {
     axiosInstance.defaults.headers.common[
       "Authorization"
     ] = `Bearer ${accessToken}`;
@@ -54,6 +51,9 @@ function App() {
     ] = `Bearer ${accessToken}`;
   }
 
+  const purge = async () => {
+    await persistor.purge();
+  };
   // 토큰 갱신
   const updateToken = async (instance: AxiosInstance, error: any) => {
     const { config, response } = error;
@@ -74,7 +74,7 @@ function App() {
         return instance(originalRequest);
       } catch (err) {
         // 갱신 실패시 임의 로그아웃 처리
-        dispatch(resetAuthState);
+        purge();
       }
     } else {
       navigate("/login");

@@ -1,12 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { PURGE } from "redux-persist";
 
+const initialState = {
+  routeHistory: "",
+  accessToken: "",
+  isLogin: false,
+};
 const authReducer = createSlice({
   name: "auth",
-  initialState: {
-    routeHistory: "",
-    accessToken: "",
-    isLogin: false,
-  },
+  initialState,
   reducers: {
     updateRouteHistory: (state, action: PayloadAction<string>) => {
       state.routeHistory = action.payload;
@@ -17,20 +19,12 @@ const authReducer = createSlice({
     updateLoginStatus: (state, action: PayloadAction<boolean>) => {
       state.isLogin = action.payload;
     },
-    resetAuthState: () => {
-      return {
-        routeHistory: "",
-        accessToken: "",
-        isLogin: false,
-      };
-    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(PURGE, () => initialState);
   },
 });
 
-export const {
-  updateRouteHistory,
-  updateAccessToken,
-  updateLoginStatus,
-  resetAuthState,
-} = authReducer.actions;
+export const { updateRouteHistory, updateAccessToken, updateLoginStatus } =
+  authReducer.actions;
 export default authReducer;
