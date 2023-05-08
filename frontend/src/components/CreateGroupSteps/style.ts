@@ -6,13 +6,11 @@ const CreateGroupStepsContainer = styled.div`
 `;
 
 const CreateGroupStepsHeader = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  margin-top: 16px;
   text-align: start;
   font-size: 24px;
   font-weight: bold;
-  height: 64px;
+  line-height: 32px;
 `;
 
 const CreateGroupStepsContent = styled.div`

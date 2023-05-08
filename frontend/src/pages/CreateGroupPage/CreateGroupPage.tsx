@@ -26,7 +26,7 @@ function CreateGroupPage() {
   const [groupInfo, setGroupInfo] = useState<CreateGroup>({
     title: "",
     tag: [],
-    startDay: "",
+    startDay: new Date().toString(),
     endDay: "",
     color: "",
   });

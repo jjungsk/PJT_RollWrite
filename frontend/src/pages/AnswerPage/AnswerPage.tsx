@@ -17,20 +17,19 @@ import {
 } from "../../apis/question";
 import { useLocation, useNavigate } from "react-router-dom";
 import { QuestionInfo } from "../../constants/types";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { showToastModal } from "../../utils/ToastModal";
 
 export default function AnswerPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  // 이미지
+
   const [ImgFile, setImgFile] = useState<File>();
   const [tmpImg, setTmpImg] = useState<string>("");
-  // 답변
   const [question, setQuestion] = useState<QuestionInfo>(
     location.state.question
   );
-  // 답변 입력하면 answer에 넣어줌
+
   const handleAnswer = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setQuestion({
       ...question,
@@ -38,7 +37,6 @@ export default function AnswerPage() {
     });
   };
 
-  // 이미지 업로드 및 미리보기
   const handleImg = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files[0]) {
@@ -52,20 +50,21 @@ export default function AnswerPage() {
       reader.readAsDataURL(files[0]);
     }
   };
-  const formData = new FormData();
-  // 버튼 눌렀을 때 api로 데이터 전송
-  const handleSaveBtn = () => {
-    // formData에 이미지, 답변 저장
 
+  const formData = new FormData();
+
+  const handleSaveBtn = () => {
     const data = JSON.stringify({
       answer: question.answer,
       meetingId: question.meetingId,
       questionId: question.questionId,
     });
     const jsonData = new Blob([data], { type: "application/json" });
-    location.state.isModify
-      ? formData.append("modifyAnswerReqDto", jsonData)
-      : formData.append("addAnswerReqDto", jsonData);
+
+    formData.append(
+      location.state.isModify ? "modifyAnswerReqDto" : "addAnswerReqDto",
+      jsonData
+    );
 
     if (ImgFile) {
       formData.append("image", ImgFile);
@@ -93,6 +92,7 @@ export default function AnswerPage() {
         navigate(-1);
       });
   };
+
   const saveAnswer = () => {
     toast
       .promise(createAnswer(formData), {

@@ -21,7 +21,7 @@ const QuestionDiv = styled.div`
 const ImgContainer = styled.div<{ BgImg: string }>`
   display: flex;
   width: 300px;
-  height: 15vh;
+  height: 20vh;
   margin: auto;
   align-items: center;
   justify-content: center;

@@ -9,6 +9,9 @@ interface Props {
   label?: string;
   value?: string;
   onClick?: React.MouseEventHandler<SVGSVGElement>;
+  min?: string;
+  max?: string;
+  placeholder?: string;
 }
 function InputLine({
   Icon,
@@ -18,22 +21,24 @@ function InputLine({
   label,
   value,
   onClick,
+  min,
+  max,
+  placeholder,
 }: Props) {
   return (
     <InputLineContainer>
       <p>{label}</p>
       <InputLineBox>
-        {value !== undefined ? (
-          <InputLineBoxInput
-            name={name}
-            onChange={onChange}
-            type={type}
-            value={value}
-            disabled
-          />
-        ) : (
-          <InputLineBoxInput name={name} onChange={onChange} type={type} />
-        )}
+        <InputLineBoxInput
+          placeholder={placeholder}
+          name={name}
+          onChange={onChange}
+          type={type}
+          min={min}
+          max={max}
+          value={value}
+        />
+
         {Icon && <Icon onClick={onClick} />}
       </InputLineBox>
     </InputLineContainer>

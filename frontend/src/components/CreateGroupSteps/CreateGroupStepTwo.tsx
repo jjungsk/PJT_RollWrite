@@ -8,6 +8,7 @@ import InputLine from "../../elements/InputLine/InputLine";
 import { CreateGroup } from "../../constants/types";
 import SelectThema from "../../elements/SelectThema/SelectThema";
 import GhostBtn from "../../elements/Button/GhostBtn";
+import { addDays } from "date-fns";
 interface Props {
   onClick: () => void;
   groupInfo: CreateGroup;
@@ -25,6 +26,12 @@ function CreateGroupStepTwo({ groupInfo, setGroupInfo, onClick }: Props) {
     });
   };
 
+  const today = new Date();
+  const minDay = addDays(new Date(groupInfo.startDay), 3);
+  const maxDay = addDays(new Date(groupInfo.startDay), 30);
+  const todayString = today.toISOString().substring(0, 10);
+  const minDayString = minDay.toISOString().substring(0, 10);
+  const maxDayString = maxDay.toISOString().substring(0, 10);
   return (
     <CreateGroupStepsContainer>
       <CreateGroupStepsHeader>
@@ -36,18 +43,25 @@ function CreateGroupStepTwo({ groupInfo, setGroupInfo, onClick }: Props) {
           label="모임 이름"
           name="title"
           onChange={handleChangeGroupInfo}
+          placeholder="모임 이름을 최대 24자입니다."
+          value={groupInfo.title}
         />
         <InputLine
           label="모임 시작일"
           name="startDay"
           onChange={handleChangeGroupInfo}
           type="date"
+          min={todayString}
+          value={groupInfo.startDay}
         />
         <InputLine
           label="모임 종료일"
           name="endDay"
           onChange={handleChangeGroupInfo}
           type="date"
+          min={minDayString}
+          max={maxDayString}
+          value={groupInfo.endDay}
         />
         <SelectThema color={groupInfo.color} onClick={handleChangeGroupInfo} />
         <GhostBtn label="확인" onClick={onClick} />
