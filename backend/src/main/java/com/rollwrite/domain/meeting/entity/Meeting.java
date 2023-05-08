@@ -1,6 +1,6 @@
 package com.rollwrite.domain.meeting.entity;
 
-import com.rollwrite.domain.meeting.dto.AddMeetingRequestDto;
+import com.rollwrite.domain.meeting.dto.AddMeetingReqDto;
 import com.rollwrite.domain.question.entity.Answer;
 import com.rollwrite.domain.question.entity.Question;
 import com.rollwrite.domain.question.entity.QuestionGpt;
@@ -69,12 +69,12 @@ public class Meeting extends BaseTimeEntity {
     }
 
     @Builder
-    public Meeting(Long id, AddMeetingRequestDto addMeetingRequestDto, String inviteCode) {
+    public Meeting(Long id, AddMeetingReqDto addMeetingReqDto, String inviteCode) {
         this.id = id;
-        this.title = addMeetingRequestDto.getTitle();
-        this.startDay = addMeetingRequestDto.getStartDay();
-        this.endDay = addMeetingRequestDto.getEndDay();
-        this.color = addMeetingRequestDto.getColor();
+        this.title = addMeetingReqDto.getTitle();
+        this.startDay = addMeetingReqDto.getStartDay();
+        this.endDay = addMeetingReqDto.getEndDay();
+        this.color = addMeetingReqDto.getColor();
         this.inviteCode = inviteCode;
     }
 }

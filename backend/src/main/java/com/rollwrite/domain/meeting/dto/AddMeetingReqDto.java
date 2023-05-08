@@ -12,7 +12,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @RequiredArgsConstructor
-public class AddMeetingRequestDto {
+public class AddMeetingReqDto {
 
     @Schema(description = "모임 제목", type = "String", example = "Test 모임 제목")
     private final String title;
