@@ -100,7 +100,12 @@ function App() {
   );
 
   useEffect(() => {
-    if (!isLogin && currentPath !== "/login" && currentPath !== "/oauth") {
+    if (
+      !isLogin &&
+      currentPath !== "/login" &&
+      currentPath !== "/oauth" &&
+      currentPath !== "/setting"
+    ) {
       navigate("/login");
       dispatch(updateRouteHistory(currentPath));
     }
