@@ -3,7 +3,7 @@ import styled from "styled-components";
 const ChatContainer = styled.div`
   width: 90%;
   padding: 10px;
-  margin-inline: auto;
+  margin: 8px auto;
   word-break: keep-all;
 `;
 
@@ -36,7 +36,7 @@ const AnswerContainer = styled.div<{ isMe: boolean }>`
   display: flex;
   width: 100%;
   height: fit-content;
-  margin-block: 16px;
+  margin-block: 20px;
   justify-content: ${(props) => (props.isMe ? "right" : "left")};
 `;
 
@@ -68,7 +68,7 @@ const AnswerContent = styled.div`
   background-color: var(--lightgray-color);
 
   & > img {
-    width: 90%;
+    width: 96%;
     height: auto;
     margin-block: 8px;
     border-radius: 5px;
@@ -77,6 +77,9 @@ const AnswerContent = styled.div`
   & > div {
     font-size: 12px;
     line-height: 15px;
+    text-align: left;
+    word-wrap: break-word;
+    overflow: hidden;
   }
 `;
 
