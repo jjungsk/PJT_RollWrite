@@ -9,11 +9,13 @@ const ResultAwardContainer = styled.div`
 
 const ResultAwardUserList = styled.div`
   display: flex;
+  width: 100%;
+  flex-wrap: wrap;
   justify-content: center;
   margin-bottom: 40px;
 
   & > div {
-    margin-inline: 10px;
+    margin: 8px;
   }
 `;
 
