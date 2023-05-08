@@ -58,7 +58,7 @@ const AnswerContainer = styled.div`
   padding: 0 36px;
   font-size: 16px;
   word-wrap: break-word;
-  max-height: 140px;
+  max-height: 110px;
   overflow: auto;
 `;
 

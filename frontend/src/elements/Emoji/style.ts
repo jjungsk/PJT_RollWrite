@@ -17,10 +17,10 @@ const EmojiContainer = styled.div<{ imgSrc?: string }>`
     `}
 
   @media (height < 700px) {
-    height: 140px;
-    width: 140px;
-    line-height: 140px;
-    font-size: 120px;
+    height: 160px;
+    width: 160px;
+    line-height: 160px;
+    font-size: 160px;
   }
 `;
 
