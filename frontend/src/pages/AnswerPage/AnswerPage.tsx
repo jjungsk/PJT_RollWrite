@@ -1,15 +1,6 @@
 import React, { useState } from "react";
-import {
-  NameContainer,
-  QuestionDiv,
-  ImgContainer,
-  IconContainer,
-  TextContainer,
-  ContentContainer,
-} from "./style";
+import { NameContainer, QuestionDiv, ContentContainer } from "./style";
 import GhostBtn from "../../elements/Button/GhostBtn";
-import Btn from "../../assets/AddImgBtn.svg";
-import { ReactComponent as Trash } from "../../assets/Trash-alt.svg";
 import {
   createAnswer,
   deleteAnswerImg,
@@ -19,13 +10,14 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { QuestionInfo } from "../../constants/types";
 import toast from "react-hot-toast";
 import { showToastModal } from "../../utils/ToastModal";
+import UploadImg from "../../elements/UploadImg/UploadImg";
+import TextArea from "../../elements/TextArea/TextArea";
 
 export default function AnswerPage() {
   const location = useLocation();
   const navigate = useNavigate();
 
   const [ImgFile, setImgFile] = useState<File>();
-  const [tmpImg, setTmpImg] = useState<string>("");
   const [question, setQuestion] = useState<QuestionInfo>(
     location.state.question
   );
@@ -35,20 +27,6 @@ export default function AnswerPage() {
       ...question,
       answer: e.target.value,
     });
-  };
-
-  const handleImg = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files && files[0]) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        if (e.target) {
-          setTmpImg(e.target.result as string);
-          setImgFile(files[0]);
-        }
-      };
-      reader.readAsDataURL(files[0]);
-    }
   };
 
   const formData = new FormData();
@@ -108,10 +86,6 @@ export default function AnswerPage() {
   };
 
   const handelClickDeleteBtn = () => {
-    setQuestion({
-      ...question,
-      image: "/img.png",
-    });
     deleteAnswerImg(question.questionId)
       .then(() => {
         toast("이미지가 삭제되었습니다.", {
@@ -129,32 +103,17 @@ export default function AnswerPage() {
         {question.title} D-{question.day}
       </NameContainer>
       <QuestionDiv>{question.question}</QuestionDiv>
-      <ImgContainer BgImg={tmpImg ? tmpImg : question.image}>
-        <IconContainer>
-          <label htmlFor="profile-img">
-            <img src={Btn} alt="img" />
-          </label>
-        </IconContainer>
-        <input
-          id="profile-img"
-          type="file"
-          accept="image/*"
-          onChange={handleImg}
-          style={{ display: "none" }}
-        />
-        {question.image && (
-          <Trash
-            style={{ position: "absolute", bottom: "8px", right: "8px" }}
-            onClick={handelClickDeleteBtn}
-          />
-        )}
-      </ImgContainer>
-      <TextContainer>
-        <ContentContainer
-          onChange={handleAnswer}
-          value={question.answer}
-        ></ContentContainer>
-      </TextContainer>
+      <UploadImg
+        setImgFile={setImgFile}
+        img={question.image}
+        handelClickDeleteBtn={handelClickDeleteBtn}
+      />
+
+      <TextArea
+        onChange={handleAnswer}
+        value={question.answer && question.answer}
+      ></TextArea>
+
       <GhostBtn
         label={location.state.isModify ? "수정하기" : "저장하기"}
         onClick={handleSaveBtn}

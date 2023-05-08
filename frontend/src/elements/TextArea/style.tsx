@@ -1,10 +1,7 @@
 import styled from "styled-components";
 
-const TextContainer = styled.div`
+const TextAreaContainer = styled.textarea`
   margin: auto;
-`;
-
-const ContentContainer = styled.textarea`
   width: 300px;
   height: 40vh;
   background: var(--lightgray-color);
@@ -16,4 +13,4 @@ const ContentContainer = styled.textarea`
   margin-block: 15px;
 `;
 
-export { TextContainer, ContentContainer };
+export { TextAreaContainer };

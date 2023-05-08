@@ -14,7 +14,7 @@ function ParticipantList({ groupInfo }: Props) {
       {groupInfo.participant.map((item) => {
         return (
           <ProfileItem key={item.userId}>
-            <ProfileImg size={40} bgImg={item.profileImage} />
+            <ProfileImg size={50} bgImg={item.profileImage} />
             {item.nickname}
           </ProfileItem>
         );

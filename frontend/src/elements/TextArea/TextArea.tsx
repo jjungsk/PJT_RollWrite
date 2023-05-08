@@ -1,10 +1,12 @@
 import React from "react";
-import { TextContainer, ContentContainer } from "./style";
+import { TextAreaContainer } from "./style";
 
-export default function TextArea() {
+interface Props {
+  onChange: React.ChangeEventHandler<HTMLTextAreaElement>;
+  value?: string;
+}
+export default function TextArea({ onChange, value }: Props) {
   return (
-    <TextContainer>
-      <ContentContainer></ContentContainer>
-    </TextContainer>
+    <TextAreaContainer onChange={onChange} value={value}></TextAreaContainer>
   );
 }
