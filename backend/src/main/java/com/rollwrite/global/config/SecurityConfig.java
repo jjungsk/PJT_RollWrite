@@ -1,7 +1,6 @@
 package com.rollwrite.global.config;
 
 import com.rollwrite.domain.user.service.AuthService;
-import com.rollwrite.domain.user.service.UserService;
 import com.rollwrite.global.auth.CustomUserDetailService;
 import com.rollwrite.global.auth.JwtAuthenticationFilter;
 import com.rollwrite.global.exception.JwtExceptionHandlerFilter;
@@ -19,7 +18,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -79,6 +77,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //인증이 필요한 URL과 필요하지 않은 URL에 대하여 설정
                 .authorizeRequests()
                 .antMatchers("/auth/kakao/login", "/auth/reissue", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll()
+                .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .cors().configurationSource(corsConfigurationSource());

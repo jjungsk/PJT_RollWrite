@@ -7,7 +7,7 @@ import com.rollwrite.domain.question.entity.Question;
 import java.util.Optional;
 
 public interface QuestionCustomRepository {
-    Optional<FindTodayQuestionResDto> findTodayQuestionByMeeting(Meeting meeting);
+    Optional<FindTodayQuestionResDto> findTodayQuestionByMeeting(Long userId, Meeting meeting);
 
     Optional<Question> findQuestionByIdAndExpireTime(Long questionId);
 }

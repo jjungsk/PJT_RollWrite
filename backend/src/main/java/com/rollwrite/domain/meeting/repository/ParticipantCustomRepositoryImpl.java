@@ -5,6 +5,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.rollwrite.domain.meeting.dto.MeetingFindUserDto;
 import com.rollwrite.domain.meeting.entity.Meeting;
 import com.rollwrite.domain.meeting.entity.QMeeting;
+import com.rollwrite.domain.meeting.entity.Participant;
+import com.rollwrite.domain.meeting.entity.QMeeting;
 import com.rollwrite.domain.meeting.entity.QParticipant;
 
 import java.time.LocalDate;
@@ -54,6 +56,18 @@ public class ParticipantCustomRepositoryImpl implements ParticipantCustomReposit
         return Optional.ofNullable(jpaQueryFactory
                 .select(participant.meeting)
                 .from(participant)
+                .where(participant.user.id.eq(userId))
+                .where(participant.meeting.id.eq(meetingId))
+                .where(participant.isDone.eq(isDone))
+                .fetchOne());
+    }
+
+    @Override
+    public Optional<Participant> findParticipantByUserAndMeetingAndIsDone(Long userId, Long meetingId, boolean isDone) {
+        return Optional.ofNullable(jpaQueryFactory
+                .selectFrom(participant)
+                .join(participant.user, user).fetchJoin()
+                .join(participant.meeting, meeting).fetchJoin()
                 .where(participant.user.id.eq(userId))
                 .where(participant.meeting.id.eq(meetingId))
                 .where(participant.isDone.eq(isDone))

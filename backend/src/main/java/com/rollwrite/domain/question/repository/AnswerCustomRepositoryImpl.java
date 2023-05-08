@@ -12,9 +12,12 @@ import com.rollwrite.domain.question.entity.Answer;
 import com.rollwrite.domain.question.entity.QAnswer;
 import com.rollwrite.domain.question.entity.QQuestion;
 import com.rollwrite.domain.question.entity.Question;
+import com.rollwrite.domain.user.entity.QUser;
 import com.rollwrite.domain.user.entity.User;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +28,7 @@ public class AnswerCustomRepositoryImpl implements AnswerCustomRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
+    QUser user = QUser.user;
     QAnswer answer = QAnswer.answer;
     QQuestion question = QQuestion.question;
 
@@ -49,7 +53,7 @@ public class AnswerCustomRepositoryImpl implements AnswerCustomRepository {
                 .join(answer.question, question)
                 .where(answer.user.eq(user))
                 .where(answer.meeting.eq(meeting))
-                .orderBy(answer.id.desc())
+                .orderBy(answer.id.asc())
                 .fetch();
     }
 
@@ -66,8 +70,7 @@ public class AnswerCustomRepositoryImpl implements AnswerCustomRepository {
                         answer.user.id
                 ))
                 .from(answer)
-                .join(answer.question, question)
-                .where(answer.question.eq(q))
+                .join(answer.question, question).on(answer.question.eq(q))
                 .where(answer.meeting.eq(meeting))
                 .fetch();
     }
@@ -110,6 +113,15 @@ public class AnswerCustomRepositoryImpl implements AnswerCustomRepository {
                 .where(answer.meeting.eq(meeting))
                 .orderBy(answer.createdAt.asc())
                 .fetch();
+    }
+
+    @Override
+    public Optional<Answer> findAnswerByUserAndQuestionAndExpireTime(Long userId, Long questionId) {
+        return Optional.ofNullable(jpaQueryFactory
+                .selectFrom(answer)
+                .join(answer.user, user).on(answer.user.id.eq(userId))
+                .join(answer.question, question).on(answer.question.id.eq(questionId).and(answer.question.expireTime.after(LocalDateTime.now())))
+                .fetchOne());
     }
 
 }
