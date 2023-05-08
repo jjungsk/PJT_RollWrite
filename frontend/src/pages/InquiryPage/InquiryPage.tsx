@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
+import UploadImg from "../../elements/UploadImg/UploadImg";
 
 function InquiryPage() {
-  return <div>문의사항</div>;
+  const [ImgFile, setImgFile] = useState<File>();
+  return (
+    <div>
+      <UploadImg setImgFile={setImgFile} />
+    </div>
+  );
 }
 
 export default InquiryPage;

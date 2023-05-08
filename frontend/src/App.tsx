@@ -125,10 +125,10 @@ function App() {
   );
 
   useEffect(() => {
-    if (!isLogin && currentPath !== "/login" && currentPath !== "/oauth") {
-      navigate("/login");
-      dispatch(updateRouteHistory(currentPath));
-    }
+    // if (!isLogin && currentPath !== "/login" && currentPath !== "/oauth") {
+    //   navigate("/login");
+    //   dispatch(updateRouteHistory(currentPath));
+    // }
   });
 
   return (

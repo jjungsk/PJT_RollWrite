@@ -18,37 +18,8 @@ const QuestionDiv = styled.div`
   line-height: 25px;
 `;
 
-const ImgContainer = styled.div<{ BgImg: string }>`
-  display: flex;
-  width: 300px;
-  height: 20vh;
-  margin: auto;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid #7a7e80;
-  border-radius: 10px;
-  position: relative;
-  background-color: rgb(0, 0, 0, 0.4);
-  background-position: center;
-  ${(props: any) =>
-    props.BgImg &&
-    css`
-      background-image: url(${props.BgImg});
-      background-size: cover;
-      background-position: center;
-    `}
-`;
-
-const IconContainer = styled.div`
-  position: absolute;
-  width: 100%;
-`;
-
-const TextContainer = styled.div`
-  margin: auto;
-`;
-
 const ContentContainer = styled.textarea`
+  margin: auto;
   width: 300px;
   height: 40vh;
   background: var(--lightgray-color);
@@ -63,12 +34,4 @@ const ContentContainer = styled.textarea`
 const ToastModal = styled.textarea`
   background-color: white;
 `;
-export {
-  NameContainer,
-  QuestionDiv,
-  ImgContainer,
-  IconContainer,
-  TextContainer,
-  ContentContainer,
-  ToastModal,
-};
+export { NameContainer, QuestionDiv, ContentContainer, ToastModal };
