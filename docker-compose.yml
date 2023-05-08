@@ -1,0 +1,56 @@
+# docker-compose.yml
+version: "3.7"
+
+services:
+  db-mysql:
+    container_name: db-mysql
+    image: mysql/mysql-server:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_ROOT_HOST: ${MYSQL_ROOT_HOST}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: 'rollwrite-release'
+      TZ: Asia/Seoul
+    restart: always
+    volumes:
+      - ./mysql/data:/var/lib/mysql --user 1000
+    ports:
+      - '3306:3306'
+    command:
+      - '--character-set-server=utf8mb4'
+      - '--collation-server=utf8mb4_unicode_ci'
+
+  db-redis:
+    container_name: db-redis-release
+    image: redis:alpine
+    environment:
+      - TZ=Asia/Seoul
+    hostname: db-redis
+    labels:
+      - "name=db-redis"
+      - "mode=standalone"
+    ports:
+      - 6666:6666
+    command: redis-server --port 6666 --appendonly yes --replica-read-only no
+
+  backend:
+    container_name: backend-release
+    build: ./backend
+    environment:
+      - TZ=Asia/Seoul
+    ports:
+      - 8888:8888
+    restart: always
+    volumes:
+      - /home/ubuntu/files-release:/var/lib/rollwrite
+  
+  frontend:
+    container_name: frontend-release
+    build: .
+    ports:
+      - 3333:3333
+    restart: always
+    volumes:
+      - /home/ubuntu/files-release:/app/build/rollwrite
+
