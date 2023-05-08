@@ -1,5 +1,5 @@
 FROM nginx:stable-alpine
-WORKDIR /app
+WORKDIR frontend/app
 RUN mkdir ./build
 ADD ./build ./build
 RUN rm /etc/nginx/conf.d/default.conf
