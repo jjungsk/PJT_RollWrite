@@ -4,15 +4,15 @@ import { ReactComponent as Logo } from "../../assets/Logo.svg";
 import { ReactComponent as KakaoBtn } from "../../assets/Kakao.svg";
 
 import { redirectKakao } from "../../apis/user";
-import { persistor } from "../../store/store";
+import { useAppDispatch } from "../../constants/types";
+import { updateAccessToken, updateLoginStatus } from "../../store/authReducer";
 
 function LoginPage() {
-  const purge = async () => {
-    await persistor.purge();
-  };
+  const dispatch = useAppDispatch();
 
   const handleClickLoginBtn = () => {
-    purge();
+    dispatch(updateAccessToken(""));
+    dispatch(updateLoginStatus(false));
     redirectKakao();
   };
 

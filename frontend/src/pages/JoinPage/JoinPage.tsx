@@ -15,7 +15,7 @@ function JoinPage() {
         .promise(joinGroup(inviteCode), {
           loading: "모임에 가입중입니다...",
           success: <b>가입을 완료했습니다.</b>,
-          error: <b>가입에 실패했습니다.</b>,
+          error: <b>로그인을 먼저 해주세요!</b>,
         })
         .then(() => {
           navigate("/home");
