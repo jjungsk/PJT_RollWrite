@@ -17,12 +17,10 @@ const authReducer = createSlice({
     updateLoginStatus: (state, action: PayloadAction<boolean>) => {
       state.isLogin = action.payload;
     },
-    resetAuthState: () => {
-      return {
-        routeHistory: "",
-        accessToken: "",
-        isLogin: false,
-      };
+    resetAuthState: (state) => {
+      state.routeHistory = "";
+      state.accessToken = "";
+      state.isLogin = false;
     },
   },
 });

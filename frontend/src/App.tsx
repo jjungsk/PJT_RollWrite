@@ -45,7 +45,7 @@ function App() {
 
   const currentPath = location.pathname;
 
-  if (accessToken) {
+  if (isLogin && accessToken) {
     axiosInstance.defaults.headers.common[
       "Authorization"
     ] = `Bearer ${accessToken}`;
