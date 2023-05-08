@@ -17,9 +17,20 @@ const authReducer = createSlice({
     updateLoginStatus: (state, action: PayloadAction<boolean>) => {
       state.isLogin = action.payload;
     },
+    resetAuthState: () => {
+      return {
+        routeHistory: "",
+        accessToken: "",
+        isLogin: false,
+      };
+    },
   },
 });
 
-export const { updateRouteHistory, updateAccessToken, updateLoginStatus } =
-  authReducer.actions;
+export const {
+  updateRouteHistory,
+  updateAccessToken,
+  updateLoginStatus,
+  resetAuthState,
+} = authReducer.actions;
 export default authReducer;

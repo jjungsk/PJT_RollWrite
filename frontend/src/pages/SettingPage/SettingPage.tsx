@@ -12,11 +12,10 @@ import { ReactComponent as Back } from "../../assets/Back.svg";
 import FillBtn from "../../elements/Button/FillBtn";
 import GhostBtn from "../../elements/Button/GhostBtn";
 import { logout, withdraw } from "../../apis/user";
-import { updateAccessToken, updateLoginStatus } from "../../store/authReducer";
+import { resetAuthState } from "../../store/authReducer";
 import { useAppDispatch } from "../../constants/types";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import { updateRouteHistory } from "../../store/authReducer";
 
 function SettingPage() {
   const dispatch = useAppDispatch();
@@ -33,10 +32,7 @@ function SettingPage() {
           toast("정상적으로 로그아웃이 되었습니다.", {
             icon: "🚪",
           });
-          dispatch(updateLoginStatus(false));
-          dispatch(updateAccessToken(""));
-          dispatch(updateRouteHistory(""));
-          navigate("/login");
+          dispatch(resetAuthState);
         }
       })
       .catch(() => {
@@ -54,9 +50,7 @@ function SettingPage() {
             toast("정상적으로 탈퇴하었습니다.", {
               icon: "🏃‍♂️",
             });
-            dispatch(updateLoginStatus(false));
-            dispatch(updateAccessToken(""));
-            navigate("/login");
+            dispatch(resetAuthState);
           }
         })
         .catch(() => {
