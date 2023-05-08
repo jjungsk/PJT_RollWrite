@@ -4,6 +4,7 @@ const EmojiContainer = styled.div<{ imgSrc?: string }>`
   font-family: "Tossface";
   height: 200px;
   width: 200px;
+  border-radius: 8px;
   line-height: 200px;
   font-size: 180px;
   text-align: center;
