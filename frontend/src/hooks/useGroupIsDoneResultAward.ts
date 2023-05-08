@@ -45,66 +45,48 @@ function useGroupIsDoneResultAward(parsedMeetingId: number): Props {
     if (isNaN(parsedMeetingId)) {
       navigate("/error");
     } else {
-      getGroupIsDoneResultQuestionList(parsedMeetingId)
-        .then((res) => {
-          setGroupResult((prevGroupResult) => ({
-            ...prevGroupResult,
-            questionList: res.data,
-          }));
-        })
-        .catch((error) => {
-          toast.error(error.message);
+      getGroupIsDoneResultQuestionList(parsedMeetingId).then((res) => {
+        setGroupResult((prevGroupResult) => ({
+          ...prevGroupResult,
+          questionList: res.data,
+        }));
+      });
+
+      getGroupIsDoneResultParticipantList(parsedMeetingId).then((res) => {
+        setGroupResult((prevGroupResult) => ({
+          ...prevGroupResult,
+          participantList: res.data,
+        }));
+      });
+
+      getGroupIsDoneResultChat(parsedMeetingId).then((res) => {
+        setGroupResult((prevGroupResult) => ({
+          ...prevGroupResult,
+          groupResult: res.data,
+        }));
+      });
+
+      getGroupIsDoneResultAward(parsedMeetingId).then((res) => {
+        const award: Award = {
+          taleteller: [],
+          photographer: [],
+          perfectAttendance: [],
+        };
+
+        res.data.map((profile: Participant) => {
+          if (profile.type === "PHOTOGRAPHER") award.photographer.push(profile);
+          else if (profile.type === "PERFECTATTENDANCE")
+            award.perfectAttendance.push(profile);
+          else award.taleteller.push(profile);
+          return 0;
         });
 
-      getGroupIsDoneResultParticipantList(parsedMeetingId)
-        .then((res) => {
-          setGroupResult((prevGroupResult) => ({
-            ...prevGroupResult,
-            participantList: res.data,
-          }));
-        })
-        .catch((error) => {
-          toast.error(error.message);
-        });
-
-      getGroupIsDoneResultChat(parsedMeetingId)
-        .then((res) => {
-          setGroupResult((prevGroupResult) => ({
-            ...prevGroupResult,
-            groupResult: res.data,
-          }));
-        })
-        .catch((error) => {
-          toast.error(error.message);
-        });
-
-      getGroupIsDoneResultAward(parsedMeetingId)
-        .then((res) => {
-          const award: Award = {
-            taleteller: [],
-            photographer: [],
-            perfectAttendance: [],
-          };
-
-          res.data.map((profile: Participant) => {
-            if (profile.type === "PHOTOGRAPHER")
-              award.photographer.push(profile);
-            else if (profile.type === "PERFECTATTENDANCE")
-              award.perfectAttendance.push(profile);
-            else award.taleteller.push(profile);
-            return 0;
-          });
-
-          setGroupResult((prevGroupResult) => ({
-            ...prevGroupResult,
-            award: award,
-            resData: res.data,
-          }));
-        })
-        .catch((error) => {
-          toast.error(error.message);
-          navigate("/error");
-        });
+        setGroupResult((prevGroupResult) => ({
+          ...prevGroupResult,
+          award: award,
+          resData: res.data,
+        }));
+      });
     }
   }, [navigate, parsedMeetingId]);
 

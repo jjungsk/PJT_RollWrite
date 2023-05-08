@@ -91,10 +91,6 @@ export default function AnswerPage() {
       })
       .then(() => {
         navigate(-1);
-      })
-      .catch((error) => {
-        toast.error(error.message);
-        navigate("/error");
       });
   };
   const saveAnswer = () => {
@@ -108,10 +104,6 @@ export default function AnswerPage() {
         question.isFinal
           ? navigate(`/award/${question.meetingId}`)
           : navigate(-1);
-      })
-      .catch((error) => {
-        toast.error(error.message);
-        navigate("/error");
       });
   };
 
@@ -126,8 +118,8 @@ export default function AnswerPage() {
           icon: "🗑",
         });
       })
-      .catch((error) => {
-        toast.error(error.message);
+      .catch(() => {
+        toast.error("이미지 삭제 중 문제가 발생하였습니다");
       });
   };
 

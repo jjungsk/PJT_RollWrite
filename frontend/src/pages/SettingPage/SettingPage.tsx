@@ -16,6 +16,7 @@ import { updateAccessToken, updateLoginStatus } from "../../store/authReducer";
 import { useAppDispatch } from "../../constants/types";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import { updateRouteHistory } from "../../store/authReducer";
 
 function SettingPage() {
   const dispatch = useAppDispatch();
@@ -34,6 +35,7 @@ function SettingPage() {
           });
           dispatch(updateLoginStatus(false));
           dispatch(updateAccessToken(""));
+          dispatch(updateRouteHistory(""));
           navigate("/login");
         }
       })
