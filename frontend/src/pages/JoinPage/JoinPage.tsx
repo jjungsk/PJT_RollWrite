@@ -12,20 +12,18 @@ function JoinPage() {
   useEffect(() => {
     if (isLogin && inviteCode) {
       joinGroup(inviteCode)
-        .then((res) => {
-          if (res.status === 200) {
-            toast("가입을 완료했습니다.");
-            navigate("/home");
-          } else if (res.status === 400) {
-            toast.error(res.data.message);
+        .then(() => {
+          toast("가입을 완료했습니다.");
+          navigate("/home");
+        })
+        .catch((error) => {
+          if (error.statusCode === 400) {
+            toast.error(error.message);
             navigate("/question");
           } else {
             toast.error("로그인을 먼저 해주세요!");
             navigate("/login");
           }
-        })
-        .catch(() => {
-          navigate("/error");
         });
     }
   });
