@@ -4,9 +4,15 @@ import { ReactComponent as Logo } from "../../assets/Logo.svg";
 import { ReactComponent as KakaoBtn } from "../../assets/Kakao.svg";
 
 import { redirectKakao } from "../../apis/user";
+import { useAppDispatch } from "../../constants/types";
+import { updateAccessToken, updateLoginStatus } from "../../store/authReducer";
 
 function LoginPage() {
+  const dispatch = useAppDispatch();
+
   const handleClickLoginBtn = () => {
+    dispatch(updateAccessToken(""));
+    dispatch(updateLoginStatus(false));
     redirectKakao();
   };
 

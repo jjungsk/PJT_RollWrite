@@ -1,11 +1,12 @@
 import styled, { css } from "styled-components";
 
-const EmojiContainer = styled.div<{ imgSrc?: string }>`
+const EmojiContainer = styled.div<{ imgSrc?: string; size?: string }>`
   font-family: "Tossface";
-  height: 200px;
-  width: 200px;
-  line-height: 200px;
-  font-size: 180px;
+  height: ${(props) => props.size || "200px"};
+  width: ${(props) => props.size || "200px"};
+  border-radius: 8px;
+  line-height: ${(props) => props.size || "200px"};
+  font-size: ${(props) => props.size || "180px"};
   text-align: center;
   margin-inline: auto;
   ${(props) =>
@@ -16,10 +17,10 @@ const EmojiContainer = styled.div<{ imgSrc?: string }>`
     `}
 
   @media (height < 700px) {
-    height: 140px;
-    width: 140px;
-    line-height: 140px;
-    font-size: 120px;
+    height: 160px;
+    width: 160px;
+    line-height: 160px;
+    font-size: 140px;
   }
 `;
 

@@ -43,6 +43,7 @@ const HeaderGroupTitle = styled.div`
       width: 20px;
       height: 20px;
       margin-left: 6px;
+      cursor: default;
     }
 
     & > div:last-child {

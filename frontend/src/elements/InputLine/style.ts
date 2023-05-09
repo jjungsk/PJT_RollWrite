@@ -23,4 +23,10 @@ const InputLineBoxInput = styled.input`
   width: 100%;
 `;
 
-export { InputLineContainer, InputLineBox, InputLineBoxInput };
+const InputLineInfo = styled.p`
+  font-weight: bold;
+  font-size: 14px;
+  color: red;
+`;
+
+export { InputLineContainer, InputLineBox, InputLineBoxInput, InputLineInfo };

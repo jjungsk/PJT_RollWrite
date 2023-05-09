@@ -12,17 +12,21 @@ import { ReactComponent as Back } from "../../assets/Back.svg";
 import FillBtn from "../../elements/Button/FillBtn";
 import GhostBtn from "../../elements/Button/GhostBtn";
 import { logout, withdraw } from "../../apis/user";
-import { updateAccessToken, updateLoginStatus } from "../../store/authReducer";
-import { useAppDispatch } from "../../constants/types";
+
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import { updateRouteHistory } from "../../store/authReducer";
+import { persistor } from "../../store/store";
 
 function SettingPage() {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
+  const purge = async () => {
+    await persistor.purge();
+  };
   const handleClickMenu = (path: string) => {
+    toast("아직 개발중입니다.", {
+      icon: "🤦‍♂️",
+    });
+    return;
     navigate(`/${path}`);
   };
 
@@ -33,10 +37,8 @@ function SettingPage() {
           toast("정상적으로 로그아웃이 되었습니다.", {
             icon: "🚪",
           });
-          dispatch(updateLoginStatus(false));
-          dispatch(updateAccessToken(""));
-          dispatch(updateRouteHistory(""));
-          navigate("/login");
+          purge();
+          navigate("");
         }
       })
       .catch(() => {
@@ -54,9 +56,8 @@ function SettingPage() {
             toast("정상적으로 탈퇴하었습니다.", {
               icon: "🏃‍♂️",
             });
-            dispatch(updateLoginStatus(false));
-            dispatch(updateAccessToken(""));
-            navigate("/login");
+            purge();
+            navigate("");
           }
         })
         .catch(() => {
@@ -67,7 +68,7 @@ function SettingPage() {
 
   return (
     <SettingContainer>
-      <SettingSection>
+      {/* <SettingSection>
         <SettingSectionTitle>알림 설정</SettingSectionTitle>
         <SettingMenuItem>
           <SettingMenuItemText>
@@ -83,9 +84,9 @@ function SettingPage() {
           </SettingMenuItemText>
           <SwitchBtn />
         </SettingMenuItem>
-      </SettingSection>
+      </SettingSection> */}
       <SettingSection>
-        <SettingSectionTitle>기타 안내</SettingSectionTitle>
+        {/* <SettingSectionTitle>기타 안내</SettingSectionTitle> */}
         <SettingMenuItem onClick={() => handleClickMenu("notice")}>
           <SettingMenuItemText>공지사항</SettingMenuItemText>
           <Back />

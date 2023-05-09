@@ -7,11 +7,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "./constants/types";
-import {
-  updateAccessToken,
-  updateLoginStatus,
-  updateRouteHistory,
-} from "./store/authReducer";
+import { updateAccessToken, updateRouteHistory } from "./store/authReducer";
 import { axiosFileInstance, axiosInstance } from "./apis/instance";
 
 import MainLayout from "./Layout/MainLayout";
@@ -33,6 +29,8 @@ import ErrorPage from "./pages/ErrorPage/ErrorPage";
 import NoticePage from "./pages/NoticePage/NoticePage";
 import InquiryPage from "./pages/InquiryPage/InquiryPage";
 import Notification from "./utils/Notification";
+import { AxiosInstance } from "axios";
+import { persistor } from "./store/store";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -44,7 +42,7 @@ function App() {
 
   const currentPath = location.pathname;
 
-  if (accessToken) {
+  if (isLogin && accessToken) {
     axiosInstance.defaults.headers.common[
       "Authorization"
     ] = `Bearer ${accessToken}`;
@@ -53,80 +51,109 @@ function App() {
     ] = `Bearer ${accessToken}`;
   }
 
+  const purge = async () => {
+    await persistor.purge();
+  };
+
   // 토큰 갱신
+  const updateToken = async (instance: AxiosInstance, error: any) => {
+    const { config, response } = error;
+    const originalRequest = config;
+
+    if (response.data.statusCode === 401) {
+      try {
+        // 갱신 요청
+        axiosInstance.defaults.headers.common["Authorization"] = null;
+        const res = await axiosInstance.post<any>(`auth/reissue`);
+        const newAccessToken = res.data.data.accessToken;
+        dispatch(updateAccessToken(newAccessToken));
+        // 실패했던 요청 새로운 accessToken으로 헤더 변경하고 재요청
+        instance.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${newAccessToken}`;
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        return instance(originalRequest);
+      } catch (err) {
+        // 갱신 실패시 임의 로그아웃 처리
+        purge();
+      }
+    }
+    return Promise.reject(error);
+  };
+
   axiosInstance.interceptors.response.use(
     (response) => {
       return response;
     },
     async (error) => {
-      const { config, response } = error;
-      const originalRequest = config;
-
-      if (response.data.statusCode === 401) {
-        try {
-          // 갱신 요청
-          axiosInstance.defaults.headers.common["Authorization"] = null;
-          const res = await axiosInstance.post<any>(`auth/reissue`);
-          const newAccessToken = res.data.data.accessToken;
-          dispatch(updateAccessToken(newAccessToken));
-          // 실패했던 요청 새로운 accessToken으로 헤더 변경하고 재요청
-          axiosInstance.defaults.headers.common[
-            "Authorization"
-          ] = `Bearer ${newAccessToken}`;
-          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-          return axiosInstance(originalRequest);
-        } catch (err) {
-          // 갱신 실패시 임의 로그아웃 처리
-          dispatch(updateLoginStatus(false));
-          dispatch(updateAccessToken(""));
-          navigate("/error");
-        }
-      } else {
-        navigate("/error");
-      }
-      return Promise.reject(error);
+      updateToken(axiosInstance, error);
     }
   );
-
-  // 토큰 갱신
   axiosFileInstance.interceptors.response.use(
     (response) => {
       return response;
     },
     async (error) => {
-      const { config, response } = error;
-      const originalRequest = config;
-
-      if (response.data.statusCode === 401) {
-        try {
-          // 갱신 요청
-          axiosInstance.defaults.headers.common["Authorization"] = null;
-          const res = await axiosInstance.post<any>(`auth/reissue`);
-          const newAccessToken = res.data.data.accessToken;
-          dispatch(updateAccessToken(newAccessToken));
-          // 실패했던 요청 새로운 accessToken으로 헤더 변경하고 재요청
-          axiosFileInstance.defaults.headers.common[
-            "Authorization"
-          ] = `Bearer ${newAccessToken}`;
-          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-          return axiosFileInstance(originalRequest);
-        } catch (err) {
-          // 갱신 실패시 임의 로그아웃 처리
-          dispatch(updateLoginStatus(false));
-          dispatch(updateAccessToken(""));
-          navigate("/error");
-        }
-      } else {
-        navigate("/error");
-      }
-      return Promise.reject(error);
+      updateToken(axiosFileInstance, error);
     }
   );
 
   useEffect(() => {
     if (!isLogin && currentPath !== "/login" && currentPath !== "/oauth") {
       navigate("/login");
-      dispatch(updateRouteHistory(currentPath));
+      if (currentPath !== "/setting") {
+        dispatch(updateRouteHistory(currentPath));
+      }
+    } else if (isLogin && currentPath === "/login") {
+      navigate("/home");
+    }
+    const pathParts = currentPath.split("/");
+    const htmlTitle = document.querySelector("title");
+    switch (pathParts[1]) {
+      case "login":
+        htmlTitle!.innerHTML = "로그인 - Rollwrite";
+        break;
+      case "home":
+        htmlTitle!.innerHTML = "홈 - Rollwrite";
+        break;
+      case "question":
+        htmlTitle!.innerHTML = "오늘의 질문 - Rollwrite";
+        break;
+      case "answer":
+        htmlTitle!.innerHTML = "답변 작성하기 - Rollwrite";
+        break;
+      case "my":
+        htmlTitle!.innerHTML = "마이페이지 - Rollwrite";
+        break;
+      case "notify":
+        htmlTitle!.innerHTML = "알림 - Rollwrite";
+        break;
+      case "setting":
+        htmlTitle!.innerHTML = "설정 - Rollwrite";
+        break;
+      case "notice":
+        htmlTitle!.innerHTML = "공지사항 - Rollwrite";
+        break;
+      case "inquiry":
+        htmlTitle!.innerHTML = "문의사항 - Rollwrite";
+        break;
+      case "invite":
+        htmlTitle!.innerHTML = "모임 초대하기 - Rollwrite";
+        break;
+      case "result":
+        htmlTitle!.innerHTML = "모임 상세보기 - Rollwrite";
+        break;
+      case "create":
+        htmlTitle!.innerHTML = "모임 생성하기 - Rollwrite";
+        break;
+      case "join":
+        htmlTitle!.innerHTML = "모임 가입하기 - Rollwrite";
+        break;
+      case "award":
+        htmlTitle!.innerHTML = "모임 결과 - Rollwrite";
+        break;
+      default:
+        break;
     }
   });
 

@@ -26,7 +26,7 @@ function CreateGroupPage() {
   const [groupInfo, setGroupInfo] = useState<CreateGroup>({
     title: "",
     tag: [],
-    startDay: "",
+    startDay: new Date().toString(),
     endDay: "",
     color: "",
   });
@@ -116,6 +116,7 @@ function CreateGroupPage() {
         <Info
           title={newGroupInfo?.title}
           subTitle="모임을 만들었어요."
+          emoji="🤝"
           fillLabel="초대하기"
           ghostLabel="홈으로"
           fillOnClick={() => handleKakaoShare(newGroupInfo?.inviteUrl!)}

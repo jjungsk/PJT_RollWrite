@@ -4,14 +4,13 @@ import { axiosFileInstance, axiosInstance } from "./instance";
 export const redirectKakao = () => {
   const CLIENT_ID = "88cb08e0de73021429ec359e909db650";
   const REDIRECT_URI = `${process.env.REACT_APP_SERVER_URL}/oauth`;
-  // const REDIRECT_URI = `https://k8a508.p.ssafy.io/api/auth/kakao/login`;
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
   window.location.href = KAKAO_AUTH_URL;
 };
 
 // 카카오 로그인
 export const kakaoOuath = async (code: string) => {
-  const response = await axiosInstance.get(`auth/kakao/login?code=${code}`);
+  const response = await axiosInstance.get(`/auth/kakao/login?code=${code}`);
   return response.data;
 };
 

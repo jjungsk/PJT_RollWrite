@@ -17,21 +17,26 @@ function QuestionWrite(props: {
   };
 
   const handleClickCreateBtn = () => {
-    createQuestion(props.groupId, question)
-      .then((res) => {
-        toast(res.message, {
-          icon: "🙋‍♂️",
-        });
-        props.setHomeContent(0);
+    props.setHomeContent(0);
+    toast
+      .promise(createQuestion(props.groupId, question), {
+        loading: "질문을 저장중입니다...",
+        success: (
+          <b>
+            저장을 완료했습니다.
+            <br />
+            보내주신 질문은 채택되지 않을 수도 있습니다.
+          </b>
+        ),
+        error: <b>에 실패했습니다.</b>,
       })
-      .catch(() => {
-        toast.error("질문 생성 중 문제가 발생하였습니다.");
-      });
+      .then(() => {})
+      .catch(() => {});
   };
   return (
-    <div>
-      <Title>원하는 질문을 입력해주세요.</Title>
-      <SubTitle>무잇이 궁금 하나요?</SubTitle>
+    <div style={{ paddingInline: "12px" }}>
+      <Title>원하는 질문을 입력해 주세요.</Title>
+      <SubTitle>무엇이 궁금 하나요?</SubTitle>
       <Emoji label="🧐" />
       <QuestionInput onChange={onChange} value={question} />
       {question.length > 0 ? (

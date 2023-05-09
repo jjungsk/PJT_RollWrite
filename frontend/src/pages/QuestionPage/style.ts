@@ -40,24 +40,17 @@ const TextContainer = styled.div`
   color: var(--black-color);
   text-align: center;
   font-weight: 700;
-  line-height: 24px;
+  line-height: 36px;
   padding: 0 15px;
   position: relative;
 `;
 
-const ModifyBtn = styled.button`
-  position: absolute;
-  border: 1px solid black;
-  border-radius: 8px;
-  height: 20px;
-  width: 40px;
-  top: -24px;
-  right: 32px;
-`;
-
 const AnswerContainer = styled.div`
-  width: 100%;
+  padding: 12px 36px;
   font-size: 16px;
+  word-wrap: break-word;
+  max-height: 110px;
+  overflow: auto;
 `;
 
 const BtnContainer = styled.div`
@@ -74,5 +67,4 @@ export {
   TextContainer,
   BtnContainer,
   AnswerContainer,
-  ModifyBtn,
 };

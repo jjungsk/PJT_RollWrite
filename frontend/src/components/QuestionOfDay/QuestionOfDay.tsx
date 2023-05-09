@@ -44,15 +44,22 @@ function QuestionOfDay({
         <QuestionOfDayContent>
           {(isAfter(pickedDay, new Date(groupInfo.startDay)) &&
             isBefore(pickedDay, new Date(groupInfo.endDay))) ||
-          isSameDay(pickedDay, new Date(groupInfo?.startDay))
-            ? isAfter(pickedDay, new Date())
-              ? "질문을 기다려라"
-              : questionMap.has(format(pickedDay, "yyyy-MM-dd"))
-              ? questionMap.get(format(pickedDay, "yyyy-MM-dd"))
-              : isSameDay(pickedDay, new Date())
-              ? "오늘 질문은 답변했냐?"
-              : "답변안했네"
-            : "모임기간이 아닙니다."}
+          isSameDay(pickedDay, new Date(groupInfo?.startDay)) ? (
+            isAfter(pickedDay, new Date()) ? (
+              <>
+                {`질문이 아직 나오지 않았습니다.`} <br />
+                {`질문은 당일 오전 8시에 나옵니다.`}
+              </>
+            ) : questionMap.has(format(pickedDay, "yyyy-MM-dd")) ? (
+              questionMap.get(format(pickedDay, "yyyy-MM-dd"))
+            ) : isSameDay(pickedDay, new Date()) ? (
+              "오늘 질문에 아직 답변하지 않았습니다!"
+            ) : (
+              "질문에 답변하지 않았습니다."
+            )
+          ) : (
+            "모임기간이 아닙니다."
+          )}
         </QuestionOfDayContent>
         <QuestionOfDayFooter>
           <GhostBtn label={"질문 만들기"} onClick={() => setHomeContent(1)} />

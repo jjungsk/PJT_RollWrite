@@ -1,5 +1,10 @@
 import React from "react";
-import { InputLineContainer, InputLineBox, InputLineBoxInput } from "./style";
+import {
+  InputLineContainer,
+  InputLineBox,
+  InputLineBoxInput,
+  InputLineInfo,
+} from "./style";
 
 interface Props {
   Icon?: React.FC<React.SVGProps<SVGSVGElement>>;
@@ -9,6 +14,10 @@ interface Props {
   label?: string;
   value?: string;
   onClick?: React.MouseEventHandler<SVGSVGElement>;
+  min?: string;
+  max?: string;
+  placeholder?: string;
+  info?: string;
 }
 function InputLine({
   Icon,
@@ -18,24 +27,28 @@ function InputLine({
   label,
   value,
   onClick,
+  min,
+  max,
+  placeholder,
+  info,
 }: Props) {
   return (
     <InputLineContainer>
       <p>{label}</p>
       <InputLineBox>
-        {value !== undefined ? (
-          <InputLineBoxInput
-            name={name}
-            onChange={onChange}
-            type={type}
-            value={value}
-            disabled
-          />
-        ) : (
-          <InputLineBoxInput name={name} onChange={onChange} type={type} />
-        )}
+        <InputLineBoxInput
+          placeholder={placeholder}
+          name={name}
+          onChange={onChange}
+          type={type}
+          min={min}
+          max={max}
+          value={value}
+        />
+
         {Icon && <Icon onClick={onClick} />}
       </InputLineBox>
+      <InputLineInfo>{info}</InputLineInfo>
     </InputLineContainer>
   );
 }

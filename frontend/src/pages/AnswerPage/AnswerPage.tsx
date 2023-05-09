@@ -1,15 +1,6 @@
 import React, { useState } from "react";
-import {
-  NameContainer,
-  QuestionDiv,
-  ImgContainer,
-  IconContainer,
-  TextContainer,
-  ContentContainer,
-} from "./style";
+import { NameContainer, QuestionDiv } from "./style";
 import GhostBtn from "../../elements/Button/GhostBtn";
-import Btn from "../../assets/AddImgBtn.svg";
-import { ReactComponent as Trash } from "../../assets/Trash-alt.svg";
 import {
   createAnswer,
   deleteAnswerImg,
@@ -17,20 +8,20 @@ import {
 } from "../../apis/question";
 import { useLocation, useNavigate } from "react-router-dom";
 import { QuestionInfo } from "../../constants/types";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { showToastModal } from "../../utils/ToastModal";
+import UploadImg from "../../elements/UploadImg/UploadImg";
+import TextArea from "../../elements/TextArea/TextArea";
 
 export default function AnswerPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  // 이미지
+
   const [ImgFile, setImgFile] = useState<File>();
-  const [tmpImg, setTmpImg] = useState<string>("");
-  // 답변
   const [question, setQuestion] = useState<QuestionInfo>(
     location.state.question
   );
-  // 답변 입력하면 answer에 넣어줌
+
   const handleAnswer = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setQuestion({
       ...question,
@@ -38,34 +29,24 @@ export default function AnswerPage() {
     });
   };
 
-  // 이미지 업로드 및 미리보기
-  const handleImg = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files && files[0]) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        if (e.target) {
-          setTmpImg(e.target.result as string);
-          setImgFile(files[0]);
-        }
-      };
-      reader.readAsDataURL(files[0]);
-    }
-  };
   const formData = new FormData();
-  // 버튼 눌렀을 때 api로 데이터 전송
-  const handleSaveBtn = () => {
-    // formData에 이미지, 답변 저장
 
+  const handleSaveBtn = () => {
+    if (question.answer === "") {
+      toast.error("내용을 입력해주세요.");
+      return;
+    }
     const data = JSON.stringify({
       answer: question.answer,
       meetingId: question.meetingId,
       questionId: question.questionId,
     });
     const jsonData = new Blob([data], { type: "application/json" });
-    location.state.isModify
-      ? formData.append("modifyAnswerReqDto", jsonData)
-      : formData.append("addAnswerReqDto", jsonData);
+
+    formData.append(
+      location.state.isModify ? "modifyAnswerReqDto" : "addAnswerReqDto",
+      jsonData
+    );
 
     if (ImgFile) {
       formData.append("image", ImgFile);
@@ -93,12 +74,13 @@ export default function AnswerPage() {
         navigate(-1);
       });
   };
+
   const saveAnswer = () => {
     toast
       .promise(createAnswer(formData), {
         loading: "답변을 저장중입니다...",
         success: <b>답변이 저장됐습니다!</b>,
-        error: <b>저장을 실패했습니다!</b>,
+        error: <b>저장을 실패했습니다! 답변은 300자이내입니다.</b>,
       })
       .then(() => {
         question.isFinal
@@ -108,15 +90,12 @@ export default function AnswerPage() {
   };
 
   const handelClickDeleteBtn = () => {
-    setQuestion({
-      ...question,
-      image: "/img.png",
-    });
     deleteAnswerImg(question.questionId)
       .then(() => {
         toast("이미지가 삭제되었습니다.", {
           icon: "🗑",
         });
+        window.location.reload();
       })
       .catch(() => {
         toast.error("이미지 삭제 중 문제가 발생하였습니다");
@@ -125,37 +104,21 @@ export default function AnswerPage() {
 
   return (
     <>
-      <Toaster />
       <NameContainer>
         {question.title} D-{question.day}
       </NameContainer>
       <QuestionDiv>{question.question}</QuestionDiv>
-      <ImgContainer BgImg={tmpImg ? tmpImg : question.image}>
-        <IconContainer>
-          <label htmlFor="profile-img">
-            <img src={Btn} alt="img" />
-          </label>
-        </IconContainer>
-        <input
-          id="profile-img"
-          type="file"
-          accept="image/*"
-          onChange={handleImg}
-          style={{ display: "none" }}
-        />
-        {question.image && (
-          <Trash
-            style={{ position: "absolute", bottom: "8px", right: "8px" }}
-            onClick={handelClickDeleteBtn}
-          />
-        )}
-      </ImgContainer>
-      <TextContainer>
-        <ContentContainer
-          onChange={handleAnswer}
-          value={question.answer}
-        ></ContentContainer>
-      </TextContainer>
+      <UploadImg
+        setImgFile={setImgFile}
+        img={question.image}
+        handelClickDeleteBtn={handelClickDeleteBtn}
+      />
+
+      <TextArea
+        onChange={handleAnswer}
+        value={question.answer && question.answer}
+      ></TextArea>
+
       <GhostBtn
         label={location.state.isModify ? "수정하기" : "저장하기"}
         onClick={handleSaveBtn}

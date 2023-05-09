@@ -11,7 +11,6 @@ import {
   TextContainer,
   BtnContainer,
   AnswerContainer,
-  ModifyBtn,
 } from "./style";
 import GhostBtn from "../../elements/Button/GhostBtn";
 import Emoji from "../../elements/Emoji/Emoji";
@@ -19,7 +18,6 @@ import { ReactComponent as BackArrow } from "../../assets/Back_Btn.svg";
 import { ReactComponent as PrevArrow } from "../../assets/Prev_Btn.svg";
 import { QuestionInfo } from "../../constants/types";
 import { getQuestionList } from "../../apis/question";
-import { toast } from "react-hot-toast";
 
 function QuestionPage() {
   const navigate = useNavigate();
@@ -52,8 +50,10 @@ function QuestionPage() {
             <InfoContainer>
               <DateContainer>{today}</DateContainer>
               <NameContainer>
-                {questionList[currentSlide].title} D-
-                {questionList[currentSlide].day}
+                {questionList[currentSlide].title}
+                {questionList[currentSlide].day > 0
+                  ? ` D-${questionList[currentSlide].day}`
+                  : " D-day"}
               </NameContainer>
             </InfoContainer>
             <EmojiContainer>
@@ -82,27 +82,11 @@ function QuestionPage() {
                 )}
               </ArrowContainer>
             </EmojiContainer>
-            <TextContainer>
-              {questionList[currentSlide].question}
-              {questionList[currentSlide].answer && (
-                <ModifyBtn
-                  onClick={() =>
-                    navigate("/answer", {
-                      state: {
-                        question: questionList[currentSlide],
-                        isModify: true,
-                      },
-                    })
-                  }
-                >
-                  수정
-                </ModifyBtn>
-              )}
-            </TextContainer>
+            <TextContainer>{questionList[currentSlide].question}</TextContainer>
             <AnswerContainer>
               {questionList[currentSlide].answer}
             </AnswerContainer>
-            {!questionList[currentSlide].answer && (
+            {!questionList[currentSlide].answer ? (
               <BtnContainer>
                 <GhostBtn
                   label="입력하기"
@@ -116,6 +100,19 @@ function QuestionPage() {
                   }
                 ></GhostBtn>
               </BtnContainer>
+            ) : (
+              <GhostBtn
+                label="수정하기"
+                onClick={() =>
+                  navigate("/answer", {
+                    state: {
+                      question: questionList[currentSlide],
+                      isModify: true,
+                    },
+                  })
+                }
+                margin="16px 0px"
+              ></GhostBtn>
             )}
           </>
         ) : (
@@ -128,7 +125,8 @@ function QuestionPage() {
               <Emoji label="🤔"></Emoji>
             </EmojiContainer>
             <TextContainer>
-              음.. 모임이 없습니다 <br /> 모임을 만들든가 들어가든가 하세요
+              현재 참여중인 모임이 없습니다 <br /> 모임을 만들거나 모임에
+              참여하세요!
             </TextContainer>
             <BtnContainer>
               <GhostBtn

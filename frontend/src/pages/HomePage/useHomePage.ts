@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getQuestionList, getGroupList } from "../../apis/home";
 import { GroupInfo, Question } from "../../constants/types";
-import { toast } from "react-hot-toast";
 
 function useHomePage() {
   const navigate = useNavigate();
