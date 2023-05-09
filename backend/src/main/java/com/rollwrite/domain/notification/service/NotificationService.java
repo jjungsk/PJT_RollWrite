@@ -2,9 +2,10 @@ package com.rollwrite.domain.notification.service;
 
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Notification;
-import com.rollwrite.domain.meeting.dto.FindAllParticipantDto;
 import com.rollwrite.domain.meeting.entity.Participant;
 import com.rollwrite.domain.meeting.repository.ParticipantRepository;
+import com.rollwrite.domain.notification.entity.Alarm;
+import com.rollwrite.domain.notification.repository.AlarmRepository;
 import com.rollwrite.domain.user.entity.User;
 import com.rollwrite.domain.user.repository.UserRepository;
 import com.rollwrite.global.service.FcmService;
@@ -22,34 +23,54 @@ import java.util.*;
 public class NotificationService {
 
     private final UserRepository userRepository;
+    private final AlarmRepository alarmRepository;
     private final ParticipantRepository participantRepository;
     private final FcmService fcmService;
 
     // 1. firebase token 저장
     @Transactional
-    public void updateFirebaseToken(Long userId, String firebaseToken) {
+    public void addFirebaseToken(Long userId, String firebaseToken) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
 
-        user.updateToken(firebaseToken);
+        log.info("user : {}", user.toString());
+        Optional<Alarm> alarm = alarmRepository.findAlarmByUser_IdAndFirebaseToken(userId, firebaseToken);
+
+        if (alarm.isEmpty()) {
+            Alarm saveAlarm = Alarm.builder()
+                    .firebaseToken(firebaseToken)
+                    .isAllowed(true)
+                    .user(user)
+                    .build();
+
+            log.info("saveAlarm : {}", saveAlarm);
+            alarmRepository.save(saveAlarm);
+        }
     }
 
     // 2. 자동으로 알림을 보낼 tokenList 가져오기
     public void sendMessageAuto() throws FirebaseMessagingException {
-        List<Participant> findAllParticipantDtoList = participantRepository.findMeetingAndUserAndTitleByProgress(false);
-        log.info("meetingFindUserDtoList : {}", findAllParticipantDtoList.toString());
+        List<Participant> participantList = participantRepository.findMeetingAndUserAndTitleByProgress(false);
+        log.info("meetingFindUserDtoList : {}", participantList.toString());
 
         // meetingId & meetingTitle 에 해당하는 userList와 tokenList구하기
         HashMap<Long, String> meetingIdAndTitle = new HashMap<>();
         HashMap<Long, List<Long>> meetingIdAndUser = new HashMap<>();
         HashMap<Long, List<String>> meetingIdAndToken = new HashMap<>();
-        for (Participant findAllParticipantDto : findAllParticipantDtoList) {
-            Long meetingId = findAllParticipantDto.getMeeting().getId();
-            String title = findAllParticipantDto.getMeeting().getTitle();
-            Long userId = findAllParticipantDto.getUser().getId();
-            String token = findAllParticipantDto.getUser().getFirebaseToken();
+        for (Participant participant : participantList) {
+            Long meetingId = participant.getMeeting().getId();
+            String title = participant.getMeeting().getTitle();
+            Long userId = participant.getUser().getId();
 
-            if (token == null || token.isEmpty()) continue;
+            List<Alarm> alarmList = participant.getUser().getAlarmList();
+            log.info("alarmList : {}", alarmList.toString());
+
+            if (alarmList.size() == 0) continue;
+            List<String> fcmTokenList = new ArrayList<>();
+
+            for (Alarm userAlarm: alarmList) {
+                fcmTokenList.add(userAlarm.getFirebaseToken());
+            }
 
             // TODO : getOrDefault 사용으로
             // meetingId 에 userId 담기
@@ -65,7 +86,7 @@ public class NotificationService {
             if (meetingIdAndToken.containsKey(meetingId)) {
                 tokenList = meetingIdAndToken.get(meetingId);
             }
-            tokenList.add(token);
+            tokenList.addAll(fcmTokenList);
             meetingIdAndToken.put(meetingId, tokenList);
 
             // meetingId 와 meetingTitle 저장
@@ -103,7 +124,7 @@ public class NotificationService {
 //            }, 0, 10, TimeUnit.MILLISECONDS);
         }
 
-        log.info("fail cnt : {}", failCnt);
+//        log.info("fail cnt : {}", failCnt);
     }
 
 }

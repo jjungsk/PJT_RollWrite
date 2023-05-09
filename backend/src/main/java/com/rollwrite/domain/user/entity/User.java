@@ -3,6 +3,7 @@ package com.rollwrite.domain.user.entity;
 import com.rollwrite.domain.inquiry.entity.Inquiry;
 import com.rollwrite.domain.meeting.entity.Participant;
 import com.rollwrite.domain.meeting.entity.Award;
+import com.rollwrite.domain.notification.entity.Alarm;
 import com.rollwrite.domain.notification.entity.Notification;
 import com.rollwrite.domain.question.entity.Answer;
 import com.rollwrite.domain.question.entity.QuestionParticipant;
@@ -40,8 +41,8 @@ public class User extends BaseTimeEntity {
     @Column(length = 2083)
     private String profileImage;
 
-    @Column(length = 2083)
-    private String firebaseToken;
+//    @Column(length = 2083)
+//    private String firebaseToken;
 
     @NotNull
     @Column
@@ -66,6 +67,9 @@ public class User extends BaseTimeEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Inquiry> inquiryList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Alarm> alarmList = new ArrayList<>();
+
     @Builder
     public User(String identifier, String nickname, String profileImage, UserType type) {
         this.identifier = identifier;
@@ -81,8 +85,8 @@ public class User extends BaseTimeEntity {
     }
 
     // 수정 - FCM Token
-    public void updateToken(String firebaseToken) {
-        this.firebaseToken = firebaseToken;
-    }
+//    public void updateToken(String firebaseToken) {
+//        this.firebaseToken = firebaseToken;
+//    }
 
 }
