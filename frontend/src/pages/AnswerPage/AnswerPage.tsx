@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NameContainer, QuestionDiv, ContentContainer } from "./style";
+import { NameContainer, QuestionDiv } from "./style";
 import GhostBtn from "../../elements/Button/GhostBtn";
 import {
   createAnswer,

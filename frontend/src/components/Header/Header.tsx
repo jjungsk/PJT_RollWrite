@@ -55,7 +55,7 @@ function Header(props: { sub?: boolean }) {
         onClick={() => handleClickBtn("/")}
       />
       <BtnContainer>
-        <NavBtn icon={Notification} onClick={() => handleClickBtn("/notify")} />
+        {/* <NavBtn icon={Notification} onClick={() => handleClickBtn("/notify")} /> */}
         <NavBtn icon={Setting} onClick={() => handleClickBtn("/setting")} />
       </BtnContainer>
     </HeaderContainer>

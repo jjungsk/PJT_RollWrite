@@ -40,7 +40,7 @@ const TextContainer = styled.div`
   color: var(--black-color);
   text-align: center;
   font-weight: 700;
-  line-height: 24px;
+  line-height: 36px;
   padding: 0 15px;
   position: relative;
 `;
