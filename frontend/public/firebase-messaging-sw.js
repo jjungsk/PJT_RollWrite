@@ -15,11 +15,24 @@ firebase.initializeApp(config);
 const messaging = firebase.messaging()
 
 messaging.onBackgroundMessage((payload) => {
+    console.log('[firebase-messaging-sw.js] Received background message ', payload);
     const notificationTitle = '[RollWrite] '+payload.notification.title;
     const notificationOptions = {
       body: payload.notification.body,
-      icon: '/logo192.png'
+      icon: '/logo192.png',
+      data: {
+        url: 'https://rollwrite.co.kr'
+      }
     };
     // eslint-disable-next-line no-restricted-globals
     self.registration.showNotification(notificationTitle, notificationOptions);
   });
+  
+  // 사용자가 알림을 클릭했을 때 실행될 핸들러 등록
+  this.addEventListener('notificationclick', function(event) {
+    event.notification.close();
+    event.waitUntil(
+      clients.openWindow(event.notification.data.url)
+    );
+});
+  
