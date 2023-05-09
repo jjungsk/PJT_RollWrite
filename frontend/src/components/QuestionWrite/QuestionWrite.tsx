@@ -25,7 +25,7 @@ function QuestionWrite(props: {
         });
       })
       .catch(() => {
-        toast.error("질문 생성 중 문제가 발생하였습니다.");
+        toast.error("질문은 38자 이내입니다.");
       });
   };
   return (

@@ -80,7 +80,7 @@ export default function AnswerPage() {
       .promise(createAnswer(formData), {
         loading: "답변을 저장중입니다...",
         success: <b>답변이 저장됐습니다!</b>,
-        error: <b>저장을 실패했습니다!</b>,
+        error: <b>저장을 실패했습니다! 답변은 300자이내입니다.</b>,
       })
       .then(() => {
         question.isFinal
