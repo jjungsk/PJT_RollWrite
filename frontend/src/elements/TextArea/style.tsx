@@ -6,7 +6,7 @@ const TextAreaContainer = styled.textarea`
   height: 40vh;
   background: var(--lightgray-color);
   box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 20px;
+  border-radius: 10px;
   border: none;
   padding: 15px;
   font-size: 16px;
