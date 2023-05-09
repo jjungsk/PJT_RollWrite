@@ -19,7 +19,7 @@ import java.util.List;
 public class FcmService {
 
     // 1. 특정 유저에게 알림 (특정 유저의 Token)
-    public void sendMessageFcmForm(String token, String title, String body) throws FirebaseMessagingException {
+    public void sendMessageOne(String token, String title, String body) throws FirebaseMessagingException {
         Message message = Message.builder()
                 .setNotification(Notification.builder()
                         .setTitle(title)

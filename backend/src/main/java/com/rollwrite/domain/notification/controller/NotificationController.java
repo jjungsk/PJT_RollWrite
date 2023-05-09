@@ -52,7 +52,7 @@ public class NotificationController {
     @PostMapping("/individual")
     public ResponseEntity<ApiResponse<?>> sendMessageTo(String targetToken, String title, String body) throws FirebaseMessagingException {
 
-        fcmService.sendMessageFcmForm(targetToken, title, body);
+        fcmService.sendMessageOne(targetToken, title, body);
 
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.SEND_MESSAGE_TO), HttpStatus.OK);
     }
