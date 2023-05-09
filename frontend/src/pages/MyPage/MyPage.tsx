@@ -82,29 +82,33 @@ function MyPage() {
   };
 
   const editProfile = () => {
-    const data = JSON.stringify({
-      isRemoveImage: isDeleteImg,
-      nickname: tmpNickname,
-    });
-    const jsonData = new Blob([data], { type: "application/json" });
+    if (tmpNickname.length <= 15) {
+      const data = JSON.stringify({
+        isRemoveImage: isDeleteImg,
+        nickname: tmpNickname,
+      });
+      const jsonData = new Blob([data], { type: "application/json" });
 
-    const formData = new FormData();
-    formData.append("modifyUserReqDto", jsonData);
-    if (!isDeleteImg && profileImgFile) {
-      formData.append("profileImage", profileImgFile);
+      const formData = new FormData();
+      formData.append("modifyUserReqDto", jsonData);
+      if (!isDeleteImg && profileImgFile) {
+        formData.append("profileImage", profileImgFile);
+      }
+
+      updateUserDetail(formData)
+        .then((res) => {
+          if (res.statusCode === 200) {
+            toast("정상적으로 수정되었습니다!", {
+              icon: "✔️",
+            });
+            setIsDeleteImg(false);
+            setEditProfileMode(false);
+          }
+        })
+        .catch(() => toast.error("회원정보 수정 중에 문제가 발생하였습니다."));
+    } else {
+      toast.error("닉네임은 15자 이내로 작성하셔야 합니다!");
     }
-
-    updateUserDetail(formData)
-      .then((res) => {
-        if (res.statusCode === 200) {
-          toast("정상적으로 수정되었습니다!", {
-            icon: "✔️",
-          });
-          setIsDeleteImg(false);
-          setEditProfileMode(false);
-        }
-      })
-      .catch(() => toast.error("회원정보 수정 중에 문제가 발생하였습니다."));
   };
 
   const handelClickDeleteBtn = () => {
