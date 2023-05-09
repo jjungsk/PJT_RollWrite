@@ -30,6 +30,8 @@ public class NotificationService {
     // 1. firebase token 저장
     @Transactional
     public void addFirebaseToken(Long userId, String firebaseToken) {
+        if (firebaseToken == null || firebaseToken.isEmpty()) return;
+
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
 
