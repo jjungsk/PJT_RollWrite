@@ -77,8 +77,6 @@ function App() {
         // 갱신 실패시 임의 로그아웃 처리
         purge();
       }
-    } else {
-      navigate("/login");
     }
     return Promise.reject(error);
   };
