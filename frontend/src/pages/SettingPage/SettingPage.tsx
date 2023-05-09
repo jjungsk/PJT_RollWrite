@@ -23,6 +23,10 @@ function SettingPage() {
     await persistor.purge();
   };
   const handleClickMenu = (path: string) => {
+    toast("아직 개발중입니다.", {
+      icon: "🤦‍♂️",
+    });
+    return;
     navigate(`/${path}`);
   };
 
@@ -64,7 +68,7 @@ function SettingPage() {
 
   return (
     <SettingContainer>
-      <SettingSection>
+      {/* <SettingSection>
         <SettingSectionTitle>알림 설정</SettingSectionTitle>
         <SettingMenuItem>
           <SettingMenuItemText>
@@ -80,9 +84,9 @@ function SettingPage() {
           </SettingMenuItemText>
           <SwitchBtn />
         </SettingMenuItem>
-      </SettingSection>
+      </SettingSection> */}
       <SettingSection>
-        <SettingSectionTitle>기타 안내</SettingSectionTitle>
+        {/* <SettingSectionTitle>기타 안내</SettingSectionTitle> */}
         <SettingMenuItem onClick={() => handleClickMenu("notice")}>
           <SettingMenuItemText>공지사항</SettingMenuItemText>
           <Back />
