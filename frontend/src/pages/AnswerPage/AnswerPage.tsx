@@ -95,6 +95,7 @@ export default function AnswerPage() {
         toast("이미지가 삭제되었습니다.", {
           icon: "🗑",
         });
+        window.location.reload();
       })
       .catch(() => {
         toast.error("이미지 삭제 중 문제가 발생하였습니다");
