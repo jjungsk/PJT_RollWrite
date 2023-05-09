@@ -84,7 +84,10 @@ public class NotificationService {
             List<String> tokenList = meetingIdAndToken.get(meetingId);
             if (tokenList.isEmpty()) continue;
 
-            Notification notification = new Notification(meetingIdAndTitle.get(meetingId), "오늘의 질문이 올라왔습니다^^");
+            Notification notification = Notification.builder()
+                    .setTitle(meetingIdAndTitle.get(meetingId))
+                    .setBody("오늘의 질문이 올라왔습니다^^")
+                    .build();
 
             log.info("fcmTokenList : {}", meetingIdAndToken);
             failCnt += fcmService.sendMessageMany(notification, tokenList);
