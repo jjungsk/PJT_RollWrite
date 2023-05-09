@@ -10,21 +10,20 @@ function JoinPage() {
   const isLogin = useAppSelector((state) => state.auth.isLogin);
 
   useEffect(() => {
-    if (isLogin && inviteCode) {
+    if (inviteCode) {
       joinGroup(inviteCode)
         .then((res) => {
-          console.log("응답");
-          console.log(res);
-
           if (res.status === 200) {
-            toast("가입을 완료했습니다.");
+            toast.success("가입을 완료했습니다.");
             navigate("/home");
           } else {
             toast.error(res.message);
+            navigate("/home");
           }
         })
         .catch(() => {
-          navigate("/error");
+          toast.error("로그인을 해주세요.");
+          navigate("/login");
         });
     }
   });
