@@ -18,20 +18,16 @@ function QuestionWrite(props: {
 
   const handleClickCreateBtn = () => {
     props.setHomeContent(0);
-    createQuestion(props.groupId, question)
-      .then((res) => {
-        toast(res.message, {
-          icon: "🙋‍♂️",
-        });
-      })
-      .catch(() => {
-        toast.error("질문은 38자 이내입니다.");
-      });
+    toast.promise(createQuestion(props.groupId, question), {
+      loading: "질문을 저장중입니다...",
+      success: <b>저장을 완료했습니다.</b>,
+      error: <b>에 실패했습니다.</b>,
+    });
   };
   return (
     <div>
       <Title>원하는 질문을 입력해주세요.</Title>
-      <SubTitle>무잇이 궁금 하나요?</SubTitle>
+      <SubTitle>무엇이 궁금 하나요?</SubTitle>
       <Emoji label="🧐" />
       <QuestionInput onChange={onChange} value={question} />
       {question.length > 0 ? (
