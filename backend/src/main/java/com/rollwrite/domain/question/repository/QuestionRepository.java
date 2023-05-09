@@ -9,5 +9,8 @@ import java.util.List;
 
 @Repository
 public interface QuestionRepository extends JpaRepository<Question, Long>, QuestionCustomRepository {
+
+    List<Question> findByMeeting(Meeting meeting);
+
     List<Question> findAllByMeeting(Meeting meeting);
 }
