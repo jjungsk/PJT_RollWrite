@@ -14,6 +14,7 @@ const HomePageHeader = styled.div`
 
   & > div {
     line-height: 30px;
+    display: flex;
   }
   & > div > span {
     font-weight: bold;

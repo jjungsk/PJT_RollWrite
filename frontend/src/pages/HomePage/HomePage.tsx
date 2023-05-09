@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { HomePageContainer, HomePageHeader } from "./style";
 import useHomePage from "./useHomePage";
 import { ReactComponent as Plus } from "../../assets/Plus.svg";
+import { ReactComponent as Info } from "../../assets/Info-circle.svg";
 import GroupList from "../../components/GroupList/GroupList";
 import HomeContent from "../../components/HomeContent/HomeContent";
 import useProfile from "../../hooks/useProfile";
 import { Profile } from "../../constants/types";
+import { AnimatePresence, motion } from "framer-motion";
 
 function HomePage() {
   const {
@@ -18,11 +20,33 @@ function HomePage() {
     setCurrentIndex,
   } = useHomePage();
   const profile: Profile = useProfile();
+  const [showExplain, setShowExplain] = useState(false);
   return (
     <HomePageContainer>
+      <AnimatePresence>
+        {showExplain && (
+          <motion.img
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            onClick={() => setShowExplain(false)}
+            src="/HomeExplain.png"
+            alt="explain"
+            style={{
+              position: "absolute",
+              top: "0px",
+              height: "100vh",
+              width: "100vw",
+              zIndex: "99",
+            }}
+          />
+        )}
+      </AnimatePresence>
       <HomePageHeader>
         <div>
           <span>{profile.nickname}</span> 님의 모임
+          <Info onClick={() => setShowExplain(true)} />
         </div>
         <Plus
           onClick={() => {
