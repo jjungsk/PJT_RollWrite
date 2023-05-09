@@ -104,10 +104,7 @@ function App() {
       if (currentPath !== "/setting") {
         dispatch(updateRouteHistory(currentPath));
       }
-    } else if (
-      isLogin &&
-      (currentPath === "/login" || currentPath === "/oauth")
-    ) {
+    } else if (isLogin && currentPath === "/login") {
       navigate("/home");
     }
     const pathParts = currentPath.split("/");
