@@ -18,11 +18,14 @@ function QuestionWrite(props: {
 
   const handleClickCreateBtn = () => {
     props.setHomeContent(0);
-    toast.promise(createQuestion(props.groupId, question), {
-      loading: "질문을 저장중입니다...",
-      success: <b>저장을 완료했습니다.</b>,
-      error: <b>에 실패했습니다.</b>,
-    });
+    toast
+      .promise(createQuestion(props.groupId, question), {
+        loading: "질문을 저장중입니다...",
+        success: <b>저장을 완료했습니다.</b>,
+        error: <b>에 실패했습니다.</b>,
+      })
+      .then(() => {})
+      .catch(() => {});
   };
   return (
     <div>
