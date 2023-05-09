@@ -13,7 +13,7 @@ function JoinPage() {
     if (inviteCode) {
       joinGroup(inviteCode)
         .then((res) => {
-          if (res.status === 200) {
+          if (res.statusCode === 200) {
             toast.success("가입을 완료했습니다.");
             navigate("/home");
           } else {
