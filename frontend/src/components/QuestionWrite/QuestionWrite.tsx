@@ -21,15 +21,21 @@ function QuestionWrite(props: {
     toast
       .promise(createQuestion(props.groupId, question), {
         loading: "질문을 저장중입니다...",
-        success: <b>저장을 완료했습니다.</b>,
+        success: (
+          <b>
+            저장을 완료했습니다.
+            <br />
+            보내주신 질문은 채택되지 않을 수도 있습니다.
+          </b>
+        ),
         error: <b>에 실패했습니다.</b>,
       })
       .then(() => {})
       .catch(() => {});
   };
   return (
-    <div>
-      <Title>원하는 질문을 입력해주세요.</Title>
+    <div style={{ paddingInline: "12px" }}>
+      <Title>원하는 질문을 입력해 주세요.</Title>
       <SubTitle>무엇이 궁금 하나요?</SubTitle>
       <Emoji label="🧐" />
       <QuestionInput onChange={onChange} value={question} />
