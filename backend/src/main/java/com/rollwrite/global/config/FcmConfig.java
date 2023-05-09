@@ -16,7 +16,7 @@ import java.util.List;
 public class FcmConfig {
 
     @Bean
-    FirebaseMessaging firebaseMessaging() throws IOException {
+    public FirebaseMessaging firebaseMessaging() throws IOException {
         // EC2 resources 폴더 절대 경로
         ClassPathResource resource = new ClassPathResource("rollwrite-1c979-firebase-adminsdk-4e75m-de6b0ec02f.json");
 

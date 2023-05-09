@@ -71,9 +71,15 @@ public class User extends BaseTimeEntity {
         this.type = type;
     }
 
+    // 수정 - 이름, 이미지
     public void update(String nickname, String profileImage) {
         this.nickname = nickname;
         this.profileImage = profileImage;
+    }
+
+    // 수정 - FCM Token
+    public void updateToken(String firebaseToken) {
+        this.firebaseToken = firebaseToken;
     }
 
 }

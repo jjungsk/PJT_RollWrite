@@ -1,9 +1,11 @@
 package com.rollwrite.domain.meeting.repository;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.rollwrite.domain.meeting.dto.FindAllParticipantDto;
 import com.rollwrite.domain.meeting.entity.Meeting;
-import com.rollwrite.domain.meeting.entity.Participant;
 import com.rollwrite.domain.meeting.entity.QMeeting;
+import com.rollwrite.domain.meeting.entity.Participant;
 import com.rollwrite.domain.meeting.entity.QParticipant;
 
 import java.time.LocalDate;
@@ -69,6 +71,17 @@ public class ParticipantCustomRepositoryImpl implements ParticipantCustomReposit
                 .where(participant.meeting.id.eq(meetingId))
                 .where(participant.isDone.eq(isDone))
                 .fetchOne());
+    }
+
+    @Override
+    public List<Participant> findMeetingAndUserAndTitleByProgress(boolean isDone) {
+        List<Participant> findAllParticipantDtoList = jpaQueryFactory
+                .selectFrom(participant)
+                .join(participant.user, user).fetchJoin()
+                .join(participant.meeting, meeting).fetchJoin()
+                .where(participant.isDone.eq(isDone))
+                .fetch();
+        return findAllParticipantDtoList;
     }
 
 }
