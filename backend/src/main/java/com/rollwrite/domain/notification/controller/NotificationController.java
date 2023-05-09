@@ -2,6 +2,7 @@ package com.rollwrite.domain.notification.controller;
 
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Notification;
+import com.rollwrite.domain.notification.dto.AddFcmTokenReqDto;
 import com.rollwrite.domain.notification.service.NotificationService;
 import com.rollwrite.global.auth.CustomUserDetails;
 import com.rollwrite.global.model.ApiResponse;
@@ -36,12 +37,12 @@ public class NotificationController {
     @ApiOperation(value = "FCM 토큰 저장", notes = "알림 허용 유저에 한해 Token은 DB에 저장")
     @Parameter(name = "firebaseToekn", description = "FCM에서 받은 유저의 Token")
     @PutMapping("/token")
-    public ResponseEntity<ApiResponse<?>> saveFirebaseToken(@ApiIgnore Authentication authentication, @RequestParam String firebaseToken) {
+    public ResponseEntity<ApiResponse<?>> saveFirebaseToken(@ApiIgnore Authentication authentication, @RequestBody AddFcmTokenReqDto addFcmTokenReqDto) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
         Long userId = userDetails.getUserId();
-        log.info("FCM Token 저장 : {}", firebaseToken);
+        log.info("FCM Token 저장 : {}", addFcmTokenReqDto.getFirebaseToken());
 
-        notificationService.updateFirebaseToken(userId, firebaseToken);
+        notificationService.updateFirebaseToken(userId, addFcmTokenReqDto.getFirebaseToken());
 
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.MODIFY_FCM_TOKEN_SUCCESS), HttpStatus.OK);
     }
