@@ -2,6 +2,7 @@ import React from "react";
 import { HomePageContainer, HomePageHeader } from "./style";
 import useHomePage from "./useHomePage";
 import { ReactComponent as Plus } from "../../assets/Plus.svg";
+import { ReactComponent as Info } from "../../assets/Info-circle.svg";
 import GroupList from "../../components/GroupList/GroupList";
 import HomeContent from "../../components/HomeContent/HomeContent";
 import useProfile from "../../hooks/useProfile";
@@ -23,6 +24,7 @@ function HomePage() {
       <HomePageHeader>
         <div>
           <span>{profile.nickname}</span> 님의 모임
+          <Info />
         </div>
         <Plus
           onClick={() => {
