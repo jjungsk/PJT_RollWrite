@@ -12,11 +12,13 @@ const ProfileContainer = styled.div`
 const ProfileImg = styled.div<{
   size: number;
   bgImg?: string;
+  margin?: string;
 }>`
   position: relative;
   width: ${(props) => props.size}px;
   height: ${(props) => props.size}px;
   border-radius: ${(props) => props.size / 2}px;
+  margin: ${(props) => props.margin};
   background-image: ${(props) =>
     props.bgImg === "" || props.bgImg === null
       ? "url(/default_profile.jpg)"
