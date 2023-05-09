@@ -7,6 +7,8 @@ interface Props {
 }
 export default function TextArea({ onChange, value }: Props) {
   return (
-    <TextAreaContainer onChange={onChange} value={value}></TextAreaContainer>
+    <div>
+      <TextAreaContainer onChange={onChange} value={value} />
+    </div>
   );
 }

@@ -46,7 +46,7 @@ function AwardMember({
         }}
         style={{ margin: "56px 0px" }}
       >
-        <ProfileImg size={280} bgImg={profile.profileImage} />
+        <ProfileImg size={280} bgImg={profile.profileImage} margin="auto" />
       </motion.div>
       <GhostBtn label="확인" onClick={handelClickBtn}></GhostBtn>
     </AwardPageContainer>
