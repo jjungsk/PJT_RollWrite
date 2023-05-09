@@ -119,7 +119,7 @@ public class MeetingService {
     }
 
     @Transactional
-    public void joinMeeting(Long userId, String inviteCode) {
+    public boolean joinMeeting(Long userId, String inviteCode) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
@@ -128,13 +128,14 @@ public class MeetingService {
 
         Optional<Participant> isExistedUser = participantRepository.findByMeetingAndUser(meeting, user);
         if (isExistedUser.isPresent()) {
-            throw new IllegalArgumentException("이미 참여한 사용자입니다.");
+            return false;
         } else {
             Participant participant = Participant.builder()
                     .user(user)
                     .meeting(meeting)
                     .build();
             participantRepository.save(participant);
+            return true;
         }
     }
 
