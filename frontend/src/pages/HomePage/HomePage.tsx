@@ -37,7 +37,7 @@ function HomePage() {
             style={{
               position: "absolute",
               top: "0px",
-              height: `${screenHeight}`,
+              height: `${screenHeight}px`,
               width: "100%",
               zIndex: "99",
             }}
