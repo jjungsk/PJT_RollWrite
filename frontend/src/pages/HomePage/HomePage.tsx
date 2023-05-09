@@ -36,8 +36,8 @@ function HomePage() {
             style={{
               position: "absolute",
               top: "0px",
-              height: "calc(100vh - 60px)",
-              width: "100vw",
+              height: "100%",
+              width: "100%",
               zIndex: "99",
             }}
           />
