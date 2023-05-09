@@ -123,7 +123,8 @@ function QuestionPage() {
               <Emoji label="🤔"></Emoji>
             </EmojiContainer>
             <TextContainer>
-              음.. 모임이 없습니다 <br /> 모임을 만들든가 들어가든가 하세요
+              현재 참여중인 모임이 없습니다 <br /> 모임을 만들거나 모임에
+              참여하세요!
             </TextContainer>
             <BtnContainer>
               <GhostBtn
