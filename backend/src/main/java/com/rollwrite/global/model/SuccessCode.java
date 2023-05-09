@@ -17,6 +17,9 @@ public enum SuccessCode {
     MODIFY_NOTICE_SUCCESS(StatusCode.SUCCESS, "공지가 수정되었습니다."),
     REMOVE_NOTICE_SUCCESS(StatusCode.SUCCESS, "공지가 삭제되었습니다."),
 
+    // inquiry
+    ADD_INQUIRY_SUCCESS(StatusCode.SUCCESS, "문의가 생성되었습니다."),
+
     // user
     SIGNUP_SUCCESS(StatusCode.SUCCESS, "회원가입 완료되었습니다."),
     LOGIN_SUCCESS(StatusCode.SUCCESS, "로그인 완료되었습니다."),
