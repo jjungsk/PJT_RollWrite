@@ -21,6 +21,7 @@ function HomePage() {
   } = useHomePage();
   const profile: Profile = useProfile();
   const [showExplain, setShowExplain] = useState(false);
+  const screenHeight = window.innerHeight;
   return (
     <HomePageContainer>
       <AnimatePresence>
@@ -36,7 +37,7 @@ function HomePage() {
             style={{
               position: "absolute",
               top: "0px",
-              height: "100%",
+              height: `${screenHeight}`,
               width: "100%",
               zIndex: "99",
             }}
