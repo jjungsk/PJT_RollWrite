@@ -5,6 +5,7 @@ import com.rollwrite.domain.meeting.service.MeetingService;
 import com.rollwrite.domain.user.dto.FindUserResDto;
 import com.rollwrite.global.auth.CustomUserDetails;
 import com.rollwrite.global.model.ApiResponse;
+import com.rollwrite.global.model.ErrorCode;
 import com.rollwrite.global.model.SuccessCode;
 
 import java.security.NoSuchAlgorithmException;
@@ -108,12 +109,23 @@ public class MeetingController {
         Long userId = userDetails.getUserId();
         log.info("Meeting 참여자 추가 userId : " + userId + " inviteCode : " + inviteCode);
 
-        meetingService.joinMeeting(userId, inviteCode);
-
-        return new ResponseEntity<>(
-                ApiResponse.success(SuccessCode.JOIN_MEETING_SUCCESS),
-                HttpStatus.OK);
+        int flag = meetingService.joinMeeting(userId, inviteCode);
+        log.info("Join Meeting flag : " + flag);
+        if (flag == 0) {
+            return new ResponseEntity<>(
+                    ApiResponse.success(SuccessCode.JOIN_MEETING_SUCCESS),
+                    HttpStatus.OK);
+        } else if (flag == 1) {
+            return new ResponseEntity<>(
+                    ApiResponse.error(ErrorCode.VALIDATION_EXCEPTION, "잘못된 인가코드입니다."),
+                    HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(
+                    ApiResponse.error(ErrorCode.VALIDATION_EXCEPTION, "이미 참여한 사용자입니다."),
+                    HttpStatus.OK);
+        }
     }
+
 
     @ApiOperation(value = "태그 가져오기", notes = "모임 생성 시 태그 가져오기")
     @GetMapping("/tag")

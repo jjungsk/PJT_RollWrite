@@ -34,6 +34,7 @@ public class ParticipantCustomRepositoryImpl implements ParticipantCustomReposit
                 .from(participant)
                 .where(participant.user.id.eq(userId))
                 .where(participant.isDone.eq(isDone))
+                .orderBy(participant.meeting.endDay.asc())
                 .fetch();
     }
 
