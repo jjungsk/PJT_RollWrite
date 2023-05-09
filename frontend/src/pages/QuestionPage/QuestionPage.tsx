@@ -52,8 +52,8 @@ function QuestionPage() {
               <NameContainer>
                 {questionList[currentSlide].title}
                 {questionList[currentSlide].day > 0
-                  ? `D-${questionList[currentSlide].day}`
-                  : "D-day"}
+                  ? ` D-${questionList[currentSlide].day}`
+                  : " D-day"}
               </NameContainer>
             </InfoContainer>
             <EmojiContainer>
