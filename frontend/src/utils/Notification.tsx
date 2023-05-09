@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { requestForToken, onMessageListener } from "./firebase";
+import { useAppDispatch, useAppSelector } from "../constants/types";
+import { sendFirebaseToken } from "../apis/notification";
+import { updateFirebaseToken } from "../store/authReducer";
 
 const Notification = () => {
+  const dispatch = useAppDispatch();
+  const isLogin = useAppSelector((state) => state.auth.isLogin);
+  const firebaseToken = useAppSelector((state) => state.auth.firebaseToken);
   const [notification, setNotification] = useState({ title: "", body: "" });
   const notify = () => toast(<ToastDisplay />);
+
   function ToastDisplay() {
     return (
       <div style={{ zIndex: 999 }}>
@@ -23,16 +30,23 @@ const Notification = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notification]);
 
-  requestForToken();
-
-  onMessageListener()
-    .then((payload) => {
-      setNotification({
-        title: payload?.notification?.title,
-        body: payload?.notification?.body,
+  if (isLogin) {
+    if (firebaseToken === "") {
+      requestForToken().then((token) => {
+        sendFirebaseToken(token);
+        dispatch(updateFirebaseToken(token));
       });
-    })
-    .catch((err) => console.log("failed: ", err));
+    }
+
+    onMessageListener()
+      .then((payload) => {
+        setNotification({
+          title: payload?.notification?.title,
+          body: payload?.notification?.body,
+        });
+      })
+      .catch((err) => console.log("failed: ", err));
+  }
 
   return <Toaster />;
 };

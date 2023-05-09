@@ -13,9 +13,6 @@ function JoinPage() {
     if (isLogin && inviteCode) {
       joinGroup(inviteCode)
         .then((res) => {
-          console.log("응답");
-          console.log(res);
-
           if (res.status === 200) {
             toast("가입을 완료했습니다.");
             navigate("/home");
