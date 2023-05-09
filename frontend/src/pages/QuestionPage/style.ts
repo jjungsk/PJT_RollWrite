@@ -46,7 +46,7 @@ const TextContainer = styled.div`
 `;
 
 const AnswerContainer = styled.div`
-  padding: 0 36px;
+  padding: 12px 36px;
   font-size: 16px;
   word-wrap: break-word;
   max-height: 110px;

@@ -26,31 +26,32 @@ function UploadImg({ setImgFile, img, handelClickDeleteBtn }: Props) {
   };
 
   return (
-    <label htmlFor="profile-img">
-      <UploadImgContainer BgImg={tmpImg ? tmpImg : img ? img : ""}>
-        <AddBtn />
-        <input
-          id="profile-img"
-          type="file"
-          accept="image/*"
-          onChange={handleImg}
-          style={{ display: "none" }}
+    <UploadImgContainer BgImg={tmpImg ? tmpImg : img ? img : ""}>
+      <label htmlFor="profile-img">
+        <AddBtn id="add" />
+      </label>
+      <input
+        id="profile-img"
+        type="file"
+        accept="image/*"
+        onChange={handleImg}
+        style={{ display: "none" }}
+      />
+      {img && (
+        <Trash
+          id="trash"
+          style={{
+            position: "absolute",
+            top: "-12px",
+            right: "-12px",
+            backgroundColor: "var(--white-color)",
+            borderRadius: "10px",
+            boxShadow: "rgba(0, 0, 0, 0.25) 2px 2px 2px",
+          }}
+          onClick={handelClickDeleteBtn}
         />
-        {img && (
-          <Trash
-            style={{
-              position: "absolute",
-              top: "-12px",
-              right: "-12px",
-              backgroundColor: "var(--white-color)",
-              borderRadius: "10px",
-              boxShadow: "rgba(0, 0, 0, 0.25) 2px 2px 2px",
-            }}
-            onClick={handelClickDeleteBtn}
-          />
-        )}
-      </UploadImgContainer>
-    </label>
+      )}
+    </UploadImgContainer>
   );
 }
 
