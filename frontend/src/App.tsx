@@ -104,8 +104,9 @@ function App() {
       if (currentPath !== "/setting") {
         dispatch(updateRouteHistory(currentPath));
       }
+    } else if (isLogin && currentPath === "/login") {
+      navigate("/home");
     }
-
     const pathParts = currentPath.split("/");
     const htmlTitle = document.querySelector("title");
     switch (pathParts[1]) {
