@@ -123,7 +123,7 @@ public class MeetingService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
-        Meeting meeting = meetingRepository.findByInviteCode(inviteCode)
+        Meeting meeting = meetingRepository.validMeetingInviteCode(inviteCode)
                 .orElseThrow(() -> new IllegalArgumentException("올바르지 않은 초대코드 입니다."));
 
         Optional<Participant> isExistedUser = participantRepository.findByMeetingAndUser(meeting, user);
