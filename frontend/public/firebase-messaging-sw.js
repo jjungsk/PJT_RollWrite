@@ -19,7 +19,7 @@ messaging.onBackgroundMessage((payload) => {
     const notificationTitle = '[RollWrite] '+payload.notification.title;
     const notificationOptions = {
       body: payload.notification.body,
-      icon: '/sample_profile_image.png'
+      icon: '/logo192.png'
     };
     // eslint-disable-next-line no-restricted-globals
     self.registration.showNotification(notificationTitle, notificationOptions);
