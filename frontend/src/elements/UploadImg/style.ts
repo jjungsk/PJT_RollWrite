@@ -20,7 +20,7 @@ const UploadImgContainer = styled.div<{ BgImg: string }>`
       background-position: center;
     `}
 
-  & > svg {
+  & > #add {
     height: 60px;
     width: 60px;
   }
