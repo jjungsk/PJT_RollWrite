@@ -1,39 +1,16 @@
 import React from "react";
-import Button from "@mui/material/Button";
-import {
-  AdminPageIndexBtnContainer,
-  AdminPageTitle,
-  AdminPageWrapper,
-} from "./style";
-import { useNavigate } from "react-router-dom";
+import { AdminPageTitle, AdminPageWrapper } from "./style";
 
 function AdminPageIndex() {
-  const navigate = useNavigate();
-
-  const moveTo = (path: string) => {
-    navigate(`/admin/${path}`);
-  };
-
   return (
     <AdminPageWrapper>
-      <AdminPageTitle>관리자 페이지</AdminPageTitle>
-      <AdminPageIndexBtnContainer>
-        <Button variant="outlined" onClick={() => moveTo("notice")}>
-          공지사항
-        </Button>
-        <Button variant="outlined" onClick={() => moveTo("admin")}>
-          관리자
-        </Button>
-        <Button variant="outlined" onClick={() => moveTo("user")}>
-          사용자
-        </Button>
-        <Button variant="outlined" onClick={() => moveTo("tag")}>
-          태그
-        </Button>
-        <Button variant="outlined" onClick={() => moveTo("group")}>
-          생성된 모임
-        </Button>
-      </AdminPageIndexBtnContainer>
+      <AdminPageTitle>
+        관리자 페이지에 당도한 것을 환영하오, 낯선이여.
+        <br />
+        우리는 우리의 훌륭한 유저들을 굽어살피는 깨우친 팀, GaBoJaGo이오.
+        <br />
+        이곳에는 대시보드가 들어올 예정이오. 다들 기대하시오.
+      </AdminPageTitle>
     </AdminPageWrapper>
   );
 }

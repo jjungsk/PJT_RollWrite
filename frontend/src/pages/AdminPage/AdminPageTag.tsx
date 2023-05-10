@@ -29,9 +29,6 @@ function AdminPageTag() {
 
   return (
     <AdminPageWrapper>
-      <Button variant="outlined" onClick={() => navigate("/admin")}>
-        메뉴로 돌아가기
-      </Button>
       <AdminPageTitle>태그 관리</AdminPageTitle>
       <TextField
         sx={{
