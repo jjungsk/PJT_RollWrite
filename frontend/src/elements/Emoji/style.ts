@@ -1,4 +1,5 @@
 import styled, { css } from "styled-components";
+import { screenHight } from "../../constants/types";
 
 const EmojiContainer = styled.div<{ imgSrc?: string; size?: string }>`
   font-family: "Tossface";
@@ -17,7 +18,7 @@ const EmojiContainer = styled.div<{ imgSrc?: string; size?: string }>`
       background-position: center;
     `}
 
-  @media (height < 700px) {
+  @media (${screenHight} < 700) {
     height: 160px;
     width: 160px;
     line-height: 160px;

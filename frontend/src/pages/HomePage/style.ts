@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { screenHight } from "../../constants/types";
 
 const HomePageContainer = styled.div`
   display: flex;
@@ -19,7 +20,7 @@ const HomePageHeader = styled.div`
   & > div > span {
     font-weight: bold;
   }
-  @media (height < 700px) {
+  @media (${screenHight} < 700) {
     padding: 8px 24px;
   }
 `;
