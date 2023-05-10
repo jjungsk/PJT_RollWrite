@@ -53,7 +53,6 @@ public class JwtTokenUtil {
             secretKey = secretKeyRT;
         }
 
-        log.info("JWRVerifier의 secretKey : {}", secretKey);
         return JWT
                 .require(Algorithm.HMAC512(secretKey.getBytes()))
                 .withIssuer(ISSUER)

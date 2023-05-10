@@ -2,16 +2,14 @@ package com.rollwrite.domain.meeting.entity;
 
 import com.rollwrite.domain.user.entity.User;
 import com.rollwrite.global.model.BaseTimeEntity;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
 @Getter
 @Entity
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Participant extends BaseTimeEntity {
 

@@ -29,10 +29,10 @@ import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @Slf4j
@@ -196,15 +196,28 @@ public class QuestionBatch {
                                 LocalDateTime prevTime = answerList.get(i - 1).getCreatedAt();
                                 LocalDateTime curTime = answerList.get(i).getCreatedAt();
 
-                                // 이전 답변과 지금 답변이 24시간 이내로 차이나면 curRecord++, 아니면 1로 초기화
-                                Duration duration = Duration.between(prevTime, curTime);
-                                if (duration.getSeconds() <= 86400) {
+                                // 오전 8시 기준으로 날짜 보정
+                                LocalDate prevDay = prevTime.toLocalDate();
+                                LocalDate curDay = curTime.toLocalDate();
+
+                                if (prevTime.getHour() < 8) {
+                                    prevDay = prevTime.minusDays(1).toLocalDate();
+                                }
+
+                                if (curTime.getHour() < 8) {
+                                    curDay = curTime.minusDays(1).toLocalDate();
+                                }
+
+                                // 이전 답변과 지금 답변이 하루 차이나면 curRecord++, 그 이상이면 1로 초기화;
+                                long duration = ChronoUnit.DAYS.between(prevDay, curDay);
+                                if (duration > 1) {
+                                    curRecord = 1;
+                                } else {
                                     if (++curRecord >= participantRecord) {
                                         participantRecord = curRecord;
                                     }
-                                } else {
-                                    curRecord = 1;
                                 }
+
                             }
                             answerRecordDtoList.add(AnswerRecordDto.builder()
                                     .user(participant.getUser())
@@ -212,7 +225,6 @@ public class QuestionBatch {
                                     .build());
                         }
 
-                        // sort
                         Collections.sort(answerRecordDtoList, new Comparator<>() {
                             @Override
                             public int compare(AnswerRecordDto o1, AnswerRecordDto o2) {

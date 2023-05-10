@@ -5,6 +5,7 @@ import com.rollwrite.domain.meeting.entity.*;
 import com.rollwrite.domain.meeting.repository.*;
 import com.rollwrite.domain.question.entity.Question;
 import com.rollwrite.domain.question.repository.AnswerRepository;
+import com.rollwrite.domain.question.repository.QuestionRepository;
 import com.rollwrite.domain.user.dto.FindUserResDto;
 import com.rollwrite.domain.user.entity.User;
 import com.rollwrite.domain.user.repository.UserRepository;
@@ -21,8 +22,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.Option;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -36,6 +35,7 @@ public class MeetingService {
     private final AwardRepository awardRepository;
     private final AnswerRepository answerRepository;
     private final MeetingRepository meetingRepository;
+    private final QuestionRepository questionRepository;
     private final TagMeetingRepository tagMeetingRepository;
     private final ParticipantRepository participantRepository;
 
@@ -43,8 +43,8 @@ public class MeetingService {
     private String baseUrl;
 
     @Transactional
-    public AddMeetingResponseDto addMeeting(Long userId,
-                                            AddMeetingRequestDto addMeetingRequestDto) throws NoSuchAlgorithmException {
+    public AddMeetingResDto addMeeting(Long userId,
+                                       AddMeetingReqDto addMeetingReqDto) throws NoSuchAlgorithmException {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
@@ -60,7 +60,7 @@ public class MeetingService {
 
         // Meeting 생성
         Meeting meeting = Meeting.builder()
-                .addMeetingRequestDto(addMeetingRequestDto)
+                .addMeetingReqDto(addMeetingReqDto)
                 .inviteCode(inviteCode)
                 .build();
         meetingRepository.save(meeting);
@@ -68,7 +68,7 @@ public class MeetingService {
         // tag id에 해당하는 Meeting(tagMeetingList)에 추가
         List<TagDto> tagList = new ArrayList<>();
         List<TagMeeting> tagMeetingList = tagIdToTagMeetingList(
-                meeting, addMeetingRequestDto.getTag(), tagList);
+                meeting, addMeetingReqDto.getTag(), tagList);
         meeting.updateTagMeetingList(tagMeetingList);
 
         // 질문에 사용 될 Tag
@@ -90,7 +90,7 @@ public class MeetingService {
                 .build();
         participantRepository.save(participant);
 
-        return AddMeetingResponseDto.builder()
+        return AddMeetingResDto.builder()
                 .meeting(meeting)
                 .tag(tagList)
                 .inviteUrl(baseUrl + inviteCode)
@@ -121,22 +121,26 @@ public class MeetingService {
     }
 
     @Transactional
-    public void joinMeeting(Long userId, String inviteCode) {
+    public int joinMeeting(Long userId, String inviteCode) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
-        Meeting meeting = meetingRepository.findByInviteCode(inviteCode)
-                .orElseThrow(() -> new IllegalArgumentException("올바르지 않은 초대코드 입니다."));
+        Optional<Meeting> optionalMeeting = meetingRepository.validMeetingInviteCode(inviteCode);
+        if (!optionalMeeting.isPresent()) {
+            return 1;
+        }
+        Meeting meeting = optionalMeeting.get();
 
         Optional<Participant> isExistedUser = participantRepository.findByMeetingAndUser(meeting, user);
         if (isExistedUser.isPresent()) {
-            throw new IllegalArgumentException("이미 참여한 사용자입니다.");
+            return 2;
         } else {
             Participant participant = Participant.builder()
                     .user(user)
                     .meeting(meeting)
                     .build();
             participantRepository.save(participant);
+            return 0;
         }
     }
 
@@ -247,9 +251,6 @@ public class MeetingService {
     }
 
     public MeetingChatDto findMeetingChat(Long userId, Long meetingId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
-
         Meeting meeting = participantRepository.findMeetingByUserAndMeetingAndIsDone(userId, meetingId, true)
                 .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
 
@@ -262,8 +263,8 @@ public class MeetingService {
                 .map(tagMeeting -> TagDto.of(tagMeeting.getTag()))
                 .collect(Collectors.toList());
 
-        // 내가 답변한 날의 Question 목록
-        List<Question> questionList = answerRepository.findMeetingQuestion(user, meeting);
+        // Question 목록
+        List<Question> questionList = questionRepository.findByMeeting(meeting);
         List<ChatDto> chatDtoList = new ArrayList<>();
         for (Question question : questionList) {
             List<AnswerDto> answerDtoList = answerRepository.findMeetingChatResult(meeting, question, userId);
@@ -306,7 +307,6 @@ public class MeetingService {
 
         List<Participant> participantList = participantRepository.findByMeeting(meeting);
 
-        // sort
         Collections.sort(participantList, new Comparator<Participant>() {
             @Override
             public int compare(Participant o1, Participant o2) {

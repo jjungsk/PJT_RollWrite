@@ -1,15 +1,18 @@
 package com.rollwrite.domain.meeting.repository;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.rollwrite.domain.meeting.dto.FindAllParticipantDto;
 import com.rollwrite.domain.meeting.entity.Meeting;
-import com.rollwrite.domain.meeting.entity.Participant;
 import com.rollwrite.domain.meeting.entity.QMeeting;
+import com.rollwrite.domain.meeting.entity.Participant;
 import com.rollwrite.domain.meeting.entity.QParticipant;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import com.rollwrite.domain.notification.entity.QAlarm;
 import com.rollwrite.domain.user.entity.QUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +23,7 @@ public class ParticipantCustomRepositoryImpl implements ParticipantCustomReposit
     private final JPAQueryFactory jpaQueryFactory;
 
     QUser user = QUser.user;
+    QAlarm alarm = QAlarm.alarm;
     QMeeting meeting = QMeeting.meeting;
     QParticipant participant = QParticipant.participant;
 
@@ -30,6 +34,7 @@ public class ParticipantCustomRepositoryImpl implements ParticipantCustomReposit
                 .from(participant)
                 .where(participant.user.id.eq(userId))
                 .where(participant.isDone.eq(isDone))
+                .orderBy(participant.meeting.endDay.asc())
                 .fetch();
     }
 
@@ -69,6 +74,17 @@ public class ParticipantCustomRepositoryImpl implements ParticipantCustomReposit
                 .where(participant.meeting.id.eq(meetingId))
                 .where(participant.isDone.eq(isDone))
                 .fetchOne());
+    }
+
+    @Override
+    public List<Participant> findMeetingAndUserAndTitleByProgress(boolean isDone) {
+        List<Participant> findAllParticipantDtoList = jpaQueryFactory
+                .selectFrom(participant)
+                .join(participant.user, user).fetchJoin()
+                .join(participant.meeting, meeting).fetchJoin()
+                .where(participant.isDone.eq(isDone))
+                .fetch();
+        return findAllParticipantDtoList;
     }
 
 }

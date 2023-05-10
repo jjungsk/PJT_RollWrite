@@ -185,7 +185,6 @@ public class QuestionService {
             }
         }
 
-        // sort
         Collections.sort(findTodayQuestionResDtoList, new Comparator<>() {
             @Override
             public int compare(FindTodayQuestionResDto o1, FindTodayQuestionResDto o2) {

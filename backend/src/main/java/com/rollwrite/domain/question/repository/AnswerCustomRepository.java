@@ -17,8 +17,6 @@ public interface AnswerCustomRepository {
 
     List<MeetingCalenderResDto> findMeetingCalender(User user, Meeting meeting);
 
-    List<Question> findMeetingQuestion(User user, Meeting meeting);
-
     List<AnswerDto> findMeetingChatResult(Meeting meeting, Question question, Long myId);
 
     List<AnswerLengthSumDto> findAnswerLengthSumByMeeting(Meeting meeting);

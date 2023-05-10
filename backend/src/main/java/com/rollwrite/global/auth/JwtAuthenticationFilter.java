@@ -11,6 +11,8 @@ import com.rollwrite.global.model.ApiResponse;
 import com.rollwrite.global.model.ErrorCode;
 import com.rollwrite.global.util.JwtTokenUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -35,10 +37,13 @@ import java.util.Optional;
 @Slf4j
 public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
     private AuthService authService;
+    private ArrayList<String> passuri;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, AuthService authService) {
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, AuthService authService,
+                                   @Value("${security.passuri}") ArrayList<String> passuri) {
         super(authenticationManager);
         this.authService = authService;
+        this.passuri = passuri;
     }
 
     // Client 요청 시 Filter
@@ -47,15 +52,24 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
         // Read the Authorization header, where the JWT Token should be
         String header = request.getHeader(JwtTokenUtil.HEADER_STRING); // Authorization
         String uri = request.getRequestURI();
+
         log.info("uri : " + uri);
         log.info("header : " + header);
 
         // If header does not contain Bearer or is null delegate to Spring impl and exit
         if (header == null || !header.startsWith(JwtTokenUtil.TOKEN_PREFIX)) {
-            filterChain.doFilter(request, response); // 일단 skip
+            filterChain.doFilter(request, response);
             return;
         }
 
+        // Q. invalid accessToken 이 들어와도 우선 실행.. 이게 맞는지 모르겠음
+        if (passuri.contains(uri)) {
+            log.info("passURI : {}", uri);
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        // Client Validation check
         Authentication authentication = getAuthentication(response, request);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 

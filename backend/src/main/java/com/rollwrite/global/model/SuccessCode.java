@@ -11,6 +11,15 @@ public enum SuccessCode {
     // test
     TEST(StatusCode.SUCCESS, "테스트 중입니다."),
 
+    // admin
+    GET_NOTICE_SUCCESS(StatusCode.SUCCESS, "공지 목록을 조회했습니다."),
+    ADD_NOTICE_SUCCESS(StatusCode.SUCCESS, "공지가 생성되었습니다."),
+    MODIFY_NOTICE_SUCCESS(StatusCode.SUCCESS, "공지가 수정되었습니다."),
+    REMOVE_NOTICE_SUCCESS(StatusCode.SUCCESS, "공지가 삭제되었습니다."),
+
+    // inquiry
+    ADD_INQUIRY_SUCCESS(StatusCode.SUCCESS, "문의가 생성되었습니다."),
+
     // user
     SIGNUP_SUCCESS(StatusCode.SUCCESS, "회원가입 완료되었습니다."),
     LOGIN_SUCCESS(StatusCode.SUCCESS, "로그인 완료되었습니다."),
@@ -42,6 +51,10 @@ public enum SuccessCode {
     FIND_TODAY_QUESTION_SUCCESS(StatusCode.SUCCESS, "오늘 질문 목록을 조회했습니다."),
     FIND_QUESTION_SUCCESS(StatusCode.SUCCESS, "질문 목록을 조회했습니다."),
     REMOVE_ANSWER_IMAGE_SUCCESS(StatusCode.SUCCESS, "답변 이미지가 삭제되었습니다."),
+
+    // notification
+    MODIFY_FCM_TOKEN_SUCCESS(StatusCode.SUCCESS, "FCM Token이 정상 갱신 되었습니다."),
+    SEND_MESSAGE_TO(StatusCode.SUCCESS, "알림을 성공적으로 보냈습니다."),
     ;
 
     private final StatusCode statusCode;

@@ -46,18 +46,6 @@ public class AnswerCustomRepositoryImpl implements AnswerCustomRepository {
     }
 
     @Override
-    public List<Question> findMeetingQuestion(User user, Meeting meeting) {
-        return jpaQueryFactory
-                .select(answer.question)
-                .from(answer)
-                .join(answer.question, question)
-                .where(answer.user.eq(user))
-                .where(answer.meeting.eq(meeting))
-                .orderBy(answer.id.asc())
-                .fetch();
-    }
-
-    @Override
     public List<AnswerDto> findMeetingChatResult(Meeting meeting, Question q, Long myId) {
         return jpaQueryFactory
                 .select(Projections.constructor(AnswerDto.class,
@@ -72,7 +60,6 @@ public class AnswerCustomRepositoryImpl implements AnswerCustomRepository {
                 .from(answer)
                 .join(answer.question, question).on(answer.question.eq(q))
                 .where(answer.meeting.eq(meeting))
-                .orderBy(answer.id.desc())
                 .fetch();
     }
 

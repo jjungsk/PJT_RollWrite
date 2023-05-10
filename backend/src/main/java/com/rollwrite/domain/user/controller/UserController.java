@@ -2,6 +2,7 @@ package com.rollwrite.domain.user.controller;
 
 import com.rollwrite.domain.user.dto.FindUserProfileResDto;
 import com.rollwrite.domain.user.dto.ModifyUserReqDto;
+import com.rollwrite.domain.user.service.AuthService;
 import com.rollwrite.domain.user.service.UserService;
 import com.rollwrite.global.auth.CustomUserDetails;
 import com.rollwrite.global.model.ApiResponse;
@@ -38,6 +39,7 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+    private final AuthService authService;
 
     // 1. User 회원 정보 조회
     @ApiOperation(value = "본인 및 타인 회원 정보 조회",
@@ -56,13 +58,11 @@ public class UserController {
 
     // 2. User 회원 정보 수정
     @ApiOperation(value = "유저의 회원 정보 수정", notes = "유저 이름과 프로필 수정 가능")
-    @Parameters({
-            @Parameter(name = "profileImage", description = "수정 할 프로필 이미지")
-    })
+    @Parameter(name = "profileImage", description = "수정 할 프로필 이미지")
     @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<ApiResponse<?>> modifyUser(@ApiIgnore Authentication authentication,
                                                      @RequestPart(value = "modifyUserReqDto", required = false) ModifyUserReqDto modifyUserReqDto,
-                                                     @RequestPart(value =    "profileImage", required = false) MultipartFile profileImage) throws IOException {
+                                                     @RequestPart(value = "profileImage", required = false) MultipartFile profileImage) throws IOException {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
         Long userId = userDetails.getUserId();
 
@@ -76,6 +76,13 @@ public class UserController {
     @DeleteMapping
     public ResponseEntity<ApiResponse<?>> removeUser(@ApiIgnore Authentication authentication) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
+        
+        // 회원 탈퇴 전 로그아웃 로직 - Redis의 refreshToken 삭제 + AccessToken Black 처리
+        String identifier = userDetails.getIdentifier();
+        log.info("로그아웃 할 identifier : {}", identifier);
+        authService.kakaoLogout(identifier);
+
+        // DB 유저 정보 삭제
         Long userId = userDetails.getUserId();
         log.info("회원 탈퇴할 userId : {}", userId);
         userService.removeUser(userId);
