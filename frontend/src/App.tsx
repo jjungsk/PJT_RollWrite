@@ -34,18 +34,20 @@ import { persistor } from "./store/store";
 import AdminLayout from "./pages/AdminPage/AdminLayout";
 import AdminPageIndex from "./pages/AdminPage/AdminPageIndex";
 import AdminPageLogin from "./pages/AdminPage/AdminPageLogin";
+import AdminPageUser from "./pages/AdminPage/AdminPageUser";
 
 function App() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const accessToken = useAppSelector((state) => state.auth.accessToken);
+  const accessToken = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzcwNzc4MjAwIiwicm9sZSI6IlVTRVIiLCJpc3MiOiJyb2xsd3JpdGUuY28ua3IiLCJleHAiOjE2ODM3MDU3MjAsImlhdCI6MTY4MzYxOTMyMH0.6GR_pFzEuXki9t_RoihBS06tdxkgpQN5NeydycS_RksdAnAAjAA6P0K7KzsIY-cNvn6OtBPR8sxAMH6gZIihOQ\",\"isLogin\":true,\"firebaseToken\":\"dZicIlPi7ydMlTxSLmtNMV:APA91bHr-JereOokw0r2M-4i00aPsb-S9qfrBTlxRzhoiKDT6DHoINiuacrwAIVGkGCj-q8WdhabZIa2Fjmoo_mxULBvZ2oo_L4nl3uT_2JMklcHgLobcoK0Rjsvnuvpg3Zz_Os8V4Y6`;
+  // const accessToken = useAppSelector((state) => state.auth.accessToken);
   const isLogin = useAppSelector((state) => state.auth.isLogin);
 
   const currentPath = location.pathname;
 
-  if (isLogin && accessToken) {
+  if (accessToken) {
     axiosInstance.defaults.headers.common[
       "Authorization"
     ] = `Bearer ${accessToken}`;
@@ -102,14 +104,14 @@ function App() {
   );
 
   useEffect(() => {
-    if (!isLogin && currentPath !== "/login" && currentPath !== "/oauth") {
-      navigate("/login");
-      if (currentPath !== "/setting") {
-        dispatch(updateRouteHistory(currentPath));
-      }
-    } else if (isLogin && currentPath === "/login") {
-      navigate("/home");
-    }
+    // if (!isLogin && currentPath !== "/login" && currentPath !== "/oauth") {
+    //   navigate("/login");
+    //   if (currentPath !== "/setting") {
+    //     dispatch(updateRouteHistory(currentPath));
+    //   }
+    // } else if (isLogin && currentPath === "/login") {
+    //   navigate("/home");
+    // }
     const pathParts = currentPath.split("/");
     const htmlTitle = document.querySelector("title");
     switch (pathParts[1]) {
@@ -158,6 +160,12 @@ function App() {
       default:
         break;
     }
+
+    const rootElement = document.querySelector("#root") as HTMLElement;
+    if (currentPath.split("/")[1] === "admin") {
+      rootElement.style.minWidth = "0";
+      rootElement.style.maxWidth = "100vw";
+    }
   });
 
   return (
@@ -186,9 +194,9 @@ function App() {
         <Route path="/create" element={<CreateGroupPage />} />
         <Route path="*" element={<ErrorPage />} />
 
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route path="/" element={<AdminPageIndex />} />
-          <Route path="/login" element={<AdminPageLogin />} />
+        <Route path="/" element={<AdminLayout />}>
+          <Route path="/admin" element={<AdminPageIndex />} />
+          <Route path="/admin/user" element={<AdminPageUser />} />
         </Route>
       </Routes>
     </>
