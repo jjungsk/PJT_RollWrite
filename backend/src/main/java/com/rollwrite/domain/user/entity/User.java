@@ -41,6 +41,9 @@ public class User extends BaseTimeEntity {
     @Column(length = 2083)
     private String profileImage;
 
+    @Column(length = 2083)
+    private String firebaseToken;
+
     @NotNull
     @Column
     @Enumerated(EnumType.STRING)
@@ -78,6 +81,10 @@ public class User extends BaseTimeEntity {
     public void update(String nickname, String profileImage) {
         this.nickname = nickname;
         this.profileImage = profileImage;
+    }
+
+    public void updateToken(String firebaseToken){
+        this.firebaseToken = firebaseToken;
     }
 
 }
