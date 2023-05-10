@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { screenHight } from "../../constants/types";
 
 const GroupCalendarContainer = styled.div`
   display: flex;
@@ -6,7 +7,7 @@ const GroupCalendarContainer = styled.div`
   gap: 16px;
   padding-top: 4vh;
 
-  @media (height < 700px) {
+  @media (${screenHight} < 700) {
     gap: 4px;
     padding-top: 0;
   }
