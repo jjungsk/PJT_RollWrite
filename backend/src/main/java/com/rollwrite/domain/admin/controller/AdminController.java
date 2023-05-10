@@ -108,4 +108,11 @@ public class AdminController {
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_MEETING_SUCCESS, findMeetingResDtoList), HttpStatus.OK);
     }
 
+    @PostMapping("/question/{meetingId}")
+    public ResponseEntity<ApiResponse> addTodayQuestion(@PathVariable Long meetingId) {
+        log.info("오늘의 질문 수동 생성  meetingId : {}", meetingId);
+        adminService.addTodayQuestion(meetingId);
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.ADD_TODAY_QUESTION_SUCCESS), HttpStatus.OK);
+    }
+
 }
