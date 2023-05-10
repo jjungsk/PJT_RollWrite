@@ -1,10 +1,13 @@
 import styled from "styled-components";
 
+const deviceHeight = window.innerHeight;
+
 const AwardPageContainer = styled.div<{ padding?: string }>`
   padding: ${(props) => props.padding || "16px 32px"};
   font-weight: bold;
   min-height: 80vh;
   overflow: scroll;
+  height: ${deviceHeight}px;
 `;
 const AwardPageHeader = styled.div`
   font-size: 24px;
