@@ -34,6 +34,7 @@ import { persistor } from "./store/store";
 import AdminLayout from "./pages/AdminPage/AdminLayout";
 import AdminPageIndex from "./pages/AdminPage/AdminPageIndex";
 import AdminPageLogin from "./pages/AdminPage/AdminPageLogin";
+import AdminPageUser from "./pages/AdminPage/AdminPageUser";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -158,6 +159,12 @@ function App() {
       default:
         break;
     }
+
+    const rootElement = document.querySelector("#root") as HTMLElement;
+    if (currentPath.split("/")[1] === "admin") {
+      rootElement.style.minWidth = "0";
+      rootElement.style.maxWidth = "100vw";
+    }
   });
 
   return (
@@ -186,9 +193,9 @@ function App() {
         <Route path="/create" element={<CreateGroupPage />} />
         <Route path="*" element={<ErrorPage />} />
 
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route path="/" element={<AdminPageIndex />} />
-          <Route path="/login" element={<AdminPageLogin />} />
+        <Route path="/" element={<AdminLayout />}>
+          <Route path="/admin" element={<AdminPageIndex />} />
+          <Route path="/admin/user" element={<AdminPageUser />} />
         </Route>
       </Routes>
     </>
