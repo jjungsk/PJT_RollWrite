@@ -1,9 +1,6 @@
 package com.rollwrite.domain.admin.controller;
 
-import com.rollwrite.domain.admin.dto.FindMeetingResDto;
-import com.rollwrite.domain.admin.dto.FindNoticeResDto;
-import com.rollwrite.domain.admin.dto.FindTagResDto;
-import com.rollwrite.domain.admin.dto.FindUserResDto;
+import com.rollwrite.domain.admin.dto.*;
 import com.rollwrite.domain.admin.service.AdminService;
 import com.rollwrite.global.auth.CustomUserDetails;
 import com.rollwrite.global.model.ApiResponse;
@@ -36,22 +33,23 @@ public class AdminController {
     }
 
     @PostMapping("/notice")
-    public ResponseEntity<ApiResponse> addNotice(@ApiIgnore Authentication authentication, @RequestBody String content) {
-        log.info("공지 생성 content : {}", content);
+    public ResponseEntity<ApiResponse> addNotice(@ApiIgnore Authentication authentication,
+                                                 @RequestBody AddContentReqDto addContentReqDto) {
+        log.info("공지 생성 addContentReqDto : {}", addContentReqDto);
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
         Long userId = userDetails.getUserId();
-        adminService.addNotice(userId, content);
+        adminService.addNotice(userId, addContentReqDto.getContent());
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.ADD_NOTICE_SUCCESS), HttpStatus.OK);
     }
 
     @PutMapping("/notice/{noticeId}")
     public ResponseEntity<ApiResponse> modifyNotice(@ApiIgnore Authentication authentication,
                                                     @PathVariable Long noticeId,
-                                                    @RequestBody String content) {
-        log.info("공지 수정 noticeId : {}, content : {}", noticeId, content);
+                                                    @RequestBody AddContentReqDto addContentReqDto) {
+        log.info("공지 수정 noticeId : {}, addContentReqDto : {}", noticeId, addContentReqDto);
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
         Long userId = userDetails.getUserId();
-        adminService.modifyNotice(userId, noticeId, content);
+        adminService.modifyNotice(userId, noticeId, addContentReqDto.getContent());
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.MODIFY_NOTICE_SUCCESS), HttpStatus.OK);
     }
 
@@ -87,17 +85,17 @@ public class AdminController {
     }
 
     @PostMapping("/tag")
-    public ResponseEntity<ApiResponse> addTag(@RequestBody String content) {
-        log.info("태그 생성 content : {}", content);
-        adminService.addTag(content);
+    public ResponseEntity<ApiResponse> addTag(@RequestBody AddContentReqDto addContentReqDto) {
+        log.info("태그 생성 addContentReqDto : {}", addContentReqDto);
+        adminService.addTag(addContentReqDto.getContent());
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.ADD_TAG_SUCCESS), HttpStatus.OK);
     }
 
     @PutMapping("/tag/{tagId}")
     public ResponseEntity<ApiResponse> modifyTag(@PathVariable Long tagId,
-                                                 @RequestBody String content) {
-        log.info("태그 수정 tagId : {}, content : {}", tagId, content);
-        adminService.modifyTag(tagId, content);
+                                                 @RequestBody AddContentReqDto addContentReqDto) {
+        log.info("태그 수정 tagId : {}, addContentReqDto : {}", tagId, addContentReqDto);
+        adminService.modifyTag(tagId, addContentReqDto.getContent());
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.MODIFY_TAG_SUCCESS), HttpStatus.OK);
     }
 
