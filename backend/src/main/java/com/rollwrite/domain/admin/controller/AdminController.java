@@ -1,6 +1,8 @@
 package com.rollwrite.domain.admin.controller;
 
 import com.rollwrite.domain.admin.dto.FindNoticeResDto;
+import com.rollwrite.domain.admin.dto.FindTagResDto;
+import com.rollwrite.domain.admin.dto.FindUserResDto;
 import com.rollwrite.domain.admin.service.AdminService;
 import com.rollwrite.global.auth.CustomUserDetails;
 import com.rollwrite.global.model.ApiResponse;
@@ -29,7 +31,7 @@ public class AdminController {
     public ResponseEntity<ApiResponse> noticeList() {
         log.info("noticeList 호출");
         List<FindNoticeResDto> findNoticeResDtoList = adminService.findNotice();
-        return new ResponseEntity<>(ApiResponse.success(SuccessCode.GET_NOTICE_SUCCESS, findNoticeResDtoList), HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_NOTICE_SUCCESS, findNoticeResDtoList), HttpStatus.OK);
     }
 
     @PostMapping("/notice")
@@ -60,6 +62,42 @@ public class AdminController {
         Long userId = userDetails.getUserId();
         adminService.removeNotice(userId, noticeId);
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.REMOVE_NOTICE_SUCCESS), HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{type}")
+    public ResponseEntity<ApiResponse> userList(@PathVariable String type) {
+        log.info("{} 조회", type);
+        List<FindUserResDto> findUserResDtoList = adminService.findUser(type);
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_USER_SUCCESS, findUserResDtoList), HttpStatus.OK);
+    }
+
+    @PutMapping("/type/{userId}")
+    public ResponseEntity<ApiResponse> modifyUserType(@PathVariable Long userId) {
+        log.info("사용자 타입 변경 userId : {}", userId);
+        adminService.modifyUserType(userId);
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.MODIFY_USER_SUCCESS), HttpStatus.OK);
+    }
+
+    @GetMapping("/tag")
+    public ResponseEntity<ApiResponse> tagList() {
+        log.info("tagList 호출");
+        List<FindTagResDto> findTagResDtoList = adminService.findTag();
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_TAG_SUCCESS, findTagResDtoList), HttpStatus.OK);
+    }
+
+    @PostMapping("/tag")
+    public ResponseEntity<ApiResponse> addTag(@RequestBody String content) {
+        log.info("태그 생성 content : {}", content);
+        adminService.addTag(content);
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.ADD_TAG_SUCCESS), HttpStatus.OK);
+    }
+
+    @PutMapping("/tag/{tagId}")
+    public ResponseEntity<ApiResponse> modifyTag(@PathVariable Long tagId,
+                                                 @RequestBody String content) {
+        log.info("태그 수정 tagId : {}, content : {}", tagId, content);
+        adminService.modifyTag(tagId, content);
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.MODIFY_TAG_SUCCESS), HttpStatus.OK);
     }
 
 }
