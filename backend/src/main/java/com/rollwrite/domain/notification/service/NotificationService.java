@@ -13,9 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Slf4j
@@ -36,23 +34,7 @@ public class NotificationService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
 
-        log.info("user : {}", user.toString());
-        Optional<Alarm> alarm = alarmRepository.findAlarmByUser_Id(userId);
-
-        if (alarm.isEmpty()) {
-            Alarm saveAlarm = Alarm.builder()
-                    .firebaseToken(firebaseToken)
-                    .isAllowed(true)
-                    .user(user)
-                    .build();
-
-            log.info("saveAlarm : {}", saveAlarm);
-            alarmRepository.save(saveAlarm);
-        } else {
-            alarm.get().updateToken(firebaseToken, true);
-
-            log.info("updateAlar : {}", alarm.get());
-        }
+        user.updateToken(firebaseToken);
     }
 
     // 2. 자동으로 알림을 보낼 tokenList 가져오기
@@ -68,16 +50,7 @@ public class NotificationService {
             Long meetingId = participant.getMeeting().getId();
             String title = participant.getMeeting().getTitle();
             Long userId = participant.getUser().getId();
-
-            List<Alarm> alarmList = participant.getUser().getAlarmList();
-            log.info("alarmList : {}", alarmList.toString());
-
-            if (alarmList.size() == 0) continue;
-            List<String> fcmTokenList = new ArrayList<>();
-
-            for (Alarm userAlarm: alarmList) {
-                fcmTokenList.add(userAlarm.getFirebaseToken());
-            }
+            String firebaseToken = participant.getUser().getFirebaseToken();
 
             // TODO : getOrDefault 사용으로
             // meetingId 에 userId 담기
@@ -93,7 +66,7 @@ public class NotificationService {
             if (meetingIdAndToken.containsKey(meetingId)) {
                 tokenList = meetingIdAndToken.get(meetingId);
             }
-            tokenList.addAll(fcmTokenList);
+            tokenList.add(firebaseToken);
             meetingIdAndToken.put(meetingId, tokenList);
 
             // meetingId 와 meetingTitle 저장
