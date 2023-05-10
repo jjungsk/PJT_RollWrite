@@ -1,11 +1,10 @@
 import styled from "styled-components";
-import { screenHight } from "../../constants/types";
 
 const Title = styled.div`
   font-size: 16px;
   margin: 16px;
 
-  @media (${screenHight} < 700) {
+  @media (height < 700) {
     font-size: 14px;
     margin: 12px;
   }
@@ -16,7 +15,7 @@ const SubTitle = styled.div`
   margin: 12px;
   font-weight: bold;
 
-  @media (${screenHight} < 700) {
+  @media (height < 700) {
     font-size: 24px;
     margin: 8px;
   }
