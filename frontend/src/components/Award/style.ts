@@ -6,7 +6,7 @@ const AwardPageContainer = styled.div<{ padding?: string }>`
   padding: ${(props) => props.padding || "16px 32px"};
   font-weight: bold;
   min-height: 80vh;
-  overflow: scroll;
+  overflow: auto;
   height: ${deviceHeight}px;
 `;
 const AwardPageHeader = styled.div`
@@ -30,7 +30,6 @@ const AwardPageContent = styled.div`
   gap: 16px;
   flex-wrap: wrap;
   justify-content: center;
-  overflow: auto;
 `;
 
 export { AwardPageContainer, AwardPageHeader, AwardPageContent };
