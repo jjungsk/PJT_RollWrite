@@ -1,9 +1,12 @@
 package com.rollwrite.domain.admin.service;
 
+import com.rollwrite.domain.admin.dto.FindMeetingResDto;
 import com.rollwrite.domain.admin.dto.FindNoticeResDto;
 import com.rollwrite.domain.admin.dto.FindTagResDto;
 import com.rollwrite.domain.admin.dto.FindUserResDto;
+import com.rollwrite.domain.meeting.entity.Meeting;
 import com.rollwrite.domain.meeting.entity.Tag;
+import com.rollwrite.domain.meeting.repository.MeetingRepository;
 import com.rollwrite.domain.meeting.repository.TagRepository;
 import com.rollwrite.domain.notification.entity.Notification;
 import com.rollwrite.domain.notification.entity.NotificationType;
@@ -28,6 +31,7 @@ public class AdminService {
 
     private final TagRepository tagRepository;
     private final UserRepository userRepository;
+    private final MeetingRepository meetingRepository;
     private final NotificationRepository notificationRepository;
 
     public List<FindNoticeResDto> findNotice() {
@@ -140,5 +144,13 @@ public class AdminService {
                 .orElseThrow(() -> new IllegalArgumentException("태그를 찾을 수 없습니다"));
 
         tag.updateContent(content);
+    }
+
+    public List<FindMeetingResDto> findMeeting() {
+        List<Meeting> meetingList = meetingRepository.findAll();
+
+        return meetingList.stream().map(meeting -> FindMeetingResDto.builder()
+                .meeting(meeting)
+                .build()).collect(Collectors.toList());
     }
 }

@@ -1,5 +1,6 @@
 package com.rollwrite.domain.admin.controller;
 
+import com.rollwrite.domain.admin.dto.FindMeetingResDto;
 import com.rollwrite.domain.admin.dto.FindNoticeResDto;
 import com.rollwrite.domain.admin.dto.FindTagResDto;
 import com.rollwrite.domain.admin.dto.FindUserResDto;
@@ -98,6 +99,13 @@ public class AdminController {
         log.info("태그 수정 tagId : {}, content : {}", tagId, content);
         adminService.modifyTag(tagId, content);
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.MODIFY_TAG_SUCCESS), HttpStatus.OK);
+    }
+
+    @GetMapping("/meeting")
+    public ResponseEntity<ApiResponse> meetingList() {
+        log.info("meetingList 호출");
+        List<FindMeetingResDto> findMeetingResDtoList = adminService.findMeeting();
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_MEETING_SUCCESS, findMeetingResDtoList), HttpStatus.OK);
     }
 
 }
