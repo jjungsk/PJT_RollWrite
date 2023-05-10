@@ -11,6 +11,9 @@ const TextAreaContainer = styled.textarea`
   padding: 15px;
   font-size: 16px;
   margin-block: 15px;
+  @media (height < 700px) {
+    height: 30vh;
+  }
 `;
 
 export { TextAreaContainer };

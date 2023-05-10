@@ -47,7 +47,10 @@ function HomePage() {
       <HomePageHeader>
         <div>
           <span>{profile.nickname}</span> 님의 모임
-          <Info onClick={() => setShowExplain(true)} />
+          <Info
+            onClick={() => setShowExplain(true)}
+            style={{ marginLeft: "5px" }}
+          />
         </div>
         <Plus
           onClick={() => {

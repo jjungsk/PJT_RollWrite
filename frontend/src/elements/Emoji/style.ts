@@ -14,6 +14,7 @@ const EmojiContainer = styled.div<{ imgSrc?: string; size?: string }>`
     css`
       background-image: url(${props.imgSrc});
       background-size: cover;
+      background-position: center;
     `}
 
   @media (height < 700px) {

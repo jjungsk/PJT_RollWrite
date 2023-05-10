@@ -1,10 +1,12 @@
 import styled from "styled-components";
+import { screenHight } from "../../constants/types";
 
 const AwardPageContainer = styled.div<{ padding?: string }>`
   padding: ${(props) => props.padding || "16px 32px"};
   font-weight: bold;
   min-height: 80vh;
-  overflow: scroll;
+  overflow: auto;
+  height: ${screenHight}px;
 `;
 const AwardPageHeader = styled.div`
   font-size: 24px;
