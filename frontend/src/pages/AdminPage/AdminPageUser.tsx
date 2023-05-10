@@ -8,6 +8,8 @@ import {
   ListItemText,
   Typography,
   Switch,
+  ToggleButtonGroup,
+  ToggleButton,
 } from "@mui/material";
 import ManageAccountsRoundedIcon from "@mui/icons-material/ManageAccountsRounded";
 import React, { useEffect, useState } from "react";
@@ -32,9 +34,7 @@ interface DialogInfo {
 function AdminPageUser() {
   const [userList, setUserList] = useState<User[]>();
   const [dialogInfo, setDialogInfo] = useState<DialogInfo>();
-  const [checked, setChecked] = React.useState(true);
   const [open, setOpen] = React.useState(false);
-
   const [type, setType] = React.useState("user");
   useEffect(() => {
     getUser(type).then((res) => {
@@ -43,9 +43,11 @@ function AdminPageUser() {
     });
   }, [type]);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
-    type === "user" ? setType("admin") : setType("user");
+  const handleChange = (
+    _event: React.MouseEvent<HTMLElement>,
+    newType: string
+  ) => {
+    setType(newType);
   };
 
   const onAgree = () => {
@@ -76,22 +78,30 @@ function AdminPageUser() {
         title={dialogInfo?.title}
         onAgree={onAgree}
       />
-      <Typography variant="h3" gutterBottom>
-        {type}
-      </Typography>
-      <div>
-        변경
-        <Switch
-          checked={checked}
+      <div
+        style={{
+          textAlign: "end",
+          width: "100%",
+          maxWidth: 720,
+          margin: "auto",
+          marginBottom: "16px",
+        }}
+      >
+        <ToggleButtonGroup
+          color="primary"
+          value={type}
+          exclusive
           onChange={handleChange}
-          inputProps={{ "aria-label": "controlled" }}
-        />
+          aria-label="Platform"
+        >
+          <ToggleButton value="user">User</ToggleButton>
+          <ToggleButton value="admin">Admin</ToggleButton>
+        </ToggleButtonGroup>
       </div>
       <List
         sx={{
           width: "100%",
           maxWidth: 720,
-          bgcolor: "background.paper",
           margin: "auto",
         }}
       >

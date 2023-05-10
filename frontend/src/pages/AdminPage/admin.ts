@@ -10,6 +10,11 @@ export const getTag = async () => {
   return response.data;
 };
 
+export const addTag = async (content: string) => {
+  const response = await axiosInstance.post(`/admin/tag`, content);
+  return response.data;
+};
+
 export const userTypeChange = async (userId: number) => {
   const response = await axiosInstance.put(`/admin/type/${userId}`);
   return response.data;
