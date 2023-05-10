@@ -83,8 +83,12 @@ public class User extends BaseTimeEntity {
         this.profileImage = profileImage;
     }
 
-    public void updateToken(String firebaseToken){
+    public void updateToken(String firebaseToken) {
         this.firebaseToken = firebaseToken;
+    }
+
+    public void updateUserType(UserType userType) {
+        this.type = userType;
     }
 
 }
