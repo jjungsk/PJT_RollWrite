@@ -31,6 +31,9 @@ import InquiryPage from "./pages/InquiryPage/InquiryPage";
 import Notification from "./utils/Notification";
 import { AxiosInstance } from "axios";
 import { persistor } from "./store/store";
+import AdminLayout from "./pages/AdminPage/AdminLayout";
+import AdminPageIndex from "./pages/AdminPage/AdminPageIndex";
+import AdminPageLogin from "./pages/AdminPage/AdminPageLogin";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -182,6 +185,11 @@ function App() {
         <Route path="/award/:meetingId" element={<AwardPage />} />
         <Route path="/create" element={<CreateGroupPage />} />
         <Route path="*" element={<ErrorPage />} />
+
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route path="/" element={<AdminPageIndex />} />
+          <Route path="/login" element={<AdminPageLogin />} />
+        </Route>
       </Routes>
     </>
   );
