@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { screenHight } from "../../constants/types";
 
 const SettingContainer = styled.div`
   width: calc(100% - 60px);
@@ -82,7 +81,7 @@ const SettingBtnContainer = styled.div`
     }
   }
 
-  @media (${screenHight} < 750) {
+  @media (height < 750) {
     display: flex;
     justify-content: center;
 
