@@ -33,8 +33,11 @@ import { AxiosInstance } from "axios";
 import { persistor } from "./store/store";
 import AdminLayout from "./pages/AdminPage/AdminLayout";
 import AdminPageIndex from "./pages/AdminPage/AdminPageIndex";
-import AdminPageLogin from "./pages/AdminPage/AdminPageLogin";
 import AdminPageUser from "./pages/AdminPage/AdminPageUser";
+import AdminPageNotice from "./pages/AdminPage/AdminPageNotice";
+import AdminPageAdmin from "./pages/AdminPage/AdminPageAdmin";
+import AdminPageTag from "./pages/AdminPage/AdminPageTag";
+import AdminPageGroup from "./pages/AdminPage/AdminPageGroup";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -104,14 +107,15 @@ function App() {
   );
 
   useEffect(() => {
-    // if (!isLogin && currentPath !== "/login" && currentPath !== "/oauth") {
-    //   navigate("/login");
-    //   if (currentPath !== "/setting") {
-    //     dispatch(updateRouteHistory(currentPath));
-    //   }
-    // } else if (isLogin && currentPath === "/login") {
-    //   navigate("/home");
-    // }
+    if (!isLogin && currentPath !== "/login" && currentPath !== "/oauth") {
+      navigate("/login");
+      if (currentPath !== "/setting") {
+        dispatch(updateRouteHistory(currentPath));
+      }
+    } else if (isLogin && currentPath === "/login") {
+      navigate("/home");
+    }
+
     const pathParts = currentPath.split("/");
     const htmlTitle = document.querySelector("title");
     switch (pathParts[1]) {
@@ -157,6 +161,9 @@ function App() {
       case "award":
         htmlTitle!.innerHTML = "모임 결과 - Rollwrite";
         break;
+      case "admin":
+        htmlTitle!.innerHTML = "관리자 - Rollwrite";
+        break;
       default:
         break;
     }
@@ -196,7 +203,11 @@ function App() {
 
         <Route path="/" element={<AdminLayout />}>
           <Route path="/admin" element={<AdminPageIndex />} />
+          <Route path="/admin/notice" element={<AdminPageNotice />} />
+          <Route path="/admin/admin" element={<AdminPageAdmin />} />
           <Route path="/admin/user" element={<AdminPageUser />} />
+          <Route path="/admin/tag" element={<AdminPageTag />} />
+          <Route path="/admin/group" element={<AdminPageGroup />} />
         </Route>
       </Routes>
     </>
