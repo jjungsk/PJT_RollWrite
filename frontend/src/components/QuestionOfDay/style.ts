@@ -9,7 +9,7 @@ const QuestionOfDayContainer = styled.div`
   width: 300px;
   gap: 12px;
 
-  @media (h${screenHight} < 700) {
+  @media (${screenHight} < 700) {
     gap: 10px;
   }
 `;
