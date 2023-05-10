@@ -17,7 +17,7 @@ const EmojiContainer = styled.div<{ imgSrc?: string; size?: string }>`
       background-position: center;
     `}
 
-  @media (height < 700) {
+  @media (height < 700px) {
     height: 160px;
     width: 160px;
     line-height: 160px;
