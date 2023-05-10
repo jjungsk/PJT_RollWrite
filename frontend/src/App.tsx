@@ -35,7 +35,6 @@ import AdminLayout from "./pages/AdminPage/AdminLayout";
 import AdminPageIndex from "./pages/AdminPage/AdminPageIndex";
 import AdminPageUser from "./pages/AdminPage/AdminPageUser";
 import AdminPageNotice from "./pages/AdminPage/AdminPageNotice";
-import AdminPageAdmin from "./pages/AdminPage/AdminPageAdmin";
 import AdminPageTag from "./pages/AdminPage/AdminPageTag";
 import AdminPageGroup from "./pages/AdminPage/AdminPageGroup";
 
@@ -203,7 +202,6 @@ function App() {
         <Route path="/" element={<AdminLayout />}>
           <Route path="/admin" element={<AdminPageIndex />} />
           <Route path="/admin/notice" element={<AdminPageNotice />} />
-          <Route path="/admin/admin" element={<AdminPageAdmin />} />
           <Route path="/admin/user" element={<AdminPageUser />} />
           <Route path="/admin/tag" element={<AdminPageTag />} />
           <Route path="/admin/group" element={<AdminPageGroup />} />
