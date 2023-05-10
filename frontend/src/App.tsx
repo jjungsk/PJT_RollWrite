@@ -41,13 +41,12 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const accessToken = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzcwNzc4MjAwIiwicm9sZSI6IlVTRVIiLCJpc3MiOiJyb2xsd3JpdGUuY28ua3IiLCJleHAiOjE2ODM3MDU3MjAsImlhdCI6MTY4MzYxOTMyMH0.6GR_pFzEuXki9t_RoihBS06tdxkgpQN5NeydycS_RksdAnAAjAA6P0K7KzsIY-cNvn6OtBPR8sxAMH6gZIihOQ\",\"isLogin\":true,\"firebaseToken\":\"dZicIlPi7ydMlTxSLmtNMV:APA91bHr-JereOokw0r2M-4i00aPsb-S9qfrBTlxRzhoiKDT6DHoINiuacrwAIVGkGCj-q8WdhabZIa2Fjmoo_mxULBvZ2oo_L4nl3uT_2JMklcHgLobcoK0Rjsvnuvpg3Zz_Os8V4Y6`;
-  // const accessToken = useAppSelector((state) => state.auth.accessToken);
+  const accessToken = useAppSelector((state) => state.auth.accessToken);
   const isLogin = useAppSelector((state) => state.auth.isLogin);
 
   const currentPath = location.pathname;
 
-  if (accessToken) {
+  if (isLogin && accessToken) {
     axiosInstance.defaults.headers.common[
       "Authorization"
     ] = `Bearer ${accessToken}`;
@@ -104,14 +103,14 @@ function App() {
   );
 
   useEffect(() => {
-    // if (!isLogin && currentPath !== "/login" && currentPath !== "/oauth") {
-    //   navigate("/login");
-    //   if (currentPath !== "/setting") {
-    //     dispatch(updateRouteHistory(currentPath));
-    //   }
-    // } else if (isLogin && currentPath === "/login") {
-    //   navigate("/home");
-    // }
+    if (!isLogin && currentPath !== "/login" && currentPath !== "/oauth") {
+      navigate("/login");
+      if (currentPath !== "/setting") {
+        dispatch(updateRouteHistory(currentPath));
+      }
+    } else if (isLogin && currentPath === "/login") {
+      navigate("/home");
+    }
     const pathParts = currentPath.split("/");
     const htmlTitle = document.querySelector("title");
     switch (pathParts[1]) {
