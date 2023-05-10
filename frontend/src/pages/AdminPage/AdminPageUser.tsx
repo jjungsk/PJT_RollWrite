@@ -8,12 +8,15 @@ import {
   ListItemText,
   Typography,
   Switch,
+  ToggleButtonGroup,
+  ToggleButton,
 } from "@mui/material";
 import ManageAccountsRoundedIcon from "@mui/icons-material/ManageAccountsRounded";
 import React, { useEffect, useState } from "react";
 import { AdminPageWrapper } from "./style";
 import { getUser, userTypeChange } from "./admin";
 import { toast } from "react-hot-toast";
+import AdminPageDialog from "./AdminPageDialog";
 
 interface User {
   nickname: string;
@@ -22,9 +25,16 @@ interface User {
   userType: string;
 }
 
+interface DialogInfo {
+  title: string;
+  content?: string;
+  user: User;
+}
+
 function AdminPageUser() {
   const [userList, setUserList] = useState<User[]>();
-  const [checked, setChecked] = React.useState(true);
+  const [dialogInfo, setDialogInfo] = useState<DialogInfo>();
+  const [open, setOpen] = React.useState(false);
   const [type, setType] = React.useState("user");
   useEffect(() => {
     getUser(type).then((res) => {
@@ -33,39 +43,65 @@ function AdminPageUser() {
     });
   }, [type]);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
-    type === "user" ? setType("admin") : setType("user");
+  const handleChange = (
+    _event: React.MouseEvent<HTMLElement>,
+    newType: string
+  ) => {
+    setType(newType);
   };
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const target = event.target as HTMLButtonElement;
-    userTypeChange(target.value).then((res) => {
-      toast.success(res.message);
-      getUser(type).then((res) => {
-        setUserList(res.data);
+  const onAgree = () => {
+    dialogInfo &&
+      userTypeChange(dialogInfo.user.userId).then((res) => {
+        toast.success(res.message);
+        getUser(type).then((res) => {
+          setUserList(res.data);
+        });
       });
+  };
+
+  const handleClickOpen = (user: User) => {
+    setOpen(true);
+    setDialogInfo({
+      title: `${user.nickname}을 ${
+        user.userType === "USER" ? "Admin으로" : "User로"
+      } 변경하시겠습니까?`,
+      user: user,
     });
   };
 
   return (
     <AdminPageWrapper>
-      <Typography variant="h3" gutterBottom>
-        {type}
-      </Typography>
-      <div>
-        변경
-        <Switch
-          checked={checked}
+      <AdminPageDialog
+        open={open}
+        setOpen={setOpen}
+        title={dialogInfo?.title}
+        onAgree={onAgree}
+      />
+      <div
+        style={{
+          textAlign: "end",
+          width: "100%",
+          maxWidth: 720,
+          margin: "auto",
+          marginBottom: "16px",
+        }}
+      >
+        <ToggleButtonGroup
+          color="primary"
+          value={type}
+          exclusive
           onChange={handleChange}
-          inputProps={{ "aria-label": "controlled" }}
-        />
+          aria-label="Platform"
+        >
+          <ToggleButton value="user">User</ToggleButton>
+          <ToggleButton value="admin">Admin</ToggleButton>
+        </ToggleButtonGroup>
       </div>
       <List
         sx={{
           width: "100%",
           maxWidth: 720,
-          bgcolor: "background.paper",
           margin: "auto",
         }}
       >
@@ -76,9 +112,8 @@ function AdminPageUser() {
               secondaryAction={
                 <Button
                   variant="outlined"
-                  value={user.userId}
                   startIcon={<ManageAccountsRoundedIcon />}
-                  onClick={handleClick}
+                  onClick={() => handleClickOpen(user)}
                 >
                   타입 변경
                 </Button>

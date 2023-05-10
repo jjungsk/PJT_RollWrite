@@ -1,5 +1,5 @@
 import React from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -14,9 +14,11 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { IconButton } from "@mui/material";
+import { AdminPageTitle } from "./style";
 
 function AdminLayout() {
   const navigate = useNavigate();
+  const location = useLocation();
   const container = window.document.body;
   const drawerWidth = 240;
   const navItems = [
@@ -27,6 +29,7 @@ function AdminLayout() {
   ];
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const currentPath = location.pathname;
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
@@ -126,6 +129,7 @@ function AdminLayout() {
         </Box>
       </Box>
       <div style={{ marginTop: "70px" }}>
+        <AdminPageTitle>{currentPath.split("/")[2]}</AdminPageTitle>
         <Outlet />
       </div>
     </div>
