@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 const AdminPageWrapper = styled.div`
   width: 100%;
+  padding: 36px;
 `;
 
 const AdminPageTitle = styled.h1`
