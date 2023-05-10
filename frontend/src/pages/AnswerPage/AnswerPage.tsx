@@ -105,7 +105,8 @@ export default function AnswerPage() {
   return (
     <>
       <NameContainer>
-        {question.title} D-{question.day}
+        {question.title}
+        {question.day > 0 ? ` D-${question.day}` : " D-day"}
       </NameContainer>
       <QuestionDiv>{question.question}</QuestionDiv>
       <UploadImg

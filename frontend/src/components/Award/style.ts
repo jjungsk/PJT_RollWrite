@@ -27,6 +27,7 @@ const AwardPageContent = styled.div`
   gap: 16px;
   flex-wrap: wrap;
   justify-content: center;
+  overflow: auto;
 `;
 
 export { AwardPageContainer, AwardPageHeader, AwardPageContent };
