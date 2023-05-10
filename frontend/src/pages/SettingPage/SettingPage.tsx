@@ -109,9 +109,9 @@ function SettingPage() {
         <div>
           <FillBtn label="로그아웃" onClick={handleClickLogoutBtn} />
         </div>
-        <div>
+        {/* <div>
           <GhostBtn label="회원탈퇴" onClick={handleClickWithdrawBtn} />
-        </div>
+        </div> */}
       </SettingBtnContainer>
     </SettingContainer>
   );
