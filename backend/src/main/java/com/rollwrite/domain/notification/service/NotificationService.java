@@ -13,7 +13,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Slf4j
@@ -30,13 +32,12 @@ public class NotificationService {
     // 1. firebase token 저장
     @Transactional
     public void addFirebaseToken(Long userId, String firebaseToken) {
-        if (firebaseToken == null || firebaseToken.isEmpty()) return;
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
 
         log.info("user : {}", user.toString());
-        Optional<Alarm> alarm = alarmRepository.findAlarmByUser_IdAndFirebaseToken(userId, firebaseToken);
+        Optional<Alarm> alarm = alarmRepository.findAlarmByUser_Id(userId);
 
         if (alarm.isEmpty()) {
             Alarm saveAlarm = Alarm.builder()
@@ -47,6 +48,10 @@ public class NotificationService {
 
             log.info("saveAlarm : {}", saveAlarm);
             alarmRepository.save(saveAlarm);
+        } else {
+            alarm.get().updateToken(firebaseToken, true);
+
+            log.info("updateAlar : {}", alarm.get());
         }
     }
 

@@ -1,6 +1,7 @@
 package com.rollwrite.domain.notification.entity;
 
 import com.rollwrite.domain.user.entity.User;
+import com.rollwrite.global.model.BaseTimeEntity;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -11,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Alarm {
+public class Alarm extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +34,11 @@ public class Alarm {
         this.firebaseToken = firebaseToken;
         this.isAllowed = isAllowed;
         this.user = user;
+    }
+
+    public void updateToken(String firebaseToken, boolean isAllowed) {
+        this.firebaseToken = firebaseToken;
+        this.isAllowed = isAllowed;
     }
 
 }
