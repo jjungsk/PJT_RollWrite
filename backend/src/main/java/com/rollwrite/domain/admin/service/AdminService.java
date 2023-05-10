@@ -1,14 +1,18 @@
 package com.rollwrite.domain.admin.service;
 
 import com.rollwrite.domain.admin.dto.FindNoticeResDto;
+import com.rollwrite.domain.admin.dto.FindTagResDto;
+import com.rollwrite.domain.admin.dto.FindUserResDto;
+import com.rollwrite.domain.meeting.entity.Tag;
+import com.rollwrite.domain.meeting.repository.TagRepository;
 import com.rollwrite.domain.notification.entity.Notification;
 import com.rollwrite.domain.notification.entity.NotificationType;
 import com.rollwrite.domain.notification.repository.NotificationRepository;
 import com.rollwrite.domain.user.entity.User;
+import com.rollwrite.domain.user.entity.UserType;
 import com.rollwrite.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +26,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class AdminService {
 
+    private final TagRepository tagRepository;
     private final UserRepository userRepository;
     private final NotificationRepository notificationRepository;
 
@@ -71,5 +76,69 @@ public class AdminService {
                 .orElseThrow(() -> new IllegalArgumentException("공지를 찾을 수 없습니다"));
 
         notificationRepository.delete(notification);
+    }
+
+    public List<FindUserResDto> findUser(String type) {
+        if (!"admin".equals(type) && !"user".equals(type)) {
+            throw new IllegalArgumentException("잘못된 user type입니다.");
+        }
+
+        UserType userType = UserType.USER;
+        if ("admin".equals(type)) {
+            userType = UserType.ADMIN;
+        }
+
+        List<User> userList = userRepository.findAllByType(userType);
+
+        return userList.stream().map(user -> FindUserResDto.builder()
+                .user(user)
+                .build()).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void modifyUserType(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
+
+        if (user.getType().equals(UserType.ADMIN)) {
+            user.updateUserType(UserType.USER);
+        } else {
+            user.updateUserType(UserType.ADMIN);
+        }
+    }
+
+    public List<FindTagResDto> findTag() {
+        List<Tag> tagList = tagRepository.findAll();
+
+        return tagList.stream().map(tag -> FindTagResDto.builder()
+                .tag(tag)
+                .build()).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void addTag(String content) {
+        // 태그의 길이가 10글자를 넘었을 때
+        if (content.getBytes(StandardCharsets.ISO_8859_1).length > 10) {
+            throw new IllegalArgumentException("태그 내용이 글자 수를 초과했습니다");
+        }
+
+        // tag insert
+        Tag tag = Tag.builder()
+                .content(content)
+                .build();
+        tagRepository.save(tag);
+    }
+
+    @Transactional
+    public void modifyTag(Long tagId, String content) {
+        // 태그의 길이가 10글자를 넘었을 때
+        if (content.getBytes(StandardCharsets.ISO_8859_1).length > 10) {
+            throw new IllegalArgumentException("태그 내용이 글자 수를 초과했습니다");
+        }
+
+        Tag tag = tagRepository.findById(tagId)
+                .orElseThrow(() -> new IllegalArgumentException("태그를 찾을 수 없습니다"));
+
+        tag.updateContent(content);
     }
 }
