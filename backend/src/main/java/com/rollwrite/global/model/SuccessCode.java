@@ -19,6 +19,7 @@ public enum SuccessCode {
     FIND_TAG_SUCCESS(StatusCode.SUCCESS, "태그 목록을 조회했습니다."),
     ADD_TAG_SUCCESS(StatusCode.SUCCESS, "태그가 생성되었습니다."),
     MODIFY_TAG_SUCCESS(StatusCode.SUCCESS, "태그가 수정되었습니다."),
+    FIND_MEETING_SUCCESS(StatusCode.SUCCESS, "모임 목록을 조회했습니다."),
 
     // inquiry
     ADD_INQUIRY_SUCCESS(StatusCode.SUCCESS, "문의가 생성되었습니다."),
