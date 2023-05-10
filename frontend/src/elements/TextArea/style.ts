@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { screenHight } from "../../constants/types";
 
 const TextAreaContainer = styled.textarea`
   margin: auto;
@@ -11,6 +12,9 @@ const TextAreaContainer = styled.textarea`
   padding: 15px;
   font-size: 16px;
   margin-block: 15px;
+  @media (${screenHight} < 700) {
+    height: 30vh;
+  }
 `;
 
 export { TextAreaContainer };
