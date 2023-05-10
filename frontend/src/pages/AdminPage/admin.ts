@@ -5,7 +5,7 @@ export const getUser = async (userType: string) => {
   return response.data;
 };
 
-export const userTypeChange = async (userId: string) => {
+export const userTypeChange = async (userId: number) => {
   const response = await axiosInstance.put(`/admin/type/${userId}`);
   return response.data;
 };

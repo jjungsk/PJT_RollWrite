@@ -14,6 +14,7 @@ import React, { useEffect, useState } from "react";
 import { AdminPageWrapper } from "./style";
 import { getUser, userTypeChange } from "./admin";
 import { toast } from "react-hot-toast";
+import AdminPageDialog from "./AdminPageDialog";
 
 interface User {
   nickname: string;
@@ -22,9 +23,18 @@ interface User {
   userType: string;
 }
 
+interface DialogInfo {
+  title: string;
+  content?: string;
+  user: User;
+}
+
 function AdminPageUser() {
   const [userList, setUserList] = useState<User[]>();
+  const [dialogInfo, setDialogInfo] = useState<DialogInfo>();
   const [checked, setChecked] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
+
   const [type, setType] = React.useState("user");
   useEffect(() => {
     getUser(type).then((res) => {
@@ -38,18 +48,34 @@ function AdminPageUser() {
     type === "user" ? setType("admin") : setType("user");
   };
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const target = event.target as HTMLButtonElement;
-    userTypeChange(target.value).then((res) => {
-      toast.success(res.message);
-      getUser(type).then((res) => {
-        setUserList(res.data);
+  const onAgree = () => {
+    dialogInfo &&
+      userTypeChange(dialogInfo.user.userId).then((res) => {
+        toast.success(res.message);
+        getUser(type).then((res) => {
+          setUserList(res.data);
+        });
       });
+  };
+
+  const handleClickOpen = (user: User) => {
+    setOpen(true);
+    setDialogInfo({
+      title: `${user.nickname}을 ${
+        user.userType === "USER" ? "Admin으로" : "User로"
+      } 변경하시겠습니까?`,
+      user: user,
     });
   };
 
   return (
     <AdminPageWrapper>
+      <AdminPageDialog
+        open={open}
+        setOpen={setOpen}
+        title={dialogInfo?.title}
+        onAgree={onAgree}
+      />
       <Typography variant="h3" gutterBottom>
         {type}
       </Typography>
@@ -76,9 +102,8 @@ function AdminPageUser() {
               secondaryAction={
                 <Button
                   variant="outlined"
-                  value={user.userId}
                   startIcon={<ManageAccountsRoundedIcon />}
-                  onClick={handleClick}
+                  onClick={() => handleClickOpen(user)}
                 >
                   타입 변경
                 </Button>
