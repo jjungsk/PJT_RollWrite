@@ -81,7 +81,7 @@ const SettingBtnContainer = styled.div`
     }
   }
 
-  @media (height < 750) {
+  @media (height < 700px) {
     display: flex;
     justify-content: center;
 

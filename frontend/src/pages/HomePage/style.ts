@@ -19,7 +19,7 @@ const HomePageHeader = styled.div`
   & > div > span {
     font-weight: bold;
   }
-  @media (height < 700) {
+  @media (height < 700px) {
     padding: 8px 24px;
   }
 `;

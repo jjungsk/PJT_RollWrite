@@ -8,7 +8,7 @@ const GhostBtn = styled.button<{ margin?: string }>`
   margin: ${(props) => props.margin};
   font-size: 20px;
   font-weight: bold;
-  @media (height < 700) {
+  @media (height < 700px) {
     font-size: 16px;
     width: 112px;
     height: 40px;
@@ -23,7 +23,7 @@ const FillBtn = styled.button`
   color: white;
   background-color: var(--main-color);
   font-weight: bold;
-  @media (height < 700) {
+  @media (height < 700px) {
     font-size: 16px;
     width: 112px;
     height: 40px;
