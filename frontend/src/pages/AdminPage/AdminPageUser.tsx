@@ -14,22 +14,10 @@ import {
 import ManageAccountsRoundedIcon from "@mui/icons-material/ManageAccountsRounded";
 import React, { useEffect, useState } from "react";
 import { AdminPageWrapper } from "./style";
-import { getUser, userTypeChange } from "./admin";
+import { getUser, changeUserType } from "./admin";
 import { toast } from "react-hot-toast";
 import AdminPageDialog from "./AdminPageDialog";
-
-interface User {
-  nickname: string;
-  profileImage: string;
-  userId: number;
-  userType: string;
-}
-
-interface DialogInfo {
-  title: string;
-  content?: string;
-  user: User;
-}
+import { DialogInfo, User } from "./type";
 
 function AdminPageUser() {
   const [userList, setUserList] = useState<User[]>();
@@ -52,7 +40,7 @@ function AdminPageUser() {
 
   const onAgree = () => {
     dialogInfo &&
-      userTypeChange(dialogInfo.user.userId).then((res) => {
+      changeUserType(dialogInfo.user.userId).then((res) => {
         toast.success(res.message);
         getUser(type).then((res) => {
           setUserList(res.data);

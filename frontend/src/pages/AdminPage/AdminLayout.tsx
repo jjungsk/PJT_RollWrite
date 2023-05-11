@@ -65,7 +65,7 @@ function AdminLayout() {
   );
 
   return (
-    <div>
+    <div style={{ overflow: "auto", height: "100vh" }}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
         <AppBar component="nav">
