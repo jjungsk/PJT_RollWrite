@@ -26,6 +26,12 @@ export const withdraw = async () => {
   return response.data;
 };
 
+// 사용자 타입 가져오기
+export const getUserType = async () => {
+  const response = await axiosInstance.get("/user");
+  return response.data;
+};
+
 // 사용자 정보 가져오기
 export const getUserDetail = async () => {
   const response = await axiosInstance.get("/user/");

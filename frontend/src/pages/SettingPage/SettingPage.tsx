@@ -23,11 +23,14 @@ function SettingPage() {
     await persistor.purge();
   };
   const handleClickMenu = (path: string) => {
-    toast("아직 개발중입니다.", {
-      icon: "🤦‍♂️",
-    });
-    return;
-    navigate(`/${path}`);
+    if (path === "service") {
+      toast("아직 개발중입니다.", {
+        icon: "🤦‍♂️",
+      });
+      return;
+    } else {
+      navigate(`/${path}`);
+    }
   };
 
   const handleClickLogoutBtn = () => {
@@ -92,12 +95,12 @@ function SettingPage() {
           <Back />
         </SettingMenuItem>
         <SettingMenuItem onClick={() => handleClickMenu("inquiry")}>
-          <SettingMenuItemText>문의사항</SettingMenuItemText>
+          <SettingMenuItemText>의견 보내기</SettingMenuItemText>
           <Back />
         </SettingMenuItem>
         <SettingMenuItem>
           <SettingMenuItemText onClick={() => handleClickMenu("service")}>
-            서비스 상세정보 / 약관
+            서비스 이용약관
           </SettingMenuItemText>
           <Back />
         </SettingMenuItem>

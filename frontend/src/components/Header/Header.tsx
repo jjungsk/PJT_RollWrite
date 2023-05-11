@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { HeaderContainer, BtnContainer } from "./style";
 import { ReactComponent as Logo } from "../../assets/Logo.svg";
 import { ReactComponent as Setting } from "../../assets/Setting.svg";
-import { ReactComponent as Notification } from "../../assets/Notification.svg";
 import NavBtn from "../../elements/Button/NavBtn";
 import { useLocation, useNavigate } from "react-router-dom";
 import BackNavigation from "../BackNavigation/BackNavigation";
@@ -19,7 +18,7 @@ function Header(props: { sub?: boolean }) {
       { text: "알림", path: "/notify" },
       { text: "설정", path: "/setting" },
       { text: "공지사항", path: "/notice" },
-      { text: "문의사항", path: "/inquiry" },
+      { text: "의견 보내기", path: "/inquiry" },
     ];
 
     HEADER_LIST.map((header) =>
