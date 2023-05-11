@@ -10,6 +10,7 @@ import CreateGroupStepTwo from "../../components/CreateGroupSteps/CreateGroupSte
 import CreateGroupStepThree from "../../components/CreateGroupSteps/CreateGroupStepThree";
 import { handleKakaoShare } from "../../utils/kakaoShare";
 import toast from "react-hot-toast";
+import { differenceInDays } from "date-fns";
 
 function CreateGroupPage() {
   const navigate = useNavigate();
@@ -57,6 +58,11 @@ function CreateGroupPage() {
 
     if (isAfter(subDays(new Date(), 1), new Date(startDay))) {
       toast.error("시작일이 오늘 이전입니다.");
+      return false;
+    }
+
+    if (differenceInDays(new Date(startDay), new Date(endDay)) >= 3) {
+      alert("시작일과 종료일은 3일 이상입니다.");
       return false;
     }
 
