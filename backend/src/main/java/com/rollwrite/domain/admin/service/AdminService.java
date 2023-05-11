@@ -174,6 +174,12 @@ public class AdminService {
         Meeting meeting = meetingRepository.findById(meetingId)
                 .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
 
+        // 만들어진 질문이 있는지 확인
+        Optional<Question> questionOptional = questionRepository.findQuestionByMeetingAndExpireTime(meetingId);
+        if (questionOptional.isPresent()) {
+            throw new IllegalArgumentException("이미 질문이 있습니다.");
+        }
+
         // 마지막 날이면 통계 내기 + 고정 질문
         if (meeting.getEndDay().equals(LocalDate.now())) {
             meetingService.makeAward(meeting);
