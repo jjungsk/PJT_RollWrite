@@ -184,6 +184,8 @@ public class AdminService {
         // 마지막 날이면 통계 내기 + 고정 질문
         if (meeting.getEndDay().equals(LocalDate.now())) {
             meetingService.makeAward(meeting);
+            // 사용안한 chatGpt 질문 삭제
+            questionGptRepository.deleteQuestionNotUsedByMeeting(meeting);
             return;
         }
 
