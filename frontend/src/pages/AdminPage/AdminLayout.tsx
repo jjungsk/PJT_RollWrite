@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -15,6 +15,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { IconButton } from "@mui/material";
 import { AdminPageTitle } from "./style";
+import { useAppSelector } from "../../constants/types";
 
 function AdminLayout() {
   const navigate = useNavigate();
@@ -30,6 +31,15 @@ function AdminLayout() {
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const currentPath = location.pathname;
+  const isLogin = useAppSelector((state) => state.auth.isLogin);
+
+  useEffect(() => {
+    if (isLogin) {
+      const rootElement = document.querySelector("#root") as HTMLElement;
+      rootElement.style.minWidth = "0";
+      rootElement.style.maxWidth = "100vw";
+    }
+  }, [isLogin]);
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
