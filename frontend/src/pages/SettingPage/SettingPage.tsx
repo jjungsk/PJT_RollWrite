@@ -106,7 +106,7 @@ function SettingPage() {
         </SettingMenuItem>
         <SettingMenuItem>
           <SettingMenuItemText>버전 정보</SettingMenuItemText>
-          <div>1.1.1</div>
+          <div>1.1.2</div>
         </SettingMenuItem>
       </SettingSection>
 
