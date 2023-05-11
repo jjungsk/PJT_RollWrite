@@ -44,9 +44,9 @@ public class NotificationService {
     public void sendMessageOne(SendMessageOneReqDto sendMessageOneReqDto) throws FirebaseMessagingException {
 
         Notification notification = Notification.builder()
-                        .setTitle(sendMessageOneReqDto.getTitle())
-                        .setBody(sendMessageOneReqDto.getBody())
-                        .build();
+                .setTitle(sendMessageOneReqDto.getTitle())
+                .setBody(sendMessageOneReqDto.getBody())
+                .build();
         fcmService.sendMessageOne(notification, sendMessageOneReqDto.getFirebaseToken());
     }
 
@@ -61,7 +61,7 @@ public class NotificationService {
     }
 
     // 4. 자동으로 단체 알림을 보내기
-    public void sendMessageAuto() throws FirebaseMessagingException, UnknownHostException {
+    public void sendMessageAuto() throws FirebaseMessagingException {
         List<Participant> participantList = participantRepository.findMeetingAndUserAndTitleByProgress(false);
         log.info("meetingFindUserDtoList : {}", participantList.toString());
 
@@ -104,20 +104,20 @@ public class NotificationService {
                 List<Question> questionList = participant.getMeeting().getQuestionList();
                 String question = "클릭해서 확인해 보세요";
                 if (!questionList.isEmpty()) {
-                    question = questionList.get(questionList.size()-1).getContent();
+                    question = questionList.get(questionList.size() - 1).getContent();
                 }
                 meetingIdAndContent.put(meetingId, question);
             }
         }
 
         // log 출력
-        for (Long meetingId: meetingIdAndUser.keySet()) {
+        for (Long meetingId : meetingIdAndUser.keySet()) {
             log.info("meetingId : {}, meetingTitle : {}, tokenList : {}",
                     meetingId, meetingIdAndTitle.get(meetingId), meetingIdAndToken.get(meetingId).toString());
         }
 
         Integer failCnt = 0;
-        for (Long meetingId: meetingIdAndToken.keySet()) {
+        for (Long meetingId : meetingIdAndToken.keySet()) {
             List<String> firebaseTokenList = meetingIdAndToken.get(meetingId);
             if (firebaseTokenList.isEmpty()) continue;
 

@@ -61,7 +61,6 @@ public class FcmService {
         Message message = Message.builder()
                 .setNotification(notification)
                 .setWebpushConfig(webpushConfig())
-                .setAndroidConfig(androidConfig())
                 .setToken(firebaseToken)
                 .build();
 
@@ -75,7 +74,6 @@ public class FcmService {
         MulticastMessage message = MulticastMessage.builder()
                 .setNotification(notification)
                 .setWebpushConfig(webpushConfig())
-                .setAndroidConfig(androidConfig())
                 .addAllTokens(firebaseTokenList)
                 .build();
         BatchResponse response = FirebaseMessaging.getInstance().sendMulticast(message);
@@ -93,7 +91,6 @@ public class FcmService {
 
         return response.getFailureCount();  // 실패한 토큰 수
     }
-
 
 
     // TODO : 4. FCM Topic 구현
@@ -116,7 +113,6 @@ public class FcmService {
                         .setBody(body)
                         .build())
                 .setWebpushConfig(webpushConfig())
-                .setAndroidConfig(androidConfig())
                 .setTopic(topic)
                 .build();
 

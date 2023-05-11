@@ -76,7 +76,7 @@ public class FileService {
         return path;
     }
 
-    public String getPath(String path) throws UnknownHostException {
+    private String getPath(String path) throws UnknownHostException {
         String hostname = InetAddress.getLocalHost().getHostName();
 
         if (hostname.substring(0, 7).equals("DESKTOP")) {

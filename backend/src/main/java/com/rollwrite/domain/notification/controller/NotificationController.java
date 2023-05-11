@@ -84,7 +84,7 @@ public class NotificationController {
     @ApiOperation(value = "(자동) FCM 알림 보내기", notes = "오전 8시 10분 질문 생성 알람 보내기")
     @Parameter(name = "firebaseToken", description = "알림 보낼 Token List")
     @PostMapping("/auto")
-    public ResponseEntity<ApiResponse<?>> sendMessageAuto() throws FirebaseMessagingException, UnknownHostException {
+    public ResponseEntity<ApiResponse<?>> sendMessageAuto() throws FirebaseMessagingException {
         LocalDateTime localDateTime = LocalDateTime.now();
         log.info("FCM 자동 알림 보내기 동작 시간 : {}", localDateTime);
         notificationService.sendMessageAuto();
@@ -108,7 +108,7 @@ public class NotificationController {
     @ApiOperation(value = "Topic 구독")
     @DeleteMapping("/unsubscribe")
     public ResponseEntity<ApiResponse<?>> unSubscribe(@ApiIgnore Authentication authentication,
-                                                    @RequestParam("topic") String topic, @RequestParam("token") String token) throws FirebaseMessagingException {
+                                                      @RequestParam("topic") String topic, @RequestParam("token") String token) throws FirebaseMessagingException {
         List<String> tokenList = new ArrayList<>();
         tokenList.add(token);
         fcmService.subscribeTopic(tokenList, topic);
@@ -120,7 +120,7 @@ public class NotificationController {
     @ApiOperation(value = "Topic 구독")
     @PostMapping("/topic")
     public ResponseEntity<ApiResponse<?>> sendMessageTopic(@ApiIgnore Authentication authentication,
-                                                      @RequestParam("topic") String topic, @RequestParam("token") String token) throws FirebaseMessagingException {
+                                                           @RequestParam("topic") String topic, @RequestParam("token") String token) throws FirebaseMessagingException {
         List<String> tokenList = new ArrayList<>();
 
         tokenList.add(token);
