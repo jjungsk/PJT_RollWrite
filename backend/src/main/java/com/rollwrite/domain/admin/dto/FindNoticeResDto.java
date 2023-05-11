@@ -1,6 +1,6 @@
 package com.rollwrite.domain.admin.dto;
 
-import com.rollwrite.domain.notification.entity.Notification;
+import com.rollwrite.domain.admin.entity.Notice;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -11,13 +11,15 @@ import java.time.LocalDateTime;
 @ToString
 public class FindNoticeResDto {
     private final Long noticeId;
+    private final String title;
     private final String content;
     private final LocalDateTime createdAt;
 
     @Builder
-    public FindNoticeResDto(Notification notification) {
-        this.noticeId = notification.getId();
-        this.content = notification.getContent();
-        this.createdAt = notification.getCreatedAt();
+    public FindNoticeResDto(Notice notice) {
+        this.noticeId = notice.getId();
+        this.title = notice.getTitle();
+        this.content = notice.getContent();
+        this.createdAt = notice.getCreatedAt();
     }
 }

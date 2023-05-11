@@ -34,32 +34,26 @@ public class AdminController {
 
     @PostMapping("/notice")
     public ResponseEntity<ApiResponse> addNotice(@ApiIgnore Authentication authentication,
-                                                 @RequestBody AddContentReqDto addContentReqDto) {
-        log.info("공지 생성 addContentReqDto : {}", addContentReqDto);
+                                                 @RequestBody AddNoticeReqDto addNoticeReqDto) {
+        log.info("공지 생성 addNoticeReqDto : {}", addNoticeReqDto);
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
         Long userId = userDetails.getUserId();
-        adminService.addNotice(userId, addContentReqDto.getContent());
+        adminService.addNotice(userId, addNoticeReqDto);
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.ADD_NOTICE_SUCCESS), HttpStatus.OK);
     }
 
     @PutMapping("/notice/{noticeId}")
-    public ResponseEntity<ApiResponse> modifyNotice(@ApiIgnore Authentication authentication,
-                                                    @PathVariable Long noticeId,
-                                                    @RequestBody AddContentReqDto addContentReqDto) {
-        log.info("공지 수정 noticeId : {}, addContentReqDto : {}", noticeId, addContentReqDto);
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
-        Long userId = userDetails.getUserId();
-        adminService.modifyNotice(userId, noticeId, addContentReqDto.getContent());
+    public ResponseEntity<ApiResponse> modifyNotice(@PathVariable Long noticeId,
+                                                    @RequestBody AddNoticeReqDto addNoticeReqDto) {
+        log.info("공지 수정 noticeId : {}, addNoticeReqDto : {}", noticeId, addNoticeReqDto);
+        adminService.modifyNotice(noticeId, addNoticeReqDto);
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.MODIFY_NOTICE_SUCCESS), HttpStatus.OK);
     }
 
     @DeleteMapping("/notice/{noticeId}")
-    public ResponseEntity<ApiResponse> removeNotice(@ApiIgnore Authentication authentication,
-                                                    @PathVariable Long noticeId) {
+    public ResponseEntity<ApiResponse> removeNotice(@PathVariable Long noticeId) {
         log.info("공지 삭제 noticeId : {}", noticeId);
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
-        Long userId = userDetails.getUserId();
-        adminService.removeNotice(userId, noticeId);
+        adminService.removeNotice(noticeId);
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.REMOVE_NOTICE_SUCCESS), HttpStatus.OK);
     }
 
@@ -111,6 +105,13 @@ public class AdminController {
         log.info("오늘의 질문 수동 생성  meetingId : {}", meetingId);
         adminService.addTodayQuestion(meetingId);
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.ADD_TODAY_QUESTION_SUCCESS), HttpStatus.OK);
+    }
+
+    @GetMapping("/inquiry")
+    public ResponseEntity<ApiResponse> inquiryList() {
+        log.info("inquiryList 호출");
+        List<FindInquiryResDto> findInquiryResDtoList = adminService.findInquiry();
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_INQUIRY_SUCCESS, findInquiryResDtoList), HttpStatus.OK);
     }
 
 }
