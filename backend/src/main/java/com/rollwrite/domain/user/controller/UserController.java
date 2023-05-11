@@ -10,19 +10,18 @@ import com.rollwrite.global.model.SuccessCode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.Optional;
 
 /**
@@ -76,7 +75,7 @@ public class UserController {
     @DeleteMapping
     public ResponseEntity<ApiResponse<?>> removeUser(@ApiIgnore Authentication authentication) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
-        
+
         // 회원 탈퇴 전 로그아웃 로직 - Redis의 refreshToken 삭제 + AccessToken Black 처리
         String identifier = userDetails.getIdentifier();
         log.info("로그아웃 할 identifier : {}", identifier);
@@ -88,6 +87,18 @@ public class UserController {
         userService.removeUser(userId);
 
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.REMOVE_USER_SUCCESS), HttpStatus.OK);
+    }
+
+    // 4. User Role
+    @GetMapping
+    public ResponseEntity<ApiResponse> userRole(@ApiIgnore Authentication authentication) {
+        log.info("userRole 호출");
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
+        String role = "USER";
+        if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            role = "ADMIN";
+        }
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_ROLE_SUCCESS, role), HttpStatus.OK);
     }
 
 }
