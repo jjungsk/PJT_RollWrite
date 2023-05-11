@@ -1,9 +1,8 @@
 package com.rollwrite.domain.admin.service;
 
-import com.rollwrite.domain.admin.dto.FindMeetingResDto;
-import com.rollwrite.domain.admin.dto.FindNoticeResDto;
-import com.rollwrite.domain.admin.dto.FindTagResDto;
-import com.rollwrite.domain.admin.dto.FindUserResDto;
+import com.rollwrite.domain.admin.dto.*;
+import com.rollwrite.domain.inquiry.entity.Inquiry;
+import com.rollwrite.domain.inquiry.repository.InquiryRepository;
 import com.rollwrite.domain.meeting.entity.*;
 import com.rollwrite.domain.meeting.repository.MeetingRepository;
 import com.rollwrite.domain.meeting.repository.TagRepository;
@@ -43,6 +42,7 @@ public class AdminService {
     private final TagRepository tagRepository;
     private final UserRepository userRepository;
     private final MeetingRepository meetingRepository;
+    private final InquiryRepository inquiryRepository;
     private final QuestionRepository questionRepository;
     private final QuestionGptRepository questionGptRepository;
     private final NotificationRepository notificationRepository;
@@ -237,5 +237,13 @@ public class AdminService {
                 .expireTime(expireTime)
                 .build();
         questionRepository.save(question);
+    }
+
+    public List<FindInquiryResDto> findInquiry() {
+        List<Inquiry> inquiryList = inquiryRepository.findAll();
+
+        return inquiryList.stream().map(inquiry -> FindInquiryResDto.builder()
+                .inquiry(inquiry)
+                .build()).collect(Collectors.toList());
     }
 }
