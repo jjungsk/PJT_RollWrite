@@ -61,8 +61,8 @@ function CreateGroupPage() {
       return false;
     }
 
-    if (differenceInDays(new Date(startDay), new Date(endDay)) >= 3) {
-      alert("시작일과 종료일은 3일 이상입니다.");
+    if (differenceInDays(new Date(endDay), new Date(startDay)) < 2) {
+      alert("모임기간은 최소 3일 입니다.");
       return false;
     }
 
