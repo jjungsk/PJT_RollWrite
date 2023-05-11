@@ -86,10 +86,10 @@ export default function AdminPageNotice() {
 
   const handleClickBtn = () => {
     if (myNotice.title.length === 0) {
-      toast.error("제목이 잆습니다.");
+      toast.error("제목이 없습니다.");
       return;
     } else if (myNotice.content.length === 0) {
-      toast.error("내용이 잆습니다.");
+      toast.error("내용이 없습니다.");
       return;
     }
 
