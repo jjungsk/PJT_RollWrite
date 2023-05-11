@@ -1,14 +1,14 @@
 package com.rollwrite.domain.admin.service;
 
 import com.rollwrite.domain.admin.dto.*;
+import com.rollwrite.domain.admin.entity.Notice;
+import com.rollwrite.domain.admin.repository.NoticeRepository;
 import com.rollwrite.domain.inquiry.entity.Inquiry;
 import com.rollwrite.domain.inquiry.repository.InquiryRepository;
 import com.rollwrite.domain.meeting.entity.*;
 import com.rollwrite.domain.meeting.repository.MeetingRepository;
 import com.rollwrite.domain.meeting.repository.TagRepository;
 import com.rollwrite.domain.meeting.service.MeetingService;
-import com.rollwrite.domain.notification.entity.Notification;
-import com.rollwrite.domain.notification.entity.NotificationType;
 import com.rollwrite.domain.notification.repository.NotificationRepository;
 import com.rollwrite.domain.question.entity.Question;
 import com.rollwrite.domain.question.entity.QuestionGpt;
@@ -41,6 +41,7 @@ public class AdminService {
 
     private final TagRepository tagRepository;
     private final UserRepository userRepository;
+    private final NoticeRepository noticeRepository;
     private final MeetingRepository meetingRepository;
     private final InquiryRepository inquiryRepository;
     private final QuestionRepository questionRepository;
@@ -49,51 +50,61 @@ public class AdminService {
     private final QuestionParticipantRepository questionParticipantRepository;
 
     public List<FindNoticeResDto> findNotice() {
-        List<Notification> notificationList = notificationRepository.findAllByType(NotificationType.NOTICE);
+        List<Notice> noticeList = noticeRepository.findAll();
 
-        return notificationList.stream().map(notification -> FindNoticeResDto.builder()
-                .notification(notification)
+        return noticeList.stream().map(notice -> FindNoticeResDto.builder()
+                .notice(notice)
                 .build()).collect(Collectors.toList());
     }
 
     @Transactional
-    public void addNotice(Long userId, String content) {
-        // 공지의 문장 길이가 60글자를 넘었을 때
-        if (content.getBytes(StandardCharsets.ISO_8859_1).length > 60) {
+    public void addNotice(Long userId, AddNoticeReqDto addNoticeReqDto) {
+        // 공지의 제목 길이가 30글자를 넘었을 때
+        if (addNoticeReqDto.getTitle().getBytes(StandardCharsets.ISO_8859_1).length > 30) {
+            throw new IllegalArgumentException("공지 제목이 글자 수를 초과했습니다");
+        }
+
+        // 공지의 문장 길이가 400글자를 넘었을 때
+        if (addNoticeReqDto.getContent().getBytes(StandardCharsets.ISO_8859_1).length > 400) {
             throw new IllegalArgumentException("공지 내용이 글자 수를 초과했습니다");
         }
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
-        // notification insert
-        Notification notification = Notification.builder()
-                .content(content)
+        // notice insert
+        Notice notice = Notice.builder()
+                .title(addNoticeReqDto.getTitle())
+                .content(addNoticeReqDto.getContent())
                 .user(user)
-                .type(NotificationType.NOTICE)
                 .build();
-        notificationRepository.save(notification);
+        noticeRepository.save(notice);
     }
 
     @Transactional
-    public void modifyNotice(Long userId, Long noticeId, String content) {
-        // 공지의 문장 길이가 60글자를 넘었을 때
-        if (content.getBytes(StandardCharsets.ISO_8859_1).length > 60) {
+    public void modifyNotice(Long noticeId, AddNoticeReqDto addNoticeReqDto) {
+        // 공지의 제목 길이가 30글자를 넘었을 때
+        if (addNoticeReqDto.getTitle().getBytes(StandardCharsets.ISO_8859_1).length > 30) {
+            throw new IllegalArgumentException("공지 제목이 글자 수를 초과했습니다");
+        }
+
+        // 공지의 문장 길이가 400글자를 넘었을 때
+        if (addNoticeReqDto.getContent().getBytes(StandardCharsets.ISO_8859_1).length > 400) {
             throw new IllegalArgumentException("공지 내용이 글자 수를 초과했습니다");
         }
 
-        Notification notification = notificationRepository.findNoticeByIdAndUser(userId, noticeId)
+        Notice notice = noticeRepository.findById(noticeId)
                 .orElseThrow(() -> new IllegalArgumentException("공지를 찾을 수 없습니다"));
 
-        notification.updateContent(content);
+        notice.updateNotice(addNoticeReqDto);
     }
 
     @Transactional
-    public void removeNotice(Long userId, Long noticeId) {
-        Notification notification = notificationRepository.findNoticeByIdAndUser(userId, noticeId)
+    public void removeNotice(Long noticeId) {
+        Notice notice = noticeRepository.findById(noticeId)
                 .orElseThrow(() -> new IllegalArgumentException("공지를 찾을 수 없습니다"));
 
-        notificationRepository.delete(notification);
+        noticeRepository.delete(notice);
     }
 
     public List<FindUserResDto> findUser(String type) {

@@ -34,6 +34,7 @@ public enum SuccessCode {
     REMOVE_USER_PROFILE_SUCCESS(StatusCode.SUCCESS, "유저 프로필 이미지가 정상 삭제 되었습니다."),
     LOGOUT_SUCCESS(StatusCode.SUCCESS, "로그아웃 되었습니다."),
     REMOVE_USER_SUCCESS(StatusCode.SUCCESS, "회원 정보가 삭제 되었습니다."),
+    FIND_ROLE_SUCCESS(StatusCode.SUCCESS, "토큰의 role 조회가 완료되었습니다."),
 
     // meeting
     GET_MEETING_IN_PROGRESS_SUCCESS(StatusCode.SUCCESS, "진행 중인 전체 모임 조회했습니다."),
