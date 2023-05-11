@@ -13,14 +13,10 @@ import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import CreateRoundedIcon from "@mui/icons-material/CreateRounded";
 import TextField from "@mui/material/TextField";
 import { AdminPageWrapper } from "./style";
-import { Notice } from "./type";
 import { toast } from "react-hot-toast";
-import {
-  UpdateNoitce,
-  createNoitce,
-  deleteNoitce,
-  getNoitceList,
-} from "./admin";
+import { UpdateNoitce, createNoitce, deleteNoitce } from "./admin";
+import { Notice } from "../../constants/types";
+import { getNoticeList } from "../../apis/notification";
 
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -66,7 +62,7 @@ export default function AdminPageNotice() {
   const [noticeList, setNoticeList] = useState<Notice[]>();
 
   useEffect(() => {
-    getNoitceList().then((res) => {
+    getNoticeList().then((res) => {
       toast.success(res.message);
       setNoticeList(res.data);
     });
@@ -97,7 +93,7 @@ export default function AdminPageNotice() {
       ? createNoitce(myNotice).then((res) => {
           toast.success(res.message);
           setIsEditing(false);
-          getNoitceList().then((res) => {
+          getNoticeList().then((res) => {
             toast.success(res.message);
             setNoticeList(res.data);
           });
@@ -105,7 +101,7 @@ export default function AdminPageNotice() {
       : UpdateNoitce(myNotice).then((res) => {
           toast.success(res.message);
           setIsEditing(false);
-          getNoitceList().then((res) => {
+          getNoticeList().then((res) => {
             toast.success(res.message);
             setNoticeList(res.data);
           });
@@ -116,7 +112,7 @@ export default function AdminPageNotice() {
     noticeId &&
       deleteNoitce(noticeId).then((res) => {
         toast.success(res.message);
-        getNoitceList().then((res) => {
+        getNoticeList().then((res) => {
           toast.success(res.message);
           setNoticeList(res.data);
         });

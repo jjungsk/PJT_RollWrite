@@ -1,5 +1,5 @@
 import { axiosInstance } from "../../apis/instance";
-import { Notice } from "./type";
+import { Notice } from "../../constants/types";
 
 export const getUser = async (userType: string) => {
   const response = await axiosInstance.get(`/admin/user/${userType}`);
@@ -45,11 +45,6 @@ export const createTodayQuestion = async (meetingId: number) => {
 
 export const createNoitce = async (notice: Notice) => {
   const response = await axiosInstance.post(`/admin/notice`, notice);
-  return response.data;
-};
-
-export const getNoitceList = async () => {
-  const response = await axiosInstance.get(`/admin/notice`);
   return response.data;
 };
 

@@ -34,10 +34,3 @@ export interface Inquiry {
   userNickname: string;
   userProfileImage: string;
 }
-
-export interface Notice {
-  noticeId?: number;
-  title: string;
-  content: string;
-  createdAt?: string;
-}
