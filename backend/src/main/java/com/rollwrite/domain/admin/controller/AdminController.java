@@ -113,4 +113,11 @@ public class AdminController {
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.ADD_TODAY_QUESTION_SUCCESS), HttpStatus.OK);
     }
 
+    @GetMapping("/inquiry")
+    public ResponseEntity<ApiResponse> inquiryList() {
+        log.info("inquiryList 호출");
+        List<FindInquiryResDto> findInquiryResDtoList = adminService.findInquiry();
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_INQUIRY_SUCCESS, findInquiryResDtoList), HttpStatus.OK);
+    }
+
 }
