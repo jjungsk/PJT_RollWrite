@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Type;
 import java.time.LocalDate;
@@ -25,6 +26,7 @@ import java.util.List;
 
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class AsyncMeetingService {
 
@@ -33,6 +35,7 @@ public class AsyncMeetingService {
     private final QuestionGptRepository questionGptRepository;
 
     @Async
+    @Transactional
     public void saveGptQuestion(String tag, Meeting meeting, long period) {
         String query = "를 공통으로 이루어진 모임이 있어. 이 모임에서 서로 에게 물어볼 만한 20자 이내의 흥미로운 질문 " + period + "개와 그와 연관된 이모지도 딱 1개씩만 같이 추천해줘, 형식은 json 배열이야, {\"question\":\"content\",\"emoji\": \"🍕\"}";
         List<MessageDto> messageDtoList = new ArrayList<>();

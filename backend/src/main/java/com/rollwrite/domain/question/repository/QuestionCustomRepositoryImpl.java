@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Optional;
 
 @Slf4j
@@ -54,6 +55,15 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository {
                 .selectFrom(question)
                 .where(question.id.eq(questionId))
                 .where(question.expireTime.after(LocalDateTime.now()))
+                .fetchOne());
+    }
+
+    @Override
+    public Optional<Question> findQuestionByMeetingAndExpireTime(Long meetingId) {
+        return Optional.ofNullable(jpaQueryFactory
+                .selectFrom(question)
+                .where(question.meeting.id.eq(meetingId))
+                .where(question.expireTime.after(LocalDateTime.now()).or(question.expireTime.eq(LocalDateTime.of(LocalDate.of(9999, 1, 1), LocalTime.MIN))))
                 .fetchOne());
     }
 }
