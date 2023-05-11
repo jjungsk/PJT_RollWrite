@@ -3,6 +3,8 @@ package com.rollwrite.domain.notification.controller;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Notification;
 import com.rollwrite.domain.notification.dto.AddFcmTokenReqDto;
+import com.rollwrite.domain.notification.dto.SendMessageManyReqDto;
+import com.rollwrite.domain.notification.dto.SendMessageOneReqDto;
 import com.rollwrite.domain.notification.service.NotificationService;
 import com.rollwrite.global.auth.CustomUserDetails;
 import com.rollwrite.global.model.ApiResponse;
@@ -17,11 +19,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
-import javax.servlet.http.HttpServletRequest;
+import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,38 +55,76 @@ public class NotificationController {
     @ApiOperation(value = "(개인) FCM 알림 보내기", notes = "Token 한개에 알람 보내기")
     @Parameter(name = "firebaseToken", description = "FCM에서 받은 유저의 Token")
     @PostMapping("/individual")
-    public ResponseEntity<ApiResponse<?>> sendMessageTo(String targetToken, String title, String body) throws FirebaseMessagingException {
+    public ResponseEntity<ApiResponse<?>> sendMessageOne(@ApiIgnore Authentication authentication,
+                                                         @RequestBody SendMessageOneReqDto sendMessageOneReqDto) throws FirebaseMessagingException {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
+        Long userId = userDetails.getUserId();
 
-        fcmService.sendMessageOne(targetToken, title, body);
+        notificationService.sendMessageOne(sendMessageOneReqDto);
 
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.SEND_MESSAGE_TO), HttpStatus.OK);
     }
 
     // 3. FCM 알림 보내기 - 다수 (한번에 최대 1000명)
     @ApiOperation(value = "(다수) FCM 알림 보내기", notes = "ArrayList<String> 알람 보내기")
-    @Parameter(name = "firebaseToekn", description = "알림 보낼 Token List")
+    @Parameter(name = "firebaseToken", description = "알림 보낼 Token List")
     @PostMapping("/multi")
-    public ResponseEntity<ApiResponse<?>> sendMessageMany(@RequestParam ArrayList<String> tokenList, String title, String body) throws FirebaseMessagingException {
-        log.info("FCM tokenList : {}", tokenList.toString());
+    public ResponseEntity<ApiResponse<?>> sendMessageMany(@ApiIgnore Authentication authentication,
+                                                          @RequestBody SendMessageManyReqDto sendMessageManyReqDto) throws FirebaseMessagingException {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
+        Long userId = userDetails.getUserId();
 
-        Notification notification = Notification.builder()
-                .setTitle(title)
-                .setBody(body)
-                .build();
-        fcmService.sendMessageMany(notification, tokenList);
+        notificationService.sendMessageMany(sendMessageManyReqDto);
 
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.SEND_MESSAGE_TO), HttpStatus.OK);
     }
 
     // 4. FCM 자동 알림 보내기 Main
-    @Scheduled(cron = "0 0 8 * * *") // sec min hour(24) day month dayOfWeek(ex.MON-FRI)
-    @ApiOperation(value = "(자동) FCM 알림 보내기", notes = "오전 8시 질문 생성 알람 보내기")
-    @Parameter(name = "firebaseToekn", description = "알림 보낼 Token List")
+    @Scheduled(cron = "0 10 8 * * *") // sec min hour(24) day month dayOfWeek(ex.MON-FRI)
+    @ApiOperation(value = "(자동) FCM 알림 보내기", notes = "오전 8시 10분 질문 생성 알람 보내기")
+    @Parameter(name = "firebaseToken", description = "알림 보낼 Token List")
     @PostMapping("/auto")
     public ResponseEntity<ApiResponse<?>> sendMessageAuto() throws FirebaseMessagingException {
         LocalDateTime localDateTime = LocalDateTime.now();
         log.info("FCM 자동 알림 보내기 동작 시간 : {}", localDateTime);
         notificationService.sendMessageAuto();
+
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.SEND_MESSAGE_TO), HttpStatus.OK);
+    }
+
+    // *. Topic 구독
+    @ApiOperation(value = "Topic 구독")
+    @PostMapping("/subscribe")
+    public ResponseEntity<ApiResponse<?>> subscribe(@ApiIgnore Authentication authentication,
+                                                    @RequestParam("topic") String topic, @RequestParam("token") String token) throws FirebaseMessagingException {
+        List<String> tokenList = new ArrayList<>();
+        tokenList.add(token);
+        fcmService.subscribeTopic(tokenList, topic);
+
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.SEND_MESSAGE_TO), HttpStatus.OK);
+    }
+
+    // *. Topic 구독 취소
+    @ApiOperation(value = "Topic 구독")
+    @DeleteMapping("/unsubscribe")
+    public ResponseEntity<ApiResponse<?>> unSubscribe(@ApiIgnore Authentication authentication,
+                                                      @RequestParam("topic") String topic, @RequestParam("token") String token) throws FirebaseMessagingException {
+        List<String> tokenList = new ArrayList<>();
+        tokenList.add(token);
+        fcmService.subscribeTopic(tokenList, topic);
+
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.SEND_MESSAGE_TO), HttpStatus.OK);
+    }
+
+    // *. Topic 메시지 보내기
+    @ApiOperation(value = "Topic 구독")
+    @PostMapping("/topic")
+    public ResponseEntity<ApiResponse<?>> sendMessageTopic(@ApiIgnore Authentication authentication,
+                                                           @RequestParam("topic") String topic, @RequestParam("token") String token) throws FirebaseMessagingException {
+        List<String> tokenList = new ArrayList<>();
+
+        tokenList.add(token);
+        fcmService.subscribeTopic(tokenList, topic);
 
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.SEND_MESSAGE_TO), HttpStatus.OK);
     }
