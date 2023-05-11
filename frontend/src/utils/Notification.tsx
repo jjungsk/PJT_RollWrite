@@ -30,7 +30,14 @@ const Notification = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notification]);
 
-  if (isLogin) {
+  const detectIphoneDevice = (agent: string) => {
+    const iPhoneRegex = /(iPhone|iPod)/i;
+    return iPhoneRegex.test(agent);
+  };
+
+  const isIphone = detectIphoneDevice(window.navigator.userAgent);
+
+  if (!isIphone && isLogin) {
     if (firebaseToken === "") {
       requestForToken().then((token) => {
         sendFirebaseToken(token);
