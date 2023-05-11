@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -15,11 +15,18 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { IconButton } from "@mui/material";
 import { AdminPageTitle } from "./style";
-import { useAppSelector } from "../../constants/types";
+import { toast } from "react-hot-toast";
+import { getUserType } from "../../apis/user";
+import LoadingIcon from "../../elements/LoadingIcon/LoadingIcon";
 
 function AdminLayout() {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [mobileOpen, setMobileOpen] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const currentPath = location.pathname;
   const container = window.document.body;
   const drawerWidth = 240;
   const navItems = [
@@ -30,17 +37,23 @@ function AdminLayout() {
     { id: 5, name: "문의사항  ", path: "inquiry" },
   ];
 
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const currentPath = location.pathname;
-  const isLogin = useAppSelector((state) => state.auth.isLogin);
-
   useEffect(() => {
-    if (isLogin) {
+    getUserType().then((res) => {
       const rootElement = document.querySelector("#root") as HTMLElement;
       rootElement.style.minWidth = "0";
       rootElement.style.maxWidth = "100vw";
-    }
-  }, [isLogin]);
+
+      setTimeout(() => {
+        if (res.data === "ADMIN") {
+          toast.success("관리자님, 환영합니다😄");
+          setIsLoading(false);
+        } else {
+          toast.error("⛔접근 권한이 없습니다.");
+          navigate("");
+        }
+      }, 1000);
+    });
+  }, [navigate]);
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
@@ -76,74 +89,79 @@ function AdminLayout() {
   );
 
   return (
-    <div style={{ overflow: "auto", height: "100vh" }}>
-      <Box sx={{ display: "flex" }}>
-        <CssBaseline />
-        <AppBar component="nav">
-          <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { sm: "none" } }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography
-              variant="h5"
-              component="div"
-              sx={{
-                flexGrow: 1,
-                display: { xs: "none", sm: "block" },
-                cursor: "pointer",
-              }}
-              onClick={() => moveTo("")}
-            >
-              Rollwrite
-            </Typography>
-            <Box
-              sx={{ flexGrow: 5, display: { xs: "none", sm: "block" } }}
-            ></Box>
-            <Box sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}>
-              {navItems.map((item) => (
-                <Button
-                  key={item.id}
-                  onClick={() => moveTo(item.path)}
-                  sx={{ color: "#fff" }}
+    <>
+      {isLoading && <LoadingIcon />}
+      {!isLoading && (
+        <div style={{ overflow: "auto", height: "100vh" }}>
+          <Box sx={{ display: "flex" }}>
+            <CssBaseline />
+            <AppBar component="nav">
+              <Toolbar>
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  edge="start"
+                  onClick={handleDrawerToggle}
+                  sx={{ mr: 2, display: { sm: "none" } }}
                 >
-                  {item.name}
-                </Button>
-              ))}
+                  <MenuIcon />
+                </IconButton>
+                <Typography
+                  variant="h5"
+                  component="div"
+                  sx={{
+                    flexGrow: 1,
+                    display: { xs: "none", sm: "block" },
+                    cursor: "pointer",
+                  }}
+                  onClick={() => moveTo("")}
+                >
+                  Rollwrite
+                </Typography>
+                <Box
+                  sx={{ flexGrow: 5, display: { xs: "none", sm: "block" } }}
+                ></Box>
+                <Box sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}>
+                  {navItems.map((item) => (
+                    <Button
+                      key={item.id}
+                      onClick={() => moveTo(item.path)}
+                      sx={{ color: "#fff" }}
+                    >
+                      {item.name}
+                    </Button>
+                  ))}
+                </Box>
+              </Toolbar>
+            </AppBar>
+            <Box component="nav">
+              <Drawer
+                container={container}
+                variant="temporary"
+                open={mobileOpen}
+                onClose={handleDrawerToggle}
+                ModalProps={{
+                  keepMounted: true, // Better open performance on mobile.
+                }}
+                sx={{
+                  display: { xs: "block", sm: "none" },
+                  "& .MuiDrawer-paper": {
+                    boxSizing: "border-box",
+                    width: drawerWidth,
+                  },
+                }}
+              >
+                {drawer}
+              </Drawer>
             </Box>
-          </Toolbar>
-        </AppBar>
-        <Box component="nav">
-          <Drawer
-            container={container}
-            variant="temporary"
-            open={mobileOpen}
-            onClose={handleDrawerToggle}
-            ModalProps={{
-              keepMounted: true, // Better open performance on mobile.
-            }}
-            sx={{
-              display: { xs: "block", sm: "none" },
-              "& .MuiDrawer-paper": {
-                boxSizing: "border-box",
-                width: drawerWidth,
-              },
-            }}
-          >
-            {drawer}
-          </Drawer>
-        </Box>
-      </Box>
-      <div style={{ marginTop: "70px" }}>
-        <AdminPageTitle>{currentPath.split("/")[2]}</AdminPageTitle>
-        <Outlet />
-      </div>
-    </div>
+          </Box>
+          <div style={{ marginTop: "70px" }}>
+            <AdminPageTitle>{currentPath.split("/")[2]}</AdminPageTitle>
+            <Outlet />
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
