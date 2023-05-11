@@ -25,3 +25,12 @@ export interface Meeting {
   color: string;
   inviteUrl: string;
 }
+
+export interface Inquiry {
+  inquiryId: number;
+  content: string;
+  imageUrl: string;
+  createdAt: string;
+  userNickname: string;
+  userProfileImage: string;
+}

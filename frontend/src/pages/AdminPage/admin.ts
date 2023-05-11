@@ -15,6 +15,11 @@ export const getMeetingList = async () => {
   return response.data;
 };
 
+export const getInquiryList = async () => {
+  const response = await axiosInstance.get(`/admin/inquiry`);
+  return response.data;
+};
+
 export const addTag = async (content: string) => {
   const response = await axiosInstance.post(`/admin/tag`, { content: content });
   return response.data;
