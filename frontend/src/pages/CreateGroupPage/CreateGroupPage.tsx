@@ -62,7 +62,7 @@ function CreateGroupPage() {
     }
 
     if (differenceInDays(new Date(endDay), new Date(startDay)) < 2) {
-      alert("모임기간은 최소 3일 입니다.");
+      toast.error("모임기간은 최소 3일 입니다.");
       return false;
     }
 
