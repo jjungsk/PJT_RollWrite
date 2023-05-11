@@ -36,6 +36,8 @@ export interface Inquiry {
 }
 
 export interface Notice {
+  noticeId?: number;
   title: string;
   content: string;
+  createdAt?: string;
 }
