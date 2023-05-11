@@ -67,6 +67,9 @@ public class MeetingService {
         if (period < 2) {
             throw new IllegalArgumentException("3일 이상의 모임을 생성하세요.");
         }
+        if (period > 31) {
+            throw new IllegalArgumentException("31일 이하의 모임을 생성하세요.");
+        }
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
