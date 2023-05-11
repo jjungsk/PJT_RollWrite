@@ -38,6 +38,7 @@ import AdminPageNotice from "./pages/AdminPage/AdminPageNotice";
 import AdminPageTag from "./pages/AdminPage/AdminPageTag";
 import AdminPageGroup from "./pages/AdminPage/AdminPageGroup";
 import AdminPageInquiry from "./pages/AdminPage/AdminPageInquiry";
+import { toast } from "react-hot-toast";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -84,6 +85,9 @@ function App() {
         // 갱신 실패시 임의 로그아웃 처리
         purge();
       }
+    } else if (response.status === 403) {
+      toast.error("⛔접근 권한이 없습니다.");
+      navigate("");
     }
     return Promise.reject(error);
   };
@@ -189,7 +193,10 @@ function App() {
         htmlTitle!.innerHTML = "공지사항 - Rollwrite";
         break;
       case "inquiry":
-        htmlTitle!.innerHTML = "문의사항 - Rollwrite";
+        htmlTitle!.innerHTML = "의견 보내기 - Rollwrite";
+        break;
+      case "service":
+        htmlTitle!.innerHTML = "서비스 이용약관 - Rollwrite";
         break;
       case "invite":
         htmlTitle!.innerHTML = "모임 초대하기 - Rollwrite";
