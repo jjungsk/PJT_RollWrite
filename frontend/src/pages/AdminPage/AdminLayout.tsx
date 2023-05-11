@@ -27,7 +27,7 @@ function AdminLayout() {
     { id: 2, name: "사용자", path: "user" },
     { id: 3, name: "모임", path: "group" },
     { id: 4, name: "태그", path: "tag" },
-    { id: 4, name: "문의사항  ", path: "inquiry" },
+    { id: 5, name: "문의사항  ", path: "inquiry" },
   ];
 
   const [mobileOpen, setMobileOpen] = React.useState(false);

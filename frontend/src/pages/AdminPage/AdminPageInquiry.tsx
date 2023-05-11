@@ -11,8 +11,6 @@ import {
   TableBody,
   Paper,
   Avatar,
-  ListItemAvatar,
-  ListItemText,
 } from "@mui/material";
 import { getInquiryList } from "./admin";
 
