@@ -37,6 +37,7 @@ import AdminPageUser from "./pages/AdminPage/AdminPageUser";
 import AdminPageNotice from "./pages/AdminPage/AdminPageNotice";
 import AdminPageTag from "./pages/AdminPage/AdminPageTag";
 import AdminPageGroup from "./pages/AdminPage/AdminPageGroup";
+import AdminPageInquiry from "./pages/AdminPage/AdminPageInquiry";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -245,6 +246,7 @@ function App() {
           <Route path="/admin/user" element={<AdminPageUser />} />
           <Route path="/admin/tag" element={<AdminPageTag />} />
           <Route path="/admin/group" element={<AdminPageGroup />} />
+          <Route path="/admin/inquiry" element={<AdminPageInquiry />} />
         </Route>
       </Routes>
     </>
