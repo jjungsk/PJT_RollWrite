@@ -66,6 +66,11 @@ function CreateGroupPage() {
       return false;
     }
 
+    if (differenceInDays(new Date(endDay), new Date(startDay)) > 30) {
+      toast.error("모임기간은 최대 30일 입니다.");
+      return false;
+    }
+
     return true;
   };
 
