@@ -141,6 +141,9 @@ public class QuestionBatch {
                     if (meeting.getEndDay().equals(LocalDate.now())) {
                         meetingService.makeAward(meeting);
 
+                        // 사용안한 chatGpt 질문 삭제
+                        questionGptRepository.deleteQuestionNotUsedByMeeting(meeting);
+
                         // 다음 모임으로 넘어감
                         executionContext.remove("idx");
                         executionContext.put("idx", idx + 1);

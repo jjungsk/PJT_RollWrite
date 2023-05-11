@@ -2,6 +2,7 @@ package com.rollwrite.domain.question.repository;
 
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.rollwrite.domain.meeting.entity.Meeting;
 import com.rollwrite.domain.question.entity.QQuestionGpt;
 import com.rollwrite.domain.question.entity.QuestionGpt;
 import lombok.RequiredArgsConstructor;
@@ -27,5 +28,14 @@ public class QuestionGptCustomRepositoryImpl implements QuestionGptCustomReposit
                 .orderBy(Expressions.numberTemplate(Double.class, "function('rand')").asc())
                 .limit(1)
                 .fetchFirst());
+    }
+
+    @Override
+    public void deleteQuestionNotUsedByMeeting(Meeting meeting) {
+        jpaQueryFactory
+                .delete(questionGpt)
+                .where(questionGpt.meeting.eq(meeting))
+                .where(questionGpt.isChoosed.eq(false))
+                .execute();
     }
 }
