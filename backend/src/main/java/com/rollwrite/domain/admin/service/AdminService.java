@@ -1,15 +1,14 @@
 package com.rollwrite.domain.admin.service;
 
 import com.rollwrite.domain.admin.dto.*;
-import com.rollwrite.domain.admin.entity.Notice;
-import com.rollwrite.domain.admin.repository.NoticeRepository;
+import com.rollwrite.domain.notice.entity.Notice;
+import com.rollwrite.domain.notice.repository.NoticeRepository;
 import com.rollwrite.domain.inquiry.entity.Inquiry;
 import com.rollwrite.domain.inquiry.repository.InquiryRepository;
 import com.rollwrite.domain.meeting.entity.*;
 import com.rollwrite.domain.meeting.repository.MeetingRepository;
 import com.rollwrite.domain.meeting.repository.TagRepository;
 import com.rollwrite.domain.meeting.service.MeetingService;
-import com.rollwrite.domain.notification.repository.NotificationRepository;
 import com.rollwrite.domain.question.entity.Question;
 import com.rollwrite.domain.question.entity.QuestionGpt;
 import com.rollwrite.domain.question.entity.QuestionParticipant;
@@ -46,16 +45,7 @@ public class AdminService {
     private final InquiryRepository inquiryRepository;
     private final QuestionRepository questionRepository;
     private final QuestionGptRepository questionGptRepository;
-    private final NotificationRepository notificationRepository;
     private final QuestionParticipantRepository questionParticipantRepository;
-
-    public List<FindNoticeResDto> findNotice() {
-        List<Notice> noticeList = noticeRepository.findAll();
-
-        return noticeList.stream().map(notice -> FindNoticeResDto.builder()
-                .notice(notice)
-                .build()).collect(Collectors.toList());
-    }
 
     @Transactional
     public void addNotice(Long userId, AddNoticeReqDto addNoticeReqDto) {
