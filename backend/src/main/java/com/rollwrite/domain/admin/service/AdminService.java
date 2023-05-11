@@ -1,6 +1,9 @@
 package com.rollwrite.domain.admin.service;
 
 import com.rollwrite.domain.admin.dto.*;
+import com.rollwrite.domain.meeting.dto.MeetingResultDto;
+import com.rollwrite.domain.meeting.dto.ParticipantDto;
+import com.rollwrite.domain.meeting.dto.TagDto;
 import com.rollwrite.domain.notice.entity.Notice;
 import com.rollwrite.domain.notice.repository.NoticeRepository;
 import com.rollwrite.domain.inquiry.entity.Inquiry;
@@ -161,12 +164,33 @@ public class AdminService {
         tag.updateContent(content);
     }
 
-    public List<FindMeetingResDto> findMeeting() {
+    public List<MeetingResultDto> findMeeting() {
+        List<MeetingResultDto> meetingResultDtoList = new ArrayList<>();
+
         List<Meeting> meetingList = meetingRepository.findAll();
 
-        return meetingList.stream().map(meeting -> FindMeetingResDto.builder()
-                .meeting(meeting)
-                .build()).collect(Collectors.toList());
+        for (Meeting meeting : meetingList) {
+            // List<Participant> -> List<ParticipantDto>
+            List<ParticipantDto> participantDtoList = meeting.getParticipantList().stream()
+                    .map(participant -> ParticipantDto.of(participant))
+                    .collect(Collectors.toList());
+
+            // 참여자 수
+            int participantCnt = participantDtoList.size();
+
+            // List<TagMeeting> -> List<TagDto>
+            List<TagDto> tagDtoList = meeting.getTagMeetingList().stream()
+                    .map(tagMeeting -> TagDto.of(tagMeeting.getTag()))
+                    .collect(Collectors.toList());
+
+            meetingResultDtoList.add(MeetingResultDto.builder()
+                    .meeting(meeting)
+                    .tag(tagDtoList)
+                    .participant(participantDtoList)
+                    .participantCnt(participantCnt)
+                    .build());
+        }
+        return meetingResultDtoList;
     }
 
     @Transactional

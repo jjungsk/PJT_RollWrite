@@ -2,6 +2,7 @@ package com.rollwrite.domain.admin.controller;
 
 import com.rollwrite.domain.admin.dto.*;
 import com.rollwrite.domain.admin.service.AdminService;
+import com.rollwrite.domain.meeting.dto.MeetingResultDto;
 import com.rollwrite.global.auth.CustomUserDetails;
 import com.rollwrite.global.model.ApiResponse;
 import com.rollwrite.global.model.SuccessCode;
@@ -89,8 +90,8 @@ public class AdminController {
     @GetMapping("/meeting")
     public ResponseEntity<ApiResponse> meetingList() {
         log.info("meetingList 호출");
-        List<FindMeetingResDto> findMeetingResDtoList = adminService.findMeeting();
-        return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_MEETING_SUCCESS, findMeetingResDtoList), HttpStatus.OK);
+        List<MeetingResultDto> meetingResultDtoList = adminService.findMeeting();
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_MEETING_SUCCESS, meetingResultDtoList), HttpStatus.OK);
     }
 
     @PostMapping("/question/{meetingId}")
