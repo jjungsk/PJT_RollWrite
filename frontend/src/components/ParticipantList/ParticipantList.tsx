@@ -19,6 +19,7 @@ function ParticipantList({ groupInfo }: Props) {
           </ProfileItem>
         );
       })}
+      <div style={{ width: "100%", height: "100px" }}></div>
     </ParticipantListContainer>
   );
 }
