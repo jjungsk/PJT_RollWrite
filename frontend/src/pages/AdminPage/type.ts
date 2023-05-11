@@ -34,3 +34,8 @@ export interface Inquiry {
   userNickname: string;
   userProfileImage: string;
 }
+
+export interface Notice {
+  title: string;
+  content: string;
+}
