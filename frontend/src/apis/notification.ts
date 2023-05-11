@@ -19,3 +19,9 @@ export const sendInquiry = async (formData: FormData) => {
   const response = await axiosFileInstance.post("/inquiry", formData);
   return response.data;
 };
+
+// 의견 보내기
+export const sendInquiry = async (formData: FormData) => {
+  const response = await axiosFileInstance.post("/inquiry", formData);
+  return response.data;
+};
