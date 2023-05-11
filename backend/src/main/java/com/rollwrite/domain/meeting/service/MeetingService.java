@@ -102,8 +102,16 @@ public class MeetingService {
             tag += tagDto.getContent() + ",";
         }
 
-        // Chat GPT 생성 질문 10개 저장
-        asyncMeetingService.saveGptQuestion(tag, meeting, period);
+        // 오늘 시작하는 모임의 경우 ChatGPT 질문 1개 먼저 만들어주기
+        // Chat GPT 생성 질문 period개 저장
+        if(startDay.isEqual(today)){
+            // Chat GPT 오늘 질문 생성
+            asyncMeetingService.saveTodayGptQuestion(tag,meeting);
+
+            asyncMeetingService.saveGptQuestion(tag, meeting, period-1);
+        }else{
+            asyncMeetingService.saveGptQuestion(tag, meeting, period);
+        }
 
         // Meeting 생성자 Meeting에 추가
         Participant participant = Participant.builder()
