@@ -104,12 +104,12 @@ public class MeetingService {
 
         // 오늘 시작하는 모임의 경우 ChatGPT 질문 1개 먼저 만들어주기
         // Chat GPT 생성 질문 period개 저장
-        if(startDay.isEqual(today)){
+        if (startDay.isEqual(today)) {
             // Chat GPT 오늘 질문 생성
-            asyncMeetingService.saveTodayGptQuestion(tag,meeting);
+            asyncMeetingService.saveTodayGptQuestion(tag, meeting);
 
-            asyncMeetingService.saveGptQuestion(tag, meeting, period-1);
-        }else{
+            asyncMeetingService.saveGptQuestion(tag, meeting, period - 1);
+        } else {
             asyncMeetingService.saveGptQuestion(tag, meeting, period);
         }
 
