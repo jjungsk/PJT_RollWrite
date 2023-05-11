@@ -1,6 +1,6 @@
-package com.rollwrite.domain.admin.repository;
+package com.rollwrite.domain.notice.repository;
 
-import com.rollwrite.domain.admin.entity.Notice;
+import com.rollwrite.domain.notice.entity.Notice;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface NoticeRepository extends JpaRepository<Notice, Long> {

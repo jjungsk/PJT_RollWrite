@@ -11,8 +11,10 @@ public enum SuccessCode {
     // test
     TEST(StatusCode.SUCCESS, "테스트 중입니다."),
 
-    // admin
+    // notice
     FIND_NOTICE_SUCCESS(StatusCode.SUCCESS, "공지 목록을 조회했습니다."),
+
+    // admin
     ADD_NOTICE_SUCCESS(StatusCode.SUCCESS, "공지가 생성되었습니다."),
     MODIFY_NOTICE_SUCCESS(StatusCode.SUCCESS, "공지가 수정되었습니다."),
     REMOVE_NOTICE_SUCCESS(StatusCode.SUCCESS, "공지가 삭제되었습니다."),

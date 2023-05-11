@@ -1,6 +1,6 @@
-package com.rollwrite.domain.admin.dto;
+package com.rollwrite.domain.notice.dto;
 
-import com.rollwrite.domain.admin.entity.Notice;
+import com.rollwrite.domain.notice.entity.Notice;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
