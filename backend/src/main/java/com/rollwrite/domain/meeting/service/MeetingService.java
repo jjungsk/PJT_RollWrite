@@ -53,6 +53,24 @@ public class MeetingService {
     public AddMeetingResDto addMeeting(Long userId,
                                        AddMeetingReqDto addMeetingReqDto) throws NoSuchAlgorithmException {
 
+        LocalDate startDay = addMeetingReqDto.getStartDay();
+        LocalDate endDay = addMeetingReqDto.getEndDay();
+        LocalDate today = LocalDate.now();
+
+        // 시작일이 오늘 이전
+        if (startDay.isBefore(today)) {
+            throw new IllegalArgumentException("시작일이 오늘 이전입니다.");
+        }
+
+        // 3일 이내인 경우
+        long period = ChronoUnit.DAYS.between(startDay, endDay);
+        if (period < 2) {
+            throw new IllegalArgumentException("3일 이상의 모임을 생성하세요.");
+        }
+        if (period > 31) {
+            throw new IllegalArgumentException("31일 이하의 모임을 생성하세요.");
+        }
+
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
@@ -84,11 +102,16 @@ public class MeetingService {
             tag += tagDto.getContent() + ",";
         }
 
-        // 날짜 계산
-        long period = ChronoUnit.DAYS.between(meeting.getStartDay(), meeting.getEndDay());
+        // 오늘 시작하는 모임의 경우 ChatGPT 질문 1개 먼저 만들어주기
+        // Chat GPT 생성 질문 period개 저장
+        if (startDay.isEqual(today)) {
+            // Chat GPT 오늘 질문 생성
+            asyncMeetingService.saveTodayGptQuestion(tag, meeting);
 
-        // Chat GPT 생성 질문 10개 저장
-        asyncMeetingService.saveGptQuestion(tag, meeting, period);
+            asyncMeetingService.saveGptQuestion(tag, meeting, period - 1);
+        } else {
+            asyncMeetingService.saveGptQuestion(tag, meeting, period);
+        }
 
         // Meeting 생성자 Meeting에 추가
         Participant participant = Participant.builder()

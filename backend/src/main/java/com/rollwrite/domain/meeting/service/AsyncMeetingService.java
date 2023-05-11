@@ -37,6 +37,56 @@ public class AsyncMeetingService {
     @Async
     @Transactional
     public void saveGptQuestion(String tag, Meeting meeting, long period) {
+        List<AsyncChatGptDto> answerList = getAsyncChatGpt(tag, period);
+
+        // 파싱된 객체 저장
+        for (AsyncChatGptDto asyncChatGptDto : answerList) {
+            log.info("질문 : " + asyncChatGptDto.getQuestion());
+            log.info("이모지 : " + asyncChatGptDto.getEmoji());
+            QuestionGpt questionGpt = QuestionGpt.builder()
+                    .emoji(asyncChatGptDto.getEmoji())
+                    .content(asyncChatGptDto.getQuestion())
+                    .meeting(meeting)
+                    .build();
+            questionGptRepository.save(questionGpt);
+        }
+    }
+
+    @Async
+    @Transactional
+    public void saveTodayGptQuestion(String tag, Meeting meeting) {
+        Long period = 1L;
+        List<AsyncChatGptDto> answerList = getAsyncChatGpt(tag, period);
+
+        AsyncChatGptDto asyncChatGptDto = answerList.get(0);
+
+        String emoji = asyncChatGptDto.getEmoji();
+        String content = asyncChatGptDto.getQuestion();
+        log.info("오늘 질문: " + content);
+        log.info("오늘 이모지 : " + emoji);
+
+        QuestionGpt questionGpt = QuestionGpt.builder()
+                .emoji(emoji)
+                .content(content)
+                .isChoosed(true)
+                .meeting(meeting)
+                .build();
+        questionGptRepository.save(questionGpt);
+
+        // 다음날 오전 8시
+        LocalDateTime expireTime = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(8, 0));
+
+        // question insert
+        Question question = Question.builder()
+                .content(content)
+                .emoji(emoji)
+                .meeting(meeting)
+                .expireTime(expireTime)
+                .build();
+        questionRepository.save(question);
+    }
+
+    private List<AsyncChatGptDto> getAsyncChatGpt(String tag, Long period) {
         String query = "를 공통으로 이루어진 모임이 있어. 이 모임에서 서로 에게 물어볼 만한 20자 이내의 흥미로운 질문 " + period + "개와 그와 연관된 이모지도 딱 1개씩만 같이 추천해줘, 형식은 json 배열이야, {\"question\":\"content\",\"emoji\": \"🍕\"}";
         List<MessageDto> messageDtoList = new ArrayList<>();
         MessageDto messageDto = MessageDto.builder()
@@ -62,42 +112,6 @@ public class AsyncMeetingService {
         Type answerListType = new com.google.gson.reflect.TypeToken<List<AsyncChatGptDto>>() {
         }.getType();
         List<AsyncChatGptDto> answerList = gson.fromJson(response, answerListType);
-
-        // 파싱된 객체 저장
-        for (AsyncChatGptDto asyncChatGptDto : answerList) {
-            log.info("질문 : " + asyncChatGptDto.getQuestion());
-            log.info("이모지 : " + asyncChatGptDto.getEmoji());
-            QuestionGpt questionGpt = QuestionGpt.builder()
-                    .emoji(asyncChatGptDto.getEmoji())
-                    .content(asyncChatGptDto.getQuestion())
-                    .meeting(meeting)
-                    .build();
-            questionGptRepository.save(questionGpt);
-        }
-        // 시작일이 오늘인 경우에만 질문 생성
-        if (meeting.getStartDay().isEqual(LocalDate.now())) {
-            // ChatGPT가 만든 질문 중 1개 선택
-            QuestionGpt questionGpt = questionGptRepository.chooseRandomQuestionGpt(meeting.getId(), false)
-                    .orElseThrow(() -> new IllegalArgumentException("Chat GPT가 생성한 질문이 없습니다."));
-
-            // 해당 gpt 질문을 isChoosed = true로 업데이트
-            questionGpt.updateIsChoosed(true);
-
-            // question, emoji 업데이트
-            String content = questionGpt.getContent();
-            String emoji = questionGpt.getEmoji();
-
-            // 다음날 오전 8시
-            LocalDateTime expireTime = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(8, 0));
-
-            // question insert
-            Question question = Question.builder()
-                    .content(content)
-                    .emoji(emoji)
-                    .meeting(meeting)
-                    .expireTime(expireTime)
-                    .build();
-            questionRepository.save(question);
-        }
+        return answerList;
     }
 }

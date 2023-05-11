@@ -23,7 +23,7 @@ public class Question extends BaseTimeEntity {
     private Long id;
 
     @NotNull
-    @Column(length = 40)
+    @Column(length = 60)
     private String content;
 
     @NotNull
