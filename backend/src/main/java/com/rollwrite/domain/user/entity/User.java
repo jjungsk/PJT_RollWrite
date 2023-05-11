@@ -1,6 +1,6 @@
 package com.rollwrite.domain.user.entity;
 
-import com.rollwrite.domain.admin.entity.Notice;
+import com.rollwrite.domain.notice.entity.Notice;
 import com.rollwrite.domain.inquiry.entity.Inquiry;
 import com.rollwrite.domain.meeting.entity.Participant;
 import com.rollwrite.domain.meeting.entity.Award;

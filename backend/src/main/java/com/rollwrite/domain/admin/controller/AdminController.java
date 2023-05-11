@@ -25,13 +25,6 @@ public class AdminController {
 
     private final AdminService adminService;
 
-    @GetMapping("/notice")
-    public ResponseEntity<ApiResponse> noticeList() {
-        log.info("noticeList 호출");
-        List<FindNoticeResDto> findNoticeResDtoList = adminService.findNotice();
-        return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_NOTICE_SUCCESS, findNoticeResDtoList), HttpStatus.OK);
-    }
-
     @PostMapping("/notice")
     public ResponseEntity<ApiResponse> addNotice(@ApiIgnore Authentication authentication,
                                                  @RequestBody AddNoticeReqDto addNoticeReqDto) {

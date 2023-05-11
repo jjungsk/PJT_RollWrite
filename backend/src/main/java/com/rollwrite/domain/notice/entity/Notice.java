@@ -1,4 +1,4 @@
-package com.rollwrite.domain.admin.entity;
+package com.rollwrite.domain.notice.entity;
 
 import com.rollwrite.domain.admin.dto.AddNoticeReqDto;
 import com.rollwrite.domain.user.entity.User;
