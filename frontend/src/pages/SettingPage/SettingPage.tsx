@@ -96,7 +96,9 @@ function SettingPage() {
           <Back />
         </SettingMenuItem>
         <SettingMenuItem>
-          <SettingMenuItemText>서비스 상세정보 / 약관</SettingMenuItemText>
+          <SettingMenuItemText onClick={() => handleClickMenu("service")}>
+            서비스 상세정보 / 약관
+          </SettingMenuItemText>
           <Back />
         </SettingMenuItem>
         <SettingMenuItem>

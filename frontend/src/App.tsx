@@ -147,7 +147,7 @@ function App() {
         window.close();
         window.location.href = `intent://${
           process.env.REACT_APP_SERVER_URL?.split("//")[1]
-        }#Intent;scheme=http;package=com.android.chrome;end`;
+        }${currentPath}#Intent;scheme=http;package=com.android.chrome;end`;
       }
     }
 
@@ -215,7 +215,7 @@ function App() {
 
   return (
     <>
-      {!(isIphone && isInApp) && <Notification />}
+      <Notification />
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route path="/" element={<Navigate to="/question" />} />
