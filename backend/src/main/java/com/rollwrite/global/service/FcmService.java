@@ -31,7 +31,7 @@ public class FcmService {
                         .build())
                 .setNotification(WebpushNotification.builder()
                         .setIcon(ICON_IMAGE)
-                        .setImage(ICON_IMAGE)
+                        .setImage("이미지")
                         .build())
                 .build();
     }
@@ -42,7 +42,7 @@ public class FcmService {
                 .setNotification(AndroidNotification.builder()
                         .setClickAction(SERVICE_LINK)
                         .setIcon(ICON_IMAGE)
-                        .setImage(ICON_IMAGE)
+                        .setImage("이미지")
                         .build())
                 .build();
     }
@@ -50,8 +50,10 @@ public class FcmService {
     // 0-3. Ios 설정
     private ApnsConfig apnsConfig() {
         return ApnsConfig.builder()
+                .setAps(Aps.builder()
+                        .build())
                 .setFcmOptions(ApnsFcmOptions.builder()
-                        .setImage(ICON_IMAGE)
+                        .setImage("이미지")
                         .build())
                 .build();
     }
@@ -61,6 +63,8 @@ public class FcmService {
         Message message = Message.builder()
                 .setNotification(notification)
                 .setWebpushConfig(webpushConfig())
+                .setAndroidConfig(androidConfig())
+                .setApnsConfig(apnsConfig())
                 .setToken(firebaseToken)
                 .build();
 
@@ -74,6 +78,8 @@ public class FcmService {
         MulticastMessage message = MulticastMessage.builder()
                 .setNotification(notification)
                 .setWebpushConfig(webpushConfig())
+                .setAndroidConfig(androidConfig())
+                .setApnsConfig(apnsConfig())
                 .addAllTokens(firebaseTokenList)
                 .build();
         BatchResponse response = FirebaseMessaging.getInstance().sendMulticast(message);
