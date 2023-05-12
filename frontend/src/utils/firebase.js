@@ -3,10 +3,11 @@ import { getMessaging, getToken, onMessage} from 'firebase/messaging';
 import { FIREBASE_CONFIG } from "../constants/firebaseConfig";
 
 const detectIphoneDevice = (agent) => {
-  const iPhoneRegex = /(iPhone|iPod)/i;
+  const iPhoneRegex = /iPhone|iPod|Mac OS X/i;
   return iPhoneRegex.test(agent);
 };
 const isIphone = detectIphoneDevice(window.navigator.userAgent);
+console.log(isIphone);
 
 var messaging = null;
 if (!isIphone) {
@@ -20,6 +21,7 @@ export const requestForToken = async () => {
       const currentToken = await getToken(messaging, { vapidKey: process.env.REACT_APP_FIREBASE_VAPID_KEY });
   
       if (currentToken) {
+        console.log(currentToken);
         return currentToken;
       } else {
         console.log(

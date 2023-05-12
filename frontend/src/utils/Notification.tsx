@@ -37,13 +37,12 @@ const Notification = () => {
 
   const isIphone = detectIphoneDevice(window.navigator.userAgent);
 
-  if (!isIphone && isLogin) {
-    if (firebaseToken === "") {
-      requestForToken().then((token) => {
-        sendFirebaseToken(token);
-        dispatch(updateFirebaseToken(token));
-      });
-    }
+  if (!isIphone && isLogin && firebaseToken === "") {
+    console.log("토큰 요청");
+    requestForToken().then((token) => {
+      sendFirebaseToken(token);
+      dispatch(updateFirebaseToken(token));
+    });
 
     // onMessageListener()
     //   .then((payload) => {
