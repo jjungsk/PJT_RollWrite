@@ -1,8 +1,6 @@
 package com.rollwrite.domain.meeting.repository;
 
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.rollwrite.domain.meeting.dto.FindAllParticipantDto;
 import com.rollwrite.domain.meeting.entity.Meeting;
 import com.rollwrite.domain.meeting.entity.QMeeting;
 import com.rollwrite.domain.meeting.entity.Participant;
@@ -12,7 +10,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import com.rollwrite.domain.notification.entity.QAlarm;
 import com.rollwrite.domain.user.entity.QUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +20,6 @@ public class ParticipantCustomRepositoryImpl implements ParticipantCustomReposit
     private final JPAQueryFactory jpaQueryFactory;
 
     QUser user = QUser.user;
-    QAlarm alarm = QAlarm.alarm;
     QMeeting meeting = QMeeting.meeting;
     QParticipant participant = QParticipant.participant;
 

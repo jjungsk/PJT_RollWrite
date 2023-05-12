@@ -3,6 +3,10 @@ package com.rollwrite.domain.meeting.service;
 import com.rollwrite.domain.meeting.dto.*;
 import com.rollwrite.domain.meeting.entity.*;
 import com.rollwrite.domain.meeting.repository.*;
+import com.rollwrite.domain.question.dto.AnswerLengthSumDto;
+import com.rollwrite.domain.question.dto.AnswerRecordDto;
+import com.rollwrite.domain.question.dto.ImageCountDto;
+import com.rollwrite.domain.question.entity.Answer;
 import com.rollwrite.domain.question.entity.Question;
 import com.rollwrite.domain.question.repository.AnswerRepository;
 import com.rollwrite.domain.question.repository.QuestionRepository;
@@ -11,6 +15,9 @@ import com.rollwrite.domain.user.entity.User;
 import com.rollwrite.domain.user.repository.UserRepository;
 
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -46,6 +53,24 @@ public class MeetingService {
     public AddMeetingResDto addMeeting(Long userId,
                                        AddMeetingReqDto addMeetingReqDto) throws NoSuchAlgorithmException {
 
+        LocalDate startDay = addMeetingReqDto.getStartDay();
+        LocalDate endDay = addMeetingReqDto.getEndDay();
+        LocalDate today = LocalDate.now();
+
+        // 시작일이 오늘 이전
+        if (startDay.isBefore(today)) {
+            throw new IllegalArgumentException("시작일이 오늘 이전입니다.");
+        }
+
+        // 3일 이내인 경우
+        long period = ChronoUnit.DAYS.between(startDay, endDay);
+        if (period < 2) {
+            throw new IllegalArgumentException("3일 이상의 모임을 생성하세요.");
+        }
+        if (period > 31) {
+            throw new IllegalArgumentException("31일 이하의 모임을 생성하세요.");
+        }
+
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
@@ -77,11 +102,16 @@ public class MeetingService {
             tag += tagDto.getContent() + ",";
         }
 
-        // 날짜 계산
-        long period = ChronoUnit.DAYS.between(meeting.getStartDay(), meeting.getEndDay());
+        // 오늘 시작하는 모임의 경우 ChatGPT 질문 1개 먼저 만들어주기
+        // Chat GPT 생성 질문 period개 저장
+        if (startDay.isEqual(today)) {
+            // Chat GPT 오늘 질문 생성
+            asyncMeetingService.saveTodayGptQuestion(tag, meeting);
 
-        // Chat GPT 생성 질문 10개 저장
-        asyncMeetingService.saveGptQuestion(tag, meeting, period);
+            asyncMeetingService.saveGptQuestion(tag, meeting, period - 1);
+        } else {
+            asyncMeetingService.saveGptQuestion(tag, meeting, period);
+        }
 
         // Meeting 생성자 Meeting에 추가
         Participant participant = Participant.builder()
@@ -326,5 +356,156 @@ public class MeetingService {
                 .nickname(participant.getUser().getNickname())
                 .profileImage(participant.getUser().getProfileImage())
                 .build()).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void makeAward(Meeting meeting) {
+        // 답변 제일 길게 많이 한 사람
+        List<AnswerLengthSumDto> answerLengthSumList = answerRepository.findAnswerLengthSumByMeeting(meeting);
+        List<User> taleteller = new ArrayList<>();
+        int maxLengthSum = Integer.MIN_VALUE;
+        for (AnswerLengthSumDto answerLengthSum : answerLengthSumList) {
+            User user = answerLengthSum.getUser();
+            int length = answerLengthSum.getAnswerLengthSum();
+
+            if (length >= maxLengthSum) {
+                maxLengthSum = length;
+                taleteller.add(user);
+            } else {
+                break;
+            }
+        }
+
+        // 사진 제일 많이 올린 사람
+        List<ImageCountDto> imageCountDtoList = answerRepository.findImageCountByMeeting(meeting);
+        List<User> photographer = new ArrayList<>();
+        Long maxImageCount = Long.MIN_VALUE;
+        for (ImageCountDto imageCount : imageCountDtoList) {
+            User user = imageCount.getUser();
+            Long count = imageCount.getImageCount();
+
+            if (count >= maxImageCount) {
+                maxImageCount = count;
+                photographer.add(user);
+            } else {
+                break;
+            }
+        }
+
+        // 연속 답변 최고기록자
+        // 1. 모임의 참가자 리스트
+        List<Participant> participantList = participantRepository.findByMeeting(meeting);
+        List<AnswerRecordDto> answerRecordDtoList = new ArrayList<>();
+
+        for (Participant participant : participantList) {
+            // 2. 참가자의 답변 리스트
+            List<Answer> answerList = answerRepository.findAnswerByUserAndMeeting(participant.getUser(), meeting);
+
+            // 3. 참가자의 최대 기록
+            int curRecord = 1;
+            int participantRecord = 1;
+            for (int i = 1, size = answerList.size(); i < size; i++) {
+                LocalDateTime prevTime = answerList.get(i - 1).getCreatedAt();
+                LocalDateTime curTime = answerList.get(i).getCreatedAt();
+
+                // 오전 8시 기준으로 날짜 보정
+                LocalDate prevDay = prevTime.toLocalDate();
+                LocalDate curDay = curTime.toLocalDate();
+
+                if (prevTime.getHour() < 8) {
+                    prevDay = prevTime.minusDays(1).toLocalDate();
+                }
+
+                if (curTime.getHour() < 8) {
+                    curDay = curTime.minusDays(1).toLocalDate();
+                }
+
+                // 이전 답변과 지금 답변이 하루 차이나면 curRecord++, 그 이상이면 1로 초기화;
+                long duration = ChronoUnit.DAYS.between(prevDay, curDay);
+                if (duration > 1) {
+                    curRecord = 1;
+                } else {
+                    if (++curRecord >= participantRecord) {
+                        participantRecord = curRecord;
+                    }
+                }
+
+            }
+            answerRecordDtoList.add(AnswerRecordDto.builder()
+                    .user(participant.getUser())
+                    .answerRecord(participantRecord)
+                    .build());
+        }
+
+        Collections.sort(answerRecordDtoList, new Comparator<>() {
+            @Override
+            public int compare(AnswerRecordDto o1, AnswerRecordDto o2) {
+                // answerRecord 기준 내림차순
+                int record1 = o1.getAnswerRecord();
+                int record2 = o2.getAnswerRecord();
+                if (record1 < record2) {
+                    return 1;
+                } else if (record1 > record2) {
+                    return -1;
+                }
+                return 0;
+            }
+        });
+
+        List<User> perfectAttendance = new ArrayList<>();
+        int maxRecord = Integer.MIN_VALUE;
+        for (AnswerRecordDto answerRecord : answerRecordDtoList) {
+            User user = answerRecord.getUser();
+            int record = answerRecord.getAnswerRecord();
+
+            if (record >= maxRecord) {
+                maxRecord = record;
+                perfectAttendance.add(user);
+            } else {
+                break;
+            }
+        }
+
+        // 충분히 긴 시간 9999-01-01 00:00:00.000000
+        LocalDateTime infiniteTime = LocalDateTime.of(LocalDate.of(9999, 1, 1), LocalTime.MIN);
+
+        // question insert
+        Question question = Question.builder()
+                .content("마지막으로 우리에 대해 하고 싶은 말이 뭐야?")
+                .emoji("🎉")
+                .meeting(meeting)
+                .expireTime(infiniteTime)
+                .build();
+        questionRepository.save(question);
+
+        // award insert - taleteller
+        for (User user : taleteller) {
+            Award award = Award.builder()
+                    .type(AwardType.TALETELLER)
+                    .meeting(meeting)
+                    .user(user)
+                    .build();
+            awardRepository.save(award);
+        }
+
+        // award insert - photographer
+        for (User user : photographer) {
+            Award award = Award.builder()
+                    .type(AwardType.PHOTOGRAPHER)
+                    .meeting(meeting)
+                    .user(user)
+                    .build();
+            awardRepository.save(award);
+        }
+
+        // award insert - PERFECTATTENDANCE
+        for (User user : perfectAttendance) {
+            Award award = Award.builder()
+                    .type(AwardType.PERFECTATTENDANCE)
+                    .meeting(meeting)
+                    .user(user)
+                    .build();
+            awardRepository.save(award);
+        }
     }
 }
