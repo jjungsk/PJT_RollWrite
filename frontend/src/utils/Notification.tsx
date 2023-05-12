@@ -31,7 +31,7 @@ const Notification = () => {
   }, [notification]);
 
   const detectIphoneDevice = (agent: string) => {
-    const iPhoneRegex = /(iPhone|iPod)/i;
+    const iPhoneRegex = /iPhone|iPod|Mac OS X/i;
     return iPhoneRegex.test(agent);
   };
 
