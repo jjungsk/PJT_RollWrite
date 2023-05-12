@@ -4,6 +4,7 @@ import com.rollwrite.domain.admin.dto.*;
 import com.rollwrite.domain.meeting.dto.MeetingResultDto;
 import com.rollwrite.domain.meeting.dto.ParticipantDto;
 import com.rollwrite.domain.meeting.dto.TagDto;
+import com.rollwrite.domain.meeting.repository.ParticipantRepository;
 import com.rollwrite.domain.notice.entity.Notice;
 import com.rollwrite.domain.notice.repository.NoticeRepository;
 import com.rollwrite.domain.inquiry.entity.Inquiry;
@@ -48,6 +49,7 @@ public class AdminService {
     private final InquiryRepository inquiryRepository;
     private final QuestionRepository questionRepository;
     private final QuestionGptRepository questionGptRepository;
+    private final ParticipantRepository participantRepository;
     private final QuestionParticipantRepository questionParticipantRepository;
 
     @Transactional
@@ -312,5 +314,37 @@ public class AdminService {
                 .findMeetingResDtoList(findMeetingResDtoList)
                 .build());
         return findMeetingDashboardDtoList;
+    }
+
+    public List<FindParticipantDashboardDto> findParticipantDashboard() {
+        List<FindParticipantDashboardDto> findParticipantDashboardDtoList = new ArrayList<>();
+        List<FindUserResDto> findUserResDtoList = new ArrayList<>();
+
+        List<MeetingCountDto> participantList = participantRepository.findMeetingCnt();
+
+        // 모임이 0개
+        int meetingCnt = 0;
+
+        // 모임 개수별로 분류
+        for (MeetingCountDto meetingCountDto : participantList) {
+            if (meetingCnt != meetingCountDto.getMeetingCount()) {
+                // 다르면 dto findParticipantDashboardDtoList 추가하고 meetingCnt, findUserResDtoList 갱신
+                findParticipantDashboardDtoList.add(FindParticipantDashboardDto.builder()
+                        .meetingCnt(meetingCnt)
+                        .findUserResDtoList(findUserResDtoList)
+                        .build());
+
+                meetingCnt = Math.toIntExact(meetingCountDto.getMeetingCount());
+                findUserResDtoList = new ArrayList<>();
+            }
+            findUserResDtoList.add(FindUserResDto.builder()
+                    .user(meetingCountDto.getUser())
+                    .build());
+        }
+        findParticipantDashboardDtoList.add(FindParticipantDashboardDto.builder()
+                .meetingCnt(meetingCnt)
+                .findUserResDtoList(findUserResDtoList)
+                .build());
+        return findParticipantDashboardDtoList;
     }
 }
