@@ -27,7 +27,7 @@ function CreateGroupStepTwo({ groupInfo, setGroupInfo, onClick }: Props) {
   };
 
   const today = new Date();
-  const minDay = addDays(new Date(groupInfo.startDay), 3);
+  const minDay = addDays(new Date(groupInfo.startDay), 2);
   const maxDay = addDays(new Date(groupInfo.startDay), 30);
   const todayString = today.toISOString().substring(0, 10);
   const minDayString = minDay.toISOString().substring(0, 10);
