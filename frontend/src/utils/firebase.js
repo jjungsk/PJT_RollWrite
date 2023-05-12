@@ -7,7 +7,6 @@ const detectIphoneDevice = (agent) => {
   return iPhoneRegex.test(agent);
 };
 const isIphone = detectIphoneDevice(window.navigator.userAgent);
-console.log(isIphone);
 
 var messaging = null;
 if (!isIphone) {
@@ -21,7 +20,6 @@ export const requestForToken = async () => {
       const currentToken = await getToken(messaging, { vapidKey: process.env.REACT_APP_FIREBASE_VAPID_KEY });
   
       if (currentToken) {
-        console.log(currentToken);
         return currentToken;
       } else {
         console.log(
