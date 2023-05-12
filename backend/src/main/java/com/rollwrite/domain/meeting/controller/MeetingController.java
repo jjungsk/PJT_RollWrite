@@ -200,4 +200,16 @@ public class MeetingController {
                 ApiResponse.success(SuccessCode.GET_PARTICIPANT_SUCCESS, findUserResDtoList),
                 HttpStatus.OK);
     }
+
+    @ApiOperation(value = "point 사용 시, 답변 뽑기", notes = "현재 모임의 답변 뽑기")
+    @Parameter(name = "meetingId", description = "조회 할 모임 아이디")
+    @GetMapping("/answer/{meetingId}")
+    public ResponseEntity<ApiResponse> getRandomAnswer(@ApiIgnore Authentication authentication, @PathVariable Long meetingId) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
+        Long userId = userDetails.getUserId();
+
+        String answer = meetingService.getRandomAnswer(userId, meetingId);
+
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.GET_RANDOM_ANSWER_SUCCESS, answer), HttpStatus.OK);
+    }
 }

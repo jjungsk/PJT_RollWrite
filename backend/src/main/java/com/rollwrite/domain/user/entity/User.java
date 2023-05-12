@@ -9,10 +9,8 @@ import com.rollwrite.domain.notification.entity.Notification;
 import com.rollwrite.domain.question.entity.Answer;
 import com.rollwrite.domain.question.entity.QuestionParticipant;
 import com.rollwrite.global.model.BaseTimeEntity;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -24,8 +22,11 @@ import java.util.List;
  */
 @Getter
 @Entity
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseTimeEntity {
+
+    public static Long POINT = 10L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,6 +45,10 @@ public class User extends BaseTimeEntity {
 
     @Column(length = 2083)
     private String firebaseToken;
+
+    @Column
+    @ColumnDefault("0")
+    private Long point;
 
     @NotNull
     @Column
@@ -94,5 +99,7 @@ public class User extends BaseTimeEntity {
     public void updateUserType(UserType userType) {
         this.type = userType;
     }
+
+    public void updatePoint(Long point) { this.point = point; }
 
 }

@@ -127,6 +127,10 @@ public class QuestionService {
             participant.updateIsDone(true);
         }
 
+        // 질문이 정상 등록 되었을 때, 답변 포인트 생성
+        Long point = user.getPoint();
+        user.updatePoint(point + User.POINT);
+
         return AddAnswerResDto.builder()
                 .participant(participant)
                 .build();

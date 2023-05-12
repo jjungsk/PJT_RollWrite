@@ -16,6 +16,7 @@ import com.rollwrite.domain.question.entity.Question;
 import com.rollwrite.domain.user.entity.QUser;
 import com.rollwrite.domain.user.entity.User;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -123,6 +124,21 @@ public class AnswerCustomRepositoryImpl implements AnswerCustomRepository {
                 .where(answer.meeting.eq(meeting))
                 .groupBy(answer.question)
                 .orderBy(answer.question.createdAt.asc())
+                .fetch();
+    }
+
+    @Override
+    public List<Answer> findByMeetingIdAndUserIdAndCreatedAt(Long userId, Long meetingId) {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        if (localDateTime.getHour() < 8) localDateTime = localDateTime.minusDays(1L).withHour(8).withMinute(0).withSecond(0);
+        else localDateTime = localDateTime.withHour(8).withMinute(0).withSecond(0);
+
+        log.info("localDateTime : {}", localDateTime);
+        return jpaQueryFactory
+                .selectFrom(answer)
+                .where(answer.meeting.id.eq(meetingId))
+                .where(answer.user.id.ne(userId))
+                .where(answer.createdAt.after(localDateTime))
                 .fetch();
     }
 

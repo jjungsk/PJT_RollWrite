@@ -49,6 +49,7 @@ public class MeetingService {
     @Value("${inviteUrl}")
     private String baseUrl;
 
+
     @Transactional
     public AddMeetingResDto addMeeting(Long userId,
                                        AddMeetingReqDto addMeetingReqDto) throws NoSuchAlgorithmException {
@@ -533,4 +534,29 @@ public class MeetingService {
             awardRepository.save(award);
         }
     }
+
+    @Transactional
+    public String getRandomAnswer(Long userId, Long meetingId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
+        Long point = user.getPoint();
+        log.info("userId : {}, userPoint : {}", userId, point);
+
+        // 가지고 있는 포인트가 1회 뽑기 포인트인 10 보다 작을 경우
+        if (point < User.POINT) return "포인트가 부족합니다.";
+
+        // 랜덤 답변 뽑기
+        List<Answer> answerList = answerRepository.findByMeetingIdAndUserIdAndCreatedAt(userId, meetingId);
+        if (answerList.isEmpty()) return "아직 등록된 답변이 없습니다.";
+
+        Random random = new Random();
+        int randomNumber = random.nextInt(answerList.size());
+
+        // 답변을 정상적으로 뽑고 나서는 포인트 감소
+        user.updatePoint(point - User.POINT);
+        log.info("user : {} {}", user.getId(), user.getPoint());
+
+        return answerList.get(randomNumber).getContent();
+    }
+
 }
