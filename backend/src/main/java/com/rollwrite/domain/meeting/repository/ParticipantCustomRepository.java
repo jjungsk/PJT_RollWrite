@@ -1,6 +1,6 @@
 package com.rollwrite.domain.meeting.repository;
 
-import com.rollwrite.domain.meeting.dto.FindAllParticipantDto;
+import com.rollwrite.domain.admin.dto.MeetingCountDto;
 import com.rollwrite.domain.meeting.entity.Meeting;
 
 import java.util.List;
@@ -21,5 +21,7 @@ public interface ParticipantCustomRepository {
     List<Participant> findMeetingAndUserAndTitleByProgress(boolean isDone);
 
     Optional<Participant> findParticipantByUserAndMeetingAndIsDone(Long userId, Long meetingId, boolean isDone);
+
+    List<MeetingCountDto> findMeetingCnt();
 
 }
