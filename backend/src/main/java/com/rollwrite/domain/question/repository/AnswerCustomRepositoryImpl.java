@@ -3,6 +3,7 @@ package com.rollwrite.domain.question.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.rollwrite.domain.meeting.dto.AnswerCountDto;
 import com.rollwrite.domain.meeting.dto.AnswerDto;
 import com.rollwrite.domain.meeting.dto.MeetingCalenderResDto;
 import com.rollwrite.domain.meeting.entity.Meeting;
@@ -110,6 +111,19 @@ public class AnswerCustomRepositoryImpl implements AnswerCustomRepository {
                 .join(answer.user, user).on(answer.user.id.eq(userId))
                 .join(answer.question, question).on(answer.question.id.eq(questionId).and(answer.question.expireTime.after(LocalDateTime.now())))
                 .fetchOne());
+    }
+
+    @Override
+    public List<AnswerCountDto> findAnswerCnt(Meeting meeting) {
+        return jpaQueryFactory
+                .select(Projections.constructor(AnswerCountDto.class,
+                        answer.question.as("question"),
+                        answer.count().as("answerCount")))
+                .from(answer)
+                .where(answer.meeting.eq(meeting))
+                .groupBy(answer.question)
+                .orderBy(answer.question.createdAt.asc())
+                .fetch();
     }
 
 }

@@ -225,7 +225,32 @@ public class MeetingService {
         Meeting meeting = meetingRepository.findById(meetingId)
                 .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
 
-        return answerRepository.findMeetingCalender(user, meeting);
+        List<MeetingCalenderResDto> meetingCalenderResDtoList = new ArrayList<>();
+
+        // 모임의 참여자 수
+        int participantCnt = meeting.getParticipantList().size();
+
+        // 답변 리스트
+        List<AnswerCountDto> answerCountDtoList = answerRepository.findAnswerCnt(meeting);
+
+        for (AnswerCountDto answerCountDto : answerCountDtoList) {
+            String question = null;
+
+            Optional<Answer> optionalAnswer = answerRepository.findByUserAndQuestion(user, answerCountDto.getQuestion());
+
+            // 내가 단 답변이 있을 때
+            if (optionalAnswer.isPresent()) {
+                question = answerCountDto.getQuestion().getContent();
+            }
+
+            meetingCalenderResDtoList.add(MeetingCalenderResDto.builder()
+                    .day(answerCountDto.getQuestion().getCreatedAt().toLocalDate())
+                    .question(question)
+                    .answerCnt(Math.toIntExact(answerCountDto.getAnswerCount()))
+                    .participantCnt(participantCnt)
+                    .build());
+        }
+        return meetingCalenderResDtoList;
     }
 
 
