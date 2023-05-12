@@ -108,4 +108,11 @@ public class AdminController {
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_INQUIRY_SUCCESS, findInquiryResDtoList), HttpStatus.OK);
     }
 
+    @GetMapping("/dashboard/meeting")
+    public ResponseEntity<ApiResponse> meetingDashboard() {
+        log.info("meetingDashboard 호출");
+        List<FindMeetingDashboardDto> findMeetingDashboardDtoList = adminService.findMeetingDashboard();
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_MEETING_SUCCESS, findMeetingDashboardDtoList), HttpStatus.OK);
+    }
+
 }

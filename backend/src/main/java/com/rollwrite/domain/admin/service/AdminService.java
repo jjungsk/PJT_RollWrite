@@ -279,4 +279,38 @@ public class AdminService {
                 .inquiry(inquiry)
                 .build()).collect(Collectors.toList());
     }
+
+    public List<FindMeetingDashboardDto> findMeetingDashboard() {
+        List<FindMeetingDashboardDto> findMeetingDashboardDtoList = new ArrayList<>();
+        List<FindMeetingResDto> findMeetingResDtoList = new ArrayList<>();
+
+        List<Meeting> meetingList = meetingRepository.findAll();
+
+        // 제일 처음 날짜
+        LocalDate day = meetingList.get(0).getCreatedAt().toLocalDate();
+
+        // 날짜별로 분류
+        for (Meeting meeting : meetingList) {
+            if (!day.isEqual(meeting.getCreatedAt().toLocalDate())) {
+                // 다르면 dto findMeetingDashboardDtoList에 추가하고 day, findMeetingResDtoList 갱신
+                findMeetingDashboardDtoList.add(FindMeetingDashboardDto.builder()
+                        .day(day)
+                        .meetingCnt(findMeetingResDtoList.size())
+                        .findMeetingResDtoList(findMeetingResDtoList)
+                        .build());
+
+                day = meeting.getCreatedAt().toLocalDate();
+                findMeetingResDtoList = new ArrayList<>();
+            }
+            findMeetingResDtoList.add(FindMeetingResDto.builder()
+                    .meeting(meeting)
+                    .build());
+        }
+        findMeetingDashboardDtoList.add(FindMeetingDashboardDto.builder()
+                .day(day)
+                .meetingCnt(findMeetingResDtoList.size())
+                .findMeetingResDtoList(findMeetingResDtoList)
+                .build());
+        return findMeetingDashboardDtoList;
+    }
 }
