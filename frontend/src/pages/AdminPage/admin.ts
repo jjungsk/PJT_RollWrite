@@ -1,6 +1,21 @@
 import { axiosInstance } from "../../apis/instance";
 import { Notice } from "../../constants/types";
 
+export const getMeetingStatistics = async () => {
+  const response = await axiosInstance.get(`/admin/dashboard/meeting`);
+  return response.data;
+};
+
+export const getParticipantStatistics = async () => {
+  const response = await axiosInstance.get(`/admin/dashboard/participant`);
+  return response.data;
+};
+
+export const getUserStatistics = async () => {
+  const response = await axiosInstance.get(`/admin/dashboard/user`);
+  return response.data;
+};
+
 export const getUser = async (userType: string) => {
   const response = await axiosInstance.get(`/admin/user/${userType}`);
   return response.data;

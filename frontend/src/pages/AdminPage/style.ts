@@ -11,8 +11,41 @@ const AdminPageTitle = styled.h1`
 
   @media all and (min-width: 768px) {
     font-size: 36px;
-    padding-block: 32px;
+    padding-top: 32px;
   }
 `;
 
-export { AdminPageWrapper, AdminPageTitle };
+const AdminPageChartWrap = styled.div`
+  @media all and (min-width: 768px) {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+`;
+
+const AdminPageChartContainer = styled.div`
+  margin: 24px;
+
+  svg {
+    width: fit-content;
+    height: fit-content;
+    cursor: default;
+  }
+
+  & > div:first-child {
+    font-size: 24px;
+    font-weight: bold;
+    padding-block: 12px;
+  }
+
+  & > div:last-child {
+    margin-inline: auto;
+  }
+`;
+
+export {
+  AdminPageWrapper,
+  AdminPageTitle,
+  AdminPageChartWrap,
+  AdminPageChartContainer,
+};
