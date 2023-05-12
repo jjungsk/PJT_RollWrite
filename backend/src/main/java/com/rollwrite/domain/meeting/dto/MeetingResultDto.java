@@ -14,6 +14,7 @@ public class MeetingResultDto {
     private final LocalDate startDay;
     private final LocalDate endDay;
     private final String color;
+    private final String inviteUrl;
     private final int participantCnt;
     private final List<TagDto> tag;
     private final List<ParticipantDto> participant;
@@ -26,6 +27,7 @@ public class MeetingResultDto {
         this.startDay = meeting.getStartDay();
         this.endDay = meeting.getEndDay();
         this.color = meeting.getColor();
+        this.inviteUrl = meeting.getInviteCode();
         this.participantCnt = participantCnt;
         this.tag = tag;
         this.participant = participant;

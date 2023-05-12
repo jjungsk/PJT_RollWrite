@@ -1,6 +1,10 @@
 package com.rollwrite.domain.admin.service;
 
 import com.rollwrite.domain.admin.dto.*;
+import com.rollwrite.domain.meeting.dto.MeetingResultDto;
+import com.rollwrite.domain.meeting.dto.ParticipantDto;
+import com.rollwrite.domain.meeting.dto.TagDto;
+import com.rollwrite.domain.meeting.repository.ParticipantRepository;
 import com.rollwrite.domain.notice.entity.Notice;
 import com.rollwrite.domain.notice.repository.NoticeRepository;
 import com.rollwrite.domain.inquiry.entity.Inquiry;
@@ -45,6 +49,7 @@ public class AdminService {
     private final InquiryRepository inquiryRepository;
     private final QuestionRepository questionRepository;
     private final QuestionGptRepository questionGptRepository;
+    private final ParticipantRepository participantRepository;
     private final QuestionParticipantRepository questionParticipantRepository;
 
     @Transactional
@@ -161,12 +166,33 @@ public class AdminService {
         tag.updateContent(content);
     }
 
-    public List<FindMeetingResDto> findMeeting() {
+    public List<MeetingResultDto> findMeeting() {
+        List<MeetingResultDto> meetingResultDtoList = new ArrayList<>();
+
         List<Meeting> meetingList = meetingRepository.findAll();
 
-        return meetingList.stream().map(meeting -> FindMeetingResDto.builder()
-                .meeting(meeting)
-                .build()).collect(Collectors.toList());
+        for (Meeting meeting : meetingList) {
+            // List<Participant> -> List<ParticipantDto>
+            List<ParticipantDto> participantDtoList = meeting.getParticipantList().stream()
+                    .map(participant -> ParticipantDto.of(participant))
+                    .collect(Collectors.toList());
+
+            // 참여자 수
+            int participantCnt = participantDtoList.size();
+
+            // List<TagMeeting> -> List<TagDto>
+            List<TagDto> tagDtoList = meeting.getTagMeetingList().stream()
+                    .map(tagMeeting -> TagDto.of(tagMeeting.getTag()))
+                    .collect(Collectors.toList());
+
+            meetingResultDtoList.add(MeetingResultDto.builder()
+                    .meeting(meeting)
+                    .tag(tagDtoList)
+                    .participant(participantDtoList)
+                    .participantCnt(participantCnt)
+                    .build());
+        }
+        return meetingResultDtoList;
     }
 
     @Transactional
@@ -254,5 +280,105 @@ public class AdminService {
         return inquiryList.stream().map(inquiry -> FindInquiryResDto.builder()
                 .inquiry(inquiry)
                 .build()).collect(Collectors.toList());
+    }
+
+    public List<FindMeetingDashboardDto> findMeetingDashboard() {
+        List<FindMeetingDashboardDto> findMeetingDashboardDtoList = new ArrayList<>();
+        List<FindMeetingResDto> findMeetingResDtoList = new ArrayList<>();
+
+        List<Meeting> meetingList = meetingRepository.findAll();
+
+        // 제일 처음 날짜
+        LocalDate day = meetingList.get(0).getCreatedAt().toLocalDate();
+
+        // 날짜별로 분류
+        for (Meeting meeting : meetingList) {
+            if (!day.isEqual(meeting.getCreatedAt().toLocalDate())) {
+                // 다르면 dto findMeetingDashboardDtoList에 추가하고 day, findMeetingResDtoList 갱신
+                findMeetingDashboardDtoList.add(FindMeetingDashboardDto.builder()
+                        .day(day)
+                        .meetingCnt(findMeetingResDtoList.size())
+                        .findMeetingResDtoList(findMeetingResDtoList)
+                        .build());
+
+                day = meeting.getCreatedAt().toLocalDate();
+                findMeetingResDtoList = new ArrayList<>();
+            }
+            findMeetingResDtoList.add(FindMeetingResDto.builder()
+                    .meeting(meeting)
+                    .build());
+        }
+        findMeetingDashboardDtoList.add(FindMeetingDashboardDto.builder()
+                .day(day)
+                .meetingCnt(findMeetingResDtoList.size())
+                .findMeetingResDtoList(findMeetingResDtoList)
+                .build());
+        return findMeetingDashboardDtoList;
+    }
+
+    public List<FindParticipantDashboardDto> findParticipantDashboard() {
+        List<FindParticipantDashboardDto> findParticipantDashboardDtoList = new ArrayList<>();
+        List<FindUserResDto> findUserResDtoList = new ArrayList<>();
+
+        List<MeetingCountDto> participantList = participantRepository.findMeetingCnt();
+
+        // 모임이 0개
+        int meetingCnt = 0;
+
+        // 모임 개수별로 분류
+        for (MeetingCountDto meetingCountDto : participantList) {
+            if (meetingCnt != meetingCountDto.getMeetingCount()) {
+                // 다르면 dto findParticipantDashboardDtoList 추가하고 meetingCnt, findUserResDtoList 갱신
+                findParticipantDashboardDtoList.add(FindParticipantDashboardDto.builder()
+                        .meetingCnt(meetingCnt)
+                        .findUserResDtoList(findUserResDtoList)
+                        .build());
+
+                meetingCnt = Math.toIntExact(meetingCountDto.getMeetingCount());
+                findUserResDtoList = new ArrayList<>();
+            }
+            findUserResDtoList.add(FindUserResDto.builder()
+                    .user(meetingCountDto.getUser())
+                    .build());
+        }
+        findParticipantDashboardDtoList.add(FindParticipantDashboardDto.builder()
+                .meetingCnt(meetingCnt)
+                .findUserResDtoList(findUserResDtoList)
+                .build());
+        return findParticipantDashboardDtoList;
+    }
+
+    public List<FindUserDashboardDto> findUserDashboard() {
+        List<FindUserDashboardDto> findUserDashboardDtoList = new ArrayList<>();
+        List<FindUserResDto> findUserResDtoList = new ArrayList<>();
+
+        List<User> userList = userRepository.findAll();
+
+        // 제일 처음 날짜
+        LocalDate day = userList.get(0).getCreatedAt().toLocalDate();
+
+        // 날짜별로 분류
+        for (User user : userList) {
+            if (!day.isEqual(user.getCreatedAt().toLocalDate())) {
+                // 다르면 dto findUserDashboardDtoList 추가하고 day, findUserResDtoList 갱신
+                findUserDashboardDtoList.add(FindUserDashboardDto.builder()
+                        .day(day)
+                        .userCnt(findUserResDtoList.size())
+                        .findUserResDtoList(findUserResDtoList)
+                        .build());
+
+                day = user.getCreatedAt().toLocalDate();
+                findUserResDtoList = new ArrayList<>();
+            }
+            findUserResDtoList.add(FindUserResDto.builder()
+                    .user(user)
+                    .build());
+        }
+        findUserDashboardDtoList.add(FindUserDashboardDto.builder()
+                .day(day)
+                .userCnt(findUserResDtoList.size())
+                .findUserResDtoList(findUserResDtoList)
+                .build());
+        return findUserDashboardDtoList;
     }
 }
