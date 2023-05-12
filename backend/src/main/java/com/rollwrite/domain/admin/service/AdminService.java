@@ -347,4 +347,38 @@ public class AdminService {
                 .build());
         return findParticipantDashboardDtoList;
     }
+
+    public List<FindUserDashboardDto> findUserDashboard() {
+        List<FindUserDashboardDto> findUserDashboardDtoList = new ArrayList<>();
+        List<FindUserResDto> findUserResDtoList = new ArrayList<>();
+
+        List<User> userList = userRepository.findAll();
+
+        // 제일 처음 날짜
+        LocalDate day = userList.get(0).getCreatedAt().toLocalDate();
+
+        // 날짜별로 분류
+        for (User user : userList) {
+            if (!day.isEqual(user.getCreatedAt().toLocalDate())) {
+                // 다르면 dto findUserDashboardDtoList 추가하고 day, findUserResDtoList 갱신
+                findUserDashboardDtoList.add(FindUserDashboardDto.builder()
+                        .day(day)
+                        .userCnt(findUserResDtoList.size())
+                        .findUserResDtoList(findUserResDtoList)
+                        .build());
+
+                day = user.getCreatedAt().toLocalDate();
+                findUserResDtoList = new ArrayList<>();
+            }
+            findUserResDtoList.add(FindUserResDto.builder()
+                    .user(user)
+                    .build());
+        }
+        findUserDashboardDtoList.add(FindUserDashboardDto.builder()
+                .day(day)
+                .userCnt(findUserResDtoList.size())
+                .findUserResDtoList(findUserResDtoList)
+                .build());
+        return findUserDashboardDtoList;
+    }
 }

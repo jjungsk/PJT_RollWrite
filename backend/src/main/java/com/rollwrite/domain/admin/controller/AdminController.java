@@ -122,4 +122,11 @@ public class AdminController {
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.GET_PARTICIPANT_SUCCESS, findParticipantDashboardDtoList), HttpStatus.OK);
     }
 
+    @GetMapping("/dashboard/user")
+    public ResponseEntity<ApiResponse> userDashboard() {
+        log.info("userDashboard 호출");
+        List<FindUserDashboardDto> findUserDashboardDtoList = adminService.findUserDashboard();
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_USER_SUCCESS, findUserDashboardDtoList), HttpStatus.OK);
+    }
+
 }
