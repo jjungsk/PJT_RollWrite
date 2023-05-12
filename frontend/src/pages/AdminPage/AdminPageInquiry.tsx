@@ -65,6 +65,7 @@ function AdminPageInquiry() {
                     src={`${inquiry.imageUrl}?w=164&h=164&fit=crop&auto=format`}
                     alt="img"
                     loading="lazy"
+                    style={{ maxHeight: "100px" }}
                   />
                 </TableCell>
                 <TableCell align="center">{inquiry.content}</TableCell>
