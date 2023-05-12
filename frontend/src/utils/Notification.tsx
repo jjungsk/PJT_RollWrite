@@ -31,7 +31,7 @@ const Notification = () => {
   }, [notification]);
 
   const detectIphoneDevice = (agent: string) => {
-    const iPhoneRegex = /(iPhone|iPod)/i;
+    const iPhoneRegex = /iPhone|iPod|Mac OS X/i;
     return iPhoneRegex.test(agent);
   };
 
@@ -45,14 +45,14 @@ const Notification = () => {
       });
     }
 
-    onMessageListener()
-      .then((payload) => {
-        setNotification({
-          title: payload?.notification?.title,
-          body: payload?.notification?.body,
-        });
-      })
-      .catch((err) => console.log("failed: ", err));
+    // onMessageListener()
+    //   .then((payload) => {
+    //     setNotification({
+    //       title: payload?.notification?.title,
+    //       body: payload?.notification?.body,
+    //     });
+    //   })
+    //   .catch((err) => console.log("failed: ", err));
   }
 
   return <Toaster />;
