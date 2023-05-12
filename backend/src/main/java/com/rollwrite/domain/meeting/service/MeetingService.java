@@ -402,8 +402,8 @@ public class MeetingService {
             List<Answer> answerList = answerRepository.findAnswerByUserAndMeeting(participant.getUser(), meeting);
 
             // 3. 참가자의 최대 기록
-            int curRecord = 1;
-            int participantRecord = 1;
+            int curRecord = 0;
+            int participantRecord = 0;
             for (int i = 1, size = answerList.size(); i < size; i++) {
                 LocalDateTime prevTime = answerList.get(i - 1).getCreatedAt();
                 LocalDateTime curTime = answerList.get(i).getCreatedAt();
@@ -423,7 +423,7 @@ public class MeetingService {
                 // 이전 답변과 지금 답변이 하루 차이나면 curRecord++, 그 이상이면 1로 초기화;
                 long duration = ChronoUnit.DAYS.between(prevDay, curDay);
                 if (duration > 1) {
-                    curRecord = 1;
+                    curRecord = 0;
                 } else {
                     if (++curRecord >= participantRecord) {
                         participantRecord = curRecord;
