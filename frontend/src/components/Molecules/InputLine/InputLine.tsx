@@ -18,6 +18,7 @@ interface Props {
   max?: string;
   placeholder?: string;
   info?: string;
+  readOnly?: boolean;
 }
 function InputLine({
   Icon,
@@ -31,6 +32,7 @@ function InputLine({
   max,
   placeholder,
   info,
+  readOnly,
 }: Props) {
   return (
     <InputLineContainer>
@@ -44,6 +46,7 @@ function InputLine({
           min={min}
           max={max}
           value={value}
+          readOnly={readOnly}
         />
 
         {Icon && <Icon onClick={onClick} />}

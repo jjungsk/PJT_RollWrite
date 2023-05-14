@@ -25,7 +25,6 @@ function QuestionPage() {
 
   useEffect(() => {
     getQuestionList().then((res) => {
-      console.log(res.data);
       setQuestionList(res.data);
     });
   }, []);

@@ -50,6 +50,7 @@ function GroupInvite({ group }: Props) {
         value={inviteUrl}
         Icon={CopySvg}
         onClick={handleCopyToClipboard}
+        readOnly={true}
       />
       <Btn label="공유하기" onClick={() => handleKakaoInviteShare(group)} />
     </GroupInviteContainer>
