@@ -28,7 +28,7 @@ export interface Participant {
   type?: string;
 }
 
-export interface GroupInfo {
+export interface Group {
   meetingId: number;
   title: string;
   tag: Tag[];
@@ -40,11 +40,6 @@ export interface GroupInfo {
   questionLimit: number;
   questionUsage: number;
   inviteUrl?: string;
-}
-
-export interface Question {
-  day: string;
-  question: string;
 }
 
 export interface DayInfo {
@@ -63,7 +58,7 @@ export interface Profile {
   cntMeetingProgressIsDone?: number;
 }
 
-export interface QuestionInfo {
+export interface Question {
   meetingId: number;
   title: string;
   day: number;
@@ -129,4 +124,12 @@ export interface Notice {
   title: string;
   content: string;
   createdAt?: string;
+}
+
+export interface CalendarQuestion {
+  day: string;
+  question: string;
+  answerCnt: number;
+  participantCnt: number;
+  rate: number;
 }

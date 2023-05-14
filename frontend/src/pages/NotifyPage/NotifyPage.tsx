@@ -1,6 +1,6 @@
 import React from "react";
 import { Notify } from "../../constants/types";
-import NotifyCardList from "../../components/NotifyCardList/NotifyCardList";
+import NotifyCardList from "../../components/Organism/NotifyCardList/NotifyCardList";
 
 function NotifyPage() {
   const notifyList: Notify[] = [

@@ -8,11 +8,11 @@ import { ResultContainer } from "./style";
 import {
   HeaderContainer,
   HeaderGroupTitle,
-} from "../../components/Header/style";
+} from "../../components/Organism/Header/style";
 import format from "date-fns/format";
-import SideMenu from "../../components/SideMenu/SideMenu";
-import ChatItem from "../../components/ChatItem/ChatItem";
-import ChatAwardItem from "../../components/ChatAwardItem/ChatAwardItem";
+import SideMenu from "../../components/Organism/SideMenu/SideMenu";
+import ChatItem from "../../components/Molecules/ChatItem/ChatItem";
+import ChatAwardItem from "../../components/Molecules/ChatAwardItem/ChatAwardItem";
 import useGroupIsDoneResultAward from "../../hooks/useGroupIsDoneResultAward";
 
 function ResultPage() {

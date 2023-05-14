@@ -15,15 +15,14 @@ import { ReactComponent as Sprout } from "../../assets/Sprout_2.svg";
 import { ReactComponent as Flower } from "../../assets/Flower.svg";
 import { ReactComponent as PlusWhite } from "../../assets/Plus_White.svg";
 import { ReactComponent as Trash } from "../../assets/Trash-alt.svg";
-import { GroupInfo } from "../../constants/types";
-import Contour from "../../elements/Contour/Contour";
-import GroupCard from "../../components/GroupCard/GroupCard";
+import { Group } from "../../constants/types";
+import Contour from "../../components/Atom/Contour/Contour";
+import GroupCard from "../../components/Molecules/GroupCard/GroupCard";
 import { useNavigate } from "react-router-dom";
 import { getUserGroupIsDoneList, updateUserDetail } from "../../apis/user";
 import useProfile from "../../hooks/useProfile";
-import FillBtn from "../../elements/Button/FillBtn";
-import GhostBtn from "../../elements/Button/GhostBtn";
 import { toast } from "react-hot-toast";
+import Btn from "../../components/Atom/Btn/Btn";
 
 function MyPage() {
   const navigate = useNavigate();
@@ -33,7 +32,7 @@ function MyPage() {
   const [isDeleteImg, setIsDeleteImg] = useState<boolean>(false);
   const [tmpNickname, setTmpNickname] = useState<string>("");
   const [editProfileMode, setEditProfileMode] = useState<boolean>(false);
-  const [groupList, setGroupList] = useState<GroupInfo[]>([]);
+  const [groupList, setGroupList] = useState<Group[]>([]);
 
   const profile = useProfile(editProfileMode);
 
@@ -177,12 +176,12 @@ function MyPage() {
             </table>
           </ProfileInfoDetail>
           {!editProfileMode && (
-            <GhostBtn label="프로필 편집" onClick={handleClickEditProfileBtn} />
+            <Btn label="프로필 편집" onClick={handleClickEditProfileBtn} />
           )}
           {editProfileMode && (
             <EditProfileBtnContainer>
-              <FillBtn label="수정" onClick={editProfile} />
-              <GhostBtn label="취소" onClick={cancelEditProfile} />
+              <Btn color="fill" label="수정" onClick={editProfile} />
+              <Btn label="취소" onClick={cancelEditProfile} />
             </EditProfileBtnContainer>
           )}
         </ProfileInfo>
@@ -191,7 +190,7 @@ function MyPage() {
       <Contour text="참여한 모임" />
 
       <GroupListContainer>
-        {groupList.map((group: GroupInfo) => (
+        {groupList.map((group: Group) => (
           <div
             key={group.meetingId}
             onClick={() => handleClickGroup(group.meetingId)}

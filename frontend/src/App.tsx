@@ -11,15 +11,12 @@ import { updateAccessToken, updateRouteHistory } from "./store/authReducer";
 import { axiosFileInstance, axiosInstance } from "./apis/instance";
 
 import MainLayout from "./Layout/MainLayout";
-import SubLayout from "./Layout/SubLayout";
-import HomePage from "./pages/HomePage/HomePage";
 import MyPage from "./pages/MyPage/MyPage";
 import QuestionPage from "./pages/QuestionPage/QuestionPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import NotifyPage from "./pages/NotifyPage/NotifyPage";
 import SettingPage from "./pages/SettingPage/SettingPage";
 import CreateGroupPage from "./pages/CreateGroupPage/CreateGroupPage";
-import InvitePage from "./pages/InvitePage/InvitePage";
 import AnswerPage from "./pages/AnswerPage/AnswerPage";
 import ResultPage from "./pages/ResultPage/ResultPage";
 import JoinPage from "./pages/JoinPage/JoinPage";
@@ -39,18 +36,20 @@ import AdminPageTag from "./pages/AdminPage/AdminPageTag";
 import AdminPageGroup from "./pages/AdminPage/AdminPageGroup";
 import AdminPageInquiry from "./pages/AdminPage/AdminPageInquiry";
 import { toast } from "react-hot-toast";
+import GroupInfoPage from "./pages/GroupInfoPage/GroupInfoPage";
 
 function App() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const accessToken = useAppSelector((state) => state.auth.accessToken);
+  const accessToken = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzcwNzc4MjAwIiwicm9sZSI6IkFETUlOIiwiaXNzIjoicm9sbHdyaXRlLmNvLmtyIiwiZXhwIjoxNjg0MTMxODk4LCJpYXQiOjE2ODQwNDU0OTh9.Gs6yrPbwedzAUjxoiJBgyR-oXj3x0FICOqhwb-GmkO1RdPTyf9QIMpP-DiUAsKrYsaxeejozeKKJCRCYpakLzQ`;
+  // const accessToken = useAppSelector((state) => state.auth.accessToken);
   const isLogin = useAppSelector((state) => state.auth.isLogin);
 
   const currentPath = location.pathname;
 
-  if (isLogin && accessToken) {
+  if (accessToken) {
     axiosInstance.defaults.headers.common[
       "Authorization"
     ] = `Bearer ${accessToken}`;
@@ -156,14 +155,14 @@ function App() {
       }
     }
 
-    if (!isLogin && currentPath !== "/login" && currentPath !== "/oauth") {
-      navigate("/login");
-      if (currentPath !== "/setting") {
-        dispatch(updateRouteHistory(currentPath));
-      }
-    } else if (isLogin && currentPath === "/login") {
-      navigate("/home");
-    }
+    // if (!isLogin && currentPath !== "/login" && currentPath !== "/oauth") {
+    //   navigate("/login");
+    //   if (currentPath !== "/setting") {
+    //     dispatch(updateRouteHistory(currentPath));
+    //   }
+    // } else if (isLogin && currentPath === "/login") {
+    //   navigate("/home");
+    // }
 
     const pathParts = currentPath.split("/");
     const htmlTitle = document.querySelector("title");
@@ -223,28 +222,26 @@ function App() {
 
   return (
     <>
-      <Notification />
+      {/* <Notification /> */}
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route path="/" element={<Navigate to="/question" />} />
-          <Route path="/home" element={<HomePage />} />
           <Route path="/question" element={<QuestionPage />} />
           <Route path="/my" element={<MyPage />} />
-        </Route>
-        <Route path="/" element={<SubLayout />}>
           <Route path="/notify" element={<NotifyPage />} />
-          <Route path="/setting" element={<SettingPage />} />
-          <Route path="/notice" element={<NoticePage />} />
-          <Route path="/inquiry" element={<InquiryPage />} />
-          <Route path="/invite/:meetingId" element={<InvitePage />} />
           <Route path="/answer" element={<AnswerPage />} />
+          <Route path="/inquiry" element={<InquiryPage />} />
+          <Route path="/notice" element={<NoticePage />} />
+          <Route path="/setting" element={<SettingPage />} />
         </Route>
+
         <Route path="/login" element={<LoginPage />} />
         <Route path="/oauth" element={<OauthPage />} />
         <Route path="/result/:meetingId" element={<ResultPage />} />
         <Route path="/join/:inviteCode" element={<JoinPage />} />
         <Route path="/award/:meetingId" element={<AwardPage />} />
         <Route path="/create" element={<CreateGroupPage />} />
+        <Route path="/group/:meetingId" element={<GroupInfoPage />} />
         <Route path="*" element={<ErrorPage />} />
 
         <Route path="/" element={<AdminLayout />}>
