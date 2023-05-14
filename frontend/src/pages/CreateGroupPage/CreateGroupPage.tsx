@@ -8,7 +8,7 @@ import BackNavigation from "../../components/Organism/BackNavigation/BackNavigat
 import CreateGroupStepOne from "../../components/Organism/CreateGroupSteps/CreateGroupStepOne";
 import CreateGroupStepTwo from "../../components/Organism/CreateGroupSteps/CreateGroupStepTwo";
 import CreateGroupStepThree from "../../components/Organism/CreateGroupSteps/CreateGroupStepThree";
-import { handleKakaoShare } from "../../utils/kakaoShare";
+import { handleKakaoInviteShare } from "../../utils/kakaoShare";
 import toast from "react-hot-toast";
 import { differenceInDays } from "date-fns";
 
@@ -130,7 +130,7 @@ function CreateGroupPage() {
           emoji="🤝"
           fillLabel="초대하기"
           ghostLabel="홈으로"
-          fillOnClick={() => handleKakaoShare(newGroupInfo?.inviteUrl!)}
+          fillOnClick={() => handleKakaoInviteShare(newGroupInfo)}
           ghostOnClick={handleConfirmButtonClick}
         />
       )}

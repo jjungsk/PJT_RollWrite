@@ -44,9 +44,7 @@ function GroupInfoPage() {
           {selectedMenuIndex === 2 && (
             <GroupQuestion meetingId={group.meetingId} />
           )}
-          {selectedMenuIndex === 3 && (
-            <GroupInvite meetingId={group.meetingId} />
-          )}
+          {selectedMenuIndex === 3 && <GroupInvite group={group} />}
         </GroupInfoPageContent>
       )}
     </>

@@ -4,20 +4,21 @@ import { getInviteUrl } from "../../../apis/home";
 import InputLine from "../../Molecules/InputLine/InputLine";
 import { ReactComponent as CopySvg } from "../../../assets/Copy.svg";
 import Btn from "../../Atom/Btn/Btn";
-import { handleKakaoShare } from "../../../utils/kakaoShare";
+import { handleKakaoInviteShare } from "../../../utils/kakaoShare";
 import { GroupInviteContainer } from "./style";
+import { Group } from "../../../constants/types";
 
 interface Props {
-  meetingId: number;
+  group: Group;
 }
 
-function GroupInvite({ meetingId }: Props) {
+function GroupInvite({ group }: Props) {
   const [inviteUrl, setInviteUrl] = useState("");
   const QRCode = require("qrcode");
 
   useEffect(() => {
-    if (meetingId) {
-      getInviteUrl(String(meetingId)).then((response) => {
+    if (group.meetingId) {
+      getInviteUrl(String(group.meetingId)).then((response) => {
         const url = response.data.inviteUrl;
         setInviteUrl(url);
         generateQRCode(url);
@@ -50,7 +51,7 @@ function GroupInvite({ meetingId }: Props) {
         Icon={CopySvg}
         onClick={handleCopyToClipboard}
       />
-      <Btn label="공유하기" onClick={() => handleKakaoShare(inviteUrl)} />
+      <Btn label="공유하기" onClick={() => handleKakaoInviteShare(group)} />
     </GroupInviteContainer>
   );
 }

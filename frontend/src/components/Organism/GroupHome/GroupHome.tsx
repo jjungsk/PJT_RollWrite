@@ -12,8 +12,10 @@ import {
   GroupHomeCardHeader,
 } from "./style";
 import { SPROUT_LIST } from "../../../constants/sprout";
-import { format } from "date-fns";
+import { format, subDays, subHours } from "date-fns";
 import html2canvas from "html2canvas";
+import { useNavigate } from "react-router-dom";
+import { handleKakaoQuestionShare } from "../../../utils/kakaoShare";
 
 interface Props {
   group: Group;
@@ -24,6 +26,7 @@ function GroupHome({ group }: Props) {
   );
   const [selectedDay, setSelectedDay] = useState(new Date());
   const calendarRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getQuestionList(group.meetingId).then((res) => {
@@ -68,42 +71,57 @@ function GroupHome({ group }: Props) {
       <GroupHomeCard>
         <GroupHomeCardHeader>
           답변률 (
-          {questionMap.get(format(new Date(), "yyyy-MM-dd"))?.answerCnt ?? 0}/
-          {questionMap.get(format(new Date(), "yyyy-MM-dd"))?.participantCnt ??
-            0}
+          {questionMap.get(format(subHours(new Date(), 8), "yyyy-MM-dd"))
+            ?.answerCnt ?? 0}
+          /
+          {questionMap.get(format(subHours(new Date(), 8), "yyyy-MM-dd"))
+            ?.participantCnt ?? 0}
           )
         </GroupHomeCardHeader>
         <GroupHomeCardContent>
-          {questionMap.has(format(new Date(), "yyyy-MM-dd")) ? (
+          {questionMap.has(format(subHours(new Date(), 8), "yyyy-MM-dd")) ? (
             <>
               {
                 SPROUT_LIST[
-                  questionMap.get(format(new Date(), "yyyy-MM-dd"))?.rate! / 20
+                  questionMap.get(format(subHours(new Date(), 8), "yyyy-MM-dd"))
+                    ?.rate! / 20
                 ]
               }
-              {questionMap.get(format(new Date(), "yyyy-MM-dd"))?.rate!}%가
-              오늘의 질문에 답변했습니다.
+              {
+                questionMap.get(format(subHours(new Date(), 8), "yyyy-MM-dd"))
+                  ?.rate!
+              }
+              %가 오늘의 질문에 답변했습니다.
             </>
           ) : (
             "오늘 질문에 답변부터 하세요"
           )}
         </GroupHomeCardContent>
         <GroupHomeCardFooter>
-          {questionMap.has(format(new Date(), "yyyy-MM-dd")) ? (
-            questionMap.get(format(new Date(), "yyyy-MM-dd"))?.rate !== 100 ? (
-              <>
+          {questionMap.has(format(subHours(new Date(), 8), "yyyy-MM-dd")) ? (
+            questionMap.get(format(subHours(new Date(), 8), "yyyy-MM-dd"))
+              ?.rate !== 101 ? (
+              <div
+                onClick={() =>
+                  handleKakaoQuestionShare(
+                    questionMap.get(
+                      format(subHours(new Date(), 8), "yyyy-MM-dd")
+                    )!
+                  )
+                }
+              >
                 답변하라고 조르기 <Arrow />
-              </>
+              </div>
             ) : (
-              <>
+              <div>
                 자랑하기 +10p
                 <Arrow />
-              </>
+              </div>
             )
           ) : (
-            <>
+            <div onClick={() => navigate("/question")}>
               답변하러 가기 <Arrow />
-            </>
+            </div>
           )}
         </GroupHomeCardFooter>
       </GroupHomeCard>

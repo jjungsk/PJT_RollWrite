@@ -8,7 +8,7 @@ const GroupHomeCard = styled.div`
   padding: 16px;
   gap: 16px;
 
-  width: 360px;
+  width: 100%;
 
   font-size: 16px;
 `;
@@ -45,9 +45,12 @@ const GroupHomeCardFooter = styled.div`
   justify-content: end;
   width: 100%;
   line-height: 32px;
-  & > svg {
-    width: 32px;
-    height: 32px;
+  & > div {
+    display: flex;
+    & > svg {
+      width: 32px;
+      height: 32px;
+    }
   }
 `;
 
