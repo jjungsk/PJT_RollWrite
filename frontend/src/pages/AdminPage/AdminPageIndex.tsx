@@ -94,8 +94,8 @@ function AdminPageIndex() {
     return (
       <BarChart
         data={data}
-        width={resize > 768 ? 600 : 360}
-        height={resize > 768 ? 400 : 300}
+        width={resize > 768 ? 600 : 350}
+        height={resize > 768 ? 350 : 300}
       >
         <XAxis
           dataKey={xKey}
@@ -170,8 +170,8 @@ function AdminPageIndex() {
 
   const renderParticipantChart = (
     <PieChart
-      width={resize > 768 ? 400 : 300}
-      height={resize > 768 ? 400 : 300}
+      width={resize > 768 ? 350 : 300}
+      height={resize > 768 ? 350 : 300}
     >
       <Pie
         data={participantStats}
@@ -179,7 +179,7 @@ function AdminPageIndex() {
         cy="50%"
         labelLine={false}
         label={renderCustomizedLabel}
-        outerRadius={resize > 768 ? 200 : 150}
+        outerRadius={resize > 768 ? 175 : 150}
         fill="#8884d8"
         dataKey="value"
       >
@@ -200,8 +200,8 @@ function AdminPageIndex() {
   return (
     <>
       <AdminPageStatsSummary>
-        🤷 사용자: {userCnt}명 &nbsp;&nbsp;&nbsp;&nbsp; 👨‍💻 관리자: {adminCnt}명
-        &nbsp;&nbsp;&nbsp;&nbsp; 👪 모임: {meetingCnt}개
+        🤷사용자: {userCnt}명 &nbsp;&nbsp;&nbsp;&nbsp; 👨‍💻관리자: {adminCnt}명
+        &nbsp;&nbsp;&nbsp;&nbsp; 👪모임: {meetingCnt}개
       </AdminPageStatsSummary>
       <AdminPageChartWrap>
         <AdminPageChartContainer>

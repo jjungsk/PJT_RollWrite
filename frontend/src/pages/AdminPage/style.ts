@@ -1,15 +1,18 @@
 import styled from "styled-components";
 
 const AdminPageStatsSummary = styled.div`
-  width: fit-content;
-  margin: auto;
-  font-size: 16px;
+  width: 350px;
+  margin: 10px auto;
+  font-size: 14px;
   font-weight: bold;
   background-color: white;
-  padding: 10px;
-
+  padding: 10px 5px;
+  border-radius: 10px;
+  
   @media all and (min-width: 768px) {
+    width: 650px;
     font-size: 24px;
+    padding-inline: 10px;
   }
 `;
 
@@ -37,9 +40,16 @@ const AdminPageChartWrap = styled.div`
 `;
 
 const AdminPageChartContainer = styled.div`
-  margin: 24px;
+  width: 350px;
   background-color: white;
-  padding: 10px;
+  border-radius: 10px;
+  margin: 25px auto;
+  padding-block: 10px; 
+  
+  @media all and (min-width: 768px) {
+    width: 650px;
+    margin-inline: 25px;
+  }
 
   svg {
     width: fit-content;
@@ -48,9 +58,14 @@ const AdminPageChartContainer = styled.div`
   }
 
   & > div:first-child {
-    font-size: 24px;
+    font-size: 18px;
     font-weight: bold;
-    padding-block: 12px;
+    padding-block: 6px 12px;
+
+    @media all and (min-width: 768px) {
+      font-size: 24px;
+      padding-block: 12px;
+    }
   }
 
   & > div:last-child {
