@@ -34,3 +34,21 @@ export interface Inquiry {
   userNickname: string;
   userProfileImage: string;
 }
+
+export interface MeetingStats {
+  day: string;
+  meetingCnt: number;
+  findMeetingResDtoList: Meeting[];
+}
+
+export interface ParticipantStats {
+  meetingCnt: number;
+  userCnt?: number;
+  findUserResDtoList: User[];
+}
+
+export interface UserStats {
+  day: string;
+  userCnt?: number;
+  findUserResDtoList: User[];
+}

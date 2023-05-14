@@ -7,7 +7,6 @@ import {
   ListItemAvatar,
   ListItemText,
   Typography,
-  Switch,
   ToggleButtonGroup,
   ToggleButton,
 } from "@mui/material";
