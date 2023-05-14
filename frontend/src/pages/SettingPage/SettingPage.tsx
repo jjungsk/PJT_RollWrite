@@ -10,7 +10,6 @@ import {
 import SwitchBtn from "../../components/Atom/SwitchBtn/SwitchBtn";
 import { ReactComponent as Back } from "../../assets/Back.svg";
 import { logout, withdraw } from "../../apis/user";
-
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { persistor } from "../../store/store";
