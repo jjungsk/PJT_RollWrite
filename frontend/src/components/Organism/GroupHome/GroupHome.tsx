@@ -12,7 +12,7 @@ import {
   GroupHomeCardHeader,
 } from "./style";
 import { SPROUT_LIST } from "../../../constants/sprout";
-import { format, subDays, subHours } from "date-fns";
+import { format, subHours } from "date-fns";
 import html2canvas from "html2canvas";
 import { useNavigate } from "react-router-dom";
 import { handleKakaoQuestionShare } from "../../../utils/kakaoShare";
