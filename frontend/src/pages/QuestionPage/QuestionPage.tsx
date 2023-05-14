@@ -43,9 +43,9 @@ function QuestionPage() {
             <div>
               <Box height="24px" width="24px" />
               D-
-              {questionList[currentSlide].day === 0
-                ? "day"
-                : questionList[currentSlide].day}{" "}
+              {questionList[currentSlide].day > 0
+                ? questionList[currentSlide].day
+                : "day"}
               <Home />
             </div>
             <div>{questionList[currentSlide].title}</div>
