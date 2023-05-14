@@ -94,13 +94,13 @@ function GroupHome({ group }: Props) {
               %가 오늘의 질문에 답변했습니다.
             </>
           ) : (
-            "오늘 질문에 답변부터 하세요"
+            "오늘 질문에 먼저 답변해주세요."
           )}
         </GroupHomeCardContent>
         <GroupHomeCardFooter>
           {questionMap.has(format(subHours(new Date(), 8), "yyyy-MM-dd")) ? (
             questionMap.get(format(subHours(new Date(), 8), "yyyy-MM-dd"))
-              ?.rate !== 101 ? (
+              ?.rate !== 100 ? (
               <div
                 onClick={() =>
                   handleKakaoQuestionShare(
@@ -110,7 +110,7 @@ function GroupHome({ group }: Props) {
                   )
                 }
               >
-                답변하라고 조르기 <Arrow />
+                답변 요청하기 <Arrow />
               </div>
             ) : (
               <div>
