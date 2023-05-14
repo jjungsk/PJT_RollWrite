@@ -31,28 +31,27 @@ const Notification = () => {
   }, [notification]);
 
   const detectIphoneDevice = (agent: string) => {
-    const iPhoneRegex = /(iPhone|iPod)/i;
+    const iPhoneRegex = /iPhone|iPod|Mac OS X/i;
     return iPhoneRegex.test(agent);
   };
 
   const isIphone = detectIphoneDevice(window.navigator.userAgent);
 
-  if (!isIphone && isLogin) {
-    if (firebaseToken === "") {
-      requestForToken().then((token) => {
-        sendFirebaseToken(token);
-        dispatch(updateFirebaseToken(token));
-      });
-    }
+  if (!isIphone && isLogin && firebaseToken === "") {
+    console.log("토큰 요청");
+    requestForToken().then((token) => {
+      sendFirebaseToken(token);
+      dispatch(updateFirebaseToken(token));
+    });
 
-    onMessageListener()
-      .then((payload) => {
-        setNotification({
-          title: payload?.notification?.title,
-          body: payload?.notification?.body,
-        });
-      })
-      .catch((err) => console.log("failed: ", err));
+    // onMessageListener()
+    //   .then((payload) => {
+    //     setNotification({
+    //       title: payload?.notification?.title,
+    //       body: payload?.notification?.body,
+    //     });
+    //   })
+    //   .catch((err) => console.log("failed: ", err));
   }
 
   return <Toaster />;

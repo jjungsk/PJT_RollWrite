@@ -5,10 +5,10 @@ const AccordionItem = styled.div`
   margin: auto;
   border-bottom: 1px solid var(--darkgray-color);
   overflow: hidden;
+  padding-inline: 4px;
 
   & > div:last-child {
     position: relative;
-    padding-inline: 4px;
   }
 `;
 

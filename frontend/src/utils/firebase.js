@@ -3,7 +3,7 @@ import { getMessaging, getToken, onMessage} from 'firebase/messaging';
 import { FIREBASE_CONFIG } from "../constants/firebaseConfig";
 
 const detectIphoneDevice = (agent) => {
-  const iPhoneRegex = /(iPhone|iPod)/i;
+  const iPhoneRegex = /iPhone|iPod|Mac OS X/i;
   return iPhoneRegex.test(agent);
 };
 const isIphone = detectIphoneDevice(window.navigator.userAgent);

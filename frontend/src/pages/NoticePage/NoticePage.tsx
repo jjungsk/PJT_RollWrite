@@ -26,7 +26,7 @@ function NoticePage() {
 
   return (
     <NoticeContainer>
-      <AccordionList items={noticeList} />;
+      <AccordionList items={noticeList} />
     </NoticeContainer>
   );
 }
