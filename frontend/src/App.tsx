@@ -34,8 +34,7 @@ import useHtmlTitle from "./hooks/useHtmlTitle";
 
 function App() {
   const dispatch = useAppDispatch();
-  // const accessToken = useAppSelector((state) => state.auth.accessToken);
-  const accessToken = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzcwNzc4MjAwIiwicm9sZSI6IkFETUlOIiwiaXNzIjoicm9sbHdyaXRlLmNvLmtyIiwiZXhwIjoxNjg0MTU5OTk3LCJpYXQiOjE2ODQwNzM1OTd9.yjYO-V1JXtOfd4J77hNaRr3qIXIxWTk9ipqgcUAJ03ZrAOM6v10QlHY5gPTaTOvLUOVFzO1BwwaNDqM4I34kkA`;
+  const accessToken = useAppSelector((state) => state.auth.accessToken);
   const isLogin = useAppSelector((state) => state.auth.isLogin);
 
   if (isLogin && accessToken) {
@@ -49,12 +48,12 @@ function App() {
 
   useTokenInterceptor(dispatch);
   useMobileDeviceDetection();
-  // useLoginRedirect(dispatch);
+  useLoginRedirect(dispatch);
   useHtmlTitle();
 
   return (
     <>
-      {/* <Notification /> */}
+      <Notification />
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route path="/" element={<Navigate to="/question" />} />
