@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Calendar from "../../Molecules/Calendar/Calendar";
 import { CalendarQuestion, Group } from "../../../constants/types";
 import { getQuestionList } from "../../../apis/home";
 import { ReactComponent as Arrow } from "../../../assets/Prev_Arrow.svg";
+import { ReactComponent as Download } from "../../../assets/Download.svg";
 
 import {
   GroupHomeCard,
@@ -12,6 +13,7 @@ import {
 } from "./style";
 import { SPROUT_LIST } from "../../../constants/sprout";
 import { format } from "date-fns";
+import html2canvas from "html2canvas";
 
 interface Props {
   group: Group;
@@ -21,6 +23,7 @@ function GroupHome({ group }: Props) {
     new Map()
   );
   const [selectedDay, setSelectedDay] = useState(new Date());
+  const calendarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     getQuestionList(group.meetingId).then((res) => {
@@ -34,9 +37,29 @@ function GroupHome({ group }: Props) {
     });
   }, [group.meetingId]);
 
+  const handleDownloadClick = async () => {
+    if (calendarRef.current) {
+      const canvas = await html2canvas(calendarRef.current);
+      const imgData = canvas.toDataURL("image/png");
+      const filename = "calendar.png";
+
+      const link = document.createElement("a");
+      document.body.appendChild(link);
+      link.href = imgData;
+      link.download = filename;
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
+
   return (
     <>
+      <Download
+        style={{ position: "absolute", right: "32px", top: "84px" }}
+        onClick={handleDownloadClick}
+      />
       <Calendar
+        calendarRef={calendarRef}
         group={group}
         questionMap={questionMap}
         selectedDay={selectedDay}

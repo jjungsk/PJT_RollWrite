@@ -28,42 +28,45 @@ import { toast } from "react-hot-toast";
 const TODAY = new Date();
 
 function createOneWeek(startDate: Date, monthStart: Date) {
-  const daysOfWeek = [];
-  let currentDay = startDate;
-
-  for (let i = 0; i < 7; i++) {
-    daysOfWeek.push({
+  const daysOfWeek = Array.from({ length: 7 }, (_, i) => {
+    const currentDay = addDays(startDate, i);
+    return {
       currentDay,
       formattedDate: isSameMonth(currentDay, monthStart)
         ? format(currentDay, "d")
         : "",
       isToday: isSameDay(currentDay, TODAY),
       isCurrMonth: isSameMonth(currentDay, monthStart),
-    });
-
-    currentDay = addDays(currentDay, 1);
-  }
-
+    };
+  });
   return daysOfWeek;
 }
+
 function createCalendar(monthStart: Date) {
   const weekLength = getWeeksInMonth(monthStart);
-  const daysOfMonth = [];
-  for (let i = 0; i < weekLength; i++) {
+  const daysOfMonth = Array.from({ length: weekLength }, (_, i) => {
     const currentDate = addDays(monthStart, i * 7);
     const startDate = startOfWeek(currentDate);
-    const oneWeek = createOneWeek(startDate, monthStart);
-    daysOfMonth.push(oneWeek);
-  }
+    return createOneWeek(startDate, monthStart);
+  });
   return daysOfMonth;
 }
+
 interface Props {
   group: Group;
   questionMap: Map<string, CalendarQuestion>;
   selectedDay: Date;
   setSelectedDay: React.Dispatch<React.SetStateAction<Date>>;
+  calendarRef: React.RefObject<HTMLDivElement>;
 }
-function Calendar({ questionMap, group, setSelectedDay, selectedDay }: Props) {
+
+function Calendar({
+  questionMap,
+  group,
+  setSelectedDay,
+  selectedDay,
+  calendarRef,
+}: Props) {
   const [monthStart, setMonthStart] = useState(startOfMonth(TODAY));
   const daysOfMonth = useMemo(() => createCalendar(monthStart), [monthStart]);
 
@@ -76,8 +79,27 @@ function Calendar({ questionMap, group, setSelectedDay, selectedDay }: Props) {
       ? setSelectedDay(day)
       : toast.error("모임 기간이 아닙니다");
   };
+
+  const isDayInGroupPeriod = (day: Date) => {
+    const startDay = new Date(group?.startDay);
+    const endDay = new Date(group?.endDay);
+    return (
+      (isAfter(day, startDay) &&
+        isBefore(day, endDay) &&
+        isSameMonth(day, monthStart)) ||
+      isSameDay(day, startDay)
+    );
+  };
+  const getSproutImage = (day: Date) => {
+    const formattedDate = format(day, "yyyy-MM-dd");
+    if (questionMap.has(formattedDate)) {
+      return SPROUT_LIST[(questionMap.get(formattedDate)?.rate ?? 20) / 20];
+    }
+    return SPROUT_LIST[0];
+  };
+
   return (
-    <CalendarContainer>
+    <CalendarContainer ref={calendarRef}>
       <CalendarMonth>
         {getYear(monthStart)}년 {getMonth(monthStart) + 1}월
       </CalendarMonth>
@@ -97,20 +119,9 @@ function Calendar({ questionMap, group, setSelectedDay, selectedDay }: Props) {
               <CalendarDayNum isSeleted={selectedDay === day.currentDay}>
                 {day.formattedDate}
               </CalendarDayNum>
-              {group &&
-              ((isAfter(day.currentDay, new Date(group?.startDay)) &&
-                isBefore(day.currentDay, new Date(group?.endDay)) &&
-                isSameMonth(day.currentDay, monthStart)) ||
-                isSameDay(day.currentDay, new Date(group?.startDay))) &&
+              {isDayInGroupPeriod(day.currentDay) &&
               isSameMonth(day.currentDay, monthStart) ? (
-                questionMap.has(format(day.currentDay, "yyyy-MM-dd")) ? (
-                  SPROUT_LIST[
-                    (questionMap.get(format(day.currentDay, "yyyy-MM-dd"))
-                      ?.rate ?? 20) / 20
-                  ]
-                ) : (
-                  SPROUT_LIST[0]
-                )
+                getSproutImage(day.currentDay)
               ) : (
                 <Box width="32px" height="32px" />
               )}
