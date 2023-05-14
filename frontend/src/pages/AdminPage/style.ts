@@ -8,7 +8,7 @@ const AdminPageStatsSummary = styled.div`
   background-color: white;
   padding: 10px 5px;
   border-radius: 10px;
-  
+
   @media all and (min-width: 768px) {
     width: 650px;
     font-size: 24px;
@@ -44,8 +44,8 @@ const AdminPageChartContainer = styled.div`
   background-color: white;
   border-radius: 10px;
   margin: 25px auto;
-  padding-block: 10px; 
-  
+  padding-block: 10px;
+
   @media all and (min-width: 768px) {
     width: 650px;
     margin-inline: 25px;
