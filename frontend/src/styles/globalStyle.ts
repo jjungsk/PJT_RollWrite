@@ -29,6 +29,21 @@ const GlobalStyle = createGlobalStyle`
     width: 0px;
   } 
 
+  :root {
+        /* Colors */
+    --bg-color: #F0EDE6;
+    --black-color:#1E1E1E;
+    --darkgray-color:#7A7E80;
+    --gray-color:#DADADA;
+    --lightgray-color:#F4F4F4;
+    --white-color:#FFFFFF;
+    --main-color:#F9AA4C;
+    --sub-color:#CBC7BA;
+    --orange-color:#FFD4B2;
+    --yellow-color:#FFF6BD;
+    --green-color:#CEEDC7;
+    --blue-color:#D1D9F8;
+  }
   
   #root {
     font-family: 'IM_Hyemin', -apple-system, Helvetica Neue, sans-serif;
@@ -43,20 +58,6 @@ const GlobalStyle = createGlobalStyle`
     text-align: center;
     background-color: var(--bg-color);
     color: var(--black-color);
-
-    /* Colors */
-    --bg-color: #F0EDE6;
-    --black-color:#1E1E1E;
-    --darkgray-color:#7A7E80;
-    --gray-color:#DADADA;
-    --lightgray-color:#F4F4F4;
-    --white-color:#FFFFFF;
-    --main-color:#F9AA4C;
-    --sub-color:#CBC7BA;
-    --orange-color:#FFD4B2;
-    --yellow-color:#FFF6BD;
-    --green-color:#CEEDC7;
-    --blue-color:#D1D9F8;
 
     /* 드래그 방지, 우클릭 방지 */
     -webkit-touch-callout: none;
