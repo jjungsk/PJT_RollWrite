@@ -19,11 +19,15 @@ import {
   getYear,
   isAfter,
   isBefore,
+  addMonths,
+  subMonths,
 } from "date-fns";
 import { CalendarQuestion, Group } from "../../../constants/types";
 import Box from "../../Atom/Box/Box";
 import { SPROUT_LIST } from "../../../constants/sprout";
 import { toast } from "react-hot-toast";
+import { swipeDirection } from "../../../utils/swipeDetector";
+import { initTouch } from "../../../utils/swipeDetector";
 
 const TODAY = new Date();
 
@@ -101,7 +105,24 @@ function Calendar({
   return (
     <>
       <CalendarContainer ref={calendarRef}>
-        <CalendarMonth>
+        <CalendarMonth
+          onTouchStart={initTouch}
+          onTouchMove={(e) =>
+            swipeDirection(
+              e,
+              () => {},
+              () => {},
+              () => {
+                setMonthStart(addMonths(monthStart, 1));
+              },
+              () => {
+                setMonthStart(subMonths(monthStart, 1));
+              }
+            )
+          }
+          onMouseDown={initTouch}
+          onMouseMove={(e) => swipeDirection(e)}
+        >
           {getYear(monthStart)}년 {getMonth(monthStart) + 1}월
         </CalendarMonth>
         <CalendarName>
