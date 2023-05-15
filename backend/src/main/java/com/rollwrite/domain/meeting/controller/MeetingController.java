@@ -202,13 +202,12 @@ public class MeetingController {
     }
 
     @ApiOperation(value = "point 사용 시, 답변 뽑기", notes = "현재 모임의 답변 뽑기")
-    @Parameter(name = "meetingId", description = "조회 할 모임 아이디")
-    @GetMapping("/answer/{meetingId}")
-    public ResponseEntity<ApiResponse> getRandomAnswer(@ApiIgnore Authentication authentication, @PathVariable Long meetingId) {
+    @PostMapping("/answer/random")
+    public ResponseEntity<ApiResponse> getRandomAnswer(@ApiIgnore Authentication authentication, @RequestBody MeetingRandomQuestionDto meetingRandomQuestionDto) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
         Long userId = userDetails.getUserId();
 
-        String answer = meetingService.getRandomAnswer(userId, meetingId);
+        String answer = meetingService.getRandomAnswer(userId, meetingRandomQuestionDto);
 
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.GET_RANDOM_ANSWER_SUCCESS, answer), HttpStatus.OK);
     }

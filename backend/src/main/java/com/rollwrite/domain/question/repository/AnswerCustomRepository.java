@@ -11,6 +11,7 @@ import com.rollwrite.domain.question.entity.Question;
 import com.rollwrite.domain.user.entity.User;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +31,6 @@ public interface AnswerCustomRepository {
 
     List<AnswerCountDto> findAnswerCnt(Meeting meeting);
 
-    List<Answer> findByMeetingIdAndUserIdAndCreatedAt(Long userId, Long meetingId);
+    Optional<Answer> findByMeetingIdAndUserIdAndCreatedAt(Long userId, Long meetingId, LocalDateTime localDateTime);
 
 }

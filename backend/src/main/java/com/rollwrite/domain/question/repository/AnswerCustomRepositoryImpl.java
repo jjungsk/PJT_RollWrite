@@ -1,5 +1,6 @@
 package com.rollwrite.domain.question.repository;
 
+import com.querydsl.core.QueryFactory;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -128,18 +129,15 @@ public class AnswerCustomRepositoryImpl implements AnswerCustomRepository {
     }
 
     @Override
-    public List<Answer> findByMeetingIdAndUserIdAndCreatedAt(Long userId, Long meetingId) {
-        LocalDateTime localDateTime = LocalDateTime.now();
-        if (localDateTime.getHour() < 8) localDateTime = localDateTime.minusDays(1L).withHour(8).withMinute(0).withSecond(0);
-        else localDateTime = localDateTime.withHour(8).withMinute(0).withSecond(0);
-
-        log.info("localDateTime : {}", localDateTime);
-        return jpaQueryFactory
+    public Optional<Answer> findByMeetingIdAndUserIdAndCreatedAt(Long userId, Long meetingId, LocalDateTime localDateTime) {
+        return Optional.ofNullable(jpaQueryFactory
                 .selectFrom(answer)
                 .where(answer.meeting.id.eq(meetingId))
                 .where(answer.user.id.ne(userId))
-                .where(answer.createdAt.after(localDateTime))
-                .fetch();
+                .where(answer.createdAt.between(localDateTime, localDateTime.plusDays(1L)))
+                .orderBy(Expressions.numberTemplate(Double.class, "function('rand')").asc())
+                .limit(1)
+                .fetchFirst());
     }
 
 }

@@ -536,27 +536,31 @@ public class MeetingService {
     }
 
     @Transactional
-    public String getRandomAnswer(Long userId, Long meetingId) {
+    public String getRandomAnswer(Long userId, MeetingRandomQuestionDto meetingRandomQuestionDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
         Long point = user.getPoint();
         log.info("userId : {}, userPoint : {}", userId, point);
 
         // 가지고 있는 포인트가 1회 뽑기 포인트인 10 보다 작을 경우
-        if (point < User.POINT) return "포인트가 부족합니다.";
+        if (point < User.POINT) throw new IllegalArgumentException("포인트가 부족합니다.");
 
         // 랜덤 답변 뽑기
-        List<Answer> answerList = answerRepository.findByMeetingIdAndUserIdAndCreatedAt(userId, meetingId);
-        if (answerList.isEmpty()) return "아직 등록된 답변이 없습니다.";
+        Long meetingId = meetingRandomQuestionDto.getMeetingId();
+        LocalDate localDate = meetingRandomQuestionDto.getFindDay();
+        LocalTime localTime = LocalTime.of(8, 0, 0, 0);
+        LocalDateTime localDateTime = LocalDateTime.of(localDate, localTime);
+        log.info("localDateTime : {}", localDateTime);
 
-        Random random = new Random();
-        int randomNumber = random.nextInt(answerList.size());
+        Answer answerRandom = answerRepository.findByMeetingIdAndUserIdAndCreatedAt(userId, meetingId, localDateTime)
+                .orElseThrow(() -> new IllegalArgumentException("아직 등록된 답변이 없습니다."));
 
+        log.info("answerRandom.getContent() : {}", answerRandom.getContent());
         // 답변을 정상적으로 뽑고 나서는 포인트 감소
         user.updatePoint(point - User.POINT);
         log.info("user : {} {}", user.getId(), user.getPoint());
 
-        return answerList.get(randomNumber).getContent();
+        return answerRandom.getContent();
     }
 
 }
