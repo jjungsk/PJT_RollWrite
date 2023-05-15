@@ -5,6 +5,7 @@ import { Group } from "../../constants/types";
 import { useParams } from "react-router-dom";
 import Tabs from "../../components/Molecules/Tabs/Tabs";
 import { GroupInfoPageContent } from "./style";
+
 import GroupHome from "../../components/Organism/GroupHome/GroupHome";
 import GroupInfo from "../../components/Organism/GroupInfo/GroupInfo";
 import GroupQuestion from "../../components/Organism/GroupQuestion/GroupQuestion";
@@ -14,6 +15,7 @@ import Box from "../../components/Atom/Box/Box";
 function GroupInfoPage() {
   const [group, setGroup] = useState<Group>();
   const [selectedMenuIndex, setSelectedMenuIndex] = useState<number>(0);
+
   const { meetingId } = useParams();
   useEffect(() => {
     getGroupList().then((res) => {

@@ -2,10 +2,11 @@ import styled, { css } from "styled-components";
 
 interface Props {
   color?: string;
+  margin?: string;
 }
 
 const BtnContainer = styled.button<Props>`
-  ${({ color }) => css`
+  ${({ color, margin }) => css`
     border: 2px solid
       ${color === "fill" ? "var(--main-color)" : "var(--darkgray-color)"};
     background-color: ${color === "fill" ? "var(--main-color)" : ""};
@@ -16,6 +17,7 @@ const BtnContainer = styled.button<Props>`
     font-size: 20px;
     font-weight: bold;
     letter-spacing: 1px;
+    margin: ${margin};
 
     @media (height < 700px) {
       font-size: 16px;

@@ -24,6 +24,9 @@ import { CalendarQuestion, Group } from "../../../constants/types";
 import Box from "../../Atom/Box/Box";
 import { SPROUT_LIST } from "../../../constants/sprout";
 import { toast } from "react-hot-toast";
+import Modal from "../Modal/Modal";
+import DatSelect from "../DaySelect/DaySelect";
+import DaySelect from "../DaySelect/DaySelect";
 
 const TODAY = new Date();
 
@@ -69,6 +72,7 @@ function Calendar({
 }: Props) {
   const [monthStart, setMonthStart] = useState(startOfMonth(TODAY));
   const daysOfMonth = useMemo(() => createCalendar(monthStart), [monthStart]);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const handelClick = (day: Date) => {
     ((isAfter(day, new Date(group?.startDay)) &&
@@ -100,7 +104,16 @@ function Calendar({
 
   return (
     <CalendarContainer ref={calendarRef}>
-      <CalendarMonth>
+      {isOpen && (
+        <Modal setIsOpen={setIsOpen} width="320px" height="240px">
+          <DaySelect day={monthStart} setDay={setMonthStart} />
+        </Modal>
+      )}
+      <CalendarMonth
+        onClick={() => {
+          setIsOpen(true);
+        }}
+      >
         {getYear(monthStart)}년 {getMonth(monthStart) + 1}월
       </CalendarMonth>
       <CalendarName>

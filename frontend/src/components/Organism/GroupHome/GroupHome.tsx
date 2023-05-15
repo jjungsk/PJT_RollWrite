@@ -4,7 +4,7 @@ import { CalendarQuestion, Group } from "../../../constants/types";
 import { getQuestionList } from "../../../apis/home";
 import { ReactComponent as Arrow } from "../../../assets/Prev_Arrow.svg";
 import { ReactComponent as Download } from "../../../assets/Download.svg";
-
+import { ReactComponent as InfoSvg } from "../../../assets/Info-circle.svg";
 import {
   GroupHomeCard,
   GroupHomeCardContent,
@@ -16,6 +16,9 @@ import { format, getDay, subHours } from "date-fns";
 import html2canvas from "html2canvas";
 import { useNavigate } from "react-router-dom";
 import { handleKakaoQuestionShare } from "../../../utils/kakaoShare";
+import Modal from "../../Molecules/Modal/Modal";
+import SproutList from "../../Molecules/SproutList/SproutList";
+import AnswerBox from "../../Molecules/AnswerBox/AnswerBox";
 
 interface Props {
   group: Group;
@@ -24,6 +27,7 @@ function GroupHome({ group }: Props) {
   const [questionMap, setQuestionMap] = useState<Map<string, CalendarQuestion>>(
     new Map()
   );
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedDay, setSelectedDay] = useState(new Date());
   const calendarRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -57,6 +61,11 @@ function GroupHome({ group }: Props) {
 
   return (
     <>
+      {isOpen && (
+        <Modal width="280px" height="128px" setIsOpen={setIsOpen} color="fill">
+          <SproutList />
+        </Modal>
+      )}
       <div style={{ position: "relative" }}>
         <Download
           style={{ position: "absolute", right: "32px", top: "4px" }}
@@ -77,8 +86,9 @@ function GroupHome({ group }: Props) {
           {questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.participantCnt ??
             0}
           )
+          <InfoSvg onClick={() => setIsOpen(true)} />
         </GroupHomeCardHeader>
-        <GroupHomeCardContent>
+        <GroupHomeCardContent alignItem="center">
           {questionMap.has(format(selectedDay, "yyyy-MM-dd")) ? (
             <>
               {
@@ -115,10 +125,12 @@ function GroupHome({ group }: Props) {
                 <Arrow />
               </div>
             )
-          ) : (
+          ) : getDay(selectedDay) === getDay(subHours(new Date(), 8)) ? (
             <div onClick={() => navigate("/question")}>
               답변하러 가기 <Arrow />
             </div>
+          ) : (
+            <></>
           )}
         </GroupHomeCardFooter>
       </GroupHomeCard>
@@ -126,9 +138,21 @@ function GroupHome({ group }: Props) {
         <GroupHomeCardHeader>
           {format(selectedDay, "yyyy년 MM월 dd일")}
         </GroupHomeCardHeader>
-        <GroupHomeCardContent>
-          {questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.question ??
-            "답변하지 않은 날은 답변을 뽑을 수 없습니다."}
+        <GroupHomeCardContent flexDirection="column">
+          {questionMap.has(format(selectedDay, "yyyy-MM-dd")) ? (
+            <>
+              {questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.question}
+              <AnswerBox
+                isMe={true}
+                answer={
+                  questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.answer ??
+                  "답변이 없습니다"
+                }
+              />
+            </>
+          ) : (
+            "답변하지 않은 날은 답변을 뽑을 수 없습니다."
+          )}
         </GroupHomeCardContent>
         <GroupHomeCardFooter>
           {questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.question && (

@@ -25,14 +25,18 @@ const GroupHomeCardHeader = styled.div`
   font-weight: bold;
 `;
 
-const GroupHomeCardContent = styled.div`
+const GroupHomeCardContent = styled.div<{
+  flexDirection?: string;
+  alignItem?: string;
+}>`
   display: flex;
-  flex-direction: row;
+  flex-direction: ${(props) => props.flexDirection};
   justify-content: center;
-  align-items: center;
+  align-items: ${(props) => props.alignItem};
   padding: 0px;
   gap: 16px;
   text-align: start;
+  width: 100%;
 
   & > svg {
     width: 64px;
