@@ -1,8 +1,13 @@
 import React from "react";
-import { SPROUT_LIST } from "../../../constants/sprout";
+import { DOG_LIST, SPROUT_LIST } from "../../../constants/sprout";
 import { padding } from "@mui/system";
 
-function SproutList() {
+interface Props {
+  thema: string;
+}
+function SproutList({ thema }: Props) {
+  const SproutThema = thema === "#CEEDC7" ? DOG_LIST : SPROUT_LIST;
+  console.log(SproutThema);
   return (
     <div
       style={{
@@ -13,7 +18,7 @@ function SproutList() {
         justifyContent: "space-between",
       }}
     >
-      <div>답변률에 따라 새싹이 진화합니다</div>
+      <div>답변률에 따라 진화합니다</div>
       <div
         style={{
           width: "100%",
@@ -24,7 +29,7 @@ function SproutList() {
           borderRadius: "16px",
         }}
       >
-        {SPROUT_LIST.map((s, i) => i !== 0 && s)}
+        {SproutThema.map((s, i) => i !== 0 && s)}
       </div>
     </div>
   );
