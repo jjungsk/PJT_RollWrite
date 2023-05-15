@@ -114,10 +114,15 @@ function GroupHome({ group }: Props) {
             <>
               {
                 SproutThema[
-                  questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.rate! / 20
+                  Math.round(
+                    questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.rate! /
+                      20
+                  )
                 ]
               }
-              {questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.rate!}
+              {Math.round(
+                questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.rate!
+              )}
               %가 오늘의 질문에 답변했습니다.
             </>
           ) : (
