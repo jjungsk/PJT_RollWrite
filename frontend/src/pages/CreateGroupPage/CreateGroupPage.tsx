@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import Info from "../../components/EmojiTitleBtn/Info";
+import Info from "../../components/Molecules/EmojiTitleBtn/Info";
 import { useNavigate } from "react-router-dom";
-import { CreateGroup, GroupInfo, Tag } from "../../constants/types";
+import { CreateGroup, Group, Tag } from "../../constants/types";
 import { createGroup, getGroupTag } from "../../apis/home";
 import { isAfter, subDays } from "date-fns";
-import BackNavigation from "../../components/BackNavigation/BackNavigation";
-import CreateGroupStepOne from "../../components/CreateGroupSteps/CreateGroupStepOne";
-import CreateGroupStepTwo from "../../components/CreateGroupSteps/CreateGroupStepTwo";
-import CreateGroupStepThree from "../../components/CreateGroupSteps/CreateGroupStepThree";
-import { handleKakaoShare } from "../../utils/kakaoShare";
+import BackNavigation from "../../components/Organism/BackNavigation/BackNavigation";
+import CreateGroupStepOne from "../../components/Organism/CreateGroupSteps/CreateGroupStepOne";
+import CreateGroupStepTwo from "../../components/Organism/CreateGroupSteps/CreateGroupStepTwo";
+import CreateGroupStepThree from "../../components/Organism/CreateGroupSteps/CreateGroupStepThree";
+import { handleKakaoInviteShare } from "../../utils/kakaoShare";
 import toast from "react-hot-toast";
 import { differenceInDays } from "date-fns";
 
@@ -16,7 +16,7 @@ function CreateGroupPage() {
   const navigate = useNavigate();
   const [groupCreateStep, setGroupCreateStep] = useState(0);
   const [tagList, setTagList] = useState<Tag[]>([]);
-  const [newGroupInfo, setNewGroupInfo] = useState<GroupInfo>();
+  const [newGroupInfo, setNewGroupInfo] = useState<Group>();
 
   useEffect(() => {
     getGroupTag().then((res) => {
@@ -130,7 +130,7 @@ function CreateGroupPage() {
           emoji="🤝"
           fillLabel="초대하기"
           ghostLabel="홈으로"
-          fillOnClick={() => handleKakaoShare(newGroupInfo?.inviteUrl!)}
+          fillOnClick={() => handleKakaoInviteShare(newGroupInfo)}
           ghostOnClick={handleConfirmButtonClick}
         />
       )}

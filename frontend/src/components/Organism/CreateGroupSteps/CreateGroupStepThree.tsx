@@ -1,0 +1,62 @@
+import React from "react";
+import { CreateGroup, Tag } from "../../../constants/types";
+import {
+  CreateGroupStepsContainer,
+  CreateGroupStepsContent,
+  CreateGroupStepsHeader,
+} from "./style";
+import SelectTag from "../../Molecules/SelectTag/SelectTag";
+import { toast } from "react-hot-toast";
+import Btn from "../../Atom/Btn/Btn";
+
+interface Props {
+  onClick: () => void;
+  groupInfo: CreateGroup;
+  setGroupInfo: React.Dispatch<React.SetStateAction<CreateGroup>>;
+  tagList: Tag[];
+}
+
+function CreateGroupStepThree({
+  groupInfo,
+  setGroupInfo,
+  onClick,
+  tagList,
+}: Props) {
+  const handleClickTagBtn = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const { value, name } = e.target as HTMLButtonElement;
+    const { tag } = groupInfo;
+    tag.includes(parseInt(value))
+      ? setGroupInfo({
+          ...groupInfo,
+          [name]: tag.filter((item) => item !== parseInt(value)),
+        })
+      : tag.length > 3
+      ? toast("최대 4개까지 가능합니다", {
+          icon: "🚫",
+        })
+      : setGroupInfo({
+          ...groupInfo,
+          [name]: [...tag, parseInt(value)],
+        });
+  };
+
+  return (
+    <CreateGroupStepsContainer>
+      <CreateGroupStepsHeader>
+        <div>{groupInfo.title}은</div>
+        <div> 어떤 모임인가요?</div>
+        <p> 최대 4개를 선택할수 있습니다.</p>
+      </CreateGroupStepsHeader>
+      <CreateGroupStepsContent>
+        <SelectTag
+          onClick={handleClickTagBtn}
+          tag={groupInfo.tag}
+          tagList={tagList}
+        />
+        <Btn label="확인" onClick={onClick} />
+      </CreateGroupStepsContent>
+    </CreateGroupStepsContainer>
+  );
+}
+
+export default CreateGroupStepThree;

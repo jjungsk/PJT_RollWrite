@@ -1,7 +1,7 @@
 import { useState } from "react";
-import AwardStart from "../../components/Award/AwardStart";
-import AwardMember from "../../components/Award/AwardMember";
-import AwardEnd from "../../components/Award/AwardEnd";
+import AwardStart from "../../components/Organism/Award/AwardStart";
+import AwardMember from "../../components/Organism/Award/AwardMember";
+import AwardEnd from "../../components/Organism/Award/AwardEnd";
 import useGroupIsDoneResultAward from "../../hooks/useGroupIsDoneResultAward";
 import { useParams } from "react-router-dom";
 

@@ -1,26 +1,24 @@
 import React, { useState } from "react";
 import { NameContainer, QuestionDiv } from "./style";
-import GhostBtn from "../../elements/Button/GhostBtn";
 import {
   createAnswer,
   deleteAnswerImg,
   updateAnswer,
 } from "../../apis/question";
 import { useLocation, useNavigate } from "react-router-dom";
-import { QuestionInfo } from "../../constants/types";
+import { Question } from "../../constants/types";
 import toast from "react-hot-toast";
 import { showToastModal } from "../../utils/ToastModal";
-import UploadImg from "../../elements/UploadImg/UploadImg";
-import TextArea from "../../elements/TextArea/TextArea";
+import UploadImg from "../../components/Molecules/UploadImg/UploadImg";
+import TextArea from "../../components/Atom/TextArea/TextArea";
+import Btn from "../../components/Atom/Btn/Btn";
 
 export default function AnswerPage() {
   const location = useLocation();
   const navigate = useNavigate();
 
   const [ImgFile, setImgFile] = useState<File>();
-  const [question, setQuestion] = useState<QuestionInfo>(
-    location.state.question
-  );
+  const [question, setQuestion] = useState<Question>(location.state.question);
 
   const handleAnswer = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setQuestion({
@@ -126,10 +124,10 @@ export default function AnswerPage() {
         value={question.answer || ""}
       ></TextArea>
 
-      <GhostBtn
+      <Btn
         label={location.state.isModify ? "수정하기" : "저장하기"}
         onClick={handleSaveBtn}
-      ></GhostBtn>
+      ></Btn>
     </>
   );
 }

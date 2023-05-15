@@ -17,7 +17,7 @@ import { IconButton } from "@mui/material";
 import { AdminPageTitle } from "./style";
 import { toast } from "react-hot-toast";
 import { getUserType } from "../../apis/user";
-import LoadingIcon from "../../elements/LoadingIcon/LoadingIcon";
+import LoadingIcon from "../../components/Atom/LoadingIcon/LoadingIcon";
 
 function AdminLayout() {
   const navigate = useNavigate();
