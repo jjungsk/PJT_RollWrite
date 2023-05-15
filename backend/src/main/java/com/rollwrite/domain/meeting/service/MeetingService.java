@@ -235,17 +235,20 @@ public class MeetingService {
 
         for (AnswerCountDto answerCountDto : answerCountDtoList) {
             String question = null;
+            String answer = null;
 
             Optional<Answer> optionalAnswer = answerRepository.findByUserAndQuestion(user, answerCountDto.getQuestion());
 
             // 내가 단 답변이 있을 때
             if (optionalAnswer.isPresent()) {
+                answer = optionalAnswer.get().getContent();
                 question = answerCountDto.getQuestion().getContent();
             }
 
             meetingCalenderResDtoList.add(MeetingCalenderResDto.builder()
                     .day(answerCountDto.getQuestion().getCreatedAt().toLocalDate())
                     .question(question)
+                    .answer(answer)
                     .answerCnt(Math.toIntExact(answerCountDto.getAnswerCount()))
                     .participantCnt(participantCnt)
                     .build());
