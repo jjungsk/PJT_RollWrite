@@ -533,4 +533,34 @@ public class MeetingService {
             awardRepository.save(award);
         }
     }
+
+    @Transactional
+    public MeetingRandomQuestionResDto getRandomAnswer(Long userId, MeetingRandomQuestionReqDto meetingRandomQuestionReqDto) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
+        Long point = user.getPoint();
+        log.info("userId : {}, userPoint : {}", userId, point);
+
+        // 가지고 있는 포인트가 1회 뽑기 포인트인 10 보다 작을 경우
+        if (point < User.POINT) return null;
+
+        // 랜덤 답변 뽑기
+        Long meetingId = meetingRandomQuestionReqDto.getMeetingId();
+        LocalDate localDate = meetingRandomQuestionReqDto.getFindDay();
+        LocalTime localTime = LocalTime.of(8, 0, 0, 0);
+        LocalDateTime localDateTime = LocalDateTime.of(localDate, localTime);
+        log.info("localDateTime : {}", localDateTime);
+
+        Answer answerRandom = answerRepository.findByMeetingIdAndUserIdAndCreatedAt(userId, meetingId, localDateTime)
+                .orElseThrow(() -> new IllegalArgumentException("아직 등록된 답변이 없습니다."));
+
+        log.info("answerRandom.getContent() : {}", answerRandom.getContent());
+        // 답변을 정상적으로 뽑고 나서는 포인트 감소
+        user.updatePoint(point - User.POINT);
+
+        return MeetingRandomQuestionResDto.builder()
+                .answer(answerRandom.getContent())
+                .build();
+    }
+
 }
