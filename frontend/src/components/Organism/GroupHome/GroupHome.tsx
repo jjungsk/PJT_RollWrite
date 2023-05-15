@@ -46,6 +46,10 @@ function GroupHome({ group }: Props) {
     });
   }, [group.meetingId]);
 
+  useEffect(() => {
+    setAnswer("");
+  }, [selectedDay]);
+
   const handleDownloadClick = async () => {
     if (calendarRef.current) {
       const canvas = await html2canvas(calendarRef.current);
