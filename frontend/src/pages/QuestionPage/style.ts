@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const QuestionPageContainer = styled.div`
-  height: 100%;
+  height: fit-content;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -23,9 +23,10 @@ const QuestionPageHeader = styled.div`
 
 const QuestionPageQuestion = styled.div`
   padding: 0px 16px;
-  line-height: 24px;
+  line-height: 28px;
   font-size: 20px;
   font-weight: bold;
+  word-break: keep-all;
 `;
 
 const QuestionPageAnswer = styled.div`

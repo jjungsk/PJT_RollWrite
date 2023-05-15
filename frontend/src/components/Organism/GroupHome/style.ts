@@ -1,11 +1,12 @@
 import styled from "styled-components";
 
 const GroupHomeCard = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  padding: 16px;
+  padding: 24px;
   gap: 16px;
 
   width: 100%;
