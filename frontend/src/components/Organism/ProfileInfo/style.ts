@@ -7,6 +7,12 @@ const ProfileContainer = styled.div`
   padding: 36px 30px;
   margin: auto;
   background-size: cover;
+
+  @media all and (min-width: 380px) {
+    width: 386px;
+    height: 214px;
+    padding: 46px;
+  }
 `;
 
 const ProfileImg = styled.div<{
