@@ -14,9 +14,9 @@ function GroupInfoPage() {
   const [group, setGroup] = useState<Group>();
   const [selectedMenuIndex, setSelectedMenuIndex] = useState<number>(0);
   const { meetingId } = useParams();
+
   useEffect(() => {
     getGroupList().then((res) => {
-      console.log(res.data);
       // eslint-disable-next-line array-callback-return
       res.data.map((data: Group) => {
         if (data.meetingId === Number(meetingId)) {
