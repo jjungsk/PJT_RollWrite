@@ -97,7 +97,9 @@ function Calendar({
   const getSproutImage = (day: Date) => {
     const formattedDate = format(day, "yyyy-MM-dd");
     if (questionMap.has(formattedDate)) {
-      return SproutThema[(questionMap.get(formattedDate)?.rate ?? 20) / 20];
+      return SproutThema[
+        Math.round((questionMap.get(formattedDate)?.rate ?? 20) / 20)
+      ];
     }
     return SproutThema[0];
   };
