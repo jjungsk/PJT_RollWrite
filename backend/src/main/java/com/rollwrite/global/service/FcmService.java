@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -22,6 +23,15 @@ public class FcmService {
 
     private final String SERVICE_LINK = "https://rollwrite.co.kr";
     private final String ICON_IMAGE = "https://k8a508.p.ssafy.io/rollwrite/favicon-32x32.png";
+
+    // 0-0. Notification 설정
+    private Notification notification(String title, String body) {
+        return Notification.builder()
+                .setTitle(title)
+                .setBody(body)
+                .setImage("이미지")
+                .build();
+    }
 
     // 0-1. WebPush 설정
     private WebpushConfig webpushConfig() {
@@ -72,8 +82,16 @@ public class FcmService {
         log.info("firebase response : {}", response);
     }
 
+    // 2. List<Message>로 보내기 (한번에 최대 500명)
+    public Integer sendMessageAll(HashMap<Long, List<Long>> userIdAndMeetingList, HashMap<Long, String> userIdAndToken,
+                                  HashMap<Long, String> meetingIdAndTitle) throws FirebaseMessagingException {
 
-    // 2. 다수 (한번에 최대 1000명)에게 알림 (보낼 Token List)
+
+        return null;
+    }
+
+
+    // 3. 다수 (한번에 최대 1000명)에게 알림 (보낼 Token List)
     public Integer sendMessageMany(Notification notification, List<String> firebaseTokenList) throws FirebaseMessagingException {
         MulticastMessage message = MulticastMessage.builder()
                 .setNotification(notification)

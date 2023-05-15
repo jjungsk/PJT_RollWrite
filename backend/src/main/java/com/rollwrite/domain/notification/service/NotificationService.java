@@ -1,6 +1,7 @@
 package com.rollwrite.domain.notification.service;
 
 import com.google.firebase.messaging.FirebaseMessagingException;
+import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
 import com.rollwrite.domain.meeting.entity.Participant;
 import com.rollwrite.domain.meeting.repository.ParticipantRepository;
@@ -50,7 +51,7 @@ public class NotificationService {
         fcmService.sendMessageOne(notification, sendMessageOneReqDto.getFirebaseToken());
     }
 
-    // 2. 개인 알림 보내기
+    // 3. 다수 알림 보내기
     public void sendMessageMany(SendMessageManyReqDto sendMessageManyReqDto) throws FirebaseMessagingException {
 
         Notification notification = Notification.builder()
@@ -60,7 +61,53 @@ public class NotificationService {
         fcmService.sendMessageMany(notification, sendMessageManyReqDto.getFirebaseTokenList());
     }
 
-    // 4. 자동으로 단체 알림을 보내기
+    // 4. Message List 보내기
+    public void sendMessageAll() throws FirebaseMessagingException {
+        List<Participant> participantList = participantRepository.findMeetingAndUserAndTitleByProgress(false);
+
+        HashMap<Long, List<Long>> userIdAndMeetingList = new HashMap<>();
+        HashMap<Long, String> userIdAndToken = new HashMap<>();
+        HashMap<Long, String> meetingIdAndTitle = new HashMap<>();
+        for (Participant participant: participantList) {
+            log.info("participant : {}", participant.getId());
+            Long userId = participant.getUser().getId();
+            String token = participant.getUser().getFirebaseToken();
+            Long meetingId = participant.getMeeting().getId();
+            String title = participant.getMeeting().getTitle();
+
+            // (1) userId 에 모임 목록 추가
+            List<Long> meetingList = new ArrayList<>();
+            if (userIdAndMeetingList.containsKey(userId)) {
+                meetingList = userIdAndMeetingList.get(userId);
+            }
+            meetingList.add(meetingId);
+            userIdAndMeetingList.put(userId, meetingList);
+
+            // (2) userId 에 토큰 담기
+            if (userIdAndToken.containsKey(userId)) continue;
+            userIdAndToken.put(userId, token);
+
+            // (3) meetingId 에 title 담기
+            if (meetingIdAndTitle.containsKey(meetingId)) continue;
+            meetingIdAndTitle.put(meetingId, title);
+
+        }
+
+        // Message 보내기
+        List<Notification> notificationList = new ArrayList<>();
+        for (Long id: userIdAndMeetingList.keySet()) {
+            Notification notification = Notification.builder()
+                    .setTitle("")
+                    .setBody("")
+                    .setImage("")
+                    .build();
+
+            notificationList.add(notification);
+        }
+
+    }
+
+    // 5. 자동으로 단체 알림을 보내기
     public void sendMessageAuto() throws FirebaseMessagingException {
         List<Participant> participantList = participantRepository.findMeetingAndUserAndTitleByProgress(false);
         log.info("meetingFindUserDtoList : {}", participantList.toString());

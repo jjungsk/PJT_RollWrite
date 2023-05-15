@@ -79,7 +79,17 @@ public class NotificationController {
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.SEND_MESSAGE_TO), HttpStatus.OK);
     }
 
-    // 4. FCM 자동 알림 보내기 Main
+    // 4. FCM List Message 보내기
+    @ApiOperation(value = "(자동) FCM Message List 보내기")
+    @PostMapping("/all")
+    public ResponseEntity<ApiResponse> sendMessageAll() throws FirebaseMessagingException {
+
+        notificationService.sendMessageAll();
+
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.SEND_MESSAGE_TO), HttpStatus.OK);
+    }
+
+    // 5. FCM 자동 알림 보내기 Main
     @Scheduled(cron = "0 10 8 * * *") // sec min hour(24) day month dayOfWeek(ex.MON-FRI)
     @ApiOperation(value = "(자동) FCM 알림 보내기", notes = "오전 8시 10분 질문 생성 알람 보내기")
     @Parameter(name = "firebaseToken", description = "알림 보낼 Token List")
