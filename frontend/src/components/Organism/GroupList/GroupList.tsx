@@ -9,8 +9,6 @@ interface Props {
 }
 
 function GroupList({ groupList, handleClickGroup }: Props) {
-  // TODO: 삭제하기
-  console.log(groupList);
   return (
     <GroupListContainer>
       {groupList?.map((group: Group) => (
@@ -27,7 +25,6 @@ function GroupList({ groupList, handleClickGroup }: Props) {
           />
         </div>
       ))}
-      <div></div>
     </GroupListContainer>
   );
 }

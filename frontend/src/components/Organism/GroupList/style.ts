@@ -2,7 +2,8 @@ import styled from "styled-components";
 
 const GroupListContainer = styled.div`
   width: 100%;
-  height: calc(100vh - 360px);
+  height: fit-content;
+  padding-bottom: 20px;
   overflow-y: scroll;
 
   & > div {
@@ -12,11 +13,6 @@ const GroupListContainer = styled.div`
 
   & > div:first-child > div {
     margin-top: 10px;
-  }
-
-  & > div:last-child {
-    width: 100%;
-    height: calc(100vh - 480px);
   }
 `;
 

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   AddProfileImgBtn,
   EditProfileBtnContainer,
+  MyPageTabContainer,
   Nickname,
   ProfileContainer,
   ProfileImg,
@@ -10,18 +11,20 @@ import {
   ProfileInfoDetail,
 } from "./style";
 import ProfileCard from "../../assets/Profile_Card.svg";
+import { ReactComponent as Plus } from "../../assets/Plus.svg";
 import { ReactComponent as Sprout } from "../../assets/Sprout_2.svg";
 import { ReactComponent as Flower } from "../../assets/Flower.svg";
 import { ReactComponent as PlusWhite } from "../../assets/Plus_White.svg";
 import { ReactComponent as Trash } from "../../assets/Trash-alt.svg";
 import { Group } from "../../constants/types";
-import Contour from "../../components/Atom/Contour/Contour";
 import { useNavigate } from "react-router-dom";
 import { getUserGroupIsDoneList, updateUserDetail } from "../../apis/user";
 import useProfile from "../../hooks/useProfile";
 import { toast } from "react-hot-toast";
 import Btn from "../../components/Atom/Btn/Btn";
 import GroupList from "../../components/Organism/GroupList/GroupList";
+import { getGroupList } from "../../apis/home";
+import Tabs from "../../components/Molecules/Tabs/Tabs";
 
 function MyPage() {
   const navigate = useNavigate();
@@ -31,13 +34,19 @@ function MyPage() {
   const [isDeleteImg, setIsDeleteImg] = useState<boolean>(false);
   const [tmpNickname, setTmpNickname] = useState<string>("");
   const [editProfileMode, setEditProfileMode] = useState<boolean>(false);
-  const [groupList, setGroupList] = useState<Group[]>([]);
+
+  const menuTabList = ["진행중인 모임", "완료된 모임"];
+  const [selectedMenuIndex, setSelectedMenuIndex] = useState<number>(0);
+  const [groupList, setGroupList] = useState<Group[][]>([[], []]);
 
   const profile = useProfile(editProfileMode);
 
   useEffect(() => {
+    getGroupList().then((res) => {
+      setGroupList((prevState) => [res.data, prevState[1]]);
+    });
     getUserGroupIsDoneList(0, 10).then((res) => {
-      setGroupList(res.data);
+      setGroupList((prevState) => [prevState[0], res.data]);
     });
   }, []);
 
@@ -47,7 +56,18 @@ function MyPage() {
   }, [profile]);
 
   const handleClickGroup = (meetingId: number) => {
-    navigate(`/result/${meetingId}`);
+    switch (selectedMenuIndex) {
+      case 0:
+        navigate(`/group/${meetingId}`);
+        break;
+
+      case 1:
+        navigate(`/result/${meetingId}`);
+        break;
+
+      default:
+        break;
+    }
   };
 
   const handleClickEditProfileBtn = () => {
@@ -186,9 +206,33 @@ function MyPage() {
         </ProfileInfo>
       </ProfileContainer>
 
-      <Contour text="참여한 모임" />
+      <MyPageTabContainer>
+        <Tabs
+          menuTabList={menuTabList}
+          selectedMenuIndex={selectedMenuIndex}
+          setSelectedMenuIndex={setSelectedMenuIndex}
+        />
+        <Plus
+          onClick={() => {
+            navigate("/create");
+          }}
+        />
+      </MyPageTabContainer>
 
-      <GroupList groupList={groupList} handleClickGroup={handleClickGroup} />
+      <>
+        {selectedMenuIndex === 0 && (
+          <GroupList
+            groupList={groupList[selectedMenuIndex]}
+            handleClickGroup={handleClickGroup}
+          />
+        )}
+        {selectedMenuIndex === 1 && (
+          <GroupList
+            groupList={groupList[selectedMenuIndex]}
+            handleClickGroup={handleClickGroup}
+          />
+        )}
+      </>
     </div>
   );
 }
