@@ -8,13 +8,13 @@ import java.time.LocalDate;
 
 @Getter
 @ToString
-public class MeetingRandomQuestionDto {
+public class MeetingRandomQuestionReqDto {
 
     private final Long meetingId;
     private final LocalDate findDay;
 
     @Builder
-    public MeetingRandomQuestionDto(Long meetingId, LocalDate findDay) {
+    public MeetingRandomQuestionReqDto(Long meetingId, LocalDate findDay) {
         this.meetingId = meetingId;
         this.findDay = findDay;
     }

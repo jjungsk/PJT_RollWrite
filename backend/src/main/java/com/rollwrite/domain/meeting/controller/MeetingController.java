@@ -9,7 +9,9 @@ import com.rollwrite.global.model.ErrorCode;
 import com.rollwrite.global.model.SuccessCode;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -203,12 +205,15 @@ public class MeetingController {
 
     @ApiOperation(value = "point 사용 시, 답변 뽑기", notes = "현재 모임의 답변 뽑기")
     @PostMapping("/answer/random")
-    public ResponseEntity<ApiResponse> getRandomAnswer(@ApiIgnore Authentication authentication, @RequestBody MeetingRandomQuestionDto meetingRandomQuestionDto) {
+    public ResponseEntity<ApiResponse> getRandomAnswer(@ApiIgnore Authentication authentication, @RequestBody MeetingRandomQuestionReqDto meetingRandomQuestionReqDto) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
         Long userId = userDetails.getUserId();
 
-        String answer = meetingService.getRandomAnswer(userId, meetingRandomQuestionDto);
+        MeetingRandomQuestionResDto meetingRandomQuestionResDto = meetingService.getRandomAnswer(userId, meetingRandomQuestionReqDto);
+        if (meetingRandomQuestionResDto == null) {
+            return new ResponseEntity<>(ApiResponse.error(ErrorCode.BAD_REQUEST_POINT), HttpStatus.OK);
+        }
 
-        return new ResponseEntity<>(ApiResponse.success(SuccessCode.GET_RANDOM_ANSWER_SUCCESS, answer), HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.GET_RANDOM_ANSWER_SUCCESS, meetingRandomQuestionResDto), HttpStatus.OK);
     }
 }
