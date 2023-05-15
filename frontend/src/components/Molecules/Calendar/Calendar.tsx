@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   CalendarContainer,
   CalendarDay,
@@ -71,6 +71,7 @@ function Calendar({
   selectedDay,
   calendarRef,
 }: Props) {
+  const [toastStatus, setToastStatus] = useState<boolean>(false);
   const [monthStart, setMonthStart] = useState(startOfMonth(TODAY));
   const daysOfMonth = useMemo(() => createCalendar(monthStart), [monthStart]);
   const SproutThema = group.color === "#CEEDC7" ? DOG_LIST : SPROUT_LIST;
@@ -81,8 +82,23 @@ function Calendar({
       isSameDay(day, new Date(group?.startDay))) &&
     isSameMonth(day, monthStart)
       ? setSelectedDay(day)
-      : toast.error("모임 기간이 아닙니다");
+      : toastErrMsg();
   };
+
+  const toastErrMsg = () => {
+    if (!toastStatus) {
+      setToastStatus(true);
+      toast.error("모임 기간이 아닙니다");
+    }
+  };
+
+  useEffect(() => {
+    if (toastStatus) {
+      setTimeout(() => {
+        setToastStatus(false);
+      }, 5000);
+    }
+  }, [toastStatus]);
 
   const isDayInGroupPeriod = (day: Date) => {
     const startDay = new Date(group?.startDay);
