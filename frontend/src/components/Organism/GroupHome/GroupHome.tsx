@@ -156,14 +156,13 @@ function GroupHome({ group }: Props) {
           {format(selectedDay, "yyyy년 MM월 dd일")}
         </GroupHomeCardHeader>
         <GroupHomeCardContent flexDirection="column" gap="0px">
-          {questionMap.has(format(selectedDay, "yyyy-MM-dd")) ? (
+          {questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.answer ? (
             <>
               {questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.question}
               <AnswerBox
                 isMe={true}
                 answer={
-                  questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.answer ??
-                  "답변이 없습니다"
+                  questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.answer!
                 }
               />
             </>
