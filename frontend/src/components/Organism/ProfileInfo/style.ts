@@ -86,34 +86,48 @@ const Nickname = styled.input.attrs((props) => ({
 
 const ProfileInfoDetail = styled.div`
   font-weight: bold;
-  font-size: 13px;
+  font-size: 12px;
   line-height: 10px;
-
-  svg {
-    width: 16px;
-    height: 20px;
-    padding-top: 2px;
-  }
 
   table {
     width: 150px;
-    margin: 4px auto;
+    margin: 2px auto 6px;
 
     tr {
-      height: 28px;
+      height: 16px;
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
 
       td {
         vertical-align: middle;
       }
 
-      td:nth-child(2) {
-        width: 80px;
+      td:nth-last-child(2) {
+        font-size: 10px;
+      }
+      td:last-child {
+        font-size: 11px;
+      }
+    }
+
+    & > tbody > tr:first-child {
+      height: 28px;
+
+      td > svg {
+        width: 24px;
+        height: 24px;
+        padding-top: 2px;
       }
 
+      td:nth-last-child(2) {
+        font-size: 13px;
+      }
       td:last-child {
         width: 35px;
-        font-weight: bold;
-        font-size: 15px;
+        font-size: 13px;
       }
     }
   }

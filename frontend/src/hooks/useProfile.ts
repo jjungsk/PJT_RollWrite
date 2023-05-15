@@ -8,6 +8,7 @@ function useProfile(editProfileMode?: boolean) {
     profileImage: "",
     cntMeetingProgress: 0,
     cntMeetingProgressIsDone: 0,
+    point: 0,
   });
 
   useEffect(() => {

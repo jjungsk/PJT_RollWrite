@@ -10,14 +10,15 @@ import {
   ProfileInfoDetail,
 } from "./style";
 import ProfileCard from "../../../assets/Profile_Card.svg";
-import { ReactComponent as Sprout } from "../../../assets/Sprout_2.svg";
-import { ReactComponent as Flower } from "../../../assets/Flower.svg";
+import { ReactComponent as Point } from "../../../assets/Point.svg";
+import { ReactComponent as Sprout } from "../../../assets/Sprout_5.svg";
 import { ReactComponent as PlusWhite } from "../../../assets/Plus_White.svg";
 import { ReactComponent as Trash } from "../../../assets/Trash-alt.svg";
 import useProfile from "../../../hooks/useProfile";
 import { updateUserDetail } from "../../../apis/user";
 import { toast } from "react-hot-toast";
 import Btn from "../../Atom/Btn/Btn";
+import { PointAnimation } from "../../../utils/PointAnimation";
 
 function ProfileInfo() {
   const [profileImgFile, setProfileImgFile] = useState<File>();
@@ -141,17 +142,28 @@ function ProfileInfo() {
             <tbody>
               <tr>
                 <td>
-                  <Sprout />
+                  <Point />
                 </td>
-                <td>진행 중인 모임</td>
-                <td>{profile.cntMeetingProgress}</td>
+                <td>포인트</td>
+                <td colSpan={2}>
+                  <PointAnimation
+                    targetValue={profile.point ?? 0}
+                    time={1000}
+                  />
+                  p
+                </td>
               </tr>
               <tr>
-                <td>
-                  <Flower />
+                <td rowSpan={2}>
+                  <Sprout />
                 </td>
-                <td>완료된 모임</td>
-                <td>{profile.cntMeetingProgressIsDone}</td>
+                <td rowSpan={2}>참여한 모임</td>
+                <td>진행중</td>
+                <td>{profile.cntMeetingProgress}개</td>
+              </tr>
+              <tr>
+                <td>완료</td>
+                <td>{profile.cntMeetingProgressIsDone}개</td>
               </tr>
             </tbody>
           </table>

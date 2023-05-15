@@ -56,6 +56,7 @@ export interface Profile {
   profileImage: string;
   cntMeetingProgress?: number;
   cntMeetingProgressIsDone?: number;
+  point?: number;
 }
 
 export interface Question {
