@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useAppDispatch } from "../constants/types";
 import { updateAccessToken } from "../store/authReducer";
 import { axiosFileInstance, axiosInstance } from "../apis/instance";

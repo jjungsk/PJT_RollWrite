@@ -13,6 +13,7 @@ import GroupInvite from "../../components/Organism/GroupInvite/GroupInvite";
 import Box from "../../components/Atom/Box/Box";
 
 function GroupInfoPage() {
+  const menuTabList = ["홈", "정보", "질문하기", "초대하기"];
   const [group, setGroup] = useState<Group>();
   const [selectedMenuIndex, setSelectedMenuIndex] = useState<number>(0);
   const { meetingId } = useParams();
@@ -40,6 +41,7 @@ function GroupInfoPage() {
         justifyContent="start"
       />
       <Tabs
+        menuTabList={menuTabList}
         selectedMenuIndex={selectedMenuIndex}
         setSelectedMenuIndex={setSelectedMenuIndex}
       />

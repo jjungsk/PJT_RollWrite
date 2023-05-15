@@ -1,10 +1,10 @@
 import React from "react";
 import { AwardPageContainer, AwardPageHeader } from "./style";
 import { motion } from "framer-motion";
-import { ProfileImg } from "../../../pages/MyPage/style";
 import { Profile } from "../../../constants/types";
 import { pop, removeAll } from "../../../utils/pop";
 import Btn from "../../Atom/Btn/Btn";
+import { ProfileImg } from "../ProfileInfo/style";
 
 interface Props {
   profile: Profile;

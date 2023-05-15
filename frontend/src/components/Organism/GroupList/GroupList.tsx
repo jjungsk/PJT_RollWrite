@@ -1,40 +1,31 @@
 import React from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/navigation";
 import GroupCard from "../../Molecules/GroupCard/GroupCard";
 import { Group } from "../../../constants/types";
+import { GroupListContainer } from "./style";
 
 interface Props {
   groupList?: Group[];
-  onIndexChanged: (index: number) => void;
-  setHomeContent: React.Dispatch<React.SetStateAction<number>>;
-  homeContent: number;
+  handleClickGroup: (meetingId: number) => void;
 }
 
-function GroupList({
-  groupList,
-  onIndexChanged,
-  setHomeContent,
-  homeContent,
-}: Props) {
+function GroupList({ groupList, handleClickGroup }: Props) {
   return (
-    <Swiper
-      style={{ height: "128px", width: "100vw", maxWidth: "450px" }}
-      spaceBetween={20}
-      slidesPerView={1}
-      onSlideChange={(e) => onIndexChanged(e.activeIndex)}
-    >
-      {groupList?.map((groupInfo, i) => (
-        <SwiperSlide key={i}>
+    <GroupListContainer>
+      {groupList?.map((group: Group) => (
+        <div
+          key={group.meetingId}
+          onClick={() => handleClickGroup(group.meetingId)}
+        >
           <GroupCard
-            groupInfo={groupInfo}
-            setHomeContent={setHomeContent}
-            homeContent={homeContent}
+            complete
+            width="calc(100% - 60px)"
+            height="90px"
+            groupInfo={group}
+            margin="16px auto"
           />
-        </SwiperSlide>
+        </div>
       ))}
-    </Swiper>
+    </GroupListContainer>
   );
 }
 

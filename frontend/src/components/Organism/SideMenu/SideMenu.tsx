@@ -4,8 +4,8 @@ import { ProfileItem, SideMenuContainer, SideMenuHeader } from "./style";
 import { ReactComponent as CloseArrow } from "../../../assets/Close_Arrow.svg";
 import AccordionList from "../AccordionList/AccordionList";
 import { AccordionItemType, Chat, Participant } from "../../../constants/types";
-import { ProfileImg } from "../../../pages/MyPage/style";
 import { QuestionItem } from "../../Molecules/ChatItem/style";
+import { ProfileImg } from "../ProfileInfo/style";
 
 function SideMenu(props: {
   questionList: Chat[];

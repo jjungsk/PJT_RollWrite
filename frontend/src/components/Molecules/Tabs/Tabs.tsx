@@ -2,11 +2,11 @@ import React, { useRef } from "react";
 import { TabsContainer, TabsContent, TabsUnderline } from "./style";
 
 interface Props {
+  menuTabList: string[];
   selectedMenuIndex: number;
   setSelectedMenuIndex: React.Dispatch<React.SetStateAction<number>>;
 }
-function Tabs({ selectedMenuIndex, setSelectedMenuIndex }: Props) {
-  const menuList = ["홈", "정보", "질문하기", "초대하기"];
+function Tabs({ menuTabList, selectedMenuIndex, setSelectedMenuIndex }: Props) {
   const tabsRef = useRef<HTMLDivElement | null>(null);
 
   const handleClick = (index: number) => {
@@ -20,9 +20,10 @@ function Tabs({ selectedMenuIndex, setSelectedMenuIndex }: Props) {
     const selectedChild = children[selectedMenuIndex];
     return `${selectedChild.offsetLeft}px`;
   };
+
   return (
     <TabsContainer ref={tabsRef}>
-      {menuList.map((menu, index) => (
+      {menuTabList.map((menu, index) => (
         <TabsContent
           key={index}
           isClicked={index === selectedMenuIndex}
