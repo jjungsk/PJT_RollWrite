@@ -15,7 +15,6 @@ import Box from "../../components/Atom/Box/Box";
 function GroupInfoPage() {
   const [group, setGroup] = useState<Group>();
   const [selectedMenuIndex, setSelectedMenuIndex] = useState<number>(0);
-
   const { meetingId } = useParams();
 
   useEffect(() => {

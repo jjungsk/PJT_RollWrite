@@ -73,7 +73,7 @@ function Calendar({
 }: Props) {
   const [monthStart, setMonthStart] = useState(startOfMonth(TODAY));
   const daysOfMonth = useMemo(() => createCalendar(monthStart), [monthStart]);
-  const SproutThema = group.color === "#CEEDC7" ? SPROUT_LIST : DOG_LIST;
+  const SproutThema = group.color === "#CEEDC7" ? DOG_LIST : SPROUT_LIST;
   const handelClick = (day: Date) => {
     ((isAfter(day, new Date(group?.startDay)) &&
       isBefore(day, new Date(group?.endDay)) &&

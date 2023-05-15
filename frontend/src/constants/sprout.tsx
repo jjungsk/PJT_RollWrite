@@ -12,19 +12,19 @@ import { ReactComponent as Dog4 } from "../assets/dog4.svg";
 import { ReactComponent as Dog5 } from "../assets/dog5.svg";
 
 export const SPROUT_LIST = [
-  <Sprout0 />,
-  <Sprout1 />,
-  <Sprout2 />,
-  <Sprout3 />,
-  <Sprout4 />,
-  <Sprout5 />,
+  <Sprout0 key="sprout0" />,
+  <Sprout1 key="sprout1" />,
+  <Sprout2 key="sprout2" />,
+  <Sprout3 key="sprout3" />,
+  <Sprout4 key="sprout4" />,
+  <Sprout5 key="sprout5" />,
 ];
 
 export const DOG_LIST = [
-  <Dog0 />,
-  <Dog1 />,
-  <Dog2 />,
-  <Dog3 />,
-  <Dog4 />,
-  <Dog5 />,
+  <Dog0 key="dog0" />,
+  <Dog1 key="dog1" />,
+  <Dog2 key="dog2" />,
+  <Dog3 key="dog3" />,
+  <Dog4 key="dog4" />,
+  <Dog5 key="dog5" />,
 ];

@@ -11,7 +11,7 @@ import {
   GroupHomeCardFooter,
   GroupHomeCardHeader,
 } from "./style";
-import { SPROUT_LIST } from "../../../constants/sprout";
+import { DOG_LIST, SPROUT_LIST } from "../../../constants/sprout";
 import { format, getDay, subHours } from "date-fns";
 import html2canvas from "html2canvas";
 import { useNavigate } from "react-router-dom";
@@ -28,6 +28,7 @@ function GroupHome({ group }: Props) {
   const [questionMap, setQuestionMap] = useState<Map<string, CalendarQuestion>>(
     new Map()
   );
+  const SproutThema = group.color === "#CEEDC7" ? DOG_LIST : SPROUT_LIST;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedDay, setSelectedDay] = useState(new Date());
   const [answer, setAnswer] = useState("");
@@ -83,7 +84,7 @@ function GroupHome({ group }: Props) {
     <>
       {isOpen && (
         <Modal width="280px" height="128px" setIsOpen={setIsOpen} color="fill">
-          <SproutList />
+          <SproutList thema={group.color} />
         </Modal>
       )}
       <div style={{ position: "relative" }}>
@@ -112,7 +113,7 @@ function GroupHome({ group }: Props) {
           {questionMap.has(format(selectedDay, "yyyy-MM-dd")) ? (
             <>
               {
-                SPROUT_LIST[
+                SproutThema[
                   questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.rate! / 20
                 ]
               }
