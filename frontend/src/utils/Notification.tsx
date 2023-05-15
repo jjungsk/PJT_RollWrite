@@ -38,7 +38,6 @@ const Notification = () => {
   const isIphone = detectIphoneDevice(window.navigator.userAgent);
 
   if (!isIphone && isLogin && firebaseToken === "") {
-    console.log("토큰 요청");
     requestForToken().then((token) => {
       sendFirebaseToken(token);
       dispatch(updateFirebaseToken(token));
