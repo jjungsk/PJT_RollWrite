@@ -10,8 +10,8 @@ import {
 } from "./style";
 import Contour from "../../Atom/Contour/Contour";
 import { format } from "date-fns";
-import { ProfileImg } from "../../../pages/MyPage/style";
 import { ko } from "date-fns/locale";
+import { ProfileImg } from "../../Organism/ProfileInfo/style";
 
 function ChatItem(props: { chat: Chat; bgColor: string }) {
   return (

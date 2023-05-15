@@ -3,7 +3,7 @@ import { Award, Participant } from "../../../constants/types";
 import { ResultAwardContainer, ResultAwardUserList } from "./style";
 import Contour from "../../Atom/Contour/Contour";
 import { QuestionContainer } from "../ChatItem/style";
-import { ProfileImg } from "../../../pages/MyPage/style";
+import { ProfileImg } from "../../Organism/ProfileInfo/style";
 
 function ChatAwardItem(props: { award: Award; bgColor: string }) {
   return (

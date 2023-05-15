@@ -1,9 +1,9 @@
 import React from "react";
 import { AwardPageContainer, AwardPageContent, AwardPageHeader } from "./style";
-import { ProfileImg } from "../../../pages/MyPage/style";
 import { useNavigate, useParams } from "react-router-dom";
 import { Award } from "../../../constants/types";
 import Btn from "../../Atom/Btn/Btn";
+import { ProfileImg } from "../ProfileInfo/style";
 interface Props {
   award: Award;
 }

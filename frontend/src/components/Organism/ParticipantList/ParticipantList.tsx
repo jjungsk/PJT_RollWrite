@@ -1,7 +1,7 @@
 import React from "react";
 import { ProfileItem } from "../SideMenu/style";
 import { Group } from "../../../constants/types";
-import { ProfileImg } from "../../../pages/MyPage/style";
+import { ProfileImg } from "../ProfileInfo/style";
 
 interface Props {
   group: Group;
