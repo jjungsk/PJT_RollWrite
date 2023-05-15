@@ -6,6 +6,7 @@ const QuestionPageContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 4vh;
+  padding-bottom: 16px;
 `;
 const QuestionPageHeader = styled.div`
   font-size: 18px;

@@ -24,7 +24,7 @@ import {
 } from "date-fns";
 import { CalendarQuestion, Group } from "../../../constants/types";
 import Box from "../../Atom/Box/Box";
-import { SPROUT_LIST } from "../../../constants/sprout";
+import { DOG_LIST, SPROUT_LIST } from "../../../constants/sprout";
 import { toast } from "react-hot-toast";
 import { swipeDirection } from "../../../utils/swipeDetector";
 import { initTouch } from "../../../utils/swipeDetector";
@@ -73,7 +73,7 @@ function Calendar({
 }: Props) {
   const [monthStart, setMonthStart] = useState(startOfMonth(TODAY));
   const daysOfMonth = useMemo(() => createCalendar(monthStart), [monthStart]);
-
+  const SproutThema = group.color === "#CEEDC7" ? SPROUT_LIST : DOG_LIST;
   const handelClick = (day: Date) => {
     ((isAfter(day, new Date(group?.startDay)) &&
       isBefore(day, new Date(group?.endDay)) &&
@@ -97,9 +97,9 @@ function Calendar({
   const getSproutImage = (day: Date) => {
     const formattedDate = format(day, "yyyy-MM-dd");
     if (questionMap.has(formattedDate)) {
-      return SPROUT_LIST[(questionMap.get(formattedDate)?.rate ?? 20) / 20];
+      return SproutThema[(questionMap.get(formattedDate)?.rate ?? 20) / 20];
     }
-    return SPROUT_LIST[0];
+    return SproutThema[0];
   };
 
   return (
