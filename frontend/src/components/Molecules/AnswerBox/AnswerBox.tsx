@@ -8,7 +8,7 @@ interface Props {
   answer: string;
 }
 function AnswerBox({ isMe, answer }: Props) {
-  const [user, setUser] = useState({ nickname: "", ProfileImg: "" });
+  const [user, setUser] = useState({ nickname: "???", ProfileImg: "" });
   useEffect(() => {
     isMe &&
       getUserDetail().then((res) => {

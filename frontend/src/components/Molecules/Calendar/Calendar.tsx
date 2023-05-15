@@ -24,9 +24,6 @@ import { CalendarQuestion, Group } from "../../../constants/types";
 import Box from "../../Atom/Box/Box";
 import { SPROUT_LIST } from "../../../constants/sprout";
 import { toast } from "react-hot-toast";
-import Modal from "../Modal/Modal";
-import DatSelect from "../DaySelect/DaySelect";
-import DaySelect from "../DaySelect/DaySelect";
 
 const TODAY = new Date();
 
@@ -72,7 +69,6 @@ function Calendar({
 }: Props) {
   const [monthStart, setMonthStart] = useState(startOfMonth(TODAY));
   const daysOfMonth = useMemo(() => createCalendar(monthStart), [monthStart]);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const handelClick = (day: Date) => {
     ((isAfter(day, new Date(group?.startDay)) &&
@@ -103,46 +99,39 @@ function Calendar({
   };
 
   return (
-    <CalendarContainer ref={calendarRef}>
-      {isOpen && (
-        <Modal setIsOpen={setIsOpen} width="320px" height="240px">
-          <DaySelect day={monthStart} setDay={setMonthStart} />
-        </Modal>
-      )}
-      <CalendarMonth
-        onClick={() => {
-          setIsOpen(true);
-        }}
-      >
-        {getYear(monthStart)}년 {getMonth(monthStart) + 1}월
-      </CalendarMonth>
-      <CalendarName>
-        <div>일</div>
-        <div>월</div>
-        <div>화</div>
-        <div>수</div>
-        <div>목</div>
-        <div>금</div>
-        <div>토</div>
-      </CalendarName>
-      {daysOfMonth.map((week, i) => (
-        <CalendarWeek key={i}>
-          {week.map((day, i) => (
-            <CalendarDay key={i} onClick={() => handelClick(day.currentDay)}>
-              <CalendarDayNum isSeleted={selectedDay === day.currentDay}>
-                {day.formattedDate}
-              </CalendarDayNum>
-              {isDayInGroupPeriod(day.currentDay) &&
-              isSameMonth(day.currentDay, monthStart) ? (
-                getSproutImage(day.currentDay)
-              ) : (
-                <Box width="32px" height="32px" />
-              )}
-            </CalendarDay>
-          ))}
-        </CalendarWeek>
-      ))}
-    </CalendarContainer>
+    <>
+      <CalendarContainer ref={calendarRef}>
+        <CalendarMonth>
+          {getYear(monthStart)}년 {getMonth(monthStart) + 1}월
+        </CalendarMonth>
+        <CalendarName>
+          <div>일</div>
+          <div>월</div>
+          <div>화</div>
+          <div>수</div>
+          <div>목</div>
+          <div>금</div>
+          <div>토</div>
+        </CalendarName>
+        {daysOfMonth.map((week, i) => (
+          <CalendarWeek key={i}>
+            {week.map((day, i) => (
+              <CalendarDay key={i} onClick={() => handelClick(day.currentDay)}>
+                <CalendarDayNum isSeleted={selectedDay === day.currentDay}>
+                  {day.formattedDate}
+                </CalendarDayNum>
+                {isDayInGroupPeriod(day.currentDay) &&
+                isSameMonth(day.currentDay, monthStart) ? (
+                  getSproutImage(day.currentDay)
+                ) : (
+                  <Box width="32px" height="32px" />
+                )}
+              </CalendarDay>
+            ))}
+          </CalendarWeek>
+        ))}
+      </CalendarContainer>
+    </>
   );
 }
 

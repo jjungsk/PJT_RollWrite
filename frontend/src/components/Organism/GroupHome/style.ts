@@ -28,13 +28,14 @@ const GroupHomeCardHeader = styled.div`
 const GroupHomeCardContent = styled.div<{
   flexDirection?: string;
   alignItem?: string;
+  gap?: string;
 }>`
   display: flex;
   flex-direction: ${(props) => props.flexDirection};
   justify-content: center;
   align-items: ${(props) => props.alignItem};
   padding: 0px;
-  gap: 16px;
+  gap: ${(props) => props.gap || "16px"};
   text-align: start;
   width: 100%;
 
