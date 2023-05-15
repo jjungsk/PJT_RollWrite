@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   AddProfileImgBtn,
   EditProfileBtnContainer,
-  GroupListContainer,
   Nickname,
   ProfileContainer,
   ProfileImg,
@@ -17,12 +16,12 @@ import { ReactComponent as PlusWhite } from "../../assets/Plus_White.svg";
 import { ReactComponent as Trash } from "../../assets/Trash-alt.svg";
 import { Group } from "../../constants/types";
 import Contour from "../../components/Atom/Contour/Contour";
-import GroupCard from "../../components/Molecules/GroupCard/GroupCard";
 import { useNavigate } from "react-router-dom";
 import { getUserGroupIsDoneList, updateUserDetail } from "../../apis/user";
 import useProfile from "../../hooks/useProfile";
 import { toast } from "react-hot-toast";
 import Btn from "../../components/Atom/Btn/Btn";
+import GroupList from "../../components/Organism/GroupList/GroupList";
 
 function MyPage() {
   const navigate = useNavigate();
@@ -189,23 +188,7 @@ function MyPage() {
 
       <Contour text="참여한 모임" />
 
-      <GroupListContainer>
-        {groupList.map((group: Group) => (
-          <div
-            key={group.meetingId}
-            onClick={() => handleClickGroup(group.meetingId)}
-          >
-            <GroupCard
-              complete
-              width="calc(100% - 60px)"
-              height="90px"
-              groupInfo={group}
-              margin="16px auto"
-            />
-          </div>
-        ))}
-        <div></div>
-      </GroupListContainer>
+      <GroupList groupList={groupList} handleClickGroup={handleClickGroup} />
     </div>
   );
 }
