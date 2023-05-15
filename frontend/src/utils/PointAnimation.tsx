@@ -27,5 +27,5 @@ export const PointAnimation = ({ targetValue, time }: Props) => {
     };
   }, [targetValue, time]);
 
-  return <>{value}</>;
+  return <>{Math.round(value)}</>;
 };
