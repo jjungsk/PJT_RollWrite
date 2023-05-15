@@ -12,7 +12,7 @@ function AwardPage() {
     Number(meetingId)
   );
   return (
-    <div style={{ overflow: "hidden" }}>
+    <div>
       {awardSteps === -1 && (
         <AwardStart title={groupResult.title} setAwardSteps={setAwardSteps} />
       )}

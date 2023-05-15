@@ -29,6 +29,10 @@ const GlobalStyle = createGlobalStyle`
     width: 0px;
   } 
 
+  body {
+    overflow: hidden;
+  }
+
   :root {
         /* Colors */
     --bg-color: #F0EDE6;
