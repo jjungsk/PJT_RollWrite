@@ -5,10 +5,11 @@ interface Props {
   label: string;
   onClick?: () => void;
   color?: string;
+  margin?: string;
 }
-function Btn({ label, onClick, color }: Props) {
+function Btn({ label, onClick, color, margin }: Props) {
   return (
-    <BtnContainer onClick={onClick} color={color}>
+    <BtnContainer onClick={onClick} color={color} margin={margin}>
       {label}
     </BtnContainer>
   );

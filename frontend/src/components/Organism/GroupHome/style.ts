@@ -1,11 +1,12 @@
 import styled from "styled-components";
 
 const GroupHomeCard = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  padding: 16px;
+  padding: 24px;
   gap: 16px;
 
   width: 100%;
@@ -24,14 +25,19 @@ const GroupHomeCardHeader = styled.div`
   font-weight: bold;
 `;
 
-const GroupHomeCardContent = styled.div`
+const GroupHomeCardContent = styled.div<{
+  flexDirection?: string;
+  alignItem?: string;
+  gap?: string;
+}>`
   display: flex;
-  flex-direction: row;
+  flex-direction: ${(props) => props.flexDirection};
   justify-content: center;
-  align-items: center;
+  align-items: ${(props) => props.alignItem};
   padding: 0px;
-  gap: 16px;
+  gap: ${(props) => props.gap || "16px"};
   text-align: start;
+  width: 100%;
 
   & > svg {
     width: 64px;

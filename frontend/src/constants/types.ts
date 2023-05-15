@@ -132,4 +132,5 @@ export interface CalendarQuestion {
   answerCnt: number;
   participantCnt: number;
   rate: number;
+  answer: string;
 }

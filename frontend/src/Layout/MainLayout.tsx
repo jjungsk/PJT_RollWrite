@@ -10,6 +10,7 @@ function MainLayout() {
         style={{
           height: "calc(100% - 48px)",
           overflow: "auto",
+          paddingBottom: "16px",
         }}
       >
         <Outlet />

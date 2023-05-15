@@ -19,11 +19,15 @@ import {
   getYear,
   isAfter,
   isBefore,
+  addMonths,
+  subMonths,
 } from "date-fns";
 import { CalendarQuestion, Group } from "../../../constants/types";
 import Box from "../../Atom/Box/Box";
 import { SPROUT_LIST } from "../../../constants/sprout";
 import { toast } from "react-hot-toast";
+import { swipeDirection } from "../../../utils/swipeDetector";
+import { initTouch } from "../../../utils/swipeDetector";
 
 const TODAY = new Date();
 
@@ -99,37 +103,56 @@ function Calendar({
   };
 
   return (
-    <CalendarContainer ref={calendarRef}>
-      <CalendarMonth>
-        {getYear(monthStart)}년 {getMonth(monthStart) + 1}월
-      </CalendarMonth>
-      <CalendarName>
-        <div>일</div>
-        <div>월</div>
-        <div>화</div>
-        <div>수</div>
-        <div>목</div>
-        <div>금</div>
-        <div>토</div>
-      </CalendarName>
-      {daysOfMonth.map((week, i) => (
-        <CalendarWeek key={i}>
-          {week.map((day, i) => (
-            <CalendarDay key={i} onClick={() => handelClick(day.currentDay)}>
-              <CalendarDayNum isSeleted={selectedDay === day.currentDay}>
-                {day.formattedDate}
-              </CalendarDayNum>
-              {isDayInGroupPeriod(day.currentDay) &&
-              isSameMonth(day.currentDay, monthStart) ? (
-                getSproutImage(day.currentDay)
-              ) : (
-                <Box width="32px" height="32px" />
-              )}
-            </CalendarDay>
-          ))}
-        </CalendarWeek>
-      ))}
-    </CalendarContainer>
+    <>
+      <CalendarContainer ref={calendarRef}>
+        <CalendarMonth
+          onTouchStart={initTouch}
+          onTouchMove={(e) =>
+            swipeDirection(
+              e,
+              () => {},
+              () => {},
+              () => {
+                setMonthStart(addMonths(monthStart, 1));
+              },
+              () => {
+                setMonthStart(subMonths(monthStart, 1));
+              }
+            )
+          }
+          onMouseDown={initTouch}
+          onMouseMove={(e) => swipeDirection(e)}
+        >
+          {getYear(monthStart)}년 {getMonth(monthStart) + 1}월
+        </CalendarMonth>
+        <CalendarName>
+          <div>일</div>
+          <div>월</div>
+          <div>화</div>
+          <div>수</div>
+          <div>목</div>
+          <div>금</div>
+          <div>토</div>
+        </CalendarName>
+        {daysOfMonth.map((week, i) => (
+          <CalendarWeek key={i}>
+            {week.map((day, i) => (
+              <CalendarDay key={i} onClick={() => handelClick(day.currentDay)}>
+                <CalendarDayNum isSeleted={selectedDay === day.currentDay}>
+                  {day.formattedDate}
+                </CalendarDayNum>
+                {isDayInGroupPeriod(day.currentDay) &&
+                isSameMonth(day.currentDay, monthStart) ? (
+                  getSproutImage(day.currentDay)
+                ) : (
+                  <Box width="32px" height="32px" />
+                )}
+              </CalendarDay>
+            ))}
+          </CalendarWeek>
+        ))}
+      </CalendarContainer>
+    </>
   );
 }
 

@@ -5,14 +5,17 @@ import { Group } from "../../constants/types";
 import { useParams } from "react-router-dom";
 import Tabs from "../../components/Molecules/Tabs/Tabs";
 import { GroupInfoPageContent } from "./style";
+
 import GroupHome from "../../components/Organism/GroupHome/GroupHome";
 import GroupInfo from "../../components/Organism/GroupInfo/GroupInfo";
 import GroupQuestion from "../../components/Organism/GroupQuestion/GroupQuestion";
 import GroupInvite from "../../components/Organism/GroupInvite/GroupInvite";
+import Box from "../../components/Atom/Box/Box";
 
 function GroupInfoPage() {
   const [group, setGroup] = useState<Group>();
   const [selectedMenuIndex, setSelectedMenuIndex] = useState<number>(0);
+
   const { meetingId } = useParams();
 
   useEffect(() => {
@@ -29,7 +32,11 @@ function GroupInfoPage() {
   return (
     <>
       <BackNavigation
-        title={group?.title}
+        title={
+          group?.title.length! > 18
+            ? group?.title.slice(0, 18) + "..."
+            : group?.title
+        }
         titleSize="16px"
         justifyContent="start"
       />
@@ -37,6 +44,7 @@ function GroupInfoPage() {
         selectedMenuIndex={selectedMenuIndex}
         setSelectedMenuIndex={setSelectedMenuIndex}
       />
+      <Box height="16px" width="360px" />
       {group && (
         <GroupInfoPageContent>
           {selectedMenuIndex === 0 && <GroupHome group={group} />}

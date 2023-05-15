@@ -39,7 +39,7 @@ function GroupInvite({ group }: Props) {
 
   const generateQRCode = (url: string) => {
     const canvas = document.getElementById("roomCode");
-    QRCode.toCanvas(canvas, url);
+    QRCode.toCanvas(canvas, url, { width: 256 });
   };
   return (
     <GroupInviteContainer>

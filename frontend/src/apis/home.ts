@@ -51,3 +51,11 @@ export const getAwardMember = async (meetingId: string) => {
   const response = await axiosInstance.get(`meeting/award/${meetingId}`);
   return response.data;
 };
+
+export const getRandomAnswer = async (meetingId: string, findDay: string) => {
+  const response = await axiosInstance.post(`meeting/answer/random`, {
+    meetingId: meetingId,
+    findDay: findDay,
+  });
+  return response.data;
+};

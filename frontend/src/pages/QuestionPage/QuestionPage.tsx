@@ -47,7 +47,13 @@ function QuestionPage() {
                 : "day"}
               <Home />
             </div>
-            <div>{questionList[currentSlide].title}</div>
+            <div
+              style={{ fontSize: "22px", lineHeight: "48px", height: "48px" }}
+            >
+              {questionList[currentSlide].title.length > 18
+                ? questionList[currentSlide].title.slice(0, 18) + "..."
+                : questionList[currentSlide].title}
+            </div>
           </QuestionPageHeader>
           <EmojiCarousel
             currentSlide={currentSlide}
