@@ -33,7 +33,7 @@ export const handleKakaoQuestionShare = (question: CalendarQuestion) => {
   (window as any).Kakao.Share.sendDefault({
     objectType: "feed",
     content: {
-      title: `오늘질문 빨리 답변 부탁드립니다 🙏`,
+      title: `오늘 질문의 답변을 빨리 달아주세요 🙏`,
       description: `오늘의 질문 : ${question.question}`,
       imageUrl: "https://rollwrite.co.kr/logo_square.png",
       link: {

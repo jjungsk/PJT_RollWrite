@@ -17,7 +17,7 @@ function GroupInfo({ group }: Props) {
       <GroupInfoCard>
         <GroupInfoCardHeader>모임 기간</GroupInfoCardHeader>
         <div>
-          {format(new Date(group.startDay), "yyyy년 MM월 dd일")} ~{" "}
+          {format(new Date(group.startDay), "yyyy년 MM월 dd일")} {" ~ "}
           {format(new Date(group.endDay), "yyyy년 MM월 dd일")}
         </div>
       </GroupInfoCard>
