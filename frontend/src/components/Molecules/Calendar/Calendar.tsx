@@ -106,25 +106,26 @@ function Calendar({
 
   return (
     <>
-      <CalendarContainer ref={calendarRef}>
-        <CalendarMonth
-          onTouchStart={initTouch}
-          onTouchMove={(e) =>
-            swipeDirection(
-              e,
-              () => {},
-              () => {},
-              () => {
-                setMonthStart(addMonths(monthStart, 1));
-              },
-              () => {
-                setMonthStart(subMonths(monthStart, 1));
-              }
-            )
-          }
-          onMouseDown={initTouch}
-          onMouseMove={(e) => swipeDirection(e)}
-        >
+      <CalendarContainer
+        ref={calendarRef}
+        onTouchStart={initTouch}
+        onTouchMove={(e) =>
+          swipeDirection(
+            e,
+            () => {},
+            () => {},
+            () => {
+              setMonthStart(addMonths(monthStart, 1));
+            },
+            () => {
+              setMonthStart(subMonths(monthStart, 1));
+            }
+          )
+        }
+        onMouseDown={initTouch}
+        onMouseMove={(e) => swipeDirection(e)}
+      >
+        <CalendarMonth>
           {getYear(monthStart)}년 {getMonth(monthStart) + 1}월
         </CalendarMonth>
         <CalendarName>
