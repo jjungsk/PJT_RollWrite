@@ -88,13 +88,16 @@ public class ParticipantCustomRepositoryImpl implements ParticipantCustomReposit
 
     @Override
     public List<Participant> findMeetingAndUserAndTitleByProgress(boolean isDone) {
-        List<Participant> findAllParticipantDtoList = jpaQueryFactory
+        return jpaQueryFactory
                 .selectFrom(participant)
-                .join(participant.user, user).fetchJoin()
+                .join(participant.user, user)
+                .fetchJoin()
                 .join(participant.meeting, meeting).fetchJoin()
-                .where(participant.isDone.eq(isDone))
+                .where(
+                        participant.isDone.eq(isDone),
+                        user.firebaseToken.isNotEmpty().and(user.firebaseToken.isNotNull())
+                )
                 .fetch();
-        return findAllParticipantDtoList;
     }
 
 }
