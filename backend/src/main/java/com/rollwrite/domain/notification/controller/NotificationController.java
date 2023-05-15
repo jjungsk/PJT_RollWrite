@@ -1,10 +1,9 @@
 package com.rollwrite.domain.notification.controller;
 
 import com.google.firebase.messaging.FirebaseMessagingException;
-import com.google.firebase.messaging.Notification;
 import com.rollwrite.domain.notification.dto.AddFcmTokenReqDto;
-import com.rollwrite.domain.notification.dto.SendMessageManyReqDto;
-import com.rollwrite.domain.notification.dto.SendMessageOneReqDto;
+import com.rollwrite.domain.notification.dto.SendMessageManyDto;
+import com.rollwrite.domain.notification.dto.SendMessageOneDto;
 import com.rollwrite.domain.notification.service.NotificationService;
 import com.rollwrite.global.auth.CustomUserDetails;
 import com.rollwrite.global.model.ApiResponse;
@@ -22,7 +21,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
-import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,45 +49,35 @@ public class NotificationController {
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.MODIFY_FCM_TOKEN_SUCCESS), HttpStatus.OK);
     }
 
-    // 2. FCM 알림 보내기 - 개인
+    // 2. FCM 알림 보내기 send - 개인
     @ApiOperation(value = "(개인) FCM 알림 보내기", notes = "Token 한개에 알람 보내기")
     @Parameter(name = "firebaseToken", description = "FCM에서 받은 유저의 Token")
     @PostMapping("/individual")
     public ResponseEntity<ApiResponse<?>> sendMessageOne(@ApiIgnore Authentication authentication,
-                                                         @RequestBody SendMessageOneReqDto sendMessageOneReqDto) throws FirebaseMessagingException {
+                                                         @RequestBody SendMessageOneDto sendMessageOneDto) throws FirebaseMessagingException {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
         Long userId = userDetails.getUserId();
 
-        notificationService.sendMessageOne(sendMessageOneReqDto);
+        notificationService.sendMessageOne(sendMessageOneDto);
 
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.SEND_MESSAGE_TO), HttpStatus.OK);
     }
 
-    // 3. FCM 알림 보내기 - 다수 (한번에 최대 1000명)
+    // 3. FCM 알림 보내기 sendMulticast - 다수 (한번에 최대 1000명)
     @ApiOperation(value = "(다수) FCM 알림 보내기", notes = "ArrayList<String> 알람 보내기")
     @Parameter(name = "firebaseToken", description = "알림 보낼 Token List")
     @PostMapping("/multi")
     public ResponseEntity<ApiResponse<?>> sendMessageMany(@ApiIgnore Authentication authentication,
-                                                          @RequestBody SendMessageManyReqDto sendMessageManyReqDto) throws FirebaseMessagingException {
+                                                          @RequestBody SendMessageManyDto sendMessageManyDto) throws FirebaseMessagingException {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
         Long userId = userDetails.getUserId();
 
-        notificationService.sendMessageMany(sendMessageManyReqDto);
+        notificationService.sendMessageMany(sendMessageManyDto);
 
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.SEND_MESSAGE_TO), HttpStatus.OK);
     }
 
-    // 4. FCM List Message 보내기
-    @ApiOperation(value = "(자동) FCM Message List 보내기")
-    @PostMapping("/all")
-    public ResponseEntity<ApiResponse> sendMessageAll() throws FirebaseMessagingException {
-
-        notificationService.sendMessageAll();
-
-        return new ResponseEntity<>(ApiResponse.success(SuccessCode.SEND_MESSAGE_TO), HttpStatus.OK);
-    }
-
-    // 5. FCM 자동 알림 보내기 Main
+    // 4. FCM 알림 보내기 sendAll - 자동 알림 보내기 Main
     @Scheduled(cron = "0 10 8 * * *") // sec min hour(24) day month dayOfWeek(ex.MON-FRI)
     @ApiOperation(value = "(자동) FCM 알림 보내기", notes = "오전 8시 10분 질문 생성 알람 보내기")
     @Parameter(name = "firebaseToken", description = "알림 보낼 Token List")
@@ -115,7 +103,7 @@ public class NotificationController {
     }
 
     // *. Topic 구독 취소
-    @ApiOperation(value = "Topic 구독")
+    @ApiOperation(value = "Topic 구독 취소")
     @DeleteMapping("/unsubscribe")
     public ResponseEntity<ApiResponse<?>> unSubscribe(@ApiIgnore Authentication authentication,
                                                       @RequestParam("topic") String topic, @RequestParam("token") String token) throws FirebaseMessagingException {
@@ -127,7 +115,7 @@ public class NotificationController {
     }
 
     // *. Topic 메시지 보내기
-    @ApiOperation(value = "Topic 구독")
+    @ApiOperation(value = "Topic 구독 메시지 보내기")
     @PostMapping("/topic")
     public ResponseEntity<ApiResponse<?>> sendMessageTopic(@ApiIgnore Authentication authentication,
                                                            @RequestParam("topic") String topic, @RequestParam("token") String token) throws FirebaseMessagingException {
