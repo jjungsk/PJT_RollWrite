@@ -8,7 +8,7 @@ interface Props {
   answer: string;
 }
 function AnswerBox({ isMe, answer }: Props) {
-  const [user, setUser] = useState({ nickname: "???", ProfileImage: "" });
+  const [user, setUser] = useState({ nickname: "???", profileImage: "" });
   useEffect(() => {
     isMe &&
       getUserDetail().then((res) => {
@@ -17,7 +17,7 @@ function AnswerBox({ isMe, answer }: Props) {
   });
   return (
     <AnswerContainer isMe={isMe}>
-      {!isMe && <ProfileImg size={40} bgImg={user.ProfileImage} />}
+      {!isMe && <ProfileImg size={40} bgImg={user.profileImage} />}
       <AnswerDetail isMe={isMe}>
         <div>{user.nickname}</div>
         <div>
@@ -26,7 +26,7 @@ function AnswerBox({ isMe, answer }: Props) {
           </AnswerContent>
         </div>
       </AnswerDetail>
-      {isMe && <ProfileImg size={40} bgImg={user.ProfileImage} />}
+      {isMe && <ProfileImg size={40} bgImg={user.profileImage} />}
     </AnswerContainer>
   );
 }
