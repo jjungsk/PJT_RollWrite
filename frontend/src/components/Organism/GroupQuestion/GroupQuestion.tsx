@@ -56,7 +56,7 @@ function GroupQuestion({ meetingId }: Props) {
           <div>- 추가한 질문들이 채택되지 않을 수 있습니다.</div>
         </div>
       </GroupQuestionHeader>
-      <Emoji label="🧐" />
+      <Emoji label="🤗" />
       <GroupQuestionInput onChange={onChange} value={question} />
       {isLoding && <Btn label="등록 하기" onClick={handleClickCreateBtn} />}
     </>
