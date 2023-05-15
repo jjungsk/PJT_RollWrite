@@ -29,6 +29,8 @@ function ProfileInfo() {
 
   const profile = useProfile(editProfileMode);
 
+  const animationTime = 400;
+
   useEffect(() => {
     setTmpProfileImg(profile.profileImage);
     setTmpNickname(profile.nickname);
@@ -148,7 +150,7 @@ function ProfileInfo() {
                 <td colSpan={2}>
                   <PointAnimation
                     targetValue={profile.point ?? 0}
-                    time={1000}
+                    time={animationTime}
                   />
                   p
                 </td>
@@ -159,11 +161,23 @@ function ProfileInfo() {
                 </td>
                 <td rowSpan={2}>참여한 모임</td>
                 <td>진행중</td>
-                <td>{profile.cntMeetingProgress}개</td>
+                <td>
+                  <PointAnimation
+                    targetValue={profile.cntMeetingProgress ?? 0}
+                    time={animationTime}
+                  />
+                  개
+                </td>
               </tr>
               <tr>
                 <td>완료</td>
-                <td>{profile.cntMeetingProgressIsDone}개</td>
+                <td>
+                  <PointAnimation
+                    targetValue={profile.cntMeetingProgressIsDone ?? 0}
+                    time={animationTime}
+                  />
+                  개
+                </td>
               </tr>
             </tbody>
           </table>
