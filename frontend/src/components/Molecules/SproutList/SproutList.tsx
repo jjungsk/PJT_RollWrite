@@ -1,6 +1,5 @@
 import React from "react";
 import { DOG_LIST, SPROUT_LIST } from "../../../constants/sprout";
-import { padding } from "@mui/system";
 
 interface Props {
   thema: string;

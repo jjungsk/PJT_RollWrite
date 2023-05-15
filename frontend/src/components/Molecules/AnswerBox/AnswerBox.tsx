@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { AnswerContainer, AnswerContent, AnswerDetail } from "./style";
-import { ProfileImg } from "../../../pages/MyPage/style";
 import { getUserDetail } from "../../../apis/user";
+import { ProfileImg } from "../../Organism/ProfileInfo/style";
 
 interface Props {
   isMe: boolean;
