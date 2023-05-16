@@ -101,24 +101,30 @@ function QuestionPage() {
           />
         </>
       ) : (
-        <>
-          <Box height="15vh" width="100%" />
-          <div
-            style={{ fontSize: "20px", fontWeight: "bold", lineHeight: "28px" }}
-          >
-            모임이 없습니다. <br />
-            모임을 만들어보세요
-          </div>
+        questionList && (
+          <>
+            <Box height="15vh" width="100%" />
+            <div
+              style={{
+                fontSize: "20px",
+                fontWeight: "bold",
+                lineHeight: "28px",
+              }}
+            >
+              모임이 없습니다. <br />
+              모임을 만들어보세요
+            </div>
 
-          <Emoji label="🙁" />
+            <Emoji label="🙁" />
 
-          <Btn
-            label={"모임 만들기"}
-            onClick={() => {
-              navigate("/create");
-            }}
-          />
-        </>
+            <Btn
+              label={"모임 만들기"}
+              onClick={() => {
+                navigate("/create");
+              }}
+            />
+          </>
+        )
       )}
     </QuestionPageContainer>
   );

@@ -11,7 +11,14 @@ import {
   GroupHomeCardHeader,
 } from "./style";
 import { DOG_LIST, SPROUT_LIST } from "../../../constants/sprout";
-import { format, getDate, subHours } from "date-fns";
+import {
+  addDays,
+  addHours,
+  format,
+  getDate,
+  isAfter,
+  subHours,
+} from "date-fns";
 import html2canvas from "html2canvas";
 import { useNavigate } from "react-router-dom";
 import { handleKakaoQuestionShare } from "../../../utils/kakaoShare";
@@ -38,7 +45,6 @@ function GroupHome({ group }: Props) {
 
   useEffect(() => {
     getQuestionList(group.meetingId).then((res) => {
-      console.log(res);
       const questionList = res.data;
       const newQuestionMap = new Map<string, CalendarQuestion>();
       // eslint-disable-next-line array-callback-return
@@ -131,23 +137,29 @@ function GroupHome({ group }: Props) {
           답변률 (
           {questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.answerCnt ?? 0}/
           {questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.participantCnt ??
-            1}
+            0}
           )
           <InfoSvg onClick={() => setIsOpen(true)} />
         </GroupHomeCardHeader>
         <GroupHomeCardContent alignItem="center">
-          {
-            SproutThema[
-              Math.round(
-                questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.rate ??
-                  0 / 20
-              )
-            ]
-          }
-          {Math.round(
-            questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.rate ?? 0
+          {isAfter(new Date(), selectedDay) ? (
+            <>
+              {
+                SproutThema[
+                  Math.round(
+                    (questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.rate ??
+                      0) / 20
+                  )
+                ]
+              }
+              {Math.round(
+                questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.rate ?? 0
+              )}
+              %가 오늘의 질문에 답변했습니다.
+            </>
+          ) : (
+            "질문은 8시에 생성됩니다."
           )}
-          %가 오늘의 질문에 답변했습니다.
         </GroupHomeCardContent>
 
         {questionMap.has(format(selectedDay, "yyyy-MM-dd")) ? (
