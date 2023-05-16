@@ -1,6 +1,5 @@
 package com.rollwrite.global.exception;
 
-import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.rollwrite.global.model.ApiResponse;
 import com.rollwrite.global.model.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +16,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiResponse> handleIllegalArgument(IllegalArgumentException e) {
         return new ResponseEntity<>(ApiResponse.error(ErrorCode.VALIDATION_EXCEPTION, e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(FakeException.class)
+    public ResponseEntity<ApiResponse> handleFake(FakeException e) {
+        return new ResponseEntity<>(ApiResponse.error(ErrorCode.BAD_REQUEST_FAKE, e.getMessage()), HttpStatus.OK);
     }
     
 }

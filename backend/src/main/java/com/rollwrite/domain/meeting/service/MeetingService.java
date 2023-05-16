@@ -22,6 +22,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.rollwrite.global.exception.FakeException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -554,8 +555,9 @@ public class MeetingService {
         LocalDateTime localDateTime = LocalDateTime.of(localDate, localTime);
         log.info("localDateTime : {}", localDateTime);
 
+        // 답변이 등록 되기 전이라면 (OK 200 코드 안에 StatusCode는 400)
         Answer answerRandom = answerRepository.findByMeetingIdAndUserIdAndCreatedAt(userId, meetingId, localDateTime)
-                .orElseThrow(() -> new IllegalArgumentException("아직 등록된 답변이 없습니다."));
+                .orElseThrow(() -> new FakeException("아직 등록된 답변이 없습니다."));
 
         log.info("answerRandom.getContent() : {}", answerRandom.getContent());
         // 답변을 정상적으로 뽑고 나서는 포인트 감소
