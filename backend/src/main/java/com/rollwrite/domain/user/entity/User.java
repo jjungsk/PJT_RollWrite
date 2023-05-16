@@ -47,7 +47,6 @@ public class User extends BaseTimeEntity {
     private String firebaseToken;
 
     @Column
-    @ColumnDefault("0")
     private Long point;
 
     @NotNull
@@ -80,10 +79,11 @@ public class User extends BaseTimeEntity {
     private List<Notice> noticeList = new ArrayList<>();
 
     @Builder
-    public User(String identifier, String nickname, String profileImage, UserType type) {
+    public User(String identifier, String nickname, String profileImage, Long point, UserType type) {
         this.identifier = identifier;
         this.nickname = nickname;
         this.profileImage = profileImage;
+        this.point = point;
         this.type = type;
     }
 
