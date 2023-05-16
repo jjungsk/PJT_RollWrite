@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AddMeetingResDto {
 
+    private final Long meetingId;
     private final String title;
     private final List<TagDto> tag;
     private final LocalDate startDay;
@@ -20,6 +21,7 @@ public class AddMeetingResDto {
 
     @Builder
     public AddMeetingResDto(Meeting meeting, String inviteUrl, List<TagDto> tag) {
+        this.meetingId = meeting.getId();
         this.title = meeting.getTitle();
         this.tag = tag;
         this.startDay = meeting.getStartDay();
