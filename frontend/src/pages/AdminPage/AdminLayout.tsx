@@ -48,7 +48,7 @@ function AdminLayout() {
           setIsLoading(false);
         } else {
           toast.error("접근 권한이 없습니다.");
-          navigate("");
+          navigate("/");
         }
       }, 1000);
     });

@@ -16,7 +16,7 @@ function JoinPage() {
             navigate("/my");
           } else {
             toast.error(res.message);
-            navigate("");
+            navigate("/");
           }
         })
         .catch(() => {
