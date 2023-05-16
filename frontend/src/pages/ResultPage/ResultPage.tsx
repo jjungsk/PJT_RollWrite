@@ -35,6 +35,7 @@ function ResultPage() {
       <AnimatePresence>
         {sideMenuOpen && (
           <SideMenu
+            meetingId={meetingId}
             questionList={questionList}
             participantList={participantList}
             bgColor={groupResult.color}
@@ -43,6 +44,7 @@ function ResultPage() {
           />
         )}
       </AnimatePresence>
+
       <HeaderContainer padding={"0px 24px 0px 24px"}>
         <Back onClick={handleClickBackBtn} />
         <HeaderGroupTitle>
