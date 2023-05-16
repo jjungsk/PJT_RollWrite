@@ -19,11 +19,13 @@ import Modal from "../../Molecules/Modal/Modal";
 import SproutList from "../../Molecules/SproutList/SproutList";
 import AnswerBox from "../../Molecules/AnswerBox/AnswerBox";
 import { toast } from "react-hot-toast";
+import LoadingIconSmall from "../../Atom/LoadingIcon/LoadingIconSmall";
 
 interface Props {
   group: Group;
 }
 function GroupHome({ group }: Props) {
+  const [toastStatus, setToastStatus] = useState<boolean>(false);
   const [questionMap, setQuestionMap] = useState<Map<string, CalendarQuestion>>(
     new Map()
   );
@@ -70,14 +72,25 @@ function GroupHome({ group }: Props) {
       String(group.meetingId),
       format(selectedDay, "yyyy-MM-dd")
     ).then((res) => {
-      console.log(res);
-      if (res.statusCode === 400) toast.error(res.message);
-      else {
-        setAnswer(res.data.answer);
-        toast.success(res.message);
+      if (!toastStatus) {
+        setToastStatus(true);
+        if (res.statusCode === 400) {
+          toast.error(res.message);
+        } else {
+          setAnswer(res.data.answer);
+          toast.success(res.message);
+        }
       }
     });
   };
+
+  useEffect(() => {
+    if (toastStatus) {
+      setTimeout(() => {
+        setToastStatus(false);
+      }, 1000);
+    }
+  }, [toastStatus]);
 
   return (
     <>
@@ -186,12 +199,20 @@ function GroupHome({ group }: Props) {
           ) : (
             "답변하지 않은 날은 답변을 뽑을 수 없습니다."
           )}
-          {answer.length > 0 && <AnswerBox isMe={false} answer={answer} />}
+          {toastStatus && (
+            <div style={{ margin: "auto" }}>
+              <LoadingIconSmall />
+            </div>
+          )}
+          {!toastStatus && answer.length > 0 && (
+            <AnswerBox isMe={false} answer={answer} />
+          )}
         </GroupHomeCardContent>
         <GroupHomeCardFooter>
-          {questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.question && (
-            <div onClick={handelClickRandomAnswer}>답변 뽑기 10p</div>
-          )}
+          {!toastStatus &&
+            questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.question && (
+              <div onClick={handelClickRandomAnswer}>답변 뽑기 10p</div>
+            )}
         </GroupHomeCardFooter>
       </GroupHomeCard>
     </>
