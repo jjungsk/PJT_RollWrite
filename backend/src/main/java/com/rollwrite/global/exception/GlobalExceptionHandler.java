@@ -19,8 +19,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(FakeException.class)
-    public ResponseEntity<ApiResponse> handleFake() {
-        return new ResponseEntity<>(ApiResponse.error(ErrorCode.BAD_REQUEST_FAKE), HttpStatus.OK);
+    public ResponseEntity<ApiResponse> handleFake(FakeException e) {
+        return new ResponseEntity<>(ApiResponse.error(ErrorCode.BAD_REQUEST_FAKE, e.getMessage()), HttpStatus.OK);
     }
     
 }

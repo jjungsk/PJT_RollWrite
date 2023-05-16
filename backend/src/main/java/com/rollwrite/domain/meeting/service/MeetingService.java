@@ -557,7 +557,7 @@ public class MeetingService {
 
         // 답변이 등록 되기 전이라면 (OK 200 코드 안에 StatusCode는 400)
         Answer answerRandom = answerRepository.findByMeetingIdAndUserIdAndCreatedAt(userId, meetingId, localDateTime)
-                .orElseThrow(() -> new FakeException("hello"));
+                .orElseThrow(() -> new FakeException("아직 등록된 답변이 없습니다."));
 
         log.info("answerRandom.getContent() : {}", answerRandom.getContent());
         // 답변을 정상적으로 뽑고 나서는 포인트 감소
