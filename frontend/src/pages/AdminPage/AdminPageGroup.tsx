@@ -20,7 +20,6 @@ import {
   ListItemAvatar,
   Avatar,
   ListItemText,
-  Typography,
   DialogActions,
   Divider,
   Button,
@@ -29,6 +28,7 @@ import {
 import { useTheme } from "@mui/material/styles";
 import MapsUgcRoundedIcon from "@mui/icons-material/MapsUgcRounded";
 import AdminPageDialog from "./AdminPageDialog";
+import { ReactComponent as Person } from "../../assets/Person.svg";
 
 function AdminPageGroup() {
   const [meetingList, setMeetingList] = useState<Meeting[]>();
@@ -94,26 +94,11 @@ function AdminPageGroup() {
             >
               {userList?.map((user, i) => (
                 <div key={user.userId}>
-                  <ListItem alignItems="flex-start">
+                  <ListItem alignItems="center">
                     <ListItemAvatar>
                       <Avatar alt={user.nickname} src={user.profileImage} />
                     </ListItemAvatar>
-                    <ListItemText
-                      primary={`${user.nickname} - ${user.point ?? 0}p`}
-                      secondary={
-                        <React.Fragment>
-                          <Typography
-                            sx={{ display: "inline" }}
-                            component="span"
-                            variant="body2"
-                            color="text.primary"
-                          >
-                            User Type -{" "}
-                          </Typography>
-                          {user.userType}
-                        </React.Fragment>
-                      }
-                    />
+                    <ListItemText>{user.nickname}</ListItemText>
                   </ListItem>
                   {i < userList.length - 1 && (
                     <Divider variant="inset" component="li" />
@@ -161,8 +146,10 @@ function AdminPageGroup() {
                   <TableCell align="center">{meeting.endDay}</TableCell>
                   <TableCell
                     align="center"
+                    style={{ cursor: "pointer" }}
                     onClick={() => handleClickDialogOpen(meeting.meetingId)}
                   >
+                    <Person width={"16px"} height={"16px"} />{" "}
                     {meeting.participantCnt ?? 0}
                   </TableCell>
                   <TableCell align="center">
