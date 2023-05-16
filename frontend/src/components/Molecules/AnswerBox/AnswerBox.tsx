@@ -14,7 +14,7 @@ function AnswerBox({ isMe, answer }: Props) {
       getUserDetail().then((res) => {
         setUser(res.data);
       });
-  });
+  }, [isMe]);
   return (
     <AnswerContainer isMe={isMe}>
       {!isMe && <ProfileImg size={40} bgImg={user.ProfileImg} />}
