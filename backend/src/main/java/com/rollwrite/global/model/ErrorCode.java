@@ -11,7 +11,7 @@ public enum ErrorCode {
     // 400 Bad Request
     VALIDATION_EXCEPTION(StatusCode.BAD_REQUEST, "잘못된 요청입니다"),
     BAD_REQUEST_POINT(StatusCode.BAD_REQUEST, "포인트가 부족합니다."),
-    NOT_FOUND_ANSWER(StatusCode.BAD_REQUEST, "아직 등록된 답변이 없습니다."),
+    BAD_REQUEST_FAKE(StatusCode.BAD_REQUEST, "아직 등록된 답변이 없습니다."),
 
     // 401 UNAUTHORIZED
     UNAUTHORIZED_EXCEPTION(StatusCode.UNAUTHORIZED, "권한이 없는 유저입니다."),
