@@ -36,7 +36,7 @@ export default function useTokenInterceptor(
       }
     } else if (response.status === 403) {
       toast.error("접근 권한이 없습니다.");
-      navigate("");
+      navigate("/");
     }
     return Promise.reject(error);
   };

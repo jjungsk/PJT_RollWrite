@@ -42,7 +42,7 @@ function SettingPage() {
             icon: "🚪",
           });
           purge();
-          navigate("");
+          navigate("/");
         }
       })
       .catch(() => {
@@ -61,7 +61,7 @@ function SettingPage() {
               icon: "🏃‍♂️",
             });
             purge();
-            navigate("");
+            navigate("/");
           }
         })
         .catch(() => {
