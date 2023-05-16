@@ -17,7 +17,7 @@ import { IconButton } from "@mui/material";
 import { AdminPageTitle } from "./style";
 import { toast } from "react-hot-toast";
 import { getUserType } from "../../apis/user";
-import LoadingIcon from "../../elements/LoadingIcon/LoadingIcon";
+import LoadingIcon from "../../components/Atom/LoadingIcon/LoadingIcon";
 
 function AdminLayout() {
   const navigate = useNavigate();
@@ -45,7 +45,6 @@ function AdminLayout() {
 
       setTimeout(() => {
         if (res.data === "ADMIN") {
-          toast.success("관리자님, 환영합니다😄");
           setIsLoading(false);
         } else {
           toast.error("접근 권한이 없습니다.");
@@ -53,7 +52,7 @@ function AdminLayout() {
         }
       }, 1000);
     });
-  }, [navigate]);
+  }, [navigate, currentPath]);
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
@@ -156,7 +155,13 @@ function AdminLayout() {
             </Box>
           </Box>
           <div style={{ marginTop: "70px" }}>
-            <AdminPageTitle>{currentPath.split("/")[2]}</AdminPageTitle>
+            <AdminPageTitle>
+              {currentPath === "/admin" || currentPath === "/admin/"
+                ? "대시보드"
+                : navItems
+                    .filter((item) => item.path === currentPath.split("/")[2])
+                    .map((item) => item.name)[0] + " 관리"}
+            </AdminPageTitle>
             <Outlet />
           </div>
         </div>

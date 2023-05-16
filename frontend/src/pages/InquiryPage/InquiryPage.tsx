@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import UploadImg from "../../elements/UploadImg/UploadImg";
-import TextArea from "../../elements/TextArea/TextArea";
-import GhostBtn from "../../elements/Button/GhostBtn";
+import UploadImg from "../../components/Molecules/UploadImg/UploadImg";
+import TextArea from "../../components/Atom/TextArea/TextArea";
 import { sendInquiry } from "../../apis/notification";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import Btn from "../../components/Atom/Btn/Btn";
 
 function InquiryPage() {
   const navigate = useNavigate();
@@ -63,9 +63,7 @@ function InquiryPage() {
     <div style={{ marginTop: "36px" }}>
       <UploadImg setImgFile={setImgFile} />
       <TextArea onChange={handleAnswer} value={text && text} />
-      {!isLoading && (
-        <GhostBtn label="저장하기" onClick={handleSaveBtn}></GhostBtn>
-      )}
+      {!isLoading && <Btn label="저장하기" onClick={handleSaveBtn}></Btn>}
     </div>
   );
 }

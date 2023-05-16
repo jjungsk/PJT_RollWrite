@@ -7,15 +7,13 @@ import {
   SettingSection,
   SettingSectionTitle,
 } from "./style";
-import SwitchBtn from "../../elements/Button/SwitchBtn";
+import SwitchBtn from "../../components/Atom/SwitchBtn/SwitchBtn";
 import { ReactComponent as Back } from "../../assets/Back.svg";
-import FillBtn from "../../elements/Button/FillBtn";
-import GhostBtn from "../../elements/Button/GhostBtn";
 import { logout, withdraw } from "../../apis/user";
-
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { persistor } from "../../store/store";
+import Btn from "../../components/Atom/Btn/Btn";
 import { pop } from "../../utils/pop";
 import { motion, useAnimation } from "framer-motion";
 
@@ -126,13 +124,13 @@ function SettingPage() {
         </SettingMenuItem>
         <SettingMenuItem onClick={handleClickVersion}>
           <SettingMenuItemText>버전 정보</SettingMenuItemText>
-          <div>1.1.2</div>
+          <div>1.2.1</div>
         </SettingMenuItem>
       </SettingSection>
 
       <SettingBtnContainer>
         <div>
-          <FillBtn label="로그아웃" onClick={handleClickLogoutBtn} />
+          <Btn label="로그아웃" onClick={handleClickLogoutBtn} color="fill" />
         </div>
         {/* <div>
           <GhostBtn label="회원탈퇴" onClick={handleClickWithdrawBtn} />
