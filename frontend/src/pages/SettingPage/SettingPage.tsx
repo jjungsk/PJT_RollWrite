@@ -124,7 +124,7 @@ function SettingPage() {
         </SettingMenuItem>
         <SettingMenuItem onClick={handleClickVersion}>
           <SettingMenuItemText>버전 정보</SettingMenuItemText>
-          <div>1.1.2</div>
+          <div>1.2.1</div>
         </SettingMenuItem>
       </SettingSection>
 
