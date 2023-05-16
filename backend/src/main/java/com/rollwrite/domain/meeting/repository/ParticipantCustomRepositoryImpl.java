@@ -1,6 +1,8 @@
 package com.rollwrite.domain.meeting.repository;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.rollwrite.domain.admin.dto.MeetingCountDto;
 import com.rollwrite.domain.meeting.entity.Meeting;
 import com.rollwrite.domain.meeting.entity.QMeeting;
 import com.rollwrite.domain.meeting.entity.Participant;
@@ -73,14 +75,29 @@ public class ParticipantCustomRepositoryImpl implements ParticipantCustomReposit
     }
 
     @Override
-    public List<Participant> findMeetingAndUserAndTitleByProgress(boolean isDone) {
-        List<Participant> findAllParticipantDtoList = jpaQueryFactory
-                .selectFrom(participant)
-                .join(participant.user, user).fetchJoin()
-                .join(participant.meeting, meeting).fetchJoin()
-                .where(participant.isDone.eq(isDone))
+    public List<MeetingCountDto> findMeetingCnt() {
+        return jpaQueryFactory
+                .select(Projections.constructor(MeetingCountDto.class,
+                        participant.user.as("userId"),
+                        participant.count().as("meetingCount")))
+                .from(participant)
+                .groupBy(participant.user)
+                .orderBy(participant.count().asc())
                 .fetch();
-        return findAllParticipantDtoList;
+    }
+
+    @Override
+    public List<Participant> findMeetingAndUserAndTitleByProgress(boolean isDone) {
+        return jpaQueryFactory
+                .selectFrom(participant)
+                .join(participant.user, user)
+                .fetchJoin()
+                .join(participant.meeting, meeting).fetchJoin()
+                .where(
+                        participant.isDone.eq(isDone),
+                        user.firebaseToken.isNotEmpty().and(user.firebaseToken.isNotNull())
+                )
+                .fetch();
     }
 
 }

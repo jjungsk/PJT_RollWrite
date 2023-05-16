@@ -107,7 +107,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
                 // setAuthorities
                 List<GrantedAuthority> roles = new ArrayList<>();
                 roles.add(new SimpleGrantedAuthority("ROLE_USER"));
-                if ("ADMIN".equals(decodedJWT.getClaim("role").asString())) {
+                if ("ADMIN".equals(user.getType().name())) {
                     roles.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
                 }
                 userDetails.setAuthorities(roles);
