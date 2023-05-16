@@ -106,7 +106,7 @@ function CreateGroupPage() {
       if (newGroupInfo?.meetingId) {
         navigate(`/group/${newGroupInfo?.meetingId}`);
       } else {
-        navigate("");
+        navigate("/");
       }
     }
 
