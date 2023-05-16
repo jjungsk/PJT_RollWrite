@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.*;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -24,4 +25,13 @@ public class Tag extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
     private List<TagMeeting> tagMeetingList = new ArrayList<>();
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
+
+    @Builder
+    public Tag(String content) {
+        this.content = content;
+    }
 }

@@ -11,11 +11,18 @@ public enum SuccessCode {
     // test
     TEST(StatusCode.SUCCESS, "테스트 중입니다."),
 
+    // notice
+    FIND_NOTICE_SUCCESS(StatusCode.SUCCESS, "공지 목록을 조회했습니다."),
+
     // admin
-    GET_NOTICE_SUCCESS(StatusCode.SUCCESS, "공지 목록을 조회했습니다."),
     ADD_NOTICE_SUCCESS(StatusCode.SUCCESS, "공지가 생성되었습니다."),
     MODIFY_NOTICE_SUCCESS(StatusCode.SUCCESS, "공지가 수정되었습니다."),
     REMOVE_NOTICE_SUCCESS(StatusCode.SUCCESS, "공지가 삭제되었습니다."),
+    FIND_TAG_SUCCESS(StatusCode.SUCCESS, "태그 목록을 조회했습니다."),
+    ADD_TAG_SUCCESS(StatusCode.SUCCESS, "태그가 생성되었습니다."),
+    MODIFY_TAG_SUCCESS(StatusCode.SUCCESS, "태그가 수정되었습니다."),
+    FIND_MEETING_SUCCESS(StatusCode.SUCCESS, "모임 목록을 조회했습니다."),
+    FIND_INQUIRY_SUCCESS(StatusCode.SUCCESS, "문의 목록을 조회했습니다."),
 
     // inquiry
     ADD_INQUIRY_SUCCESS(StatusCode.SUCCESS, "문의가 생성되었습니다."),
@@ -29,6 +36,7 @@ public enum SuccessCode {
     REMOVE_USER_PROFILE_SUCCESS(StatusCode.SUCCESS, "유저 프로필 이미지가 정상 삭제 되었습니다."),
     LOGOUT_SUCCESS(StatusCode.SUCCESS, "로그아웃 되었습니다."),
     REMOVE_USER_SUCCESS(StatusCode.SUCCESS, "회원 정보가 삭제 되었습니다."),
+    FIND_ROLE_SUCCESS(StatusCode.SUCCESS, "토큰의 role 조회가 완료되었습니다."),
 
     // meeting
     GET_MEETING_IN_PROGRESS_SUCCESS(StatusCode.SUCCESS, "진행 중인 전체 모임 조회했습니다."),

@@ -31,6 +31,14 @@ import InquiryPage from "./pages/InquiryPage/InquiryPage";
 import Notification from "./utils/Notification";
 import { AxiosInstance } from "axios";
 import { persistor } from "./store/store";
+import AdminLayout from "./pages/AdminPage/AdminLayout";
+import AdminPageIndex from "./pages/AdminPage/AdminPageIndex";
+import AdminPageUser from "./pages/AdminPage/AdminPageUser";
+import AdminPageNotice from "./pages/AdminPage/AdminPageNotice";
+import AdminPageTag from "./pages/AdminPage/AdminPageTag";
+import AdminPageGroup from "./pages/AdminPage/AdminPageGroup";
+import AdminPageInquiry from "./pages/AdminPage/AdminPageInquiry";
+import { toast } from "react-hot-toast";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -77,6 +85,9 @@ function App() {
         // 갱신 실패시 임의 로그아웃 처리
         purge();
       }
+    } else if (response.status === 403) {
+      toast.error("⛔접근 권한이 없습니다.");
+      navigate("");
     }
     return Promise.reject(error);
   };
@@ -98,7 +109,53 @@ function App() {
     }
   );
 
+  const detectMobileDevice = (agent: string) => {
+    const mobileRegex =
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+    return mobileRegex.test(agent);
+  };
+  const detectIphoneDevice = (agent: string) => {
+    const iPhoneRegex = /iPhone|iPod|Mac OS X/i;
+    return iPhoneRegex.test(agent);
+  };
+  const detectInAppBrowser = (agent: string) => {
+    const inAppRegex = [
+      /KAKAOTALK/i,
+      /Instagram/i,
+      /NAVER/i,
+      /zumapp/i,
+      /whale/i,
+      /FB/i,
+      /Snapchat/i,
+      /Line/i,
+      /everytimeApp/i,
+      /WhatsApp/i,
+      /Electron/i,
+      /wadiz/i,
+      /AliApp/i,
+      /FB_IAB/i,
+      /FB4A/i,
+      /FBAN/i,
+      /FBIOS/i,
+      /FBSS/i,
+      /SamsungBrowser/i,
+    ];
+    return inAppRegex.some((mobile) => agent.match(mobile));
+  };
+  const isMobile = detectMobileDevice(window.navigator.userAgent);
+  const isIphone = detectIphoneDevice(window.navigator.userAgent);
+  const isInApp = detectInAppBrowser(window.navigator.userAgent);
+
   useEffect(() => {
+    if (isMobile && isInApp) {
+      if (!isIphone) {
+        window.close();
+        window.location.href = `intent://${
+          process.env.REACT_APP_SERVER_URL?.split("//")[1]
+        }${currentPath}#Intent;scheme=http;package=com.android.chrome;end`;
+      }
+    }
+
     if (!isLogin && currentPath !== "/login" && currentPath !== "/oauth") {
       navigate("/login");
       if (currentPath !== "/setting") {
@@ -107,6 +164,7 @@ function App() {
     } else if (isLogin && currentPath === "/login") {
       navigate("/home");
     }
+
     const pathParts = currentPath.split("/");
     const htmlTitle = document.querySelector("title");
     switch (pathParts[1]) {
@@ -135,7 +193,10 @@ function App() {
         htmlTitle!.innerHTML = "공지사항 - Rollwrite";
         break;
       case "inquiry":
-        htmlTitle!.innerHTML = "문의사항 - Rollwrite";
+        htmlTitle!.innerHTML = "의견 보내기 - Rollwrite";
+        break;
+      case "service":
+        htmlTitle!.innerHTML = "서비스 이용약관 - Rollwrite";
         break;
       case "invite":
         htmlTitle!.innerHTML = "모임 초대하기 - Rollwrite";
@@ -151,6 +212,9 @@ function App() {
         break;
       case "award":
         htmlTitle!.innerHTML = "모임 결과 - Rollwrite";
+        break;
+      case "admin":
+        htmlTitle!.innerHTML = "관리자 - Rollwrite";
         break;
       default:
         break;
@@ -182,6 +246,15 @@ function App() {
         <Route path="/award/:meetingId" element={<AwardPage />} />
         <Route path="/create" element={<CreateGroupPage />} />
         <Route path="*" element={<ErrorPage />} />
+
+        <Route path="/" element={<AdminLayout />}>
+          <Route path="/admin" element={<AdminPageIndex />} />
+          <Route path="/admin/notice" element={<AdminPageNotice />} />
+          <Route path="/admin/user" element={<AdminPageUser />} />
+          <Route path="/admin/tag" element={<AdminPageTag />} />
+          <Route path="/admin/group" element={<AdminPageGroup />} />
+          <Route path="/admin/inquiry" element={<AdminPageInquiry />} />
+        </Route>
       </Routes>
     </>
   );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   SettingBtnContainer,
   SettingContainer,
@@ -16,18 +16,24 @@ import { logout, withdraw } from "../../apis/user";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { persistor } from "../../store/store";
+import { pop } from "../../utils/pop";
+import { motion, useAnimation } from "framer-motion";
 
 function SettingPage() {
   const navigate = useNavigate();
   const purge = async () => {
     await persistor.purge();
   };
+
   const handleClickMenu = (path: string) => {
-    toast("아직 개발중입니다.", {
-      icon: "🤦‍♂️",
-    });
-    return;
-    navigate(`/${path}`);
+    if (path === "service") {
+      toast("아직 개발중입니다.", {
+        icon: "🤦‍♂️",
+      });
+      return;
+    } else {
+      navigate(`/${path}`);
+    }
   };
 
   const handleClickLogoutBtn = () => {
@@ -66,6 +72,25 @@ function SettingPage() {
     }
   };
 
+  const controls = useAnimation();
+  const [clickCount, setClickCount] = useState(0);
+
+  useEffect(() => {
+    controls.start({ opacity: 1, scale: 1 });
+  });
+
+  const handleClickVersion = () => {
+    setClickCount((prevClickCount) => prevClickCount + 1);
+
+    if (clickCount === 2) {
+      // pop(100);
+      toast("That's Rollwrite!", {
+        icon: "🤟",
+      });
+      setTimeout(() => setClickCount(0), 500);
+    }
+  };
+
   return (
     <SettingContainer>
       {/* <SettingSection>
@@ -92,16 +117,16 @@ function SettingPage() {
           <Back />
         </SettingMenuItem>
         <SettingMenuItem onClick={() => handleClickMenu("inquiry")}>
-          <SettingMenuItemText>문의사항</SettingMenuItemText>
+          <SettingMenuItemText>의견 보내기</SettingMenuItemText>
           <Back />
         </SettingMenuItem>
-        <SettingMenuItem>
-          <SettingMenuItemText>서비스 상세정보 / 약관</SettingMenuItemText>
+        <SettingMenuItem onClick={() => handleClickMenu("service")}>
+          <SettingMenuItemText>서비스 이용약관</SettingMenuItemText>
           <Back />
         </SettingMenuItem>
-        <SettingMenuItem>
+        <SettingMenuItem onClick={handleClickVersion}>
           <SettingMenuItemText>버전 정보</SettingMenuItemText>
-          <div>1.1.1</div>
+          <div>1.1.2</div>
         </SettingMenuItem>
       </SettingSection>
 

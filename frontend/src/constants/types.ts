@@ -123,3 +123,10 @@ export interface AccordionItemType {
   title: string;
   content: ReactElement;
 }
+
+export interface Notice {
+  noticeId?: number;
+  title: string;
+  content: string;
+  createdAt?: string;
+}

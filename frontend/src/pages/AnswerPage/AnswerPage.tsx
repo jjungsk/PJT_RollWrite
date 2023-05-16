@@ -32,10 +32,16 @@ export default function AnswerPage() {
   const formData = new FormData();
 
   const handleSaveBtn = () => {
-    if (question.answer === "") {
+    if (question.answer === null || question.answer.length <= 0) {
       toast.error("내용을 입력해주세요.");
       return;
     }
+
+    if (question.answer.length > 300) {
+      toast.error(" 답변은 300자이내입니다.");
+      return;
+    }
+
     const data = JSON.stringify({
       answer: question.answer,
       meetingId: question.meetingId,
@@ -80,7 +86,7 @@ export default function AnswerPage() {
       .promise(createAnswer(formData), {
         loading: "답변을 저장중입니다...",
         success: <b>답변이 저장됐습니다!</b>,
-        error: <b>저장을 실패했습니다! 답변은 300자이내입니다.</b>,
+        error: <b>저장을 실패했습니다!</b>,
       })
       .then(() => {
         question.isFinal
@@ -117,7 +123,7 @@ export default function AnswerPage() {
 
       <TextArea
         onChange={handleAnswer}
-        value={question.answer && question.answer}
+        value={question.answer || ""}
       ></TextArea>
 
       <GhostBtn

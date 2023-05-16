@@ -1,5 +1,6 @@
 package com.rollwrite.domain.user.entity;
 
+import com.rollwrite.domain.notice.entity.Notice;
 import com.rollwrite.domain.inquiry.entity.Inquiry;
 import com.rollwrite.domain.meeting.entity.Participant;
 import com.rollwrite.domain.meeting.entity.Award;
@@ -70,6 +71,9 @@ public class User extends BaseTimeEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Alarm> alarmList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Notice> noticeList = new ArrayList<>();
+
     @Builder
     public User(String identifier, String nickname, String profileImage, UserType type) {
         this.identifier = identifier;
@@ -83,8 +87,12 @@ public class User extends BaseTimeEntity {
         this.profileImage = profileImage;
     }
 
-    public void updateToken(String firebaseToken){
+    public void updateToken(String firebaseToken) {
         this.firebaseToken = firebaseToken;
+    }
+
+    public void updateUserType(UserType userType) {
+        this.type = userType;
     }
 
 }
