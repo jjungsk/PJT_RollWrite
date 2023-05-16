@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from "react";
 import Calendar from "../../Molecules/Calendar/Calendar";
 import { CalendarQuestion, Group } from "../../../constants/types";
 import { getQuestionList, getRandomAnswer } from "../../../apis/home";
-import { ReactComponent as Arrow } from "../../../assets/Prev_Arrow.svg";
 import { ReactComponent as Download } from "../../../assets/Download.svg";
 import { ReactComponent as InfoSvg } from "../../../assets/Info-circle.svg";
 import {
@@ -12,7 +11,7 @@ import {
   GroupHomeCardHeader,
 } from "./style";
 import { DOG_LIST, SPROUT_LIST } from "../../../constants/sprout";
-import { format, getDay, subHours } from "date-fns";
+import { format, getDate, subHours } from "date-fns";
 import html2canvas from "html2canvas";
 import { useNavigate } from "react-router-dom";
 import { handleKakaoQuestionShare } from "../../../utils/kakaoShare";
@@ -20,17 +19,19 @@ import Modal from "../../Molecules/Modal/Modal";
 import SproutList from "../../Molecules/SproutList/SproutList";
 import AnswerBox from "../../Molecules/AnswerBox/AnswerBox";
 import { toast } from "react-hot-toast";
+import LoadingIconSmall from "../../Atom/LoadingIcon/LoadingIconSmall";
 
 interface Props {
   group: Group;
 }
 function GroupHome({ group }: Props) {
+  const [toastStatus, setToastStatus] = useState<boolean>(false);
   const [questionMap, setQuestionMap] = useState<Map<string, CalendarQuestion>>(
     new Map()
   );
   const SproutThema = group.color === "#CEEDC7" ? DOG_LIST : SPROUT_LIST;
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [selectedDay, setSelectedDay] = useState(new Date());
+  const [selectedDay, setSelectedDay] = useState<Date>(new Date());
   const [answer, setAnswer] = useState("");
   const calendarRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -71,14 +72,25 @@ function GroupHome({ group }: Props) {
       String(group.meetingId),
       format(selectedDay, "yyyy-MM-dd")
     ).then((res) => {
-      console.log(res);
-      if (res.statusCode === 400) toast.error(res.message);
-      else {
-        setAnswer(res.data.answer);
-        toast.success(res.message);
+      if (!toastStatus) {
+        setToastStatus(true);
+        if (res.statusCode === 400) {
+          toast.error(res.message);
+        } else {
+          setAnswer(res.data.answer);
+          toast.success(res.message);
+        }
       }
     });
   };
+
+  useEffect(() => {
+    if (toastStatus) {
+      setTimeout(() => {
+        setToastStatus(false);
+      }, 1000);
+    }
+  }, [toastStatus]);
 
   return (
     <>
@@ -87,9 +99,9 @@ function GroupHome({ group }: Props) {
           <SproutList thema={group.color} />
         </Modal>
       )}
-      <div style={{ position: "relative" }}>
+      <div style={{ position: "relative", marginBottom: "16px" }}>
         <Download
-          style={{ position: "absolute", right: "32px", top: "4px" }}
+          style={{ position: "absolute", right: "32px", top: "2px" }}
           onClick={handleDownloadClick}
         />
         <Calendar
@@ -99,6 +111,19 @@ function GroupHome({ group }: Props) {
           selectedDay={selectedDay}
           setSelectedDay={setSelectedDay}
         />
+      </div>
+      <div
+        style={{
+          borderTop: "1px solid var(--gray-color)",
+          height: "60px",
+          lineHeight: "60px",
+          width: "90%",
+          margin: "auto",
+          fontWeight: "bold",
+          color: "var(--darkgray-color)",
+        }}
+      >
+        {format(selectedDay, "yyyy년 MM월 dd일")}
       </div>
       <GroupHomeCard>
         <GroupHomeCardHeader>
@@ -110,24 +135,30 @@ function GroupHome({ group }: Props) {
           <InfoSvg onClick={() => setIsOpen(true)} />
         </GroupHomeCardHeader>
         <GroupHomeCardContent alignItem="center">
-          {questionMap.has(format(selectedDay, "yyyy-MM-dd")) ? (
+          {questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.answer ? (
             <>
               {
                 SproutThema[
-                  questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.rate! / 20
+                  Math.round(
+                    questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.rate! /
+                      20
+                  )
                 ]
               }
-              {questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.rate!}
+              {Math.round(
+                questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.rate!
+              )}
               %가 오늘의 질문에 답변했습니다.
             </>
           ) : (
             "답변률은 질문에 답변한 날만 확인 할수 있습니다."
           )}
         </GroupHomeCardContent>
-        <GroupHomeCardFooter>
-          {questionMap.has(format(selectedDay, "yyyy-MM-dd")) ? (
-            questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.rate !== 100 ? (
-              getDay(selectedDay) === getDay(subHours(new Date(), 8)) ? (
+
+        {questionMap.has(format(selectedDay, "yyyy-MM-dd")) ? (
+          questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.rate !== 100 ? (
+            getDate(selectedDay) === getDate(subHours(new Date(), 8)) ? (
+              <GroupHomeCardFooter>
                 <div
                   onClick={() =>
                     handleKakaoQuestionShare(
@@ -135,27 +166,25 @@ function GroupHome({ group }: Props) {
                     )
                   }
                 >
-                  답변 요청하기 <Arrow />
+                  답변 요청하기
                 </div>
-              ) : (
-                <></>
-              )
+              </GroupHomeCardFooter>
             ) : (
               <></>
             )
-          ) : getDay(selectedDay) === getDay(subHours(new Date(), 8)) ? (
-            <div onClick={() => navigate("/question")}>
-              답변하러 가기 <Arrow />
-            </div>
           ) : (
             <></>
-          )}
-        </GroupHomeCardFooter>
+          )
+        ) : getDate(selectedDay) === getDate(subHours(new Date(), 8)) ? (
+          <GroupHomeCardFooter>
+            <div onClick={() => navigate("/question")}>답변하러 가기</div>{" "}
+          </GroupHomeCardFooter>
+        ) : (
+          <></>
+        )}
       </GroupHomeCard>
       <GroupHomeCard>
-        <GroupHomeCardHeader>
-          {format(selectedDay, "yyyy년 MM월 dd일")}
-        </GroupHomeCardHeader>
+        <GroupHomeCardHeader>답변 뽑기 🎲</GroupHomeCardHeader>
         <GroupHomeCardContent flexDirection="column" gap="0px">
           {questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.answer ? (
             <>
@@ -170,14 +199,20 @@ function GroupHome({ group }: Props) {
           ) : (
             "답변하지 않은 날은 답변을 뽑을 수 없습니다."
           )}
-          {answer.length > 0 && <AnswerBox isMe={false} answer={answer} />}
-        </GroupHomeCardContent>
-        <GroupHomeCardFooter>
-          {questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.question && (
-            <div onClick={handelClickRandomAnswer}>
-              답변 뽑기 -10p <Arrow />
+          {toastStatus && (
+            <div style={{ margin: "auto" }}>
+              <LoadingIconSmall />
             </div>
           )}
+          {!toastStatus && answer.length > 0 && (
+            <AnswerBox isMe={false} answer={answer} />
+          )}
+        </GroupHomeCardContent>
+        <GroupHomeCardFooter>
+          {!toastStatus &&
+            questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.question && (
+              <div onClick={handelClickRandomAnswer}>답변 뽑기 10p</div>
+            )}
         </GroupHomeCardFooter>
       </GroupHomeCard>
     </>

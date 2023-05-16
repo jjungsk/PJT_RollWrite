@@ -3,7 +3,7 @@ import styled from "styled-components";
 const GroupListContainer = styled.div`
   width: 100%;
   height: fit-content;
-  padding-bottom: 20px;
+  padding-bottom: 10px;
   overflow-y: scroll;
 
   & > div {

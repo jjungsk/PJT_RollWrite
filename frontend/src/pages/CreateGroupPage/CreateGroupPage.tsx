@@ -36,8 +36,8 @@ function CreateGroupPage() {
   const validateForm = () => {
     const titleLength = title.trim().length;
 
-    if (titleLength === 0 || titleLength > 24) {
-      toast.error("모임명은 1~24자 이내로 입력해주세요.");
+    if (titleLength === 0 || titleLength > 20) {
+      toast.error("모임명은 1~20자 이내로 입력해주세요.");
       return false;
     }
 
@@ -75,7 +75,12 @@ function CreateGroupPage() {
   };
 
   const handleBackButtonClick = () => {
+    console.log(groupCreateStep);
     if (groupCreateStep === 0) navigate(-1);
+    else if (groupCreateStep === 3) {
+      navigate("/my");
+      return;
+    }
     setGroupCreateStep(groupCreateStep - 1);
   };
 
@@ -97,7 +102,13 @@ function CreateGroupPage() {
         });
     }
 
-    if (groupCreateStep === 3) navigate("/home");
+    if (groupCreateStep === 3) {
+      if (newGroupInfo?.meetingId) {
+        navigate(`/group/${newGroupInfo?.meetingId}`);
+      } else {
+        navigate("");
+      }
+    }
 
     setGroupCreateStep(groupCreateStep + 1);
   };
@@ -129,7 +140,7 @@ function CreateGroupPage() {
           subTitle="모임을 만들었어요."
           emoji="🤝"
           fillLabel="초대하기"
-          ghostLabel="홈으로"
+          ghostLabel="모임 상세"
           fillOnClick={() => handleKakaoInviteShare(newGroupInfo)}
           ghostOnClick={handleConfirmButtonClick}
         />

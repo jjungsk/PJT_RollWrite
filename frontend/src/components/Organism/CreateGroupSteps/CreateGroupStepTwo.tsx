@@ -43,7 +43,7 @@ function CreateGroupStepTwo({ groupInfo, setGroupInfo, onClick }: Props) {
           label="모임 이름"
           name="title"
           onChange={handleChangeGroupInfo}
-          placeholder="모임 이름을 최대 24자입니다."
+          placeholder="모임 이름을 최대 20자입니다."
           value={groupInfo.title}
         />
         <InputLine

@@ -5,7 +5,7 @@ const GroupQuestionHeader = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  padding: 32px 16px;
+  padding: 32px 0px 32px 16px;
   gap: 16px;
 
   text-align: start;
