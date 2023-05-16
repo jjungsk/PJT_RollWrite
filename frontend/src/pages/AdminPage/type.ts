@@ -3,6 +3,7 @@ export interface User {
   profileImage: string;
   userId: number;
   userType: string;
+  point?: number;
 }
 
 export interface DialogInfo {
@@ -24,6 +25,8 @@ export interface Meeting {
   endDay: string;
   color: string;
   inviteUrl: string;
+  participantCnt?: number;
+  participant?: User[];
 }
 
 export interface Inquiry {
