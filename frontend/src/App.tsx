@@ -31,6 +31,7 @@ import useTokenInterceptor from "./hooks/useTokenInterceptor";
 import useMobileDeviceDetection from "./hooks/useMobileDeviceDetection";
 import useLoginRedirect from "./hooks/useLoginRedirect";
 import useHtmlTitle from "./hooks/useHtmlTitle";
+import useResize from "./hooks/useResize";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -50,6 +51,7 @@ function App() {
   useMobileDeviceDetection();
   useLoginRedirect(dispatch);
   useHtmlTitle();
+  useResize();
 
   return (
     <>

@@ -15,6 +15,8 @@ import { format } from "date-fns";
 import Btn from "../../components/Atom/Btn/Btn";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "@mui/material";
+import Emoji from "../../components/Atom/Emoji/Emoji";
+import Box from "../../components/Atom/Box/Box";
 
 function QuestionPage() {
   const [questionList, setQuestionList] = useState<Question[]>();
@@ -31,11 +33,11 @@ function QuestionPage() {
 
   return (
     <QuestionPageContainer>
-      {questionList && (
+      {questionList && questionList?.length > 0 ? (
         <>
           <QuestionPageHeader
             onClick={() =>
-              navigate(`/group/${questionList[currentSlide].meetingId}`)
+              navigate(`/group/${questionList?.[currentSlide].meetingId}`)
             }
           >
             <div>
@@ -88,6 +90,25 @@ function QuestionPage() {
                   isModify: questionList[currentSlide].answer,
                 },
               });
+            }}
+          />
+        </>
+      ) : (
+        <>
+          <Box height="15vh" width="100%" />
+          <div
+            style={{ fontSize: "20px", fontWeight: "bold", lineHeight: "28px" }}
+          >
+            모임이 없습니다. <br />
+            모임을 만들어보세요
+          </div>
+
+          <Emoji label="🙁" />
+
+          <Btn
+            label={"모임 만들기"}
+            onClick={() => {
+              navigate("/create");
             }}
           />
         </>
