@@ -20,6 +20,7 @@ import Modal from "../../Molecules/Modal/Modal";
 import SproutList from "../../Molecules/SproutList/SproutList";
 import AnswerBox from "../../Molecules/AnswerBox/AnswerBox";
 import { toast } from "react-hot-toast";
+import Box from "../../Atom/Box/Box";
 
 interface Props {
   group: Group;
@@ -87,7 +88,7 @@ function GroupHome({ group }: Props) {
           <SproutList thema={group.color} />
         </Modal>
       )}
-      <div style={{ position: "relative" }}>
+      <div style={{ position: "relative", marginBottom: "16px" }}>
         <Download
           style={{ position: "absolute", right: "32px", top: "4px" }}
           onClick={handleDownloadClick}
@@ -100,6 +101,19 @@ function GroupHome({ group }: Props) {
           setSelectedDay={setSelectedDay}
         />
       </div>
+      <div
+        style={{
+          borderTop: "1px solid var(--gray-color)",
+          height: "60px",
+          lineHeight: "60px",
+          width: "90%",
+          margin: "auto",
+          fontWeight: "bold",
+          color: "var(--darkgray-color)",
+        }}
+      >
+        {format(selectedDay, "yyyy년 MM월 dd일")}
+      </div>
       <GroupHomeCard>
         <GroupHomeCardHeader>
           답변률 (
@@ -110,7 +124,7 @@ function GroupHome({ group }: Props) {
           <InfoSvg onClick={() => setIsOpen(true)} />
         </GroupHomeCardHeader>
         <GroupHomeCardContent alignItem="center">
-          {questionMap.has(format(selectedDay, "yyyy-MM-dd")) ? (
+          {questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.answer ? (
             <>
               {
                 SproutThema[
@@ -129,10 +143,11 @@ function GroupHome({ group }: Props) {
             "답변률은 질문에 답변한 날만 확인 할수 있습니다."
           )}
         </GroupHomeCardContent>
-        <GroupHomeCardFooter>
-          {questionMap.has(format(selectedDay, "yyyy-MM-dd")) ? (
-            questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.rate !== 100 ? (
-              getDay(selectedDay) === getDay(subHours(new Date(), 8)) ? (
+
+        {questionMap.has(format(selectedDay, "yyyy-MM-dd")) ? (
+          questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.rate !== 100 ? (
+            getDay(selectedDay) === getDay(subHours(new Date(), 8)) ? (
+              <GroupHomeCardFooter>
                 <div
                   onClick={() =>
                     handleKakaoQuestionShare(
@@ -140,27 +155,25 @@ function GroupHome({ group }: Props) {
                     )
                   }
                 >
-                  답변 요청하기 <Arrow />
+                  답변 요청하기
                 </div>
-              ) : (
-                <></>
-              )
+              </GroupHomeCardFooter>
             ) : (
               <></>
             )
-          ) : getDay(selectedDay) === getDay(subHours(new Date(), 8)) ? (
-            <div onClick={() => navigate("/question")}>
-              답변하러 가기 <Arrow />
-            </div>
           ) : (
             <></>
-          )}
-        </GroupHomeCardFooter>
+          )
+        ) : getDay(selectedDay) === getDay(subHours(new Date(), 8)) ? (
+          <GroupHomeCardFooter>
+            <div onClick={() => navigate("/question")}>답변하러 가기</div>{" "}
+          </GroupHomeCardFooter>
+        ) : (
+          <></>
+        )}
       </GroupHomeCard>
       <GroupHomeCard>
-        <GroupHomeCardHeader>
-          {format(selectedDay, "yyyy년 MM월 dd일")}
-        </GroupHomeCardHeader>
+        <GroupHomeCardHeader>답변 뽑기 🎲</GroupHomeCardHeader>
         <GroupHomeCardContent flexDirection="column" gap="0px">
           {questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.answer ? (
             <>
@@ -179,9 +192,7 @@ function GroupHome({ group }: Props) {
         </GroupHomeCardContent>
         <GroupHomeCardFooter>
           {questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.question && (
-            <div onClick={handelClickRandomAnswer}>
-              답변 뽑기 -10p <Arrow />
-            </div>
+            <div onClick={handelClickRandomAnswer}>답변 뽑기 10p</div>
           )}
         </GroupHomeCardFooter>
       </GroupHomeCard>

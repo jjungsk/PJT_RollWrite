@@ -6,7 +6,7 @@ const GroupHomeCard = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  padding: 24px;
+  padding: 12px 24px 24px;
   gap: 16px;
 
   width: 100%;
@@ -21,7 +21,7 @@ const GroupHomeCardHeader = styled.div`
   align-items: center;
   padding: 0px;
   gap: 4px;
-
+  font-size: 18px;
   font-weight: bold;
 `;
 
@@ -46,10 +46,13 @@ const GroupHomeCardContent = styled.div<{
 `;
 
 const GroupHomeCardFooter = styled.div`
-  color: var(--darkgray-color);
+  background-color: var(--main-color);
+  color: var(--white-color);
+  border-radius: 16px;
   display: flex;
-  justify-content: end;
-  width: 100%;
+  justify-content: center;
+  width: 90%;
+  margin: auto;
   line-height: 32px;
   & > div {
     display: flex;
