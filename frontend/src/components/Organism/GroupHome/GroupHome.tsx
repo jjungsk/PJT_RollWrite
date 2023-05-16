@@ -131,7 +131,7 @@ function GroupHome({ group }: Props) {
           답변률 (
           {questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.answerCnt ?? 0}/
           {questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.participantCnt ??
-            0}
+            1}
           )
           <InfoSvg onClick={() => setIsOpen(true)} />
         </GroupHomeCardHeader>
@@ -139,12 +139,13 @@ function GroupHome({ group }: Props) {
           {
             SproutThema[
               Math.round(
-                questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.rate! / 20
+                questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.rate ??
+                  0 / 20
               )
             ]
           }
           {Math.round(
-            questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.rate!
+            questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.rate ?? 0
           )}
           %가 오늘의 질문에 답변했습니다.
         </GroupHomeCardContent>
