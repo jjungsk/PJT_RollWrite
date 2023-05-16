@@ -38,6 +38,7 @@ function GroupHome({ group }: Props) {
 
   useEffect(() => {
     getQuestionList(group.meetingId).then((res) => {
+      console.log(res);
       const questionList = res.data;
       const newQuestionMap = new Map<string, CalendarQuestion>();
       // eslint-disable-next-line array-callback-return
@@ -135,24 +136,17 @@ function GroupHome({ group }: Props) {
           <InfoSvg onClick={() => setIsOpen(true)} />
         </GroupHomeCardHeader>
         <GroupHomeCardContent alignItem="center">
-          {questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.answer ? (
-            <>
-              {
-                SproutThema[
-                  Math.round(
-                    questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.rate! /
-                      20
-                  )
-                ]
-              }
-              {Math.round(
-                questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.rate!
-              )}
-              %가 오늘의 질문에 답변했습니다.
-            </>
-          ) : (
-            "답변률은 질문에 답변한 날만 확인 할수 있습니다."
+          {
+            SproutThema[
+              Math.round(
+                questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.rate! / 20
+              )
+            ]
+          }
+          {Math.round(
+            questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.rate!
           )}
+          %가 오늘의 질문에 답변했습니다.
         </GroupHomeCardContent>
 
         {questionMap.has(format(selectedDay, "yyyy-MM-dd")) ? (
