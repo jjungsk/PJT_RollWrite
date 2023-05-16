@@ -36,8 +36,8 @@ function CreateGroupPage() {
   const validateForm = () => {
     const titleLength = title.trim().length;
 
-    if (titleLength === 0 || titleLength > 24) {
-      toast.error("모임명은 1~24자 이내로 입력해주세요.");
+    if (titleLength === 0 || titleLength > 20) {
+      toast.error("모임명은 1~20자 이내로 입력해주세요.");
       return false;
     }
 
