@@ -29,6 +29,8 @@ const SideMenuHeader = styled.div`
   align-items: end;
 
   svg {
+    width: 32px;
+    height: 32px;
     cursor: pointer;
   }
 `;

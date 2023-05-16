@@ -2,18 +2,22 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ProfileItem, SideMenuContainer, SideMenuHeader } from "./style";
 import { ReactComponent as CloseArrow } from "../../../assets/Close_Arrow.svg";
+import { ReactComponent as Present } from "../../../assets/Present.svg";
 import AccordionList from "../AccordionList/AccordionList";
 import { AccordionItemType, Chat, Participant } from "../../../constants/types";
 import { QuestionItem } from "../../Molecules/ChatItem/style";
 import { ProfileImg } from "../ProfileInfo/style";
+import { useNavigate } from "react-router-dom";
 
 function SideMenu(props: {
+  meetingId?: string;
   questionList: Chat[];
   participantList: Participant[];
   bgColor: string;
   sideMenuOpen: boolean;
   handleSideMenuOpen: (sideMenuOpen: boolean) => void;
 }) {
+  const navigate = useNavigate();
   const [menuItemList, setMenuItemList] = useState<AccordionItemType[]>([
     {
       title: "질문 목록",
@@ -27,6 +31,10 @@ function SideMenu(props: {
 
   const handleClickCloseBtn = () => {
     props.handleSideMenuOpen(false);
+  };
+
+  const handleClickPresentBtn = () => {
+    navigate(`/award/${props.meetingId}`);
   };
 
   const Scroll = require("react-scroll");
@@ -101,6 +109,7 @@ function SideMenu(props: {
       >
         <SideMenuHeader>
           <CloseArrow onClick={handleClickCloseBtn} />
+          <Present onClick={handleClickPresentBtn} />
         </SideMenuHeader>
         <AccordionList items={menuItemList} />
       </motion.div>
