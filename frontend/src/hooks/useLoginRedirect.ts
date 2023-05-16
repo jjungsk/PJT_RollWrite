@@ -18,7 +18,7 @@ const useLoginRedirect = (dispatch: ReturnType<typeof useAppDispatch>) => {
         dispatch(updateRouteHistory(currentPath));
       }
     } else if (isLogin && currentPath === "/login") {
-      navigate("/home");
+      navigate("");
     }
   }, [isLogin, location, navigate, dispatch]);
 };

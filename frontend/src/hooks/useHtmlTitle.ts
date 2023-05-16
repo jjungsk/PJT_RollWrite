@@ -17,9 +17,6 @@ const useHtmlTitle = () => {
       case "login":
         htmlTitle.innerHTML = "로그인 - Rollwrite";
         break;
-      case "home":
-        htmlTitle.innerHTML = "홈 - Rollwrite";
-        break;
       case "question":
         htmlTitle.innerHTML = "오늘의 질문 - Rollwrite";
         break;
