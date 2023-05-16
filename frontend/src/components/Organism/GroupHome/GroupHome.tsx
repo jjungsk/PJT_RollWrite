@@ -11,7 +11,14 @@ import {
   GroupHomeCardHeader,
 } from "./style";
 import { DOG_LIST, SPROUT_LIST } from "../../../constants/sprout";
-import { addDays, format, getDate, isAfter, subHours } from "date-fns";
+import {
+  addDays,
+  addHours,
+  format,
+  getDate,
+  isAfter,
+  subHours,
+} from "date-fns";
 import html2canvas from "html2canvas";
 import { useNavigate } from "react-router-dom";
 import { handleKakaoQuestionShare } from "../../../utils/kakaoShare";
@@ -135,7 +142,7 @@ function GroupHome({ group }: Props) {
           <InfoSvg onClick={() => setIsOpen(true)} />
         </GroupHomeCardHeader>
         <GroupHomeCardContent alignItem="center">
-          {isAfter(subHours(new Date(), 8), selectedDay) ? (
+          {isAfter(new Date(), selectedDay) ? (
             <>
               {
                 SproutThema[
