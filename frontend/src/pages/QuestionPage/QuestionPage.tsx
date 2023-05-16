@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import "swiper/css";
 
 import EmojiCarousel from "../../components/Organism/EmojiCarousel/EmojiCarousel";
-import { ReactComponent as Home } from "../../assets/Home.svg";
 import EastIcon from "@mui/icons-material/East";
 import { Question } from "../../constants/types";
 import { getQuestionList } from "../../apis/question";
@@ -13,7 +12,6 @@ import {
   QuestionPageQuestion,
 } from "./style";
 import { format } from "date-fns";
-import Box from "../../components/Atom/Box/Box";
 import Btn from "../../components/Atom/Btn/Btn";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "@mui/material";

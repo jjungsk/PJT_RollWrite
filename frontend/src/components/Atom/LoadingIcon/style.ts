@@ -12,6 +12,14 @@ const LoadingIconWrap = styled.div`
   background: none;
 `;
 
+const LoadingIconSmallWrap = styled.div`
+  width: 100px;
+  height: 100px;
+  display: inline-block;
+  overflow: hidden;
+  background: none;
+`;
+
 const LoadingIconContainer = styled.div`
   width: 100%;
   height: 100%;
@@ -108,6 +116,102 @@ const LoadingIconContainer = styled.div`
   }
 `;
 
+const LoadingIconSmallContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform: translateZ(0) scale(1);
+  backface-visibility: hidden;
+  transform-origin: 0 0;
+
+  div {
+    box-sizing: content - box;
+  }
+
+  & > div:nth-child(1) {
+    display: block;
+  }
+  & > div:nth-child(1) div {
+    position: absolute;
+    top: 46px;
+    left: -4px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ec472b;
+    animation: animation-loading-icon-3 0.5s linear infinite;
+  }
+  & > div:nth-child(1) div:nth-child(1) {
+    animation-delay: -1.34s;
+  }
+  & > div:nth-child(1) div:nth-child(2) {
+    animation-delay: -0.66s;
+  }
+  & > div:nth-child(1) div:nth-child(3) {
+    animation-delay: 0s;
+  }
+
+  & > div:nth-child(2) {
+    transform: translate(-15px, 0);
+  }
+  & > div:nth-child(2) div {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 60px;
+    height: 30px;
+    border-radius: 60px 60px 0 0;
+    background: #f8b26a;
+    animation: animation-loading-icon-1 0.5s linear infinite;
+    transform-origin: 30px 30px;
+  }
+  & > div:nth-child(2) div:nth-child(2) {
+    animation: animation-loading-icon-2 0.5s linear infinite;
+  }
+  & > div:nth-child(2) div:nth-child(3) {
+    transform: rotate(-90deg);
+    animation: none;
+  }
+
+  @keyframes animation-loading-icon-1 {
+    0% {
+      transform: rotate(0deg);
+    }
+    50% {
+      transform: rotate(-45deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+
+  @keyframes animation-loading-icon-2 {
+    0% {
+      transform: rotate(180deg);
+    }
+    50% {
+      transform: rotate(225deg);
+    }
+    100% {
+      transform: rotate(180deg);
+    }
+  }
+
+  @keyframes animation-loading-icon-3 {
+    0% {
+      transform: translate(95px, 0);
+      opacity: 0;
+    }
+    20% {
+      opacity: 1;
+    }
+    100% {
+      transform: translate(35px, 0);
+      opacity: 1;
+    }
+  }
+`;
+
 const LoadingText = styled.div`
   position: absolute;
   top: 45%;
@@ -128,4 +232,10 @@ const LoadingText = styled.div`
   }
 `;
 
-export { LoadingIconWrap, LoadingIconContainer, LoadingText };
+export {
+  LoadingIconWrap,
+  LoadingIconSmallWrap,
+  LoadingIconContainer,
+  LoadingIconSmallContainer,
+  LoadingText,
+};
