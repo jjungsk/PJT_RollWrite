@@ -76,6 +76,7 @@ public class AuthService {
                 .identifier(addKakaoUserResDto.getId())
                 .nickname(addKakaoUserResDto.getNickname())
                 .profileImage(imagePath)
+                .point(100L)
                 .type(UserType.USER)
                 .build();
         userRepository.save(user);
