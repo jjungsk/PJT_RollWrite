@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from "react";
 import Calendar from "../../Molecules/Calendar/Calendar";
 import { CalendarQuestion, Group } from "../../../constants/types";
 import { getQuestionList, getRandomAnswer } from "../../../apis/home";
-import { ReactComponent as Arrow } from "../../../assets/Prev_Arrow.svg";
 import { ReactComponent as Download } from "../../../assets/Download.svg";
 import { ReactComponent as InfoSvg } from "../../../assets/Info-circle.svg";
 import {
@@ -12,7 +11,7 @@ import {
   GroupHomeCardHeader,
 } from "./style";
 import { DOG_LIST, SPROUT_LIST } from "../../../constants/sprout";
-import { format, getDay, subHours } from "date-fns";
+import { format, getDate, subHours } from "date-fns";
 import html2canvas from "html2canvas";
 import { useNavigate } from "react-router-dom";
 import { handleKakaoQuestionShare } from "../../../utils/kakaoShare";
@@ -20,7 +19,6 @@ import Modal from "../../Molecules/Modal/Modal";
 import SproutList from "../../Molecules/SproutList/SproutList";
 import AnswerBox from "../../Molecules/AnswerBox/AnswerBox";
 import { toast } from "react-hot-toast";
-import Box from "../../Atom/Box/Box";
 
 interface Props {
   group: Group;
@@ -31,7 +29,7 @@ function GroupHome({ group }: Props) {
   );
   const SproutThema = group.color === "#CEEDC7" ? DOG_LIST : SPROUT_LIST;
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [selectedDay, setSelectedDay] = useState(new Date());
+  const [selectedDay, setSelectedDay] = useState<Date>(new Date());
   const [answer, setAnswer] = useState("");
   const calendarRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -90,7 +88,7 @@ function GroupHome({ group }: Props) {
       )}
       <div style={{ position: "relative", marginBottom: "16px" }}>
         <Download
-          style={{ position: "absolute", right: "32px", top: "4px" }}
+          style={{ position: "absolute", right: "32px", top: "2px" }}
           onClick={handleDownloadClick}
         />
         <Calendar
@@ -146,7 +144,7 @@ function GroupHome({ group }: Props) {
 
         {questionMap.has(format(selectedDay, "yyyy-MM-dd")) ? (
           questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.rate !== 100 ? (
-            getDay(selectedDay) === getDay(subHours(new Date(), 8)) ? (
+            getDate(selectedDay) === getDate(subHours(new Date(), 8)) ? (
               <GroupHomeCardFooter>
                 <div
                   onClick={() =>
@@ -164,7 +162,7 @@ function GroupHome({ group }: Props) {
           ) : (
             <></>
           )
-        ) : getDay(selectedDay) === getDay(subHours(new Date(), 8)) ? (
+        ) : getDate(selectedDay) === getDate(subHours(new Date(), 8)) ? (
           <GroupHomeCardFooter>
             <div onClick={() => navigate("/question")}>답변하러 가기</div>{" "}
           </GroupHomeCardFooter>

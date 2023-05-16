@@ -21,6 +21,7 @@ import {
   isBefore,
   addMonths,
   subMonths,
+  getDate,
 } from "date-fns";
 import { CalendarQuestion, Group } from "../../../constants/types";
 import Box from "../../Atom/Box/Box";
@@ -157,7 +158,9 @@ function Calendar({
           <CalendarWeek key={i}>
             {week.map((day, i) => (
               <CalendarDay key={i} onClick={() => handelClick(day.currentDay)}>
-                <CalendarDayNum isSeleted={selectedDay === day.currentDay}>
+                <CalendarDayNum
+                  isSeleted={getDate(selectedDay) === getDate(day.currentDay)}
+                >
                   {day.formattedDate}
                 </CalendarDayNum>
                 {isDayInGroupPeriod(day.currentDay) &&

@@ -36,8 +36,9 @@ const CalendarName = styled.div`
 `;
 
 const CalendarMonth = styled.div`
-  height: 32px;
-  line-height: 32px;
+  height: 28px;
+  line-height: 28px;
+  margin-bottom: 28px;
   font-weight: bold;
 `;
 
