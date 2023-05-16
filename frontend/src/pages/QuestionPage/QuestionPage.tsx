@@ -57,10 +57,16 @@ function QuestionPage() {
             </div>
             <div
               style={{
+                display: "flex",
                 justifyContent: "end",
-                fontSize: "16px",
-                fontWeight: "bold",
+                width: "360px",
+                padding: "0px 24px",
+                lineHeight: "24px",
+                color: "var(--darkgray-color)",
               }}
+              onClick={() =>
+                navigate(`/group/${questionList?.[currentSlide].meetingId}`)
+              }
             >
               모임 상세보기
               <Icon>
@@ -68,6 +74,7 @@ function QuestionPage() {
               </Icon>
             </div>
           </QuestionPageHeader>
+
           <EmojiCarousel
             currentSlide={currentSlide}
             setCurrentSlide={setCurrentSlide}
