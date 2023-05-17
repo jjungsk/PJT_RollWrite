@@ -152,26 +152,26 @@ public class MeetingService {
     }
 
     @Transactional
-    public int joinMeeting(Long userId, String inviteCode) {
+    public Long joinMeeting(Long userId, String inviteCode) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
         Optional<Meeting> optionalMeeting = meetingRepository.validMeetingInviteCode(inviteCode);
         if (!optionalMeeting.isPresent()) {
-            return 1;
+            return -1L;
         }
         Meeting meeting = optionalMeeting.get();
 
         Optional<Participant> isExistedUser = participantRepository.findByMeetingAndUser(meeting, user);
         if (isExistedUser.isPresent()) {
-            return 2;
+            return -2L;
         } else {
             Participant participant = Participant.builder()
                     .user(user)
                     .meeting(meeting)
                     .build();
             participantRepository.save(participant);
-            return 0;
+            return meeting.getId();
         }
     }
 
