@@ -134,4 +134,5 @@ export interface CalendarQuestion {
   participantCnt: number;
   rate: number;
   answer: string;
+  imageUrl?: string;
 }

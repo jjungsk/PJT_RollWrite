@@ -34,7 +34,12 @@ function GroupHome({ group }: Props) {
   const SproutThema = group.color === "#CEEDC7" ? DOG_LIST : SPROUT_LIST;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedDay, setSelectedDay] = useState<Date>(new Date());
-  const [answer, setAnswer] = useState("");
+  const [randomAnswer, setRandomAnswer] = useState<{
+    answer: string;
+    imageUrl?: string;
+  }>({
+    answer: "",
+  });
   const [user, setUser] = useState<User>();
   const calendarRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -54,7 +59,7 @@ function GroupHome({ group }: Props) {
   }, [group.meetingId]);
 
   useEffect(() => {
-    setAnswer("");
+    setRandomAnswer({ answer: "" });
   }, [selectedDay]);
 
   useEffect(() => {
@@ -88,7 +93,7 @@ function GroupHome({ group }: Props) {
         if (res.statusCode === 400) {
           toast.error(res.message);
         } else {
-          setAnswer(res.data.answer);
+          setRandomAnswer(res.data);
           toast.success(res.message);
         }
       }
@@ -213,6 +218,9 @@ function GroupHome({ group }: Props) {
                 answer={
                   questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.answer!
                 }
+                imageUrl={
+                  questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.imageUrl
+                }
               />
             </>
           ) : (
@@ -223,8 +231,12 @@ function GroupHome({ group }: Props) {
               <LoadingIconSmall />
             </div>
           )}
-          {!toastStatus && answer.length > 0 && (
-            <AnswerBox isMe={false} answer={answer} />
+          {!toastStatus && randomAnswer.answer.length > 0 && (
+            <AnswerBox
+              isMe={false}
+              answer={randomAnswer.answer}
+              imageUrl={randomAnswer.imageUrl}
+            />
           )}
         </GroupHomeCardContent>
         <GroupHomeCardFooter>
