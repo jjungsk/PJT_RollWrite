@@ -172,7 +172,7 @@ function GroupHome({ group }: Props) {
           )}
         </GroupHomeCardContent>
 
-        {questionMap.has(format(selectedDay, "yyyy-MM-dd")) ? (
+        {questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.answer ? (
           questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.rate !== 100 ? (
             getDate(selectedDay) === getDate(subHours(new Date(), 8)) ? (
               <GroupHomeCardFooter>
