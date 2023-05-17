@@ -1,8 +1,10 @@
 package com.rollwrite.domain.question.repository;
 
+import com.querydsl.core.QueryFactory;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.rollwrite.domain.meeting.dto.AnswerCountDto;
 import com.rollwrite.domain.meeting.dto.AnswerDto;
 import com.rollwrite.domain.meeting.dto.MeetingCalenderResDto;
 import com.rollwrite.domain.meeting.entity.Meeting;
@@ -15,6 +17,7 @@ import com.rollwrite.domain.question.entity.Question;
 import com.rollwrite.domain.user.entity.QUser;
 import com.rollwrite.domain.user.entity.User;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -110,6 +113,31 @@ public class AnswerCustomRepositoryImpl implements AnswerCustomRepository {
                 .join(answer.user, user).on(answer.user.id.eq(userId))
                 .join(answer.question, question).on(answer.question.id.eq(questionId).and(answer.question.expireTime.after(LocalDateTime.now())))
                 .fetchOne());
+    }
+
+    @Override
+    public List<AnswerCountDto> findAnswerCnt(Meeting meeting) {
+        return jpaQueryFactory
+                .select(Projections.constructor(AnswerCountDto.class,
+                        answer.question.as("question"),
+                        answer.count().as("answerCount")))
+                .from(answer)
+                .where(answer.meeting.eq(meeting))
+                .groupBy(answer.question)
+                .orderBy(answer.question.createdAt.asc())
+                .fetch();
+    }
+
+    @Override
+    public Optional<Answer> findByMeetingIdAndUserIdAndCreatedAt(Long userId, Long meetingId, LocalDateTime localDateTime) {
+        return Optional.ofNullable(jpaQueryFactory
+                .selectFrom(answer)
+                .where(answer.meeting.id.eq(meetingId))
+                .where(answer.user.id.ne(userId))
+                .where(answer.createdAt.between(localDateTime, localDateTime.plusDays(1L)))
+                .orderBy(Expressions.numberTemplate(Double.class, "function('rand')").asc())
+                .limit(1)
+                .fetchFirst());
     }
 
 }

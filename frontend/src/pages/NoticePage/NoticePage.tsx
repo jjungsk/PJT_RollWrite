@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import AccordionList from "../../elements/AccordionList/AccordionList";
+import AccordionList from "../../components/Organism/AccordionList/AccordionList";
 import { AccordionItemType, Notice } from "../../constants/types";
 import { NoticeContainer, NoticeContent, NoticeDay } from "./style";
 import { getNoticeList } from "../../apis/notification";

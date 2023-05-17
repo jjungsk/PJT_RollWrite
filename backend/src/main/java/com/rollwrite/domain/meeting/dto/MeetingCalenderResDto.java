@@ -1,7 +1,7 @@
 package com.rollwrite.domain.meeting.dto;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,10 +10,19 @@ public class MeetingCalenderResDto {
 
     private final LocalDate day;
     private final String question;
+    private final String answer;
+    private final int answerCnt;
+    private final int participantCnt;
+    private final int rate;
 
     @Builder
-    public MeetingCalenderResDto(LocalDateTime day, String question) {
-        this.day = day.toLocalDate();
+    public MeetingCalenderResDto(LocalDate day, String question, String answer, int answerCnt, int participantCnt) {
+        this.day = day;
         this.question = question;
+        this.answer = answer;
+        this.answerCnt = answerCnt;
+        this.participantCnt = participantCnt;
+        this.rate = (int) ((answerCnt / (double) participantCnt) * 100);
     }
+
 }

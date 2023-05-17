@@ -7,7 +7,6 @@ import {
   ListItemAvatar,
   ListItemText,
   Typography,
-  Switch,
   ToggleButtonGroup,
   ToggleButton,
 } from "@mui/material";
@@ -111,7 +110,7 @@ function AdminPageUser() {
                 <Avatar alt={user.nickname} src={user.profileImage} />
               </ListItemAvatar>
               <ListItemText
-                primary={user.nickname}
+                primary={`${user.nickname} - ${user.point ?? 0}p`}
                 secondary={
                   <React.Fragment>
                     <Typography

@@ -8,11 +8,11 @@ import { ResultContainer } from "./style";
 import {
   HeaderContainer,
   HeaderGroupTitle,
-} from "../../components/Header/style";
+} from "../../components/Organism/Header/style";
 import format from "date-fns/format";
-import SideMenu from "../../components/SideMenu/SideMenu";
-import ChatItem from "../../components/ChatItem/ChatItem";
-import ChatAwardItem from "../../components/ChatAwardItem/ChatAwardItem";
+import SideMenu from "../../components/Organism/SideMenu/SideMenu";
+import ChatItem from "../../components/Molecules/ChatItem/ChatItem";
+import ChatAwardItem from "../../components/Molecules/ChatAwardItem/ChatAwardItem";
 import useGroupIsDoneResultAward from "../../hooks/useGroupIsDoneResultAward";
 
 function ResultPage() {
@@ -35,6 +35,7 @@ function ResultPage() {
       <AnimatePresence>
         {sideMenuOpen && (
           <SideMenu
+            meetingId={meetingId}
             questionList={questionList}
             participantList={participantList}
             bgColor={groupResult.color}
@@ -43,6 +44,7 @@ function ResultPage() {
           />
         )}
       </AnimatePresence>
+
       <HeaderContainer padding={"0px 24px 0px 24px"}>
         <Back onClick={handleClickBackBtn} />
         <HeaderGroupTitle>

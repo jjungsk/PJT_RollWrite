@@ -1,70 +1,43 @@
 import styled from "styled-components";
 
-const InfoContainer = styled.div`
-  width: 100%;
-  height: 8vh;
+const QuestionPageContainer = styled.div`
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4vh;
+  padding-bottom: 16px;
 `;
-
-const DateContainer = styled.div`
-  width: 100%;
+const QuestionPageHeader = styled.div`
   font-size: 18px;
   color: var(--darkgray-color);
-  text-align: center;
-  margin-block: 5px;
+  align-items: center;
+
+  & > div {
+    display: flex;
+    justify-content: center;
+    line-height: 24px;
+    height: 24px;
+    gap: 1px;
+  }
 `;
 
-const NameContainer = styled.div`
-  width: 100%;
+const QuestionPageQuestion = styled.div`
+  padding: 0px 16px;
+  line-height: 28px;
   font-size: 20px;
-  color: var(--black-color);
-  text-align: center;
-  margin-block: 5px;
+  font-weight: bold;
+  word-break: keep-all;
 `;
 
-const EmojiContainer = styled.div`
-  width: 100%;
-  margin-block: 30px;
-  display: flex;
-  align-items: space-between;
-`;
-
-const ArrowContainer = styled.div`
-  margin: auto 15px;
-  width: 30px;
-`;
-
-const TextContainer = styled.div`
-  width: 100%;
-  height: 8vh;
-  font-size: 20px;
-  color: var(--black-color);
-  text-align: center;
-  font-weight: 700;
-  line-height: 36px;
-  padding: 0 15px;
-  position: relative;
-`;
-
-const AnswerContainer = styled.div`
-  padding: 12px 36px;
-  font-size: 16px;
-  word-wrap: break-word;
-  max-height: 110px;
-  overflow: auto;
-`;
-
-const BtnContainer = styled.div`
-  width: 100%;
-  margin-block: 50px;
+const QuestionPageAnswer = styled.div`
+  padding: 0px 16px;
+  word-break: break-all;
 `;
 
 export {
-  InfoContainer,
-  DateContainer,
-  NameContainer,
-  EmojiContainer,
-  ArrowContainer,
-  TextContainer,
-  BtnContainer,
-  AnswerContainer,
+  QuestionPageContainer,
+  QuestionPageHeader,
+  QuestionPageQuestion,
+  QuestionPageAnswer,
 };

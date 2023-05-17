@@ -22,6 +22,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.rollwrite.global.exception.FakeException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -225,7 +226,35 @@ public class MeetingService {
         Meeting meeting = meetingRepository.findById(meetingId)
                 .orElseThrow(() -> new IllegalArgumentException("모임을 찾을 수 없습니다"));
 
-        return answerRepository.findMeetingCalender(user, meeting);
+        List<MeetingCalenderResDto> meetingCalenderResDtoList = new ArrayList<>();
+
+        // 모임의 참여자 수
+        int participantCnt = meeting.getParticipantList().size();
+
+        // 답변 리스트
+        List<AnswerCountDto> answerCountDtoList = answerRepository.findAnswerCnt(meeting);
+
+        for (AnswerCountDto answerCountDto : answerCountDtoList) {
+            String question = null;
+            String answer = null;
+
+            Optional<Answer> optionalAnswer = answerRepository.findByUserAndQuestion(user, answerCountDto.getQuestion());
+
+            // 내가 단 답변이 있을 때
+            if (optionalAnswer.isPresent()) {
+                answer = optionalAnswer.get().getContent();
+                question = answerCountDto.getQuestion().getContent();
+            }
+
+            meetingCalenderResDtoList.add(MeetingCalenderResDto.builder()
+                    .day(answerCountDto.getQuestion().getCreatedAt().toLocalDate())
+                    .question(question)
+                    .answer(answer)
+                    .answerCnt(Math.toIntExact(answerCountDto.getAnswerCount()))
+                    .participantCnt(participantCnt)
+                    .build());
+        }
+        return meetingCalenderResDtoList;
     }
 
 
@@ -402,8 +431,8 @@ public class MeetingService {
             List<Answer> answerList = answerRepository.findAnswerByUserAndMeeting(participant.getUser(), meeting);
 
             // 3. 참가자의 최대 기록
-            int curRecord = 1;
-            int participantRecord = 1;
+            int curRecord = 0;
+            int participantRecord = 0;
             for (int i = 1, size = answerList.size(); i < size; i++) {
                 LocalDateTime prevTime = answerList.get(i - 1).getCreatedAt();
                 LocalDateTime curTime = answerList.get(i).getCreatedAt();
@@ -423,7 +452,7 @@ public class MeetingService {
                 // 이전 답변과 지금 답변이 하루 차이나면 curRecord++, 그 이상이면 1로 초기화;
                 long duration = ChronoUnit.DAYS.between(prevDay, curDay);
                 if (duration > 1) {
-                    curRecord = 1;
+                    curRecord = 0;
                 } else {
                     if (++curRecord >= participantRecord) {
                         participantRecord = curRecord;
@@ -508,4 +537,35 @@ public class MeetingService {
             awardRepository.save(award);
         }
     }
+
+    @Transactional
+    public MeetingRandomQuestionResDto getRandomAnswer(Long userId, MeetingRandomQuestionReqDto meetingRandomQuestionReqDto) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
+        Long point = user.getPoint();
+        log.info("userId : {}, userPoint : {}", userId, point);
+
+        // 가지고 있는 포인트가 1회 뽑기 포인트인 10 보다 작을 경우
+        if (point < User.POINT) return null;
+
+        // 랜덤 답변 뽑기
+        Long meetingId = meetingRandomQuestionReqDto.getMeetingId();
+        LocalDate localDate = meetingRandomQuestionReqDto.getFindDay();
+        LocalTime localTime = LocalTime.of(8, 0, 0, 0);
+        LocalDateTime localDateTime = LocalDateTime.of(localDate, localTime);
+        log.info("localDateTime : {}", localDateTime);
+
+        // 답변이 등록 되기 전이라면 (OK 200 코드 안에 StatusCode는 400)
+        Answer answerRandom = answerRepository.findByMeetingIdAndUserIdAndCreatedAt(userId, meetingId, localDateTime)
+                .orElseThrow(() -> new FakeException("아직 등록된 답변이 없습니다."));
+
+        log.info("answerRandom.getContent() : {}", answerRandom.getContent());
+        // 답변을 정상적으로 뽑고 나서는 포인트 감소
+        user.updatePoint(point - User.POINT);
+
+        return MeetingRandomQuestionResDto.builder()
+                .answer(answerRandom.getContent())
+                .build();
+    }
+
 }

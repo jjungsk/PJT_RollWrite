@@ -2,6 +2,7 @@ package com.rollwrite.domain.admin.controller;
 
 import com.rollwrite.domain.admin.dto.*;
 import com.rollwrite.domain.admin.service.AdminService;
+import com.rollwrite.domain.meeting.dto.MeetingResultDto;
 import com.rollwrite.global.auth.CustomUserDetails;
 import com.rollwrite.global.model.ApiResponse;
 import com.rollwrite.global.model.SuccessCode;
@@ -89,8 +90,8 @@ public class AdminController {
     @GetMapping("/meeting")
     public ResponseEntity<ApiResponse> meetingList() {
         log.info("meetingList 호출");
-        List<FindMeetingResDto> findMeetingResDtoList = adminService.findMeeting();
-        return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_MEETING_SUCCESS, findMeetingResDtoList), HttpStatus.OK);
+        List<MeetingResultDto> meetingResultDtoList = adminService.findMeeting();
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_MEETING_SUCCESS, meetingResultDtoList), HttpStatus.OK);
     }
 
     @PostMapping("/question/{meetingId}")
@@ -105,6 +106,27 @@ public class AdminController {
         log.info("inquiryList 호출");
         List<FindInquiryResDto> findInquiryResDtoList = adminService.findInquiry();
         return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_INQUIRY_SUCCESS, findInquiryResDtoList), HttpStatus.OK);
+    }
+
+    @GetMapping("/dashboard/meeting")
+    public ResponseEntity<ApiResponse> meetingDashboard() {
+        log.info("meetingDashboard 호출");
+        List<FindMeetingDashboardDto> findMeetingDashboardDtoList = adminService.findMeetingDashboard();
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_MEETING_SUCCESS, findMeetingDashboardDtoList), HttpStatus.OK);
+    }
+
+    @GetMapping("/dashboard/participant")
+    public ResponseEntity<ApiResponse> participantDashboard() {
+        log.info("participantDashboard 호출");
+        List<FindParticipantDashboardDto> findParticipantDashboardDtoList = adminService.findParticipantDashboard();
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.GET_PARTICIPANT_SUCCESS, findParticipantDashboardDtoList), HttpStatus.OK);
+    }
+
+    @GetMapping("/dashboard/user")
+    public ResponseEntity<ApiResponse> userDashboard() {
+        log.info("userDashboard 호출");
+        List<FindUserDashboardDto> findUserDashboardDtoList = adminService.findUserDashboard();
+        return new ResponseEntity<>(ApiResponse.success(SuccessCode.FIND_USER_SUCCESS, findUserDashboardDtoList), HttpStatus.OK);
     }
 
 }

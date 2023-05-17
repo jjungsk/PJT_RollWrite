@@ -48,6 +48,7 @@ public class UserService {
                 .userId(user.getId())
                 .nickname(user.getNickname())
                 .profileImage(user.getProfileImage())
+                .point(user.getPoint())
                 .cntMeetingProgress(meetingIs.size())
                 .cntMeetingProgressIsDone(meetingIsDone.size())
                 .build();

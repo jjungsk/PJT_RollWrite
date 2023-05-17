@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.ToString;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,6 +21,7 @@ public class FindMeetingResDto {
     private final LocalDate endDay;
     private final String color;
     private final String inviteUrl;
+    private final LocalDateTime createdAt;
 
     @Builder
     public FindMeetingResDto(Meeting meeting) {
@@ -30,5 +32,6 @@ public class FindMeetingResDto {
         this.endDay = meeting.getEndDay();
         this.color = meeting.getColor();
         this.inviteUrl = meeting.getInviteCode();
+        this.createdAt = meeting.getCreatedAt();
     }
 }

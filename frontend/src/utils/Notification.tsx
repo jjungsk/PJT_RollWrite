@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { requestForToken, onMessageListener } from "./firebase";
@@ -38,7 +39,6 @@ const Notification = () => {
   const isIphone = detectIphoneDevice(window.navigator.userAgent);
 
   if (!isIphone && isLogin && firebaseToken === "") {
-    console.log("토큰 요청");
     requestForToken().then((token) => {
       sendFirebaseToken(token);
       dispatch(updateFirebaseToken(token));

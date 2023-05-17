@@ -11,6 +11,7 @@ public class FindUserResDto {
     private final Long userId;
     private final String nickname;
     private final String profileImage;
+    private final Long point;
     private final String userType;
 
     @Builder
@@ -18,6 +19,7 @@ public class FindUserResDto {
         this.userId = user.getId();
         this.nickname = user.getNickname();
         this.profileImage = user.getProfileImage();
+        this.point = user.getPoint();
         this.userType = user.getType().name();
     }
 }
