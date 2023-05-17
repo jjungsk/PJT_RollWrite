@@ -20,7 +20,7 @@ public class NoticeService {
     private final NoticeRepository noticeRepository;
 
     public List<FindNoticeResDto> findNotice() {
-        List<Notice> noticeList = noticeRepository.findAllByOrderByUpdatedAtDesc();
+        List<Notice> noticeList = noticeRepository.findAllByOrderByIdDesc();
 
         return noticeList.stream().map(notice -> FindNoticeResDto.builder()
                 .notice(notice)
