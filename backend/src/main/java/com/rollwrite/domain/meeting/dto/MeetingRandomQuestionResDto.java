@@ -3,6 +3,7 @@ package com.rollwrite.domain.meeting.dto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
@@ -11,9 +12,11 @@ import java.time.LocalDate;
 public class MeetingRandomQuestionResDto {
 
     private String answer;
+    private String imageUrl;
 
     @Builder
-    public MeetingRandomQuestionResDto(String answer) {
-        this.answer = answer;
+    public MeetingRandomQuestionResDto(String setAnswer, String setImageUrl) {
+        this.answer = setAnswer;
+        this.imageUrl = setImageUrl;
     }
 }

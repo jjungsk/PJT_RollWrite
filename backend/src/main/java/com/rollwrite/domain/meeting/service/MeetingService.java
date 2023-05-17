@@ -237,6 +237,7 @@ public class MeetingService {
         for (AnswerCountDto answerCountDto : answerCountDtoList) {
             String question = null;
             String answer = null;
+            String imageUrl = null;
 
             Optional<Answer> optionalAnswer = answerRepository.findByUserAndQuestion(user, answerCountDto.getQuestion());
 
@@ -244,14 +245,17 @@ public class MeetingService {
             if (optionalAnswer.isPresent()) {
                 answer = optionalAnswer.get().getContent();
                 question = answerCountDto.getQuestion().getContent();
+                imageUrl = optionalAnswer.get().getImageUrl();
             }
 
             meetingCalenderResDtoList.add(MeetingCalenderResDto.builder()
                     .day(answerCountDto.getQuestion().getCreatedAt().toLocalDate())
                     .question(question)
+                    .questionId(answerCountDto.getQuestion().getId())
                     .answer(answer)
                     .answerCnt(Math.toIntExact(answerCountDto.getAnswerCount()))
                     .participantCnt(participantCnt)
+                    .imageUrl(imageUrl)
                     .build());
         }
         return meetingCalenderResDtoList;
@@ -564,7 +568,8 @@ public class MeetingService {
         user.updatePoint(point - User.POINT);
 
         return MeetingRandomQuestionResDto.builder()
-                .answer(answerRandom.getContent())
+                .setAnswer(answerRandom.getContent())
+                .setImageUrl(answerRandom.getImageUrl())
                 .build();
     }
 

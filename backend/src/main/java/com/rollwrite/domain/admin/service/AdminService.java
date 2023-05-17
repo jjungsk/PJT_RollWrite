@@ -275,7 +275,7 @@ public class AdminService {
     }
 
     public List<FindInquiryResDto> findInquiry() {
-        List<Inquiry> inquiryList = inquiryRepository.findAll();
+        List<Inquiry> inquiryList = inquiryRepository.findAllByOrderByIdDesc();
 
         return inquiryList.stream().map(inquiry -> FindInquiryResDto.builder()
                 .inquiry(inquiry)
