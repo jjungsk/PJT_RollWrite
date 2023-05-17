@@ -152,26 +152,26 @@ public class MeetingService {
     }
 
     @Transactional
-    public int joinMeeting(Long userId, String inviteCode) {
+    public Long joinMeeting(Long userId, String inviteCode) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
         Optional<Meeting> optionalMeeting = meetingRepository.validMeetingInviteCode(inviteCode);
         if (!optionalMeeting.isPresent()) {
-            return 1;
+            return -1L;
         }
         Meeting meeting = optionalMeeting.get();
 
         Optional<Participant> isExistedUser = participantRepository.findByMeetingAndUser(meeting, user);
         if (isExistedUser.isPresent()) {
-            return 2;
+            return -2L;
         } else {
             Participant participant = Participant.builder()
                     .user(user)
                     .meeting(meeting)
                     .build();
             participantRepository.save(participant);
-            return 0;
+            return meeting.getId();
         }
     }
 
@@ -237,6 +237,7 @@ public class MeetingService {
         for (AnswerCountDto answerCountDto : answerCountDtoList) {
             String question = null;
             String answer = null;
+            String imageUrl = null;
 
             Optional<Answer> optionalAnswer = answerRepository.findByUserAndQuestion(user, answerCountDto.getQuestion());
 
@@ -244,14 +245,17 @@ public class MeetingService {
             if (optionalAnswer.isPresent()) {
                 answer = optionalAnswer.get().getContent();
                 question = answerCountDto.getQuestion().getContent();
+                imageUrl = optionalAnswer.get().getImageUrl();
             }
 
             meetingCalenderResDtoList.add(MeetingCalenderResDto.builder()
                     .day(answerCountDto.getQuestion().getCreatedAt().toLocalDate())
                     .question(question)
+                    .questionId(answerCountDto.getQuestion().getId())
                     .answer(answer)
                     .answerCnt(Math.toIntExact(answerCountDto.getAnswerCount()))
                     .participantCnt(participantCnt)
+                    .imageUrl(imageUrl)
                     .build());
         }
         return meetingCalenderResDtoList;
@@ -564,7 +568,8 @@ public class MeetingService {
         user.updatePoint(point - User.POINT);
 
         return MeetingRandomQuestionResDto.builder()
-                .answer(answerRandom.getContent())
+                .setAnswer(answerRandom.getContent())
+                .setImageUrl(answerRandom.getImageUrl())
                 .build();
     }
 

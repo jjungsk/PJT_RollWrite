@@ -111,19 +111,21 @@ public class MeetingController {
         Long userId = userDetails.getUserId();
         log.info("Meeting 참여자 추가 userId : " + userId + " inviteCode : " + inviteCode);
 
-        int flag = meetingService.joinMeeting(userId, inviteCode);
+        Long flag = meetingService.joinMeeting(userId, inviteCode);
         log.info("Join Meeting flag : " + flag);
-        if (flag == 0) {
-            return new ResponseEntity<>(
-                    ApiResponse.success(SuccessCode.JOIN_MEETING_SUCCESS),
-                    HttpStatus.OK);
-        } else if (flag == 1) {
+        if (flag == -1L) {
             return new ResponseEntity<>(
                     ApiResponse.error(ErrorCode.VALIDATION_EXCEPTION, "잘못된 인가코드입니다."),
                     HttpStatus.OK);
-        } else {
+        } else if(flag == -2L) {
             return new ResponseEntity<>(
                     ApiResponse.error(ErrorCode.VALIDATION_EXCEPTION, "이미 참여한 사용자입니다."),
+                    HttpStatus.OK);
+        }else {
+            HashMap<String, Long> response = new HashMap<>();
+            response.put("meetingId", flag);
+            return new ResponseEntity<>(
+                    ApiResponse.success(SuccessCode.JOIN_MEETING_SUCCESS, response),
                     HttpStatus.OK);
         }
     }
