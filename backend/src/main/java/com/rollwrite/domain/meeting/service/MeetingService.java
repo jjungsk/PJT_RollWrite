@@ -152,27 +152,39 @@ public class MeetingService {
     }
 
     @Transactional
-    public int joinMeeting(Long userId, String inviteCode) {
+    public JoinMeetingResDto joinMeeting(Long userId, String inviteCode) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
         Optional<Meeting> optionalMeeting = meetingRepository.validMeetingInviteCode(inviteCode);
-        if (!optionalMeeting.isPresent()) {
-            return 1;
-        }
-        Meeting meeting = optionalMeeting.get();
 
-        Optional<Participant> isExistedUser = participantRepository.findByMeetingAndUser(meeting, user);
-        if (isExistedUser.isPresent()) {
-            return 2;
+        int flag;
+        Long meetingId = null;
+
+        if (!optionalMeeting.isPresent()) {
+            flag = 0;
         } else {
-            Participant participant = Participant.builder()
-                    .user(user)
-                    .meeting(meeting)
-                    .build();
-            participantRepository.save(participant);
-            return 0;
+            Meeting meeting = optionalMeeting.get();
+            meetingId = meeting.getId();
+
+            Optional<Participant> isExistedUser = participantRepository.findByMeetingAndUser(meeting, user);
+
+            if (isExistedUser.isPresent()) {
+                flag = 1;
+            } else {
+                Participant participant = Participant.builder()
+                        .user(user)
+                        .meeting(meeting)
+                        .build();
+                participantRepository.save(participant);
+                flag = 2;
+            }
         }
+
+        return JoinMeetingResDto.builder()
+                .meetingId(meetingId)
+                .flag(flag)
+                .build();
     }
 
     public List<TagDto> findTag() {
@@ -237,6 +249,7 @@ public class MeetingService {
         for (AnswerCountDto answerCountDto : answerCountDtoList) {
             String question = null;
             String answer = null;
+            String imageUrl = null;
 
             Optional<Answer> optionalAnswer = answerRepository.findByUserAndQuestion(user, answerCountDto.getQuestion());
 
@@ -244,14 +257,17 @@ public class MeetingService {
             if (optionalAnswer.isPresent()) {
                 answer = optionalAnswer.get().getContent();
                 question = answerCountDto.getQuestion().getContent();
+                imageUrl = optionalAnswer.get().getImageUrl();
             }
 
             meetingCalenderResDtoList.add(MeetingCalenderResDto.builder()
                     .day(answerCountDto.getQuestion().getCreatedAt().toLocalDate())
                     .question(question)
+                    .questionId(answerCountDto.getQuestion().getId())
                     .answer(answer)
                     .answerCnt(Math.toIntExact(answerCountDto.getAnswerCount()))
                     .participantCnt(participantCnt)
+                    .imageUrl(imageUrl)
                     .build());
         }
         return meetingCalenderResDtoList;
@@ -564,7 +580,8 @@ public class MeetingService {
         user.updatePoint(point - User.POINT);
 
         return MeetingRandomQuestionResDto.builder()
-                .answer(answerRandom.getContent())
+                .setAnswer(answerRandom.getContent())
+                .setImageUrl(answerRandom.getImageUrl())
                 .build();
     }
 
