@@ -1,11 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 function useResize() {
-  const [height, setHeight] = useState(window.innerHeight);
-
   const handleResize = () => {
-    console.log(window.innerHeight);
-    setHeight(window.innerHeight);
     document.getElementById("root")!.style.height = `${window.innerHeight}px`;
   };
 

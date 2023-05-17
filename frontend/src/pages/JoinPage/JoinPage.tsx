@@ -13,9 +13,13 @@ function JoinPage() {
         .then((res) => {
           if (res.statusCode === 200) {
             toast.success("가입을 완료했습니다.");
-            navigate("/my");
           } else {
             toast.error(res.message);
+          }
+
+          if (res.data.meetingId) {
+            navigate(`/group/${res.data.meetingId}`);
+          } else {
             navigate("/");
           }
         })

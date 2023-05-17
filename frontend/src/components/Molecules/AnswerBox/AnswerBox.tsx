@@ -6,9 +6,10 @@ import { User } from "../../../pages/AdminPage/type";
 interface Props {
   isMe: boolean;
   answer: string;
+  imageUrl?: string;
   user?: User;
 }
-function AnswerBox({ isMe, answer, user }: Props) {
+function AnswerBox({ isMe, answer, imageUrl, user }: Props) {
   return (
     <AnswerContainer isMe={isMe}>
       {!isMe && <ProfileImg size={40} bgImg={user?.profileImage ?? ""} />}
@@ -16,6 +17,7 @@ function AnswerBox({ isMe, answer, user }: Props) {
         <div>{user?.nickname ?? "???"}</div>
         <div>
           <AnswerContent>
+            {imageUrl && <img src={imageUrl} alt="" />}
             <div>{answer}</div>
           </AnswerContent>
         </div>

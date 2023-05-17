@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { pop, render } from "../../../utils/pop";
-import { Controls, Player } from "@lottiefiles/react-lottie-player";
+import { Player } from "@lottiefiles/react-lottie-player";
 import animationData from "../../../assets/141145-gift-box.json";
 
 interface Props {
