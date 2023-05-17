@@ -221,6 +221,7 @@ function GroupHome({ group }: Props) {
                 imageUrl={
                   questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.imageUrl
                 }
+                user={user}
               />
             </>
           ) : (
