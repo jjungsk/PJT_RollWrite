@@ -3,8 +3,6 @@ import GroupCard from "../../Molecules/GroupCard/GroupCard";
 import { Group } from "../../../constants/types";
 import { GroupListContainer } from "./style";
 import Box from "../../Atom/Box/Box";
-import Btn from "../../Atom/Btn/Btn";
-import { useNavigate } from "react-router-dom";
 
 interface Props {
   groupList?: Group[];
@@ -12,7 +10,6 @@ interface Props {
 }
 
 function GroupList({ groupList, handleClickGroup }: Props) {
-  const navigate = useNavigate();
   return (
     <GroupListContainer>
       {groupList && groupList?.length > 0 ? (

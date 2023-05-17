@@ -11,14 +11,7 @@ import {
   GroupHomeCardHeader,
 } from "./style";
 import { DOG_LIST, SPROUT_LIST } from "../../../constants/sprout";
-import {
-  addDays,
-  addHours,
-  format,
-  getDate,
-  isAfter,
-  subHours,
-} from "date-fns";
+import { format, getDate, subHours } from "date-fns";
 import html2canvas from "html2canvas";
 import { useNavigate } from "react-router-dom";
 import { handleKakaoQuestionShare } from "../../../utils/kakaoShare";
@@ -27,6 +20,8 @@ import SproutList from "../../Molecules/SproutList/SproutList";
 import AnswerBox from "../../Molecules/AnswerBox/AnswerBox";
 import { toast } from "react-hot-toast";
 import LoadingIconSmall from "../../Atom/LoadingIcon/LoadingIconSmall";
+import { getUserDetail } from "../../../apis/user";
+import { User } from "../../../pages/AdminPage/type";
 
 interface Props {
   group: Group;
@@ -39,9 +34,17 @@ function GroupHome({ group }: Props) {
   const SproutThema = group.color === "#CEEDC7" ? DOG_LIST : SPROUT_LIST;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedDay, setSelectedDay] = useState<Date>(new Date());
-  const [answer, setAnswer] = useState("");
+  const [randomAnswer, setRandomAnswer] = useState<{
+    answer: string;
+    imageUrl?: string;
+  }>({
+    answer: "",
+  });
+  const [user, setUser] = useState<User>();
   const calendarRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
+  const isToday = getDate(selectedDay) <= getDate(subHours(new Date(), 8));
 
   useEffect(() => {
     getQuestionList(group.meetingId).then((res) => {
@@ -56,8 +59,14 @@ function GroupHome({ group }: Props) {
   }, [group.meetingId]);
 
   useEffect(() => {
-    setAnswer("");
+    setRandomAnswer({ answer: "" });
   }, [selectedDay]);
+
+  useEffect(() => {
+    getUserDetail().then((res) => {
+      setUser(res.data);
+    });
+  }, []);
 
   const handleDownloadClick = async () => {
     if (calendarRef.current) {
@@ -84,7 +93,16 @@ function GroupHome({ group }: Props) {
         if (res.statusCode === 400) {
           toast.error(res.message);
         } else {
-          setAnswer(res.data.answer);
+          setRandomAnswer(res.data);
+          const newPoint: number = user?.point ? user?.point - 10 : 0;
+
+          setUser(
+            (prevState) =>
+              ({
+                ...prevState,
+                point: newPoint,
+              } as User)
+          );
           toast.success(res.message);
         }
       }
@@ -134,15 +152,21 @@ function GroupHome({ group }: Props) {
       </div>
       <GroupHomeCard>
         <GroupHomeCardHeader>
-          답변률 (
-          {questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.answerCnt ?? 0}/
-          {questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.participantCnt ??
-            0}
-          )
+          답변률{" "}
+          {isToday && (
+            <>
+              {"(" +
+                (questionMap.get(format(selectedDay, "yyyy-MM-dd"))
+                  ?.answerCnt ?? 0)}
+              /
+              {(questionMap.get(format(selectedDay, "yyyy-MM-dd"))
+                ?.participantCnt ?? group.participantCnt) + ")"}
+            </>
+          )}
           <InfoSvg onClick={() => setIsOpen(true)} />
         </GroupHomeCardHeader>
         <GroupHomeCardContent alignItem="center">
-          {isAfter(new Date(), selectedDay) ? (
+          {isToday ? (
             <>
               {
                 SproutThema[
@@ -162,7 +186,7 @@ function GroupHome({ group }: Props) {
           )}
         </GroupHomeCardContent>
 
-        {questionMap.has(format(selectedDay, "yyyy-MM-dd")) ? (
+        {questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.answer ? (
           questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.rate !== 100 ? (
             getDate(selectedDay) === getDate(subHours(new Date(), 8)) ? (
               <GroupHomeCardFooter>
@@ -191,7 +215,9 @@ function GroupHome({ group }: Props) {
         )}
       </GroupHomeCard>
       <GroupHomeCard>
-        <GroupHomeCardHeader>답변 뽑기 🎲</GroupHomeCardHeader>
+        <GroupHomeCardHeader>
+          답변 뽑기 {"(현재 포인트 : " + user?.point + "p)"} 🎲
+        </GroupHomeCardHeader>
         <GroupHomeCardContent flexDirection="column" gap="0px">
           {questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.answer ? (
             <>
@@ -201,6 +227,10 @@ function GroupHome({ group }: Props) {
                 answer={
                   questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.answer!
                 }
+                imageUrl={
+                  questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.imageUrl
+                }
+                user={user}
               />
             </>
           ) : (
@@ -211,8 +241,12 @@ function GroupHome({ group }: Props) {
               <LoadingIconSmall />
             </div>
           )}
-          {!toastStatus && answer.length > 0 && (
-            <AnswerBox isMe={false} answer={answer} />
+          {!toastStatus && randomAnswer.answer.length > 0 && (
+            <AnswerBox
+              isMe={false}
+              answer={randomAnswer.answer}
+              imageUrl={randomAnswer.imageUrl}
+            />
           )}
         </GroupHomeCardContent>
         <GroupHomeCardFooter>
