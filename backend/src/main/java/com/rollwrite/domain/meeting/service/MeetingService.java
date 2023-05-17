@@ -270,6 +270,19 @@ public class MeetingService {
                     .imageUrl(imageUrl)
                     .build());
         }
+
+        // 아무도 답변하지 않은 경우 (오늘 질문 추가해주기)
+        if (meetingCalenderResDtoList.size() == 0) {
+            Question question = questionRepository.findTodayQuestionByMeeting(meeting)
+                    .orElseThrow(() -> new IllegalArgumentException("오늘 날짜의 질문이 없습니다."));
+
+            meetingCalenderResDtoList.add(MeetingCalenderResDto.builder()
+                    .questionId(question.getId())
+                    .answerCnt(0)
+                    .participantCnt(participantCnt)
+                    .build());
+        }
+
         return meetingCalenderResDtoList;
     }
 
