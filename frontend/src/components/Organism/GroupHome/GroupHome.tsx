@@ -94,6 +94,15 @@ function GroupHome({ group }: Props) {
           toast.error(res.message);
         } else {
           setRandomAnswer(res.data);
+          const newPoint: number = user?.point ? user?.point - 10 : 0;
+
+          setUser(
+            (prevState) =>
+              ({
+                ...prevState,
+                point: newPoint,
+              } as User)
+          );
           toast.success(res.message);
         }
       }
@@ -207,7 +216,7 @@ function GroupHome({ group }: Props) {
       </GroupHomeCard>
       <GroupHomeCard>
         <GroupHomeCardHeader>
-          답변 뽑기 {"(" + user?.point + "p)"} 🎲
+          답변 뽑기 {"(현재 포인트 : " + user?.point + "p)"} 🎲
         </GroupHomeCardHeader>
         <GroupHomeCardContent flexDirection="column" gap="0px">
           {questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.answer ? (
