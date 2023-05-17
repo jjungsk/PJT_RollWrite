@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { pop, render } from "../../../utils/pop";
+import { Controls, Player } from "@lottiefiles/react-lottie-player";
+import animationData from "../../../assets/141145-gift-box.json";
 
 interface Props {
   setAwardSteps: React.Dispatch<React.SetStateAction<number>>;
@@ -41,23 +43,14 @@ const AwardBox = ({ setAwardSteps }: Props) => {
   };
 
   return (
-    <motion.div
-      animate={controls}
-      onClick={handleShake}
-      initial={{ opacity: 0, scale: 0 }}
-      transition={{
-        duration: 5,
-        delay: 0.5,
-        ease: [0, 0.71, 0.2, 1.01],
-        scale: {
-          type: "spring",
-          damping: 5,
-          stiffness: 80,
-          restDelta: 0.001,
-        },
-      }}
-    >
-      <img src="/box.png" width={280} alt="box" />
+    <motion.div animate={controls} onClick={handleShake}>
+      {/* <img src="/box.png" width={280} alt="box" /> */}
+      <Player
+        autoplay
+        keepLastFrame
+        src={animationData}
+        style={{ height: "300px", width: "300px" }}
+      ></Player>
     </motion.div>
   );
 };

@@ -1,32 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { AnswerContainer, AnswerContent, AnswerDetail } from "./style";
-import { getUserDetail } from "../../../apis/user";
 import { ProfileImg } from "../../Organism/ProfileInfo/style";
+import { User } from "../../../pages/AdminPage/type";
 
 interface Props {
   isMe: boolean;
   answer: string;
+  user?: User;
 }
-function AnswerBox({ isMe, answer }: Props) {
-  const [user, setUser] = useState({ nickname: "???", profileImage: "" });
-  useEffect(() => {
-    isMe &&
-      getUserDetail().then((res) => {
-        setUser(res.data);
-      });
-  }, [isMe]);
+function AnswerBox({ isMe, answer, user }: Props) {
   return (
     <AnswerContainer isMe={isMe}>
-      {!isMe && <ProfileImg size={40} bgImg={user.profileImage} />}
+      {!isMe && <ProfileImg size={40} bgImg={user?.profileImage ?? ""} />}
       <AnswerDetail isMe={isMe}>
-        <div>{user.nickname}</div>
+        <div>{user?.nickname ?? "???"}</div>
         <div>
           <AnswerContent>
             <div>{answer}</div>
           </AnswerContent>
         </div>
       </AnswerDetail>
-      {isMe && <ProfileImg size={40} bgImg={user.profileImage} />}
+      {isMe && <ProfileImg size={40} bgImg={user?.profileImage} />}
     </AnswerContainer>
   );
 }
