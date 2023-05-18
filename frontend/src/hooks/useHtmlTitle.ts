@@ -38,8 +38,8 @@ const useHtmlTitle = () => {
       case "inquiry":
         htmlTitle.innerHTML = "의견 보내기 - Rollwrite";
         break;
-      case "service":
-        htmlTitle.innerHTML = "서비스 이용약관 - Rollwrite";
+      case "manual":
+        htmlTitle.innerHTML = "서비스 소개 - Rollwrite";
         break;
       case "invite":
         htmlTitle.innerHTML = "모임 초대하기 - Rollwrite";

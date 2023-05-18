@@ -140,8 +140,8 @@ function AdminPageIndex() {
     return (
       <BarChart
         data={data}
-        width={resize > 768 ? 600 : 350}
-        height={resize > 768 ? 350 : 300}
+        width={resize > 768 ? 800 : 350}
+        height={resize > 768 ? 400 : 300}
       >
         <XAxis
           dataKey={xKey}
@@ -155,6 +155,7 @@ function AdminPageIndex() {
         <YAxis
           label={{ value: yLabel, angle: -90, position: "insideLeft", dx: 10 }}
           allowDecimals={false}
+          fontSize={resize > 768 ? 16 : 10}
         />
         <Tooltip />
         <CartesianGrid stroke="#E5E5E5" strokeDasharray="5 5" />

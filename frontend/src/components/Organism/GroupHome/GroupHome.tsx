@@ -11,7 +11,7 @@ import {
   GroupHomeCardHeader,
 } from "./style";
 import { DOG_LIST, SPROUT_LIST } from "../../../constants/sprout";
-import { format, getDate, subHours } from "date-fns";
+import { differenceInDays, format, getDate, subDays, subHours } from "date-fns";
 import html2canvas from "html2canvas";
 import { useNavigate } from "react-router-dom";
 import { handleKakaoQuestionShare } from "../../../utils/kakaoShare";
@@ -189,16 +189,14 @@ function GroupHome({ group }: Props) {
         {questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.answer ? (
           questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.rate !== 100 ? (
             getDate(selectedDay) === getDate(subHours(new Date(), 8)) ? (
-              <GroupHomeCardFooter>
-                <div
-                  onClick={() =>
-                    handleKakaoQuestionShare(
-                      questionMap.get(format(selectedDay, "yyyy-MM-dd"))!
-                    )
-                  }
-                >
-                  답변 요청하기
-                </div>
+              <GroupHomeCardFooter
+                onClick={() =>
+                  handleKakaoQuestionShare(
+                    questionMap.get(format(selectedDay, "yyyy-MM-dd"))!
+                  )
+                }
+              >
+                <div>답변 요청하기</div>
               </GroupHomeCardFooter>
             ) : (
               <></>
@@ -207,8 +205,26 @@ function GroupHome({ group }: Props) {
             <></>
           )
         ) : getDate(selectedDay) === getDate(subHours(new Date(), 8)) ? (
-          <GroupHomeCardFooter>
-            <div onClick={() => navigate("/question")}>답변하러 가기</div>{" "}
+          <GroupHomeCardFooter
+            onClick={() =>
+              navigate("/answer", {
+                state: {
+                  question: {
+                    question: questionMap.get(format(new Date(), "yyyy-MM-dd"))
+                      ?.question,
+                    title: group.title,
+                    day: differenceInDays(new Date(group.endDay), new Date()),
+                    meetingId: group.meetingId,
+                    questionId: questionMap.get(
+                      format(new Date(), "yyyy-MM-dd")
+                    )?.questionId,
+                  },
+                  isModify: false,
+                },
+              })
+            }
+          >
+            <div>답변하러 가기</div>
           </GroupHomeCardFooter>
         ) : (
           <></>
@@ -249,10 +265,10 @@ function GroupHome({ group }: Props) {
             />
           )}
         </GroupHomeCardContent>
-        <GroupHomeCardFooter>
+        <GroupHomeCardFooter onClick={handelClickRandomAnswer}>
           {!toastStatus &&
-            questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.question && (
-              <div onClick={handelClickRandomAnswer}>답변 뽑기 10p</div>
+            questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.answer && (
+              <div>답변 뽑기 10p</div>
             )}
         </GroupHomeCardFooter>
       </GroupHomeCard>
