@@ -30,6 +30,15 @@ function LoginPage() {
       <BtnContainer>
         <KakaoBtn onClick={handleClickLoginBtn} />
       </BtnContainer>
+      <div
+        style={{
+          fontFamily: "Tossface",
+          position: "absolute",
+          bottom: "-100px",
+        }}
+      >
+        🐭
+      </div>
       <ManualIcon onClick={() => navigate("/manual")}>?</ManualIcon>
     </>
   );
