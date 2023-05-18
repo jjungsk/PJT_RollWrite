@@ -12,7 +12,12 @@ const useLoginRedirect = (dispatch: ReturnType<typeof useAppDispatch>) => {
   useEffect(() => {
     const currentPath = location.pathname;
 
-    if (!isLogin && currentPath !== "/login" && currentPath !== "/oauth") {
+    if (
+      !isLogin &&
+      currentPath !== "/login" &&
+      currentPath !== "/oauth" &&
+      currentPath !== "/manual"
+    ) {
       navigate("/login");
       if (currentPath !== "/setting") {
         dispatch(updateRouteHistory(currentPath));

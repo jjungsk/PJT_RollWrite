@@ -39,7 +39,6 @@ function ManualPage() {
       <ManualContainer>
         {selectedMenuIndex === 0 && (
           <>
-            <PresentBox />
             <Logo />
             <ManualSubTitle>
               Rollwrite는 여러분이 모인
@@ -48,6 +47,7 @@ function ManualPage() {
               <br />
               롤링페이퍼 플랫폼입니다
             </ManualSubTitle>
+            <PresentBox />
             <ManualStepBox>
               <ManualStep>규칙 1. </ManualStep>
               <ManualStepText>
@@ -68,7 +68,7 @@ function ManualPage() {
               <ManualStep>규칙 3. </ManualStep>
               <ManualStepText>
                 <div>모든 답변은 모임의 마지막 날 확인 가능해요</div>
-                <div>(마지막 날 우리 모임의 선물이 될거에요^^)</div>
+                <div>(마지막 날 우리 모임의 선물이 될 거예요^^)</div>
               </ManualStepText>
             </ManualStepBox>
           </>
@@ -78,7 +78,6 @@ function ManualPage() {
             src={`/manual_step_${selectedMenuIndex}_bg.png`}
             alt="manualImage"
           />
-          // <ManualImg src={`/manual_step_${selectedMenuIndex}.png`} alt="manualImage"/>
         )}
         {selectedMenuIndex === 1 && (
           <ManualStepBox>
@@ -130,6 +129,37 @@ function ManualPage() {
             </ManualStepText>
           </ManualStepBox>
         )}
+
+        <div
+          style={{
+            position: "absolute",
+            bottom: "-2px",
+            right: "-2px",
+            width: 1,
+            height: 1,
+          }}
+        >
+          <img
+            style={{ width: 1, height: 1 }}
+            src={`/manual_step_1_bg.png`}
+            alt="manualImage"
+          />
+          <img
+            style={{ width: 1, height: 1 }}
+            src={`/manual_step_2_bg.png`}
+            alt="manualImage"
+          />
+          <img
+            style={{ width: 1, height: 1 }}
+            src={`/manual_step_3_bg.png`}
+            alt="manualImage"
+          />
+          <img
+            style={{ width: 1, height: 1 }}
+            src={`/manual_step_4_bg.png`}
+            alt="manualImage"
+          />
+        </div>
       </ManualContainer>
     </ManualWrap>
   );
