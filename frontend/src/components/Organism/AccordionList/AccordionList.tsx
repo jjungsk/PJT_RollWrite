@@ -12,7 +12,7 @@ function AccordionList(props: { items: AccordionItemType[] }) {
   };
 
   return (
-    <div>
+    <div style={{ height: "calc(100% - 40px)", overflow: "scroll" }}>
       {props.items.map((item, index) => (
         <AccordionItem key={index}>
           <AccordionItemTitle
