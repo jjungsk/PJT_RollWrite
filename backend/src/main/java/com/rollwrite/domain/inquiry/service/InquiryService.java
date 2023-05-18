@@ -1,8 +1,10 @@
 package com.rollwrite.domain.inquiry.service;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.rollwrite.domain.inquiry.dto.AddInquiryReqDto;
 import com.rollwrite.domain.inquiry.entity.Inquiry;
 import com.rollwrite.domain.inquiry.repository.InquiryRepository;
+import com.rollwrite.domain.notification.service.NotificationService;
 import com.rollwrite.domain.user.entity.User;
 import com.rollwrite.domain.user.repository.UserRepository;
 import com.rollwrite.global.service.FileService;
@@ -24,9 +26,10 @@ public class InquiryService {
     private final FileService fileService;
     private final UserRepository userRepository;
     private final InquiryRepository inquiryRepository;
+    private final NotificationService notificationService;
 
     @Transactional
-    public void addInquiry(Long userId, AddInquiryReqDto addInquiryReqDto, MultipartFile image) throws IOException {
+    public void addInquiry(Long userId, AddInquiryReqDto addInquiryReqDto, MultipartFile image) throws IOException, FirebaseMessagingException {
         // 문의의 문장 길이가 400글자를 넘었을 때
         if (addInquiryReqDto.getInquiry().getBytes(StandardCharsets.ISO_8859_1).length > 400) {
             throw new IllegalArgumentException("문의 내용이 글자 수를 초과했습니다");
@@ -46,5 +49,8 @@ public class InquiryService {
                 .content(addInquiryReqDto.getInquiry())
                 .build();
         inquiryRepository.save(inquiry);
+
+        // Admin Alarm
+        notificationService.sendToAdmin(inquiry);
     }
 }

@@ -1,5 +1,6 @@
 package com.rollwrite.domain.inquiry.controller;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.rollwrite.domain.inquiry.dto.AddInquiryReqDto;
 import com.rollwrite.domain.inquiry.service.InquiryService;
 import com.rollwrite.global.auth.CustomUserDetails;
@@ -29,7 +30,7 @@ public class InquiryController {
     @PostMapping
     public ResponseEntity<ApiResponse> addInquiry(@ApiIgnore Authentication authentication,
                                                   @RequestPart AddInquiryReqDto addInquiryReqDto,
-                                                  @RequestPart(required = false) MultipartFile image) throws IOException {
+                                                  @RequestPart(required = false) MultipartFile image) throws IOException, FirebaseMessagingException {
         log.info("문의 생성 addInquiryReqDto : {}", addInquiryReqDto);
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
         Long userId = userDetails.getUserId();
