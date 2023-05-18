@@ -7,15 +7,30 @@ const ManualIcon = styled.div`
   width: 50px;
   height: 50px;
   border-radius: 25px;
-  background: var(--lightgray-color);
+  background: var(--main-color);
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
 
   display: flex;
   font-weight: bold;
-  font-size: 34px;
+  font-size: 28px;
   align-items: center;
   justify-content: center;
-  color: var(--darkgray-color);
+  color: var(--white-color);
+
+  animation: bounce 1s linear infinite;
+
+  @keyframes bounce {
+    0% {
+      bottom: 15px;
+    }
+    50% {
+      bottom: 18px;
+    }
+    100% {
+      bottom: 15px;
+    }
+  }
 `;
 
 const ManualWrap = styled.div`
@@ -36,13 +51,22 @@ const ManualContainer = styled.div`
   overflow: scroll;
 
   & > svg {
-    width: 240px;
-    height: fit-content;
-    margin: 15px auto;
-  }
-  & > svg:nth-child(2) {
     width: 200px;
-    margin: 20px auto;
+    margin: 30px auto;
+    height: fit-content;
+  }
+  & > svg:nth-child(3) {
+    width: 240px;
+    margin: 30px auto 20px;
+  }
+
+  @media all and (min-width: 380px) {
+    & > svg {
+      width: 240px;
+    }
+    & > svg:nth-child(3) {
+      width: 280px;
+    }
   }
 `;
 

@@ -6,8 +6,11 @@ import { ReactComponent as KakaoBtn } from "../../assets/Kakao.svg";
 import { redirectKakao } from "../../apis/user";
 import { useAppDispatch } from "../../constants/types";
 import { updateAccessToken, updateLoginStatus } from "../../store/authReducer";
+import { ManualIcon } from "../ManualPage/style";
+import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const handleClickLoginBtn = () => {
@@ -27,6 +30,7 @@ function LoginPage() {
       <BtnContainer>
         <KakaoBtn onClick={handleClickLoginBtn} />
       </BtnContainer>
+      <ManualIcon onClick={() => navigate("/manual")}>?</ManualIcon>
     </>
   );
 }

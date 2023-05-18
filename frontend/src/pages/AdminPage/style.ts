@@ -49,7 +49,7 @@ const AdminPageChartContainer = styled.div`
   padding-block: 10px;
 
   @media all and (min-width: 768px) {
-    width: 650px;
+    width: 800px;
     margin-inline: 25px;
   }
 
