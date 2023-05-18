@@ -78,7 +78,6 @@ function ManualPage() {
             src={`/manual_step_${selectedMenuIndex}_bg.png`}
             alt="manualImage"
           />
-          // <ManualImg src={`/manual_step_${selectedMenuIndex}.png`} alt="manualImage"/>
         )}
         {selectedMenuIndex === 1 && (
           <ManualStepBox>
@@ -130,6 +129,37 @@ function ManualPage() {
             </ManualStepText>
           </ManualStepBox>
         )}
+
+        <div
+          style={{
+            position: "absolute",
+            bottom: "-2px",
+            right: "-2px",
+            width: 1,
+            height: 1,
+          }}
+        >
+          <img
+            style={{ width: 1, height: 1 }}
+            src={`/manual_step_1_bg.png`}
+            alt="manualImage"
+          />
+          <img
+            style={{ width: 1, height: 1 }}
+            src={`/manual_step_2_bg.png`}
+            alt="manualImage"
+          />
+          <img
+            style={{ width: 1, height: 1 }}
+            src={`/manual_step_3_bg.png`}
+            alt="manualImage"
+          />
+          <img
+            style={{ width: 1, height: 1 }}
+            src={`/manual_step_4_bg.png`}
+            alt="manualImage"
+          />
+        </div>
       </ManualContainer>
     </ManualWrap>
   );
