@@ -11,7 +11,7 @@ import {
   GroupHomeCardHeader,
 } from "./style";
 import { DOG_LIST, SPROUT_LIST } from "../../../constants/sprout";
-import { format, getDate, subHours } from "date-fns";
+import { differenceInDays, format, getDate, subDays, subHours } from "date-fns";
 import html2canvas from "html2canvas";
 import { useNavigate } from "react-router-dom";
 import { handleKakaoQuestionShare } from "../../../utils/kakaoShare";
@@ -212,7 +212,14 @@ function GroupHome({ group }: Props) {
               onClick={() =>
                 navigate("/answer", {
                   state: {
-                    question: { meetingId: group.meetingId, questionId: 1 },
+                    question: {
+                      title: group.title,
+                      day: differenceInDays(new Date(group.endDay), new Date()),
+                      meetingId: group.meetingId,
+                      questionId: questionMap.get(
+                        format(new Date(), "yyyy-MM-dd")
+                      )?.questionId,
+                    },
                     isModify: false,
                   },
                 })

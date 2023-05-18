@@ -135,4 +135,5 @@ export interface CalendarQuestion {
   rate: number;
   answer: string;
   imageUrl?: string;
+  questionId: number;
 }
