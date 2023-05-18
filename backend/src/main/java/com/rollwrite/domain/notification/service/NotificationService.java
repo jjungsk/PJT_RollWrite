@@ -99,7 +99,7 @@ public class NotificationService {
 
         // ADMIN 유저 목록 중 FirbaseToken List를 가져온다
         List<User> adminUserList = userRepository.findAllByType(UserType.ADMIN);
-        List<String> fcmTokenList = null;
+        List<String> fcmTokenList = new ArrayList<>();
         for (User admin: adminUserList) {
             if (admin.getFirebaseToken() == null || admin.getFirebaseToken().isEmpty()) continue;
             fcmTokenList.add(admin.getFirebaseToken());
