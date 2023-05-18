@@ -6,6 +6,7 @@ import { ReactComponent as KakaoBtn } from "../../assets/Kakao.svg";
 import { redirectKakao } from "../../apis/user";
 import { useAppDispatch } from "../../constants/types";
 import { updateAccessToken, updateLoginStatus } from "../../store/authReducer";
+import { position } from "html2canvas/dist/types/css/property-descriptors/position";
 
 function LoginPage() {
   const dispatch = useAppDispatch();
@@ -27,6 +28,15 @@ function LoginPage() {
       <BtnContainer>
         <KakaoBtn onClick={handleClickLoginBtn} />
       </BtnContainer>
+      <div
+        style={{
+          fontFamily: "Tossface",
+          position: "absolute",
+          bottom: "-100px",
+        }}
+      >
+        🐭
+      </div>
     </>
   );
 }
