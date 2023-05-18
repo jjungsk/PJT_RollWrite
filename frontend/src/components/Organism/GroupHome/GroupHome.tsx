@@ -269,7 +269,7 @@ function GroupHome({ group }: Props) {
         </GroupHomeCardContent>
         <GroupHomeCardFooter>
           {!toastStatus &&
-            questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.question && (
+            questionMap.get(format(selectedDay, "yyyy-MM-dd"))?.answer && (
               <div onClick={handelClickRandomAnswer}>답변 뽑기 10p</div>
             )}
         </GroupHomeCardFooter>
