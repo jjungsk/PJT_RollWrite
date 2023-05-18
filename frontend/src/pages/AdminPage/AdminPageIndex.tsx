@@ -49,6 +49,7 @@ import {
 import { useTheme } from "@mui/material/styles";
 import { User } from "./type";
 import { Meeting } from "./type";
+import { format } from "date-fns";
 
 function AdminPageIndex() {
   const theme = useTheme();
@@ -125,8 +126,12 @@ function AdminPageIndex() {
     };
   }, []);
 
+  const dateFormatter = (date: string) => {
+    return format(new Date(date), "MM/dd");
+  };
+
   const makeChart = (
-    data: MeetingStats[] | ParticipantStats[] | UserStats[],
+    data: MeetingStats[] | UserStats[],
     xKey: string,
     xLabel: string,
     yKey: string,
@@ -140,10 +145,12 @@ function AdminPageIndex() {
       >
         <XAxis
           dataKey={xKey}
+          tickFormatter={dateFormatter}
           label={{ value: xLabel, position: "insideBottomRight", dy: 8 }}
           stroke="#007AFF"
           cursor={"pointer"}
           onClick={(e: any) => handleClickChart(yKey, e.value)}
+          fontSize={resize > 768 ? 16 : 10}
         />
         <YAxis
           label={{ value: yLabel, angle: -90, position: "insideLeft", dx: 10 }}
@@ -154,7 +161,7 @@ function AdminPageIndex() {
         <Bar
           dataKey={yKey}
           fill="#007AFF"
-          barSize={30}
+          barSize={resize > 768 ? 30 : 10}
           cursor={"pointer"}
           onClick={(e: any) => handleClickChart(yKey, e.day)}
         />
@@ -177,7 +184,14 @@ function AdminPageIndex() {
     "가입한 사용자 수"
   );
 
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+  const COLORS = [
+    "#7e7e7e",
+    "#0088FE",
+    "#00C49F",
+    "#FFBB28",
+    "#FF8042",
+    "#fd4a4a",
+  ];
   const RADIAN = Math.PI / 180;
   const renderCustomizedLabel = ({
     cx,

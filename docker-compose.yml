@@ -13,7 +13,7 @@ services:
       - "mode=standalone"
     ports:
       - 6666:6666
-    command: redis-server --port 6666 --appendonly yes --replica-read-only no
+    command: redis-server --port 6666 --requirepass ${REDIS_PASSWORD} --appendonly yes --replica-read-only no
 
   backend:
     container_name: backend-release

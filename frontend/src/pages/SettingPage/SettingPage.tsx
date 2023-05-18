@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { persistor } from "../../store/store";
 import Btn from "../../components/Atom/Btn/Btn";
-import { pop } from "../../utils/pop";
+import { pop, render } from "../../utils/pop";
 import { motion, useAnimation } from "framer-motion";
 
 function SettingPage() {
@@ -70,28 +70,55 @@ function SettingPage() {
     }
   };
 
-  const controls = useAnimation();
-  const [clickCount, setClickCount] = useState(0);
+  const [clickCount, setClickCount] = useState<number>(0);
+  const [toastStatus, setToastStatus] = useState<boolean>(false);
 
   useEffect(() => {
-    controls.start({ opacity: 1, scale: 1 });
-  });
+    pop(1);
+    setTimeout(render, 700);
+  }, []);
 
   const handleClickVersion = () => {
     setClickCount((prevClickCount) => prevClickCount + 1);
 
-    if (clickCount === 2) {
-      // pop(100);
-      toast("That's Rollwrite!", {
-        icon: "🤟",
-      });
-      setTimeout(() => setClickCount(0), 500);
+    if ((clickCount + 1) % 5 === 0) {
+      if (!toastStatus) {
+        setToastStatus(true);
+        pop(100);
+
+        setTimeout(() => {
+          toast("FE 주대선", {
+            icon: "🤯",
+          });
+          toast("BE 정세권", {
+            icon: "🐶",
+          });
+          toast("BE 장예주", {
+            icon: "🤷",
+          });
+          toast("BE 권태윤", {
+            icon: "🔥",
+          });
+          toast("FE 공예찬", {
+            icon: "🙏",
+          });
+          toast("🏆 Team GaBoJaGo 🏆");
+          toast("That's Rollwrite!", {
+            icon: "🤟",
+          });
+        }, 200);
+
+        setTimeout(() => {
+          setToastStatus(false);
+        }, 3000);
+      }
     }
   };
 
   return (
     <SettingContainer>
-      {/* <SettingSection>
+      <>
+        {/* <SettingSection>
         <SettingSectionTitle>알림 설정</SettingSectionTitle>
         <SettingMenuItem>
           <SettingMenuItemText>
@@ -108,34 +135,35 @@ function SettingPage() {
           <SwitchBtn />
         </SettingMenuItem>
       </SettingSection> */}
-      <SettingSection>
-        {/* <SettingSectionTitle>기타 안내</SettingSectionTitle> */}
-        <SettingMenuItem onClick={() => handleClickMenu("notice")}>
-          <SettingMenuItemText>공지사항</SettingMenuItemText>
-          <Back />
-        </SettingMenuItem>
-        <SettingMenuItem onClick={() => handleClickMenu("inquiry")}>
-          <SettingMenuItemText>의견 보내기</SettingMenuItemText>
-          <Back />
-        </SettingMenuItem>
-        <SettingMenuItem onClick={() => handleClickMenu("service")}>
-          <SettingMenuItemText>서비스 이용약관</SettingMenuItemText>
-          <Back />
-        </SettingMenuItem>
-        <SettingMenuItem onClick={handleClickVersion}>
-          <SettingMenuItemText>버전 정보</SettingMenuItemText>
-          <div>1.2.1</div>
-        </SettingMenuItem>
-      </SettingSection>
+        <SettingSection>
+          {/* <SettingSectionTitle>기타 안내</SettingSectionTitle> */}
+          <SettingMenuItem onClick={() => handleClickMenu("notice")}>
+            <SettingMenuItemText>공지사항</SettingMenuItemText>
+            <Back />
+          </SettingMenuItem>
+          <SettingMenuItem onClick={() => handleClickMenu("inquiry")}>
+            <SettingMenuItemText>의견 보내기</SettingMenuItemText>
+            <Back />
+          </SettingMenuItem>
+          <SettingMenuItem onClick={() => handleClickMenu("service")}>
+            <SettingMenuItemText>서비스 이용약관</SettingMenuItemText>
+            <Back />
+          </SettingMenuItem>
+          <SettingMenuItem onClick={handleClickVersion}>
+            <SettingMenuItemText>버전 정보</SettingMenuItemText>
+            <div>1.2.2</div>
+          </SettingMenuItem>
+        </SettingSection>
 
-      <SettingBtnContainer>
-        <div>
-          <Btn label="로그아웃" onClick={handleClickLogoutBtn} color="fill" />
-        </div>
-        {/* <div>
+        <SettingBtnContainer>
+          <div>
+            <Btn label="로그아웃" onClick={handleClickLogoutBtn} color="fill" />
+          </div>
+          {/* <div>
           <GhostBtn label="회원탈퇴" onClick={handleClickWithdrawBtn} />
         </div> */}
-      </SettingBtnContainer>
+        </SettingBtnContainer>
+      </>
     </SettingContainer>
   );
 }
