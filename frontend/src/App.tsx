@@ -32,6 +32,7 @@ import useMobileDeviceDetection from "./hooks/useMobileDeviceDetection";
 import useLoginRedirect from "./hooks/useLoginRedirect";
 import useHtmlTitle from "./hooks/useHtmlTitle";
 import useResize from "./hooks/useResize";
+import ManualPage from "./pages/ManualPage/ManualPage";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -75,6 +76,7 @@ function App() {
         <Route path="/award/:meetingId" element={<AwardPage />} />
         <Route path="/create" element={<CreateGroupPage />} />
         <Route path="/group/:meetingId" element={<GroupInfoPage />} />
+        <Route path="/manual" element={<ManualPage />} />
         <Route path="*" element={<ErrorPage />} />
 
         <Route path="/" element={<AdminLayout />}>

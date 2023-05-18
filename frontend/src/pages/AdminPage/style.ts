@@ -32,6 +32,8 @@ const AdminPageTitle = styled.h1`
 `;
 
 const AdminPageChartWrap = styled.div`
+  padding-bottom: 50px;
+
   @media all and (min-width: 768px) {
     display: flex;
     flex-wrap: wrap;
