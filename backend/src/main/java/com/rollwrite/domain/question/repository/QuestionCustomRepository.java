@@ -12,4 +12,6 @@ public interface QuestionCustomRepository {
     Optional<Question> findQuestionByIdAndExpireTime(Long questionId);
 
     Optional<Question> findQuestionByMeetingAndExpireTime(Long meetingId);
+
+    Optional<Question> findTodayQuestionByMeeting(Meeting meeting);
 }

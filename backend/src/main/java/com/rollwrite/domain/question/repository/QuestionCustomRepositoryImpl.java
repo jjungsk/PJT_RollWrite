@@ -66,4 +66,15 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository {
                 .where(question.expireTime.after(LocalDateTime.now()).or(question.expireTime.eq(LocalDateTime.of(LocalDate.of(9999, 1, 1), LocalTime.MIN))))
                 .fetchOne());
     }
+
+    @Override
+    public Optional<Question> findTodayQuestionByMeeting(Meeting meeting) {
+        return Optional.ofNullable(jpaQueryFactory
+                .selectFrom(question)
+                .where(question.meeting.eq(meeting))
+                .orderBy(question.id.desc())
+                .limit(1)
+                .fetchOne());
+    }
+
 }
