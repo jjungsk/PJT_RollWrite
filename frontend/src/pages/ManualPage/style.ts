@@ -58,6 +58,22 @@ const ManualContainer = styled.div`
   & > svg:nth-child(3) {
     width: 240px;
     margin: 30px auto 20px;
+    animation: shake 1s linear infinite;
+
+    @keyframes shake {
+      0% {
+        transform: rotate(0deg);
+      }
+      25% {
+        transform: rotate(-3deg);
+      }
+      75% {
+        transform: rotate(3deg);
+      }
+      100% {
+        transform: rotate(0deg);
+      }
+    }
   }
 
   @media all and (min-width: 380px) {
