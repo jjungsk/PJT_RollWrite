@@ -194,7 +194,18 @@ function GroupHome({ group }: Props) {
           )
         ) : getDate(selectedDay) === getDate(subHours(new Date(), 8)) ? (
           <GroupHomeCardFooter>
-            <div onClick={() => navigate("/question")}>답변하러 가기</div>{" "}
+            <div
+              onClick={() =>
+                navigate("/answer", {
+                  state: {
+                    question: { meetingId: group.meetingId, questionId: 1 },
+                    isModify: false,
+                  },
+                })
+              }
+            >
+              답변하러 가기
+            </div>{" "}
           </GroupHomeCardFooter>
         ) : (
           <></>

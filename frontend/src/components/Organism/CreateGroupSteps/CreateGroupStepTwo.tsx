@@ -7,7 +7,7 @@ import {
 import InputLine from "../../Molecules/InputLine/InputLine";
 import { CreateGroup } from "../../../constants/types";
 import SelectThema from "../../Molecules/SelectThema/SelectThema";
-import { addDays } from "date-fns";
+import { addDays, format } from "date-fns";
 import Btn from "../../Atom/Btn/Btn";
 interface Props {
   onClick: () => void;
@@ -29,9 +29,9 @@ function CreateGroupStepTwo({ groupInfo, setGroupInfo, onClick }: Props) {
   const today = new Date();
   const minDay = addDays(new Date(groupInfo.startDay), 2);
   const maxDay = addDays(new Date(groupInfo.startDay), 30);
-  const todayString = today.toISOString().substring(0, 10);
-  const minDayString = minDay.toISOString().substring(0, 10);
-  const maxDayString = maxDay.toISOString().substring(0, 10);
+  const todayString = format(today, "yyyy-MM-dd");
+  const minDayString = format(minDay, "yyyy-MM-dd");
+  const maxDayString = format(maxDay, "yyyy-MM-dd");
   return (
     <CreateGroupStepsContainer>
       <CreateGroupStepsHeader>
