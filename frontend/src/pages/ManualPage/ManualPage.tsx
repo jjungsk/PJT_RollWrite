@@ -39,7 +39,6 @@ function ManualPage() {
       <ManualContainer>
         {selectedMenuIndex === 0 && (
           <>
-            <PresentBox />
             <Logo />
             <ManualSubTitle>
               Rollwrite는 여러분이 모인
@@ -48,6 +47,7 @@ function ManualPage() {
               <br />
               롤링페이퍼 플랫폼입니다
             </ManualSubTitle>
+            <PresentBox />
             <ManualStepBox>
               <ManualStep>규칙 1. </ManualStep>
               <ManualStepText>
@@ -68,7 +68,7 @@ function ManualPage() {
               <ManualStep>규칙 3. </ManualStep>
               <ManualStepText>
                 <div>모든 답변은 모임의 마지막 날 확인 가능해요</div>
-                <div>(마지막 날 우리 모임의 선물이 될거에요^^)</div>
+                <div>(마지막 날 우리 모임의 선물이 될 거예요^^)</div>
               </ManualStepText>
             </ManualStepBox>
           </>
