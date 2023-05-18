@@ -27,7 +27,7 @@ function ManualPage() {
   return (
     <ManualWrap>
       <BackNavigationContainer>
-        <Home onClick={() => navigate("/")} />
+        <Home width="32px" height="32px" onClick={() => navigate("/")} />
         <BackNavigationTitle>서비스 소개</BackNavigationTitle>
         <Box width="32px" height="32px" />
       </BackNavigationContainer>

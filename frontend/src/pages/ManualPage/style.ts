@@ -1,5 +1,23 @@
 import styled from "styled-components";
 
+const ManualIcon = styled.div`
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  background: var(--lightgray-color);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+
+  display: flex;
+  font-weight: bold;
+  font-size: 34px;
+  align-items: center;
+  justify-content: center;
+  color: var(--darkgray-color);
+`;
+
 const ManualWrap = styled.div`
   width: 100%;
   height: 100%;
@@ -13,13 +31,14 @@ const ManualWrap = styled.div`
 
 const ManualContainer = styled.div`
   width: 100%;
-  height: 100%;
+  height: calc(100% - 68px);
   font-weight: bold;
+  overflow: scroll;
 
   & > svg {
     width: 240px;
     height: fit-content;
-    margin: 10px auto;
+    margin: 15px auto;
   }
   & > svg:nth-child(2) {
     width: 200px;
@@ -84,6 +103,7 @@ const ManualStepText = styled.div`
 `;
 
 export {
+  ManualIcon,
   ManualWrap,
   ManualContainer,
   ManualSubTitle,
