@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { AccordionItem, AccordionItemTitle } from "./style";
 import { ReactComponent as Arrow } from "../../../assets/Arrow.svg";
 import { AccordionItemType } from "../../../constants/types";
+import Box from "../../Atom/Box/Box";
 
 function AccordionList(props: { items: AccordionItemType[] }) {
   const [activeIndex, setActiveIndex] = useState<number | null>(0);
@@ -35,6 +36,7 @@ function AccordionList(props: { items: AccordionItemType[] }) {
           </AnimatePresence>
         </AccordionItem>
       ))}
+      <Box width="10px" height="60px"></Box>
     </div>
   );
 }
