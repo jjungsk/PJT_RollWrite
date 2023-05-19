@@ -20,7 +20,7 @@ function MyPage() {
     getGroupList().then((res) => {
       setGroupList((prevState) => [res.data, prevState[1]]);
     });
-    getUserGroupIsDoneList(0, 10).then((res) => {
+    getUserGroupIsDoneList(0, 100).then((res) => {
       setGroupList((prevState) => [prevState[0], res.data]);
     });
   }, []);
