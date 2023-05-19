@@ -49,7 +49,11 @@ function ResultPage() {
         <Back onClick={handleClickBackBtn} />
         <HeaderGroupTitle>
           <div>
-            <div>{groupResult.title}</div>
+            <div>
+              {groupResult.title.length > 15
+                ? groupResult.title.slice(0, 15) + "..."
+                : groupResult.title}
+            </div>
             <Person />
             <div>{groupResult.participantCnt}</div>
           </div>

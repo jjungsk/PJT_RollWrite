@@ -145,13 +145,13 @@ function SettingPage() {
             <SettingMenuItemText>의견 보내기</SettingMenuItemText>
             <Back />
           </SettingMenuItem>
-          <SettingMenuItem onClick={() => handleClickMenu("service")}>
-            <SettingMenuItemText>서비스 이용약관</SettingMenuItemText>
+          <SettingMenuItem onClick={() => navigate("/manual")}>
+            <SettingMenuItemText>서비스 소개</SettingMenuItemText>
             <Back />
           </SettingMenuItem>
           <SettingMenuItem onClick={handleClickVersion}>
             <SettingMenuItemText>버전 정보</SettingMenuItemText>
-            <div>1.2.2</div>
+            <div>1.2.3</div>
           </SettingMenuItem>
         </SettingSection>
 

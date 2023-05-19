@@ -246,6 +246,15 @@ public class MeetingService {
         // 답변 리스트
         List<AnswerCountDto> answerCountDtoList = answerRepository.findAnswerCnt(meeting);
 
+        // 오전 8시 기준으로 날짜 보정
+        LocalDate today = LocalDate.now();
+
+        if (LocalDateTime.now().getHour() < 8) {
+            today = LocalDateTime.now().minusDays(1).toLocalDate();
+        }
+
+        boolean isTodayQuestion = false;
+
         for (AnswerCountDto answerCountDto : answerCountDtoList) {
             String question = null;
             String answer = null;
@@ -260,6 +269,11 @@ public class MeetingService {
                 imageUrl = optionalAnswer.get().getImageUrl();
             }
 
+            // 오늘 질문일 때
+            if (answerCountDto.getQuestion().getCreatedAt().toLocalDate().equals(today)) {
+                isTodayQuestion = true;
+            }
+
             meetingCalenderResDtoList.add(MeetingCalenderResDto.builder()
                     .day(answerCountDto.getQuestion().getCreatedAt().toLocalDate())
                     .question(question)
@@ -270,6 +284,21 @@ public class MeetingService {
                     .imageUrl(imageUrl)
                     .build());
         }
+
+        // 오늘 질문 추가해주기
+        if (!isTodayQuestion) {
+            Question question = questionRepository.findTodayQuestionByMeeting(meeting)
+                    .orElseThrow(() -> new IllegalArgumentException("오늘 날짜의 질문이 없습니다."));
+
+            meetingCalenderResDtoList.add(MeetingCalenderResDto.builder()
+                    .day(question.getCreatedAt().toLocalDate())
+                    .questionId(question.getId())
+                    .question(question.getContent())
+                    .answerCnt(0)
+                    .participantCnt(participantCnt)
+                    .build());
+        }
+
         return meetingCalenderResDtoList;
     }
 

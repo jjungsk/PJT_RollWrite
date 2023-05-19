@@ -15,6 +15,7 @@ function JoinPage() {
             toast.success("가입을 완료했습니다.");
           } else {
             toast.error(res.message);
+            navigate("/");
           }
 
           if (res.data.meetingId) {
